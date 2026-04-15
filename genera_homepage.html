@@ -390,18 +390,18 @@
       border-radius: 20px;
       overflow: hidden;
       /* Real daycare office desk photo */
-      background-image: url('https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=900&q=80');
+      background-image: url('https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=900&q=80');
       background-size: cover;
-      background-position: center;
+      background-position: 60% 40%;
       padding: 48px 36px 32px;
       box-shadow: 0 28px 70px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.06);
     }
-    /* Subtle vignette overlay — helps laptop pop against the photo */
+    /* Very subtle warm overlay — keeps laptop readable without darkening the scene */
     .hero-img-wrap::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at center, rgba(0,0,0,.04) 0%, rgba(0,0,0,.38) 100%);
+      background: rgba(255,248,240,.08);
       pointer-events: none;
       z-index: 0;
     }
