@@ -383,23 +383,34 @@
     }
     .stars { color: var(--gold); letter-spacing: -1px; }
 
-    /* Hero laptop mockup */
+    /* Hero photo scene */
     .hero-img-wrap {
       position: relative;
       animation: fadeUp .8s .3s both;
+      border-radius: 20px;
+      overflow: hidden;
+      /* Real daycare office desk photo */
+      background-image: url('https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=900&q=80');
+      background-size: cover;
+      background-position: center;
+      padding: 48px 36px 32px;
+      box-shadow: 0 28px 70px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.06);
     }
-    .hero-img-glow {
+    /* Subtle vignette overlay — helps laptop pop against the photo */
+    .hero-img-wrap::before {
+      content: '';
       position: absolute;
-      inset: -50px;
-      background: radial-gradient(ellipse, rgba(255,168,0,.13) 0%, transparent 65%);
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,.04) 0%, rgba(0,0,0,.38) 100%);
       pointer-events: none;
+      z-index: 0;
     }
 
     /* Laptop */
     .laptop {
       position: relative;
       width: 100%;
-      max-width: 560px;
+      max-width: 100%;
       margin: 0 auto;
       z-index: 1;
     }
@@ -407,7 +418,7 @@
       background: #1a1a1f;
       border-radius: 12px 12px 0 0;
       padding: 10px 10px 0;
-      box-shadow: 0 -4px 24px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.06);
+      box-shadow: 0 -4px 24px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.06);
       position: relative;
     }
     .laptop-lid::before {
@@ -416,8 +427,7 @@
       top: 5px;
       left: 50%;
       transform: translateX(-50%);
-      width: 6px;
-      height: 6px;
+      width: 6px; height: 6px;
       background: #2a2a35;
       border-radius: 50%;
       border: 1px solid rgba(255,255,255,.08);
@@ -430,8 +440,7 @@
       position: relative;
     }
     .laptop-screen img {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       object-fit: cover;
       object-position: top left;
       display: block;
@@ -440,7 +449,7 @@
       background: linear-gradient(to bottom, #2a2a35, #1e1e28);
       height: 18px;
       border-radius: 0 0 4px 4px;
-      box-shadow: 0 4px 0 rgba(0,0,0,.3);
+      box-shadow: 0 4px 0 rgba(0,0,0,.4);
       position: relative;
     }
     .laptop-base::after {
@@ -449,8 +458,7 @@
       bottom: -6px;
       left: 50%;
       transform: translateX(-50%);
-      width: 40%;
-      height: 6px;
+      width: 40%; height: 6px;
       background: #16161e;
       border-radius: 0 0 8px 8px;
     }
@@ -460,7 +468,7 @@
       border-radius: 0 0 60px 60px;
       width: 55%;
       margin: 0 auto;
-      box-shadow: 0 8px 24px rgba(0,0,0,.5);
+      box-shadow: 0 12px 32px rgba(0,0,0,.7);
     }
 
     @keyframes fadeUp {
@@ -1148,7 +1156,6 @@
     </div>
 
     <div class="hero-img-wrap" aria-hidden="true">
-      <div class="hero-img-glow"></div>
       <div class="laptop">
         <div class="laptop-lid">
           <div class="laptop-screen">
