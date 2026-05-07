@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import { REGISTER_URL } from "@/lib/urls";
 
 const PAW_LOGO =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663478487775/BxxxoQYbhf7FnKvPttwktS/genera-paw-fixed_92730de9.png";
 
 const PRODUCT_LINKS = [
   { href: "/features", label: "Features" },
-  { href: "https://app.generasoftware.com/admin", label: "Free Trial" },
+  { href: REGISTER_URL, label: "Free Trial" },
   { href: "/sign-up", label: "Founding 100" },
   { href: "/faqs", label: "FAQs" },
   { href: "/blog", label: "Blog" },

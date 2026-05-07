@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Reveal from "@/components/Reveal";
+import { REGISTER_URL } from "@/lib/urls";
 
 export const metadata: Metadata = {
   title: "Features — Genera Software",
@@ -212,7 +213,7 @@ export default function FeaturesPage() {
             </p>
             <div className="mt-7">
               <a
-                href="mailto:info@generasoftware.com?subject=Start%20Free%20Trial"
+                href={REGISTER_URL}
                 className="btn btn-gold btn-lg"
               >
                 Start 3-Month Free Trial
@@ -249,7 +250,7 @@ export default function FeaturesPage() {
           </p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
             <a
-              href="mailto:info@generasoftware.com?subject=Start%20Free%20Trial"
+              href={REGISTER_URL}
               className="btn btn-gold btn-lg"
             >
               Start 3-Month Free Trial

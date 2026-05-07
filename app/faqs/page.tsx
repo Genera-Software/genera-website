@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
+import { REGISTER_URL } from "@/lib/urls";
 import FaqAccordion, { type Faq } from "./_components/FaqAccordion";
 
 export const metadata: Metadata = {
@@ -167,7 +168,7 @@ export default function FaqsPage() {
           </p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
             <a
-              href="mailto:info@generasoftware.com?subject=Start%20Free%20Trial"
+              href={REGISTER_URL}
               className="btn btn-gold btn-lg"
             >
               Start 3-Month Free Trial

@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import Paw from "@/components/Paw";
 import Reveal from "@/components/Reveal";
+import { REGISTER_URL } from "@/lib/urls";
 
 const TRUST_CHIPS = [
   "Paws & Play",
@@ -119,7 +121,7 @@ export default function Home() {
       <Reveal />
 
       {/* ── Hero ───────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 pt-20 pb-8">
+      <section className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 pt-20 pb-12">
         {/* decorative blobs */}
         <span
           aria-hidden
@@ -143,9 +145,10 @@ export default function Home() {
           />
         </div>
 
-        <div className="relative z-10 mx-auto flex max-w-[1160px] flex-col items-center text-center md:items-start md:text-left">
+        <div className="relative z-10 mx-auto flex w-full max-w-[1160px] flex-col items-center text-center md:items-start md:text-left">
           <div className="mb-4 inline-flex animate-[fadeInUp_0.6s_ease_both] items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-4 py-1.5 font-caveat text-[1.05rem] font-bold text-gold-soft">
-            🐾 Built by a daycare, for daycares
+            <Paw className="h-[1.1em] w-[1.1em]" /> Built by a daycare, for
+            daycares
           </div>
 
           <h1 className="rev mb-4 animate-[fadeInUp_0.7s_0.1s_ease_both] text-white [font-size:clamp(2.4rem,4vw,3.6rem)]">
@@ -168,7 +171,7 @@ export default function Home() {
 
           <div className="rev d2 mb-4 flex flex-wrap justify-center gap-3.5 md:justify-start">
             <a
-              href="https://app.generasoftware.com/admin"
+              href={REGISTER_URL}
               className="btn btn-gold btn-lg"
             >
               Start Your 3-Month Free Trial
@@ -181,14 +184,9 @@ export default function Home() {
             </a>
           </div>
 
-          <div className="rev d3 mb-2 flex items-center gap-2 font-caveat text-[1.15rem] text-white/75">
-            <span className="text-gold tracking-widest">★★★★★</span>
-            <span>Trusted by pet businesses across the UK</span>
-          </div>
-
-          {/* Floating UI cards */}
-          <div className="flex w-full flex-nowrap items-start justify-center gap-5 px-2 py-2 pb-8 max-md:flex-wrap md:justify-start">
-            <div className="relative min-w-[200px] max-w-[220px] animate-[var(--animate-float-1)] overflow-hidden rounded-[20px_16px_22px_18px/18px_22px_16px_20px] bg-gradient-to-br from-[#E8856A] to-[#C96B52] px-7 pt-7 pb-5 shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
+          {/* Floating UI cards — left-aligned within the same nav-width container */}
+          <div className="rev d3 mt-20 flex w-full flex-wrap items-start justify-center gap-5 md:justify-start">
+            <div className="relative min-w-[200px] max-w-[220px] animate-[var(--animate-float-1)] overflow-hidden rounded-[20px_16px_22px_18px/18px_22px_16px_20px] bg-gradient-to-br from-[#E8856A] to-[#C96B52] px-7 pt-7 pb-5 text-left shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
               <span className="absolute right-4 top-4 rounded-full bg-white/35 px-2.5 py-0.5 text-[0.72rem] font-bold tracking-wide text-white backdrop-blur-sm">
                 Today
               </span>
@@ -204,7 +202,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="relative mt-8 min-w-[200px] max-w-[220px] animate-[var(--animate-float-2)] overflow-hidden rounded-[20px_16px_22px_18px/18px_22px_16px_20px] bg-gradient-to-br from-[#6B9E72] to-[#4E7D58] px-7 pt-7 pb-5 shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
+            <div className="relative mt-8 min-w-[200px] max-w-[220px] animate-[var(--animate-float-2)] overflow-hidden rounded-[20px_16px_22px_18px/18px_22px_16px_20px] bg-gradient-to-br from-[#6B9E72] to-[#4E7D58] px-7 pt-7 pb-5 text-left shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
               <span className="absolute right-4 top-4 rounded-full bg-white/35 px-2.5 py-0.5 text-[0.72rem] font-bold tracking-wide text-white backdrop-blur-sm">
                 Paid
               </span>
@@ -219,7 +217,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="relative mt-2 min-w-[200px] max-w-[220px] animate-[var(--animate-float-3)] overflow-hidden rounded-[20px_16px_22px_18px/18px_22px_16px_20px] bg-gradient-to-br from-[#E8A430] to-[#C8880A] px-7 pt-7 pb-5 shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
+            <div className="relative mt-2 min-w-[200px] max-w-[220px] animate-[var(--animate-float-3)] overflow-hidden rounded-[20px_16px_22px_18px/18px_22px_16px_20px] bg-gradient-to-br from-[#E8A430] to-[#C8880A] px-7 pt-7 pb-5 text-left shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
               <span className="absolute right-4 top-4 rounded-full bg-white/35 px-2.5 py-0.5 text-[0.72rem] font-bold tracking-wide text-white backdrop-blur-sm">
                 Routed
               </span>
@@ -240,7 +238,7 @@ export default function Home() {
       {/* ── Trust bar ──────────────────────────────────────────── */}
       <div
         aria-label="Businesses using Genera"
-        className="overflow-hidden border-y-2 border-teal-mid bg-teal-soft py-4"
+        className="overflow-hidden border-y-2 border-teal-mid bg-teal-soft py-8"
       >
         <p className="mb-2 text-center font-caveat text-[1.3rem] text-forest">
           Businesses already on board
@@ -257,16 +255,19 @@ export default function Home() {
             ))}
           </div>
         </div>
+
+        <div className="mt-6 flex items-center justify-center gap-2 px-6 font-caveat text-[1.15rem] text-forest">
+          <span className="tracking-widest text-gold">★★★★★</span>
+          <span>Trusted by pet businesses across the UK</span>
+        </div>
       </div>
 
       {/* ── Pain points ─────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-gradient-to-b from-cream to-teal-soft px-8 py-22">
-        <span
-          aria-hidden
-          className="absolute right-[3%] top-[5%] animate-[var(--animate-wobble)] text-[5rem] opacity-10"
-        >
-          🐾
-        </span>
+        <Paw
+          className="absolute right-[3%] top-[5%] h-[5rem] w-[5rem] animate-[var(--animate-wobble)] text-forest opacity-10"
+        />
+
         <div className="mx-auto max-w-[1160px]">
           <div className="rev mb-14 text-center">
             <p className="eyebrow">Sound familiar?</p>
@@ -399,7 +400,7 @@ export default function Home() {
               ))}
             </ul>
             <a
-              href="https://app.generasoftware.com/admin"
+              href={REGISTER_URL}
               className="btn btn-outline-w btn-lg mt-6"
             >
               Apply for a Founding Spot →
@@ -425,7 +426,7 @@ export default function Home() {
               product from the start.
             </p>
             <a
-              href="https://app.generasoftware.com/admin"
+              href={REGISTER_URL}
               className="btn btn-gold btn-lg mt-5"
             >
               Claim Your Spot Now
@@ -450,7 +451,8 @@ export default function Home() {
                 />
               </div>
               <p className="polaroid-caption">
-                Duncan &amp; Jess, South West London 🐾
+                Duncan &amp; Jess, South West London{" "}
+                <Paw className="inline h-[1em] w-[1em] align-[-0.1em]" />
               </p>
             </div>
           </div>
@@ -492,7 +494,7 @@ export default function Home() {
           </p>
           <div className="mt-7 flex flex-wrap justify-center gap-3.5">
             <a
-              href="https://app.generasoftware.com/admin"
+              href={REGISTER_URL}
               className="btn btn-gold btn-lg"
             >
               Start Your Free Trial

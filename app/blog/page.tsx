@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
+import { REGISTER_URL } from "@/lib/urls";
 
 export const metadata: Metadata = {
   title: "Blog — Genera Software",
@@ -177,7 +178,7 @@ export default function BlogPage() {
             the way you run your pet business.
           </p>
           <a
-            href="mailto:info@generasoftware.com?subject=Start%20Free%20Trial"
+            href={REGISTER_URL}
             className="btn btn-gold btn-lg mt-6"
           >
             Start 3-Month Free Trial →

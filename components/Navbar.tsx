@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { LOGIN_URL, REGISTER_URL } from "@/lib/urls";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -95,9 +96,15 @@ export default function Navbar() {
             ))}
           </div>
 
-          <div className="ml-6 hidden md:block">
+          <div className="ml-4 hidden items-center gap-2 md:flex">
             <Link
-              href="/sign-up"
+              href={LOGIN_URL}
+              className="rounded-full px-3 py-1.5 text-[0.85rem] font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+            >
+              Login
+            </Link>
+            <Link
+              href={REGISTER_URL}
               className="inline-flex items-center rounded-full bg-gold px-5 py-2 font-poppins text-[0.85rem] font-bold text-ink shadow-[0_4px_14px_rgba(255,168,0,0.35)] transition-shadow hover:shadow-[0_6px_22px_rgba(255,168,0,0.5)]"
             >
               Start Free Trial
@@ -157,11 +164,18 @@ export default function Navbar() {
         ))}
         <div className="mt-6 flex flex-col gap-3">
           <Link
-            href="/sign-up"
+            href={REGISTER_URL}
             className="btn btn-gold btn-lg"
             onClick={() => setOpen(false)}
           >
             Start Free Trial
+          </Link>
+          <Link
+            href={LOGIN_URL}
+            className="btn btn-outline-w btn-lg"
+            onClick={() => setOpen(false)}
+          >
+            Login
           </Link>
           <a
             href="mailto:info@generasoftware.com?subject=I%27d%20like%20to%20know%20more%20about%20Genera"
