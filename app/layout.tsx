@@ -27,7 +27,7 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "Genera — The Software That Actually Understands Your Daycare",
+  title: "Dog Daycare Management Software — Genera for Dog Walkers and Daycares",
   description:
     "Genera — purpose-built software for dog daycares, walkers and pet care businesses. Bookings, payments, transport, staff and pet records in one place.",
   icons: {
