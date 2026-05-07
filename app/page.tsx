@@ -279,11 +279,19 @@ export default function Home() {
               the rest.
             </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="relative grid gap-6 md:grid-cols-3">
+            <Image
+              src="/images/confused.png"
+              alt=""
+              aria-hidden
+              width={720}
+              height={720}
+              className="pointer-events-none absolute -bottom-24 -left-40 z-0 h-[28rem] w-auto -rotate-6 select-none drop-shadow-[0_10px_24px_rgba(0,62,69,0.22)] md:-bottom-32 md:-left-48 md:h-[36rem]"
+            />
             {PAIN_POINTS.map((p, i) => (
               <div
                 key={p.n}
-                className={`rev d${i + 1} rounded-2xl border border-teal-mid/60 bg-white/80 p-7 shadow-[0_4px_20px_rgba(0,62,69,0.06)] backdrop-blur-sm`}
+                className={`rev d${i + 1} relative z-10 rounded-2xl border border-teal-mid/60 bg-white/80 p-7 shadow-[0_4px_20px_rgba(0,62,69,0.06)] backdrop-blur-sm`}
               >
                 <div className="mb-3 font-poppins text-[2.2rem] font-extrabold leading-none text-gold/70">
                   {p.n}
@@ -405,7 +413,15 @@ export default function Home() {
             </a>
           </div>
 
-          <div className="rev d2 rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm">
+          <div className="rev d2 relative rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm md:pr-64">
+            <Image
+              src="/images/welcome.png"
+              alt=""
+              aria-hidden
+              width={720}
+              height={720}
+              className="pointer-events-none absolute -right-32 -bottom-16 z-20 h-80 w-auto select-none drop-shadow-[0_12px_28px_rgba(0,0,0,0.35)] md:-right-40 md:h-[28rem]"
+            />
             <p className="text-sm uppercase tracking-widest text-gold-soft">
               Spots remaining
             </p>
