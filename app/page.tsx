@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Paw from "@/components/Paw";
 import Reveal from "@/components/Reveal";
+import BookDemoButton from "@/components/BookDemoButton";
 import { REGISTER_URL } from "@/lib/urls";
 
 const TRUST_CHIPS = [
@@ -133,7 +134,7 @@ export default function Home() {
         />
 
         {/* Right-justified backdrop image — above the gradient, below the text */}
-        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 md:block">
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-2/4 md:block">
           <Image
             src="/images/hero-background-fun.png"
             alt=""
@@ -176,12 +177,9 @@ export default function Home() {
             >
               Start Your 3-Month Free Trial
             </a>
-            <a
-              href="mailto:info@generasoftware.com?subject=I%27d%20like%20to%20know%20more%20about%20Genera"
-              className="btn btn-forest btn-lg"
-            >
+            <BookDemoButton className="btn btn-forest btn-lg">
               Book a Demo
-            </a>
+            </BookDemoButton>
           </div>
 
           {/* Floating UI cards — left-aligned within the same nav-width container */}
@@ -499,12 +497,9 @@ export default function Home() {
             >
               Start Your Free Trial
             </a>
-            <a
-              href="mailto:info@generasoftware.com?subject=I%27d%20like%20to%20know%20more%20about%20Genera"
-              className="btn btn-outline-w btn-lg"
-            >
+            <BookDemoButton className="btn btn-outline-w btn-lg">
               Book a Demo
-            </a>
+            </BookDemoButton>
           </div>
           <p className="mt-5 font-caveat text-lg text-white/70">
             No credit card &nbsp;·&nbsp; No commitment &nbsp;·&nbsp; Cancel

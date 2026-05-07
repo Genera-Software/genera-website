@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Poppins, Caveat } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BookDemoModal from "@/components/BookDemoModal";
 import "./globals.css";
 
 const inter = Inter({
@@ -48,6 +49,7 @@ export default function RootLayout({
         <Navbar />
         <main>{children}</main>
         <Footer />
+        <BookDemoModal />
       </body>
     </html>
   );

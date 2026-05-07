@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Reveal from "@/components/Reveal";
+import BookDemoButton from "@/components/BookDemoButton";
 import { REGISTER_URL } from "@/lib/urls";
 
 export const metadata: Metadata = {
@@ -321,12 +322,9 @@ export default function OurStoryPage() {
             >
               Start 3-Month Free Trial
             </a>
-            <a
-              href="/contact"
-              className="btn btn-outline-w btn-lg"
-            >
+            <BookDemoButton className="btn btn-outline-w btn-lg">
               Book a Demo
-            </a>
+            </BookDemoButton>
           </div>
         </div>
       </section>

@@ -177,13 +177,16 @@ export default function Navbar() {
           >
             Login
           </Link>
-          <a
-            href="mailto:info@generasoftware.com?subject=I%27d%20like%20to%20know%20more%20about%20Genera"
+          <button
+            type="button"
             className="btn btn-outline-w btn-lg"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              setOpen(false);
+              window.dispatchEvent(new Event("book-demo:open"));
+            }}
           >
             Book a Demo
-          </a>
+          </button>
         </div>
       </div>
     </>

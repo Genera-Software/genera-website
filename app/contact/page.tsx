@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
+import BookDemoButton from "@/components/BookDemoButton";
 import { REGISTER_URL } from "@/lib/urls";
 
 export const metadata: Metadata = {
@@ -59,12 +60,9 @@ export default function ContactPage() {
               info@generasoftware.com
             </a>
             <div className="mt-7 flex flex-wrap justify-center gap-3">
-              <a
-                href="mailto:info@generasoftware.com?subject=Book%20a%20Demo"
-                className="btn btn-gold btn-lg"
-              >
+              <BookDemoButton className="btn btn-gold btn-lg">
                 Book a Demo
-              </a>
+              </BookDemoButton>
               <a
                 href={REGISTER_URL}
                 className="btn btn-outline-d btn-lg"
