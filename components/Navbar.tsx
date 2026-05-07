@@ -95,8 +95,11 @@ export default function Navbar() {
             ))}
           </div>
 
-          <div className="ml-10 hidden md:block">
-            <Link href="/sign-up" className="btn btn-gold">
+          <div className="ml-6 hidden md:block">
+            <Link
+              href="/sign-up"
+              className="inline-flex items-center rounded-full bg-gold px-5 py-2 font-poppins text-[0.85rem] font-bold text-ink shadow-[0_4px_14px_rgba(255,168,0,0.35)] transition-shadow hover:shadow-[0_6px_22px_rgba(255,168,0,0.5)]"
+            >
               Start Free Trial
             </Link>
           </div>

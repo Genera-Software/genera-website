@@ -131,9 +131,9 @@ export default function Home() {
         />
 
         {/* Right-justified backdrop image — above the gradient, below the text */}
-        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 max-w-[560px] md:block">
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 md:block">
           <Image
-            src="/images/hero-background.png"
+            src="/images/hero-background-fun.png"
             alt=""
             aria-hidden
             fill
@@ -143,7 +143,7 @@ export default function Home() {
           />
         </div>
 
-        <div className="relative z-10 mx-auto flex max-w-[860px] flex-col items-start text-left">
+        <div className="relative z-10 mx-auto flex max-w-[1160px] flex-col items-center text-center md:items-start md:text-left">
           <div className="mb-4 inline-flex animate-[fadeInUp_0.6s_ease_both] items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-4 py-1.5 font-caveat text-[1.05rem] font-bold text-gold-soft">
             🐾 Built by a daycare, for daycares
           </div>
@@ -166,7 +166,7 @@ export default function Home() {
             your business run the way it should.
           </p>
 
-          <div className="rev d2 mb-4 flex flex-wrap gap-3.5">
+          <div className="rev d2 mb-4 flex flex-wrap justify-center gap-3.5 md:justify-start">
             <a
               href="https://app.generasoftware.com/admin"
               className="btn btn-gold btn-lg"
@@ -187,7 +187,7 @@ export default function Home() {
           </div>
 
           {/* Floating UI cards */}
-          <div className="flex w-full flex-nowrap items-start gap-5 px-2 py-2 pb-8 max-md:flex-wrap">
+          <div className="flex w-full flex-nowrap items-start justify-center gap-5 px-2 py-2 pb-8 max-md:flex-wrap md:justify-start">
             <div className="relative min-w-[200px] max-w-[220px] animate-[var(--animate-float-1)] overflow-hidden rounded-[20px_16px_22px_18px/18px_22px_16px_20px] bg-gradient-to-br from-[#E8856A] to-[#C96B52] px-7 pt-7 pb-5 shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
               <span className="absolute right-4 top-4 rounded-full bg-white/35 px-2.5 py-0.5 text-[0.72rem] font-bold tracking-wide text-white backdrop-blur-sm">
                 Today
@@ -299,6 +299,43 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Product showcase ────────────────────────────────────── */}
+      <section className="bg-cream px-8 py-22">
+        <div className="mx-auto max-w-[1160px]">
+          <div className="rev mb-14 text-center">
+            <p className="eyebrow">See it in action</p>
+            <h2>A dashboard built for busy people.</h2>
+          </div>
+
+          <div className="rev d1 relative mx-auto max-w-[1000px]">
+            <p className="mb-3 text-center font-caveat text-xl text-forest">
+              Your 9am Monday, sorted ☕
+            </p>
+
+            <div className="relative overflow-hidden rounded-3xl border border-teal-mid/50 bg-white shadow-[0_24px_60px_rgba(0,62,69,0.16)]">
+              <div className="flex items-center gap-3 border-b border-cream-dark bg-cream px-4 py-3">
+                <div className="flex gap-1.5">
+                  <span className="block h-3 w-3 rounded-full bg-[#FF6058]" />
+                  <span className="block h-3 w-3 rounded-full bg-[#FFBD2E]" />
+                  <span className="block h-3 w-3 rounded-full bg-[#28C940]" />
+                </div>
+                <div className="rounded-md bg-white px-3 py-1 text-xs text-ink-soft">
+                  app.generasoftware.com
+                </div>
+              </div>
+              <Image
+                src="/images/app-screenshot.png"
+                alt="Genera software dashboard overview"
+                width={1600}
+                height={900}
+                className="block h-auto w-full"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Features ────────────────────────────────────────────── */}
       <section id="features" className="bg-white px-8 py-22">
         <div className="mx-auto max-w-[1160px]">
@@ -336,43 +373,6 @@ export default function Home() {
                 <p className="text-ink-soft">{f.body}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Product showcase ────────────────────────────────────── */}
-      <section className="bg-cream px-8 py-22">
-        <div className="mx-auto max-w-[1160px]">
-          <div className="rev mb-14 text-center">
-            <p className="eyebrow">See it in action</p>
-            <h2>A dashboard built for busy people.</h2>
-          </div>
-
-          <div className="rev d1 relative mx-auto max-w-[1000px]">
-            <p className="mb-3 text-center font-caveat text-xl text-forest">
-              Your 9am Monday, sorted ☕
-            </p>
-
-            <div className="relative overflow-hidden rounded-3xl border border-teal-mid/50 bg-white shadow-[0_24px_60px_rgba(0,62,69,0.16)]">
-              <div className="flex items-center gap-3 border-b border-cream-dark bg-cream px-4 py-3">
-                <div className="flex gap-1.5">
-                  <span className="block h-3 w-3 rounded-full bg-[#FF6058]" />
-                  <span className="block h-3 w-3 rounded-full bg-[#FFBD2E]" />
-                  <span className="block h-3 w-3 rounded-full bg-[#28C940]" />
-                </div>
-                <div className="rounded-md bg-white px-3 py-1 text-xs text-ink-soft">
-                  app.generasoftware.com
-                </div>
-              </div>
-              <Image
-                src="/images/app-screenshot.png"
-                alt="Genera software dashboard overview"
-                width={1600}
-                height={900}
-                className="block h-auto w-full"
-                loading="lazy"
-              />
-            </div>
           </div>
         </div>
       </section>
