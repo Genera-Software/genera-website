@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────
+   Design tokens — lifted from the original Genera CSS so every
+   page has the same palette, fonts and rhythm available as
+   Tailwind utilities (bg-forest, text-gold, font-poppins, …).
+   ───────────────────────────────────────────────────────────── */
+@theme {
+  --color-cream:        #F8FAFB;
+  --color-cream-dark:   #EEF4F5;
+  --color-forest:       #003E45;
+  --color-forest-mid:   #005060;
+  --color-forest-dark:  #002830;
+  --color-gold:         #FFA800;
+  --color-gold-light:   #FFF3CC;
+  --color-gold-soft:    #FFE099;
+  --color-teal-soft:    #E0F0F2;
+  --color-teal-mid:     #C2E2E6;
+  --color-ink:          #111827;
+  --color-ink-soft:     #4B5563;
+
+  --font-poppins: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-inter:   "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-caveat:  "Caveat", ui-serif, cursive;
+
+  --animate-float-1: float1 4.5s ease-in-out infinite;
+  --animate-float-2: float2 5.5s ease-in-out infinite;
+  --animate-float-3: float3 4s ease-in-out infinite;
+  --animate-illust-float: illustFloat 5s ease-in-out infinite;
+  --animate-fade-up:  fadeInUp 0.7s ease both;
+  --animate-scroll-x: scrollX 28s linear infinite;
+  --animate-draw-squig: drawSquig 1.2s 0.6s ease forwards;
+  --animate-wobble: wobble 6s ease-in-out infinite;
+}
+
+/* Keyframes referenced by --animate-* tokens above. */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes illustFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-10px); }
+}
+@keyframes float1 {
+  0%, 100% { transform: rotate(-3deg) translateY(0); }
+  50%      { transform: rotate(-2.5deg) translateY(-10px); }
+}
+@keyframes float2 {
+  0%, 100% { transform: rotate(1.5deg) translateY(0); }
+  50%      { transform: rotate(2deg) translateY(-14px); }
+}
+@keyframes float3 {
+  0%, 100% { transform: rotate(-1deg) translateY(0); }
+  50%      { transform: rotate(-1.5deg) translateY(-8px); }
+}
+@keyframes scrollX {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes drawSquig {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes wobble {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(8deg); }
+}
+@keyframes polaroidFloat {
+  0%, 100% { transform: rotate(-2.5deg) translateY(0); }
+  50%      { transform: rotate(-2deg)   translateY(-10px); }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Base — wrapped in @layer base so utilities like `text-white`
+   can override these defaults without specificity hacks.
+   ───────────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html, body {
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-inter);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-poppins);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--color-ink);
+  }
+
+  em { font-style: italic; color: var(--color-gold); }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Reusable component classes — these stay as plain CSS because
+   they involve animations / decorative shapes / pseudo-elements
+   that would be unreadable as long Tailwind class strings.
+   ───────────────────────────────────────────────────────────── */
+
+/* Scroll-reveal: starts hidden, .in adds visibility */
+.rev { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.rev.in { opacity: 1; transform: translateY(0); }
+.rev.d1 { transition-delay: 0.05s; }
+.rev.d2 { transition-delay: 0.15s; }
+.rev.d3 { transition-delay: 0.25s; }
+.rev.d4 { transition-delay: 0.35s; }
+.rev.d5 { transition-delay: 0.45s; }
+.rev.d6 { transition-delay: 0.55s; }
+
+/* Squiggle underline used in hero h1 */
+.squig { position: relative; display: inline-block; }
+.squig svg {
+  position: absolute; left: 0; bottom: -6px;
+  width: 100%; height: 12px; overflow: visible;
+  stroke: var(--color-gold-soft); stroke-width: 3.5; fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 300; stroke-dashoffset: 300;
+  animation: var(--animate-draw-squig);
+}
+
+/* Buttons — kept as a class because the variants are reused on every page */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-poppins); font-weight: 700; font-size: 0.95rem;
+  padding: 0.85rem 1.75rem; border-radius: 9999px;
+  text-decoration: none; cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
+  border: 2.5px solid transparent; white-space: nowrap;
+}
+.btn:hover { transform: translateY(-3px) rotate(-0.5deg); }
+.btn-gold     { background: var(--color-gold); color: var(--color-ink); box-shadow: 0 4px 18px rgba(255,168,0,0.35); }
+.btn-gold:hover { box-shadow: 0 8px 28px rgba(255,168,0,0.45); }
+.btn-forest   { background: var(--color-forest); color: #fff; }
+.btn-forest:hover { box-shadow: 0 8px 24px rgba(0,62,69,0.3); }
+.btn-outline-w { background: transparent; border-color: #fff; color: #fff; }
+.btn-outline-w:hover { background: rgba(255,255,255,0.12); }
+.btn-outline-d { background: transparent; border-color: var(--color-forest); color: var(--color-forest); }
+.btn-outline-d:hover { background: var(--color-forest); color: #fff; }
+.btn-lg { padding: 1rem 2.2rem; font-size: 1rem; }
+
+/* Caveat handwritten "label" used above section headings */
+.eyebrow {
+  font-family: var(--font-caveat);
+  font-size: 1.55rem; font-weight: 700;
+  color: var(--color-forest);
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: 0.85rem;
+}
+.eyebrow::before { content: '🐾'; font-size: 1.1rem; }
+
+/* Polaroid frame for the story-section photo. The wrapper is the
+   tilted white card with paper-stack shadows; .photo-wrap clips the
+   image to a fixed 400px window; .polaroid-caption sits in the 64px
+   reserved gutter at the bottom of the frame. */
+.polaroid {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 520px;
+  background: #fff;
+  border-radius: 22px;
+  padding: 16px 16px 64px;
+  transform: rotate(-2.5deg);
+  animation: polaroidFloat 5s ease-in-out infinite;
+  box-shadow:
+    0 2px 0 #e0e0e0,
+    0 6px 0 rgba(0,0,0,0.04),
+    0 24px 60px rgba(0,62,69,0.16),
+    0 8px 20px rgba(0,0,0,0.08);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.polaroid:hover {
+  animation: none;
+  transform: rotate(0deg) scale(1.02);
+  box-shadow:
+    0 2px 0 #e0e0e0,
+    0 6px 0 rgba(0,0,0,0.04),
+    0 40px 80px rgba(0,62,69,0.22);
+}
+.polaroid-window {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  width: 100%;
+  height: 400px;
+}
+.polaroid-window img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center 55%;
+}
+.polaroid-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-caveat);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #666;
+  letter-spacing: 0.3px;
+}
