@@ -2,12 +2,16 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
+import { createMetadata } from "@/lib/seo";
 import { REGISTER_URL } from "@/lib/urls";
 
 export const metadata: Metadata = {
-  title: "Our Story — Genera Software",
-  description:
-    "From a dog walking round in South West London in 2011 to software used by pet businesses across the UK. Here's how it happened.",
+  ...createMetadata({
+    title: "About Genera Dog Daycare Software",
+    description:
+      "Learn how Genera grew from a South West London dog walking and daycare business into pet business software for UK dog daycares and walkers.",
+    path: "/our-story",
+  }),
 };
 
 const STATS = [

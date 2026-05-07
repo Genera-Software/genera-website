@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
+import { createMetadata } from "@/lib/seo";
 import { REGISTER_URL } from "@/lib/urls";
 
 export const metadata: Metadata = {
-  title: "Blog — Genera Software",
-  description:
-    "Practical advice, industry commentary, and lessons learned from 15 years of running a real pet business.",
+  ...createMetadata({
+    title: "Dog Daycare Business Blog and Pet Care Software Advice",
+    description:
+      "Read practical dog daycare business advice, pet care operations guidance and software tips from the team behind Genera.",
+    path: "/blog",
+  }),
 };
 
 type Post = {

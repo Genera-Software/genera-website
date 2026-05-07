@@ -2,12 +2,16 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
+import { createMetadata } from "@/lib/seo";
 import { REGISTER_URL } from "@/lib/urls";
 
 export const metadata: Metadata = {
-  title: "Features — Genera Software",
-  description:
-    "Everything you need. Nothing you don't. Genera is software built inside a real pet business — every feature exists because we needed it ourselves.",
+  ...createMetadata({
+    title: "Dog Daycare Software Features for Pet Businesses",
+    description:
+      "Explore Genera features for dog daycares and pet businesses, including online bookings, client and pet records, invoicing, route planning, staff management and compliance.",
+    path: "/features",
+  }),
 };
 
 type Feature = {

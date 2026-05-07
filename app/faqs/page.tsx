@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
+import { createMetadata } from "@/lib/seo";
 import { REGISTER_URL } from "@/lib/urls";
 import FaqAccordion, { type Faq } from "./_components/FaqAccordion";
 
 export const metadata: Metadata = {
-  title: "FAQs — Genera Software",
-  description:
-    "Got questions? We have got answers. Everything you need to know about Genera.",
+  ...createMetadata({
+    title: "Dog Daycare Software FAQs for Pet Businesses",
+    description:
+      "Find answers about Genera dog daycare software, including free trials, online bookings, invoicing, client records, data security, support and setup.",
+    path: "/faqs",
+  }),
 };
 
 const FAQS: Faq[] = [

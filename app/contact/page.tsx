@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
+import { createMetadata } from "@/lib/seo";
 import { REGISTER_URL } from "@/lib/urls";
 
 export const metadata: Metadata = {
-  title: "Contact — Genera Software",
-  description:
-    "Book a demo, ask a question, or just say hello. We're a small team and we read every message.",
+  ...createMetadata({
+    title: "Contact Genera for Dog Daycare Software Demos",
+    description:
+      "Contact Genera to book a dog daycare software demo, ask about pet business management features, or get help starting your free trial.",
+    path: "/contact",
+  }),
 };
 
 export default function ContactPage() {

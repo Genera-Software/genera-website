@@ -1,9 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
+import { createMetadata } from "@/lib/seo";
 import Paw from "@/components/Paw";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
 import { REGISTER_URL } from "@/lib/urls";
+
+export const metadata = createMetadata({
+  title: "Dog Daycare Software for Bookings, Payments & Routes",
+  description:
+    "Genera helps UK dog daycares and pet care businesses manage online bookings, invoices, payments, transport routes, staff schedules and pet records.",
+  path: "/",
+});
 
 const TRUST_CHIPS = [
   "Paws & Play",
