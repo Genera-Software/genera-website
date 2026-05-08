@@ -45,12 +45,22 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const supabase = getPublicSupabase();
-  const { data } = await supabase
-    .from("blog_posts")
-    .select("slug")
-    .eq("is_published", true);
-  return (data ?? []).map((p) => ({ slug: p.slug }));
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    return [];
+  }
+  try {
+    const supabase = getPublicSupabase();
+    const { data } = await supabase
+      .from("blog_posts")
+      .select("slug")
+      .eq("is_published", true);
+    return (data ?? []).map((p) => ({ slug: p.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export default async function BlogPostPage({
