@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, Poppins, Caveat } from "next/font/google";
+import Script from "next/script";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
+
+const GA_MEASUREMENT_ID = "G-B1NT2G0G7X";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -98,6 +101,18 @@ export default function RootLayout({
     >
       <body className="font-[family-name:var(--font-inter)] text-base leading-relaxed">
         {children}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
       </body>
     </html>
   );
