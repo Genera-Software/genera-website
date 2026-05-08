@@ -5,6 +5,9 @@ import Paw from "@/components/Paw";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
 import { REGISTER_URL } from "@/lib/urls";
+import { getPublicSupabase } from "@/lib/supabase/server";
+
+export const revalidate = 60;
 
 export const metadata = createMetadata({
   title: "Dog Daycare Software for Bookings, Payments & Routes",
@@ -12,21 +15,6 @@ export const metadata = createMetadata({
     "Genera helps UK dog daycares and pet care businesses manage online bookings, invoices, payments, transport routes, staff schedules and pet records.",
   path: "/",
 });
-
-const TRUST_CHIPS = [
-  "Paws & Play",
-  "Bark & Stride",
-  "Wag Walkers",
-  "Tail End Daycare",
-  "The Dog Lodge",
-  "Muddy Paws Co",
-  "Happy Hounds HQ",
-  "Fetch & Go",
-  "Pawsitive Vibes",
-  "Walkies Club",
-  "Snout & About",
-  "Good Boy Daycare",
-];
 
 const PAIN_POINTS = [
   {
@@ -124,7 +112,31 @@ const FOUNDING_PERKS = [
   "Locked-in founding member pricing, forever",
 ];
 
-export default function Home() {
+export default async function Home() {
+  const supabase = getPublicSupabase();
+
+  const [logosRes, spotsRes] = await Promise.all([
+    supabase
+      .from("trust_logos")
+      .select("id, name, logo_url")
+      .eq("is_visible", true)
+      .order("sort_order", { ascending: true }),
+    supabase
+      .from("founding_spots")
+      .select("total_spots, claimed_spots")
+      .eq("id", 1)
+      .maybeSingle(),
+  ]);
+
+  const trustLogos = logosRes.data ?? [];
+  const totalSpots = spotsRes.data?.total_spots ?? 100;
+  const claimedSpots = spotsRes.data?.claimed_spots ?? 0;
+  const remainingSpots = Math.max(totalSpots - claimedSpots, 0);
+  const progressPct =
+    totalSpots > 0
+      ? Math.min(100, Math.round((claimedSpots / totalSpots) * 100))
+      : 0;
+
   return (
     <>
       <Reveal />
@@ -315,14 +327,30 @@ export default function Home() {
         </p>
         <div className="overflow-hidden">
           <div className="flex w-max animate-[var(--animate-scroll-x)] gap-2 md:gap-4">
-            {[...TRUST_CHIPS, ...TRUST_CHIPS].map((c, i) => (
-              <span
-                key={i}
-                className="shrink-0 whitespace-nowrap rounded-full border-2 border-teal-mid bg-white px-3.5 py-1.5 text-[0.78rem] font-semibold text-forest md:px-4 md:text-[0.88rem]"
-              >
-                {c}
-              </span>
-            ))}
+            {[...trustLogos, ...trustLogos].map((logo, i) =>
+              logo.logo_url ? (
+                <span
+                  key={`${logo.id}-${i}`}
+                  className="grid h-9 shrink-0 place-items-center rounded-full border-2 border-teal-mid bg-white px-3.5 md:h-11 md:px-4"
+                >
+                  <Image
+                    src={logo.logo_url}
+                    alt={logo.name}
+                    width={120}
+                    height={40}
+                    className="h-5 w-auto md:h-6"
+                    unoptimized
+                  />
+                </span>
+              ) : (
+                <span
+                  key={`${logo.id}-${i}`}
+                  className="shrink-0 whitespace-nowrap rounded-full border-2 border-teal-mid bg-white px-3.5 py-1.5 text-[0.78rem] font-semibold text-forest md:px-4 md:text-[0.88rem]"
+                >
+                  {logo.name}
+                </span>
+              ),
+            )}
           </div>
         </div>
 
@@ -519,16 +547,19 @@ export default function Home() {
               Spots remaining
             </p>
             <div className="relative z-10 mt-1 font-poppins text-[3.6rem] font-extrabold leading-none text-gold md:mt-2 md:text-[5rem]">
-              73
+              {remainingSpots}
             </div>
             <p className="relative z-10 mb-4 text-[0.85rem] text-white/70 md:mb-5 md:text-base">
-              out of 100 founding members
+              out of {totalSpots} founding members
             </p>
             <div className="relative z-10 h-[7px] w-full overflow-hidden rounded-full bg-white/10 md:h-2">
-              <div className="h-full w-[27%] rounded-full bg-gold" />
+              <div
+                className="h-full rounded-full bg-gold"
+                style={{ width: `${progressPct}%` }}
+              />
             </div>
             <p className="relative z-10 mt-2 text-[0.78rem] text-white/60 md:text-sm">
-              27 spots claimed so far
+              {claimedSpots} {claimedSpots === 1 ? "spot" : "spots"} claimed so far
             </p>
             <p className="relative z-10 mt-3.5 max-w-[200px] text-[0.9rem] text-white/80 md:mt-4 md:max-w-none md:text-base">
               Applications close once we reach 100. Be part of shaping the

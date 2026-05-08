@@ -11,9 +11,19 @@
   },
   "dependencies": {
     "@c15t/nextjs": "^2.0.4",
+    "@supabase/ssr": "^0.10.3",
+    "@supabase/supabase-js": "^2.105.3",
+    "@tiptap/extension-image": "^3.22.5",
+    "@tiptap/extension-link": "^3.22.5",
+    "@tiptap/pm": "^3.22.5",
+    "@tiptap/react": "^3.22.5",
+    "@tiptap/starter-kit": "^3.22.5",
     "next": "^15.5.16",
     "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "react-dom": "19.0.0",
+    "react-hook-form": "^7.75.0",
+    "slugify": "^1.6.9",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.7",

@@ -2,27 +2,28 @@
 
 import { useState } from "react";
 
-export type Faq = {
+export type FaqItem = {
+  id: string;
   q: string;
-  a: React.ReactNode;
+  a: string; // HTML
 };
 
-export default function FaqAccordion({ items }: { items: Faq[] }) {
-  const [open, setOpen] = useState<number | null>(0);
+export default function FaqAccordion({ items }: { items: FaqItem[] }) {
+  const [open, setOpen] = useState<string | null>(items[0]?.id ?? null);
 
   return (
     <div className="flex flex-col gap-3">
-      {items.map((item, i) => {
-        const isOpen = open === i;
+      {items.map((item) => {
+        const isOpen = open === item.id;
         return (
           <div
-            key={i}
+            key={item.id}
             className="overflow-hidden rounded-2xl border border-cream-dark bg-white shadow-[0_4px_16px_rgba(0,62,69,0.04)]"
           >
             <button
               type="button"
               aria-expanded={isOpen}
-              onClick={() => setOpen(isOpen ? null : i)}
+              onClick={() => setOpen(isOpen ? null : item.id)}
               className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left font-poppins text-base font-bold text-forest transition-colors hover:bg-cream md:text-lg"
             >
               <span>{item.q}</span>
@@ -46,9 +47,10 @@ export default function FaqAccordion({ items }: { items: Faq[] }) {
               }`}
             >
               <div className="min-h-0">
-                <div className="border-t border-cream-dark px-6 py-5 text-ink-soft">
-                  {item.a}
-                </div>
+                <div
+                  className="border-t border-cream-dark px-6 py-5 text-ink-soft [&_a]:font-semibold [&_a]:text-forest [&_a]:underline [&_a]:decoration-gold [&_a]:underline-offset-2 hover:[&_a]:text-forest-mid [&_p+p]:mt-3 [&_strong]:font-bold [&_strong]:text-forest [&_ul]:my-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:pl-5"
+                  dangerouslySetInnerHTML={{ __html: item.a }}
+                />
               </div>
             </div>
           </div>
