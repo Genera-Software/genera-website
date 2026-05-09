@@ -60,6 +60,150 @@ export type Database = {
         };
         Relationships: [];
       };
+      forms: {
+        Row: {
+          id: string;
+          slug: string;
+          name: string;
+          description: string;
+          success_title: string;
+          success_message: string;
+          webhook_url: string | null;
+          webhook_secret: string | null;
+          webhook_meta: Json;
+          notify_email: string | null;
+          email_subject: string | null;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          name: string;
+          description?: string;
+          success_title?: string;
+          success_message?: string;
+          webhook_url?: string | null;
+          webhook_secret?: string | null;
+          webhook_meta?: Json;
+          notify_email?: string | null;
+          email_subject?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          name?: string;
+          description?: string;
+          success_title?: string;
+          success_message?: string;
+          webhook_url?: string | null;
+          webhook_secret?: string | null;
+          webhook_meta?: Json;
+          notify_email?: string | null;
+          email_subject?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      form_questions: {
+        Row: {
+          id: string;
+          form_id: string;
+          sort_order: number;
+          key: string;
+          eyebrow: string;
+          label: string;
+          hint: string;
+          type: "text" | "email" | "textarea" | "choice";
+          placeholder: string;
+          choices: Json;
+          is_optional: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          form_id: string;
+          sort_order?: number;
+          key: string;
+          eyebrow?: string;
+          label: string;
+          hint?: string;
+          type?: "text" | "email" | "textarea" | "choice";
+          placeholder?: string;
+          choices?: Json;
+          is_optional?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          form_id?: string;
+          sort_order?: number;
+          key?: string;
+          eyebrow?: string;
+          label?: string;
+          hint?: string;
+          type?: "text" | "email" | "textarea" | "choice";
+          placeholder?: string;
+          choices?: Json;
+          is_optional?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      form_submissions: {
+        Row: {
+          id: string;
+          form_id: string;
+          payload: Json;
+          webhook_status: "pending" | "sent" | "failed" | "skipped";
+          webhook_status_code: number | null;
+          webhook_response: string | null;
+          webhook_attempted_at: string | null;
+          email_status: "pending" | "sent" | "failed" | "skipped";
+          email_response: string | null;
+          ip_address: string | null;
+          user_agent: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          form_id: string;
+          payload?: Json;
+          webhook_status?: "pending" | "sent" | "failed" | "skipped";
+          webhook_status_code?: number | null;
+          webhook_response?: string | null;
+          webhook_attempted_at?: string | null;
+          email_status?: "pending" | "sent" | "failed" | "skipped";
+          email_response?: string | null;
+          ip_address?: string | null;
+          user_agent?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          form_id?: string;
+          payload?: Json;
+          webhook_status?: "pending" | "sent" | "failed" | "skipped";
+          webhook_status_code?: number | null;
+          webhook_response?: string | null;
+          webhook_attempted_at?: string | null;
+          email_status?: "pending" | "sent" | "failed" | "skipped";
+          email_response?: string | null;
+          ip_address?: string | null;
+          user_agent?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       faqs: {
         Row: {
           answer_html: string;
@@ -153,3 +297,7 @@ export type BlogPost = Database["public"]["Tables"]["blog_posts"]["Row"];
 export type Faq = Database["public"]["Tables"]["faqs"]["Row"];
 export type TrustLogo = Database["public"]["Tables"]["trust_logos"]["Row"];
 export type FoundingSpots = Database["public"]["Tables"]["founding_spots"]["Row"];
+export type Form = Database["public"]["Tables"]["forms"]["Row"];
+export type FormQuestion = Database["public"]["Tables"]["form_questions"]["Row"];
+export type FormSubmission = Database["public"]["Tables"]["form_submissions"]["Row"];
+export type QuestionType = FormQuestion["type"];

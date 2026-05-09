@@ -565,12 +565,12 @@ export default async function Home() {
               Applications close once we reach 100. Be part of shaping the
               product from the start.
             </p>
-            <a
-              href={REGISTER_URL}
+            <BookDemoButton
+              slug="founding-hundred"
               className="btn btn-gold btn-lg relative z-10 mt-4 md:mt-5"
             >
               Claim Your Spot Now
-            </a>
+            </BookDemoButton>
           </div>
 
         </div>
