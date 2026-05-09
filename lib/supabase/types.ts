@@ -255,6 +255,96 @@ export type Database = {
         };
         Relationships: [];
       };
+      support_tickets: {
+        Row: {
+          id: string;
+          status: "new" | "in_progress" | "completed";
+          category:
+            | "technical"
+            | "billing"
+            | "feature_request"
+            | "account"
+            | "other";
+          subject: string;
+          description: string;
+          account_id: string | null;
+          account_email: string | null;
+          account_name: string | null;
+          account_metadata: Json;
+          page_url: string | null;
+          app_version: string | null;
+          user_agent: string | null;
+          browser: string | null;
+          os: string | null;
+          viewport: string | null;
+          console_errors: Json;
+          source: string;
+          internal_notes: string;
+          assigned_to: string | null;
+          created_at: string;
+          updated_at: string;
+          resolved_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          status?: "new" | "in_progress" | "completed";
+          category?:
+            | "technical"
+            | "billing"
+            | "feature_request"
+            | "account"
+            | "other";
+          subject: string;
+          description: string;
+          account_id?: string | null;
+          account_email?: string | null;
+          account_name?: string | null;
+          account_metadata?: Json;
+          page_url?: string | null;
+          app_version?: string | null;
+          user_agent?: string | null;
+          browser?: string | null;
+          os?: string | null;
+          viewport?: string | null;
+          console_errors?: Json;
+          source?: string;
+          internal_notes?: string;
+          assigned_to?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          resolved_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          status?: "new" | "in_progress" | "completed";
+          category?:
+            | "technical"
+            | "billing"
+            | "feature_request"
+            | "account"
+            | "other";
+          subject?: string;
+          description?: string;
+          account_id?: string | null;
+          account_email?: string | null;
+          account_name?: string | null;
+          account_metadata?: Json;
+          page_url?: string | null;
+          app_version?: string | null;
+          user_agent?: string | null;
+          browser?: string | null;
+          os?: string | null;
+          viewport?: string | null;
+          console_errors?: Json;
+          source?: string;
+          internal_notes?: string;
+          assigned_to?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          resolved_at?: string | null;
+        };
+        Relationships: [];
+      };
       trust_logos: {
         Row: {
           created_at: string;
@@ -301,3 +391,6 @@ export type Form = Database["public"]["Tables"]["forms"]["Row"];
 export type FormQuestion = Database["public"]["Tables"]["form_questions"]["Row"];
 export type FormSubmission = Database["public"]["Tables"]["form_submissions"]["Row"];
 export type QuestionType = FormQuestion["type"];
+export type SupportTicket = Database["public"]["Tables"]["support_tickets"]["Row"];
+export type SupportTicketStatus = SupportTicket["status"];
+export type SupportTicketCategory = SupportTicket["category"];
