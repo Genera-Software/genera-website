@@ -23,7 +23,7 @@ export default async function EditBlogPostPage({
 
   const updateAction = async (formData: FormData) => {
     "use server";
-    await updateBlogPost(post.id, formData);
+    return updateBlogPost(post.id, formData);
   };
 
   return (

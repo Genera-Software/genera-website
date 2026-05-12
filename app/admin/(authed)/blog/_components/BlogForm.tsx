@@ -34,13 +34,15 @@ function autoSlug(input: string): string {
     .slice(0, 80);
 }
 
+type ActionResult = { ok: true } | { ok: false; error: string };
+
 export default function BlogForm({
   initial,
   action,
   submitLabel,
 }: {
   initial?: Initial;
-  action: (formData: FormData) => Promise<void>;
+  action: (formData: FormData) => Promise<ActionResult | void>;
   submitLabel: string;
 }) {
   const [title, setTitle] = useState(initial?.title ?? "");
@@ -59,7 +61,11 @@ export default function BlogForm({
         setPending(true);
         setError(null);
         try {
-          await action(fd);
+          const result = await action(fd);
+          if (result && result.ok === false) {
+            setError(result.error);
+            setPending(false);
+          }
         } catch (err) {
           setError(err instanceof Error ? err.message : "Save failed");
           setPending(false);

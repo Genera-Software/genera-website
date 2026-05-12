@@ -57,112 +57,143 @@ function revalidatePublicBlog(slug?: string) {
   revalidatePath("/admin/blog");
 }
 
-export async function createBlogPost(formData: FormData) {
-  const data = parse(formData);
-  const supabase = getAdminSupabase();
+export type BlogActionResult = { ok: true } | { ok: false; error: string };
 
-  let slug = data.slug ? sanitizeSlug(data.slug) : sanitizeSlug(data.title);
-  if (!slug) throw new Error("Could not generate a slug — please fill the slug field");
-  if (!slugRegex.test(slug)) {
-    throw new Error("Slug must be lowercase letters, numbers, and dashes only");
-  }
+export async function createBlogPost(
+  formData: FormData,
+): Promise<BlogActionResult | void> {
+  let slug: string;
+  try {
+    const data = parse(formData);
+    const supabase = getAdminSupabase();
 
-  const file = formData.get("cover_file");
-  let cover_image_url: string | null = null;
-  if (file instanceof File && file.size > 0) {
-    cover_image_url = await uploadToBucket(file, "blog-images");
-  }
-
-  const publishedAt =
-    data.is_published && !data.published_at
-      ? new Date().toISOString()
-      : data.published_at && data.published_at !== ""
-        ? new Date(data.published_at).toISOString()
-        : null;
-
-  const { error } = await supabase.from("blog_posts").insert({
-    slug,
-    title: data.title,
-    excerpt: data.excerpt,
-    body_html: data.body_html,
-    author_name: data.author_name,
-    category: data.category,
-    read_time_minutes: data.read_time_minutes,
-    is_published: data.is_published,
-    published_at: publishedAt,
-    cover_image_url,
-  });
-
-  if (error) {
-    if (error.code === "23505") {
-      throw new Error("A post with that slug already exists");
+    slug = data.slug ? sanitizeSlug(data.slug) : sanitizeSlug(data.title);
+    if (!slug) {
+      return { ok: false, error: "Could not generate a slug — please fill the slug field" };
     }
-    throw new Error(error.message);
-  }
+    if (!slugRegex.test(slug)) {
+      return { ok: false, error: "Slug must be lowercase letters, numbers, and dashes only" };
+    }
 
-  revalidatePublicBlog(slug);
+    const file = formData.get("cover_file");
+    let cover_image_url: string | null = null;
+    if (file instanceof File && file.size > 0) {
+      cover_image_url = await uploadToBucket(file, "blog-images");
+    }
+
+    const publishedAt =
+      data.is_published && !data.published_at
+        ? new Date().toISOString()
+        : data.published_at && data.published_at !== ""
+          ? new Date(data.published_at).toISOString()
+          : null;
+
+    const { error } = await supabase.from("blog_posts").insert({
+      slug,
+      title: data.title,
+      excerpt: data.excerpt,
+      body_html: data.body_html,
+      author_name: data.author_name,
+      category: data.category,
+      read_time_minutes: data.read_time_minutes,
+      is_published: data.is_published,
+      published_at: publishedAt,
+      cover_image_url,
+    });
+
+    if (error) {
+      console.error("[createBlogPost] supabase insert failed", error);
+      if (error.code === "23505") {
+        return { ok: false, error: "A post with that slug already exists" };
+      }
+      return { ok: false, error: error.message };
+    }
+
+    revalidatePublicBlog(slug);
+  } catch (err) {
+    console.error("[createBlogPost] unexpected error", err);
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : "Failed to create post",
+    };
+  }
   redirect("/admin/blog");
 }
 
-export async function updateBlogPost(id: string, formData: FormData) {
-  const data = parse(formData);
-  const supabase = getAdminSupabase();
+export async function updateBlogPost(
+  id: string,
+  formData: FormData,
+): Promise<BlogActionResult | void> {
+  let slug: string;
+  let existingSlug: string | undefined;
+  try {
+    const data = parse(formData);
+    const supabase = getAdminSupabase();
 
-  const { data: existing } = await supabase
-    .from("blog_posts")
-    .select("slug, cover_image_url, published_at, is_published")
-    .eq("id", id)
-    .maybeSingle();
+    const { data: existing } = await supabase
+      .from("blog_posts")
+      .select("slug, cover_image_url, published_at, is_published")
+      .eq("id", id)
+      .maybeSingle();
 
-  if (!existing) throw new Error("Post not found");
+    if (!existing) return { ok: false, error: "Post not found" };
+    existingSlug = existing.slug;
 
-  let slug = data.slug ? sanitizeSlug(data.slug) : existing.slug;
-  if (!slugRegex.test(slug)) {
-    throw new Error("Slug must be lowercase letters, numbers, and dashes only");
-  }
+    slug = data.slug ? sanitizeSlug(data.slug) : existing.slug;
+    if (!slugRegex.test(slug)) {
+      return { ok: false, error: "Slug must be lowercase letters, numbers, and dashes only" };
+    }
 
-  const file = formData.get("cover_file");
-  let cover_image_url: string | null | undefined = undefined;
-  if (file instanceof File && file.size > 0) {
-    cover_image_url = await uploadToBucket(file, "blog-images");
-    if (existing.cover_image_url) {
+    const file = formData.get("cover_file");
+    let cover_image_url: string | null | undefined = undefined;
+    if (file instanceof File && file.size > 0) {
+      cover_image_url = await uploadToBucket(file, "blog-images");
+      if (existing.cover_image_url) {
+        await deleteFromBucket(existing.cover_image_url, "blog-images");
+      }
+    } else if (data.remove_cover && existing.cover_image_url) {
       await deleteFromBucket(existing.cover_image_url, "blog-images");
+      cover_image_url = null;
     }
-  } else if (data.remove_cover && existing.cover_image_url) {
-    await deleteFromBucket(existing.cover_image_url, "blog-images");
-    cover_image_url = null;
-  }
 
-  const publishedAt =
-    data.published_at && data.published_at !== ""
-      ? new Date(data.published_at).toISOString()
-      : data.is_published && !existing.published_at
-        ? new Date().toISOString()
-        : existing.published_at;
+    const publishedAt =
+      data.published_at && data.published_at !== ""
+        ? new Date(data.published_at).toISOString()
+        : data.is_published && !existing.published_at
+          ? new Date().toISOString()
+          : existing.published_at;
 
-  const update: BlogPostUpdate = {
-    slug,
-    title: data.title,
-    excerpt: data.excerpt,
-    body_html: data.body_html,
-    author_name: data.author_name,
-    category: data.category,
-    read_time_minutes: data.read_time_minutes,
-    is_published: data.is_published,
-    published_at: publishedAt,
-  };
-  if (cover_image_url !== undefined) update.cover_image_url = cover_image_url;
+    const update: BlogPostUpdate = {
+      slug,
+      title: data.title,
+      excerpt: data.excerpt,
+      body_html: data.body_html,
+      author_name: data.author_name,
+      category: data.category,
+      read_time_minutes: data.read_time_minutes,
+      is_published: data.is_published,
+      published_at: publishedAt,
+    };
+    if (cover_image_url !== undefined) update.cover_image_url = cover_image_url;
 
-  const { error } = await supabase.from("blog_posts").update(update).eq("id", id);
-  if (error) {
-    if (error.code === "23505") {
-      throw new Error("A post with that slug already exists");
+    const { error } = await supabase.from("blog_posts").update(update).eq("id", id);
+    if (error) {
+      console.error("[updateBlogPost] supabase update failed", error);
+      if (error.code === "23505") {
+        return { ok: false, error: "A post with that slug already exists" };
+      }
+      return { ok: false, error: error.message };
     }
-    throw new Error(error.message);
-  }
 
-  revalidatePublicBlog(slug);
-  if (existing.slug !== slug) revalidatePath(`/blog/${existing.slug}`);
+    revalidatePublicBlog(slug);
+    if (existingSlug !== slug) revalidatePath(`/blog/${existingSlug}`);
+  } catch (err) {
+    console.error("[updateBlogPost] unexpected error", err);
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : "Failed to update post",
+    };
+  }
   redirect("/admin/blog");
 }
 
