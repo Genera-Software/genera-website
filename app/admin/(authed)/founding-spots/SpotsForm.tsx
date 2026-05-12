@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { AdminBusyButton } from "../_components/AdminBusyButton";
 import { updateFoundingSpots } from "./actions";
 
 export default function SpotsForm({
@@ -61,13 +62,14 @@ export default function SpotsForm({
       )}
 
       <div>
-        <button
+        <AdminBusyButton
           type="submit"
-          disabled={pending}
-          className="rounded-lg bg-gold px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:opacity-90 hover:shadow-md hover:shadow-gold/30 disabled:cursor-not-allowed disabled:opacity-60"
+          variant="gold"
+          pending={pending}
+          pendingLabel="Saving…"
         >
-          {pending ? "Saving…" : "Save changes"}
-        </button>
+          Save changes
+        </AdminBusyButton>
       </div>
     </form>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { AdminBusyButton } from "../(authed)/_components/AdminBusyButton";
 import { loginAction } from "./actions";
 
 export default function LoginForm({ from }: { from: string }) {
@@ -31,13 +32,14 @@ export default function LoginForm({ from }: { from: string }) {
           {state.error}
         </p>
       )}
-      <button
+      <AdminBusyButton
         type="submit"
-        disabled={pending}
-        className="rounded-lg bg-gold px-4 py-3 text-base font-semibold text-ink transition-colors hover:opacity-90 hover:shadow-md hover:shadow-gold/30 disabled:cursor-not-allowed disabled:opacity-60"
+        variant="goldLg"
+        pending={pending}
+        pendingLabel="Signing in…"
       >
-        {pending ? "Signing in…" : "Sign in"}
-      </button>
+        Sign in
+      </AdminBusyButton>
     </form>
   );
 }

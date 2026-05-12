@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAdminSupabase } from "@/lib/supabase/admin";
+import { AdminFormStatusButton } from "../../../_components/AdminBusyButton";
 import PageHeader from "../../../_components/PageHeader";
 import FormPreview from "../../_components/FormPreview";
 import FormSettingsForm from "../../_components/FormSettingsForm";
@@ -223,10 +224,12 @@ export default async function EditFormPage({
                           await moveQuestion(form.id, q.id, "up");
                         }}
                       >
-                        <button
+                        <AdminFormStatusButton
                           type="submit"
-                          className="rounded p-1 text-ink-soft/70 hover:bg-cream-dark hover:text-ink"
+                          variant="icon"
                           title="Move up"
+                          pendingLabel="Moving…"
+                          className="rounded p-1 text-ink-soft/70 hover:bg-cream-dark hover:text-ink"
                         >
                           <svg
                             width="14"
@@ -240,7 +243,7 @@ export default async function EditFormPage({
                           >
                             <polyline points="18 15 12 9 6 15" />
                           </svg>
-                        </button>
+                        </AdminFormStatusButton>
                       </form>
                       <form
                         action={async () => {
@@ -248,10 +251,12 @@ export default async function EditFormPage({
                           await moveQuestion(form.id, q.id, "down");
                         }}
                       >
-                        <button
+                        <AdminFormStatusButton
                           type="submit"
-                          className="rounded p-1 text-ink-soft/70 hover:bg-cream-dark hover:text-ink"
+                          variant="icon"
                           title="Move down"
+                          pendingLabel="Moving…"
+                          className="rounded p-1 text-ink-soft/70 hover:bg-cream-dark hover:text-ink"
                         >
                           <svg
                             width="14"
@@ -265,7 +270,7 @@ export default async function EditFormPage({
                           >
                             <polyline points="6 9 12 15 18 9" />
                           </svg>
-                        </button>
+                        </AdminFormStatusButton>
                       </form>
                       <span className="ml-2 text-xs text-ink-soft/70">
                         {q.sort_order}
@@ -310,12 +315,13 @@ export default async function EditFormPage({
                           await deleteQuestion(form.id, q.id);
                         }}
                       >
-                        <button
+                        <AdminFormStatusButton
                           type="submit"
-                          className="rounded-md border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50"
+                          variant="outlineDanger"
+                          pendingLabel="Deleting…"
                         >
                           Delete
-                        </button>
+                        </AdminFormStatusButton>
                       </form>
                     </div>
                   </td>
@@ -362,12 +368,13 @@ export default async function EditFormPage({
                 await markAllSubmissionsRead(form.id);
               }}
             >
-              <button
+              <AdminFormStatusButton
                 type="submit"
-                className="rounded-lg border border-teal-mid bg-white px-3 py-2 text-xs font-semibold text-ink hover:border-forest"
+                variant="outlineMarkAll"
+                pendingLabel="Updating…"
               >
                 Mark all as read
-              </button>
+              </AdminFormStatusButton>
             </form>
           )}
         </div>
@@ -436,12 +443,13 @@ export default async function EditFormPage({
               placeholder="paste id…"
               className="rounded-md border border-teal-mid bg-white px-2 py-1 font-mono text-xs"
             />
-            <button
+            <AdminFormStatusButton
               type="submit"
-              className="rounded-md border border-red-200 px-2.5 py-1 font-semibold text-red-600 hover:bg-red-50"
+              variant="outlineDangerSm"
+              pendingLabel="Deleting…"
             >
               Delete
-            </button>
+            </AdminFormStatusButton>
           </form>
         )}
       </section>

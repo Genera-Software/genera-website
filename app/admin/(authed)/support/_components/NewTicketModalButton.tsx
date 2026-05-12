@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AdminBusyButton } from "../../_components/AdminBusyButton";
 
 const CATEGORIES: Array<{ value: string; label: string }> = [
   { value: "technical", label: "Technical" },
@@ -184,13 +185,14 @@ export default function NewTicketModalButton({
                 >
                   Cancel
                 </button>
-                <button
+                <AdminBusyButton
                   type="submit"
-                  disabled={submitting}
-                  className="rounded-lg bg-forest px-4 py-2 text-sm font-semibold text-white hover:bg-forest-dark disabled:opacity-60"
+                  variant="forest"
+                  pending={submitting}
+                  pendingLabel="Creating…"
                 >
-                  {submitting ? "Creating…" : "Create ticket"}
-                </button>
+                  Create ticket
+                </AdminBusyButton>
               </div>
             </form>
           </div>

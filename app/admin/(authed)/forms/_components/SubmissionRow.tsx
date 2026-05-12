@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { AdminBusyButton } from "../../_components/AdminBusyButton";
 
 type Props = {
   id: string;
@@ -94,18 +95,19 @@ export default function SubmissionRow({
         </td>
         <td className="px-5 py-3 text-right align-middle">
           <div className="inline-flex items-center gap-2">
-            <button
+            <AdminBusyButton
               type="button"
+              variant="outlineSm"
+              pending={isPending}
+              pendingLabel="Updating…"
               onClick={() =>
                 startTransition(() => {
                   onToggleRead(id, !isRead);
                 })
               }
-              disabled={isPending}
-              className="rounded-md border border-teal-mid px-2.5 py-1.5 text-xs font-semibold text-ink-soft hover:border-forest hover:text-ink disabled:opacity-50"
             >
               {isRead ? "Mark unread" : "Mark read"}
-            </button>
+            </AdminBusyButton>
             <button
               type="button"
               onClick={handleExpand}

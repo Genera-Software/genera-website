@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAdminSupabase } from "@/lib/supabase/admin";
+import { AdminFormStatusButton } from "../_components/AdminBusyButton";
 import PageHeader from "../_components/PageHeader";
 import { deleteForm } from "./actions";
 
@@ -356,12 +357,13 @@ export default async function FormsAdminPage() {
                           await deleteForm(f.id);
                         }}
                       >
-                        <button
+                        <AdminFormStatusButton
                           type="submit"
-                          className="rounded-md border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50"
+                          variant="outlineDanger"
+                          pendingLabel="Deleting…"
                         >
                           Delete
-                        </button>
+                        </AdminFormStatusButton>
                       </form>
                     </div>
                   </td>

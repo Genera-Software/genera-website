@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { AdminFormStatusButton } from "./AdminBusyButton";
 
 type NavItem = {
   kind: "item";
@@ -251,9 +252,10 @@ export default function Sidebar({
 
         <div className="absolute bottom-4 left-4 right-4">
           <form action="/admin/logout" method="post">
-            <button
+            <AdminFormStatusButton
               type="submit"
-              className="flex w-full items-center gap-3 rounded-lg border border-forest-mid/50 px-3 py-2.5 text-sm font-medium text-cream transition-colors hover:bg-forest hover:text-white"
+              variant="ghostWide"
+              pendingLabel="Signing out…"
             >
               <svg
                 width="18"
@@ -270,7 +272,7 @@ export default function Sidebar({
                 <line x1="21" y1="12" x2="9" y2="12" />
               </svg>
               Sign out
-            </button>
+            </AdminFormStatusButton>
           </form>
         </div>
       </aside>

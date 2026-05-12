@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getAdminSupabase } from "@/lib/supabase/admin";
+import { AdminFormStatusButton } from "../../_components/AdminBusyButton";
 import PageHeader from "../../_components/PageHeader";
 import {
   deleteTicket,
@@ -181,12 +182,13 @@ export default async function SupportTicketDetailPage({
                 className="w-full rounded-lg border border-teal-mid bg-white px-3 py-2 text-sm text-ink focus:border-forest focus:outline-none"
               />
               <div className="mt-3 flex justify-end">
-                <button
+                <AdminFormStatusButton
                   type="submit"
-                  className="rounded-lg bg-forest px-4 py-2 text-sm font-semibold text-white hover:bg-forest-dark"
+                  variant="forestSm"
+                  pendingLabel="Saving…"
                 >
                   Save notes
-                </button>
+                </AdminFormStatusButton>
               </div>
             </form>
           </section>
@@ -209,18 +211,15 @@ export default async function SupportTicketDetailPage({
                       await setTicketStatus(ticket.id, s);
                     }}
                   >
-                    <button
+                    <AdminFormStatusButton
                       type="submit"
+                      variant={active ? "ticketStatusActive" : "ticketStatus"}
                       disabled={active}
-                      className={`w-full rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
-                        active
-                          ? "cursor-default bg-cream text-ink-soft"
-                          : "border border-teal-mid bg-white text-ink hover:border-forest hover:bg-cream"
-                      }`}
+                      pendingLabel="Updating…"
                     >
                       {active ? "✓ " : ""}
                       {STATUS_LABEL[s]}
-                    </button>
+                    </AdminFormStatusButton>
                   </form>
                 );
               })}
@@ -284,12 +283,14 @@ export default async function SupportTicketDetailPage({
                 await deleteTicket(ticket.id);
               }}
             >
-              <button
+              <AdminFormStatusButton
                 type="submit"
-                className="w-full rounded-lg border border-red-200 px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50"
+                variant="outlineDanger"
+                className="w-full"
+                pendingLabel="Deleting…"
               >
                 Delete ticket
-              </button>
+              </AdminFormStatusButton>
             </form>
           </section>
         </aside>
