@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { AdminBusyButton } from "../../_components/AdminBusyButton";
 import RichTextEditor from "../../_components/RichTextEditor";
 
 type Initial = {
@@ -263,13 +264,14 @@ export default function BlogForm({
           </p>
         )}
 
-        <button
+        <AdminBusyButton
           type="submit"
-          disabled={pending}
-          className="rounded-lg bg-gold px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:opacity-90 hover:shadow-md hover:shadow-gold/30 disabled:cursor-not-allowed disabled:opacity-60"
+          variant="gold"
+          pending={pending}
+          pendingLabel="Saving…"
         >
-          {pending ? "Saving…" : submitLabel}
-        </button>
+          {submitLabel}
+        </AdminBusyButton>
       </aside>
     </form>
   );

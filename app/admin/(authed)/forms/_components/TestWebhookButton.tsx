@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AdminBusyButton } from "../../_components/AdminBusyButton";
 import { testWebhook } from "../actions";
 
 export default function TestWebhookButton({ formId }: { formId: string }) {
@@ -27,14 +28,15 @@ export default function TestWebhookButton({ formId }: { formId: string }) {
 
   return (
     <div className="flex flex-col gap-2">
-      <button
+      <AdminBusyButton
         type="button"
+        variant="outline"
+        pending={pending}
+        pendingLabel="Sending…"
         onClick={onClick}
-        disabled={pending}
-        className="self-start rounded-lg border border-teal-mid bg-white px-4 py-2 text-sm font-semibold text-ink hover:border-forest disabled:opacity-60"
       >
-        {pending ? "Sending…" : "Send test webhook"}
-      </button>
+        Send test webhook
+      </AdminBusyButton>
       {result && (
         <p
           className={`rounded-md px-3 py-2 text-xs ${

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAdminSupabase } from "@/lib/supabase/admin";
+import { AdminFormStatusButton } from "../_components/AdminBusyButton";
 import PageHeader from "../_components/PageHeader";
 import { deleteFaq, moveFaq } from "./actions";
 
@@ -48,10 +49,12 @@ export default async function FaqsAdminPage() {
                         await moveFaq(f.id, "up");
                       }}
                     >
-                      <button
+                      <AdminFormStatusButton
                         type="submit"
-                        className="rounded p-1 text-ink-soft/70 hover:bg-cream-dark hover:text-ink"
+                        variant="icon"
                         title="Move up"
+                        pendingLabel="Moving…"
+                        className="rounded p-1 text-ink-soft/70 hover:bg-cream-dark hover:text-ink"
                       >
                         <svg
                           width="14"
@@ -65,7 +68,7 @@ export default async function FaqsAdminPage() {
                         >
                           <polyline points="18 15 12 9 6 15" />
                         </svg>
-                      </button>
+                      </AdminFormStatusButton>
                     </form>
                     <form
                       action={async () => {
@@ -73,10 +76,12 @@ export default async function FaqsAdminPage() {
                         await moveFaq(f.id, "down");
                       }}
                     >
-                      <button
+                      <AdminFormStatusButton
                         type="submit"
-                        className="rounded p-1 text-ink-soft/70 hover:bg-cream-dark hover:text-ink"
+                        variant="icon"
                         title="Move down"
+                        pendingLabel="Moving…"
+                        className="rounded p-1 text-ink-soft/70 hover:bg-cream-dark hover:text-ink"
                       >
                         <svg
                           width="14"
@@ -90,7 +95,7 @@ export default async function FaqsAdminPage() {
                         >
                           <polyline points="6 9 12 15 18 9" />
                         </svg>
-                      </button>
+                      </AdminFormStatusButton>
                     </form>
                     <span className="ml-2 text-xs text-ink-soft/70">
                       {f.sort_order}
@@ -130,12 +135,13 @@ export default async function FaqsAdminPage() {
                         await deleteFaq(f.id);
                       }}
                     >
-                      <button
+                      <AdminFormStatusButton
                         type="submit"
-                        className="rounded-md border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50"
+                        variant="outlineDanger"
+                        pendingLabel="Deleting…"
                       >
                         Delete
-                      </button>
+                      </AdminFormStatusButton>
                     </form>
                   </div>
                 </td>

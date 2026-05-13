@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAdminSupabase } from "@/lib/supabase/admin";
+import { AdminFormStatusButton } from "../_components/AdminBusyButton";
 import PageHeader from "../_components/PageHeader";
 import { deleteBlogPost, togglePublish } from "./actions";
 
@@ -88,12 +89,15 @@ export default async function BlogAdminPage() {
                         await togglePublish(p.id);
                       }}
                     >
-                      <button
+                      <AdminFormStatusButton
                         type="submit"
-                        className="rounded-md border border-teal-mid px-3 py-1.5 text-xs font-semibold text-ink hover:border-forest"
+                        variant="outlineSm"
+                        pendingLabel={
+                          p.is_published ? "Unpublishing…" : "Publishing…"
+                        }
                       >
                         {p.is_published ? "Unpublish" : "Publish"}
-                      </button>
+                      </AdminFormStatusButton>
                     </form>
                     <Link
                       href={`/admin/blog/${p.id}/edit`}
@@ -107,12 +111,13 @@ export default async function BlogAdminPage() {
                         await deleteBlogPost(p.id);
                       }}
                     >
-                      <button
+                      <AdminFormStatusButton
                         type="submit"
-                        className="rounded-md border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50"
+                        variant="outlineDanger"
+                        pendingLabel="Deleting…"
                       >
                         Delete
-                      </button>
+                      </AdminFormStatusButton>
                     </form>
                   </div>
                 </td>
