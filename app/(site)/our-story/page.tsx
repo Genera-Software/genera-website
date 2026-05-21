@@ -88,7 +88,7 @@ export default async function OurStoryPage() {
       {/* Split hero */}
       <section className="grid grid-cols-1 md:grid-cols-2">
         <div className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 py-20 text-white md:px-14">
-          <p className="font-caveat text-xl text-gold-soft">
+          <p className="font-caveat text-[1.55rem] font-semibold leading-snug text-gold-soft">
             Our Story · Built from the ground up
           </p>
           <h1 className="mt-3 text-white">
@@ -130,9 +130,10 @@ export default async function OurStoryPage() {
               type="video/mp4"
             />
           </video>
-          {/* Soft overlay: left-edge blend into text panel + subtle dark warmth */}
-          <div className="pointer-events-none absolute inset-0 bg-[rgba(0,20,24,0.18)]" />
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-[180px] bg-gradient-to-r from-[rgba(0,62,69,0.55)] to-transparent" />
+          {/* Strong left-edge blend — solid forest fading into video, matching the text panel */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-[55%] bg-gradient-to-r from-forest via-forest/60 to-transparent" />
+          {/* Subtle overall dark warm tint to take the edge off the brightness */}
+          <div className="pointer-events-none absolute inset-0 bg-[rgba(0,15,18,0.22)]" />
         </div>
       </section>
 
