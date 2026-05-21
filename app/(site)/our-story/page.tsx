@@ -130,6 +130,9 @@ export default async function OurStoryPage() {
               type="video/mp4"
             />
           </video>
+          {/* Soft overlay: left-edge blend into text panel + subtle dark warmth */}
+          <div className="pointer-events-none absolute inset-0 bg-[rgba(0,20,24,0.18)]" />
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-[180px] bg-gradient-to-r from-[rgba(0,62,69,0.55)] to-transparent" />
         </div>
       </section>
 
