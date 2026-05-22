@@ -179,10 +179,10 @@ export default async function OurStoryPage() {
 
           <div className="rev overflow-hidden rounded-3xl shadow-[0_24px_60px_rgba(0,62,69,0.16)]">
             <Image
-              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663478487775/BxxxoQYbhf7FnKvPttwktS/duncans-woodland_6f11b5ea.jpg"
-              alt="The woodland daycare facility"
+              src="/images/team-certificates.png"
+              alt="The Duncan's Dog Co team holding their certificates"
               width={1600}
-              height={1000}
+              height={1200}
               className="block h-auto w-full"
               loading="lazy"
             />
@@ -397,14 +397,14 @@ function PolaroidPlaceholder({
     <div
       className={`group inline-block ${rotation} bg-white p-2 pb-7 shadow-[0_14px_30px_rgba(0,62,69,0.18)] transition-transform duration-300 hover:rotate-0 hover:scale-[1.04] md:p-3 md:pb-10`}
     >
-      <div className="relative flex h-24 w-28 items-center justify-center overflow-hidden bg-linear-to-br from-cream-dark via-cream to-teal-mid/30 md:h-36 md:w-44">
+      <div className="relative flex h-28 w-28 items-center justify-center overflow-hidden bg-linear-to-br from-cream-dark via-cream to-teal-mid/30 md:h-44 md:w-44">
         {imageUrl ? (
           <Image
             src={imageUrl}
             alt={`Photo from ${year}`}
             fill
             sizes="(max-width: 768px) 112px, 176px"
-            className="object-cover"
+            className="object-cover object-top"
           />
         ) : (
           <svg
