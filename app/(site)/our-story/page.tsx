@@ -85,9 +85,10 @@ export default async function OurStoryPage() {
     <>
       <Reveal />
 
-      {/* Split hero */}
-      <section className="grid grid-cols-1 md:grid-cols-2">
-        <div className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 py-20 text-white md:px-14">
+      {/* Split hero — wrapping section carries the same gradient as the homepage hero
+           so the nav (bg-forest) transitions seamlessly into the page */}
+      <section className="grid grid-cols-1 bg-gradient-to-br from-forest via-forest-mid to-[#007080] md:grid-cols-2">
+        <div className="relative overflow-hidden px-8 py-20 text-white md:px-14">
           <p className="font-caveat text-[1.55rem] font-semibold leading-snug text-gold-soft">
             Our Story · Built from the ground up
           </p>
@@ -116,7 +117,7 @@ export default async function OurStoryPage() {
 
         </div>
 
-        <div className="relative min-h-[320px] overflow-hidden bg-forest-dark md:min-h-0">
+        <div className="relative min-h-[320px] overflow-hidden bg-transparent md:min-h-0">
           <video
             autoPlay
             muted
