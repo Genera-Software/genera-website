@@ -307,6 +307,7 @@ export default async function OurStoryPage() {
             <h2 className="mt-2">It takes a team who actually cares.</h2>
           </div>
 
+          {/* Becks */}
           <div className="rev d1 grid gap-10 overflow-hidden rounded-3xl border border-cream-dark bg-cream shadow-[0_24px_60px_rgba(0,62,69,0.08)] md:grid-cols-[2fr_3fr]">
             <div className="relative aspect-[4/5] md:aspect-auto">
               <Image
@@ -346,6 +347,49 @@ export default async function OurStoryPage() {
                   day one.
                 </p>
               </div>
+            </div>
+          </div>
+
+          {/* Jess — photo on the right on desktop */}
+          <div className="rev d2 mt-8 grid gap-10 overflow-hidden rounded-3xl border border-cream-dark bg-cream shadow-[0_24px_60px_rgba(0,62,69,0.08)] md:grid-cols-[3fr_2fr]">
+            <div className="p-8 md:p-12 md:order-1">
+              <p className="eyebrow">Meet the team</p>
+              <h3 className="mt-2 font-poppins text-3xl font-extrabold text-forest">
+                Jess
+              </h3>
+              <p className="mt-1 font-medium text-gold">
+                Co-Founder &amp; Director
+              </p>
+              <div className="mt-5 flex flex-col gap-3 text-ink-soft">
+                <p>
+                  Jess co-founded Duncan&apos;s Dog Co alongside Duncan in 2011,
+                  building it from a dog walking round in South West London into
+                  one of the UK&apos;s longest-standing five-star licensed
+                  daycares.
+                </p>
+                <p>
+                  She has run every part of the business — from the early
+                  morning runs and client relationships to managing a full team
+                  and navigating the day-to-day realities of running a licensed
+                  facility. Every problem Genera solves is one she has lived
+                  first hand.
+                </p>
+                <p>
+                  As co-founder of Genera, Jess brings that same care and
+                  attention to detail to every part of how the product is built
+                  and how customers are supported.
+                </p>
+              </div>
+            </div>
+            <div className="relative aspect-[4/5] md:aspect-auto md:order-2">
+              <Image
+                src="/images/jess.png"
+                alt="Jess, Co-Founder of Genera Software"
+                fill
+                sizes="(max-width: 768px) 100vw, 400px"
+                className="object-cover object-top"
+                loading="lazy"
+              />
             </div>
           </div>
         </div>
