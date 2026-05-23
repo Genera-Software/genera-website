@@ -78,7 +78,7 @@ export default function Navbar() {
               <span className="font-massilia text-[1.1rem] font-extrabold tracking-[0.125rem] text-white">
                 GENERA
               </span>
-              <span className="text-[0.62rem] tracking-[0.5px] text-white/60">
+              <span className="my-[5px] text-[0.62rem] tracking-[0.5px] text-white/60">
                 A Better Breed of Software
               </span>
             </span>
