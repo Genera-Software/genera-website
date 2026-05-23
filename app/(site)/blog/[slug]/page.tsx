@@ -88,7 +88,7 @@ export default async function BlogPostPage({
       <Reveal />
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-6 pt-20 pb-16 text-white md:px-8 md:pt-28 md:pb-20">
+      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-6 pt-28 pb-16 text-white md:px-8 md:pt-36 md:pb-20">
         <div className="mx-auto max-w-[820px]">
           <Link
             href="/blog"

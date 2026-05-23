@@ -19,7 +19,7 @@ export default function ContactPage() {
       <Reveal />
 
       {/* Page hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 py-24 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 pt-32 pb-24 text-white">
         <div className="mx-auto max-w-[860px] text-center">
           <p className="eyebrow !text-gold-soft">Get in Touch</p>
           <h1 className="mt-2 text-white">

@@ -88,7 +88,7 @@ export default async function OurStoryPage() {
       {/* Split hero — wrapping section carries the same gradient as the homepage hero
            so the nav (bg-forest) transitions seamlessly into the page */}
       <section className="grid grid-cols-1 bg-gradient-to-br from-forest via-forest-mid to-[#007080] md:grid-cols-2">
-        <div className="relative overflow-hidden px-8 py-20 text-white md:px-14">
+        <div className="relative overflow-hidden px-8 pt-28 pb-20 text-white md:px-14 md:pt-36">
           <p className="font-caveat text-section-h font-semibold leading-snug text-gold-soft">
             Our Story · Built from the ground up
           </p>

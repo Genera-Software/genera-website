@@ -4,6 +4,7 @@ import { createMetadata } from "@/lib/seo";
 import Paw from "@/components/Paw";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
+import FoundingSpotsStats from "@/components/FoundingSpotsStats";
 import { FOUNDING_100_CTA_LABEL } from "@/lib/cta";
 import { getPublicSupabase } from "@/lib/supabase/server";
 
@@ -131,18 +132,13 @@ export default async function Home() {
   const trustLogos = logosRes.data ?? [];
   const totalSpots = spotsRes.data?.total_spots ?? 100;
   const claimedSpots = spotsRes.data?.claimed_spots ?? 0;
-  const remainingSpots = Math.max(totalSpots - claimedSpots, 0);
-  const progressPct =
-    totalSpots > 0
-      ? Math.min(100, Math.round((claimedSpots / totalSpots) * 100))
-      : 0;
 
   return (
     <>
       <Reveal />
 
       {/* ── Hero ───────────────────────────────────────────────── */}
-      <section className="relative flex flex-col overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-6 pt-8 pb-0 md:min-h-screen md:px-8 md:pt-20 md:pb-12">
+      <section className="relative flex flex-col overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-6 pt-24 pb-0 md:min-h-screen md:px-8 md:pt-32 md:pb-12">
         {/* decorative blobs */}
         <span
           aria-hidden
@@ -562,24 +558,10 @@ export default async function Home() {
               height={720}
               className="pointer-events-none absolute -right-6 bottom-0 z-0 h-[180px] w-auto select-none drop-shadow-[0_8px_20px_rgba(0,0,0,0.3)] md:-right-40 md:-bottom-16 md:z-20 md:h-[28rem] md:drop-shadow-[0_12px_28px_rgba(0,0,0,0.35)]"
             />
-            <p className="relative z-10 text-eyebrow uppercase tracking-widest text-gold-soft md:text-sm">
-              Spots remaining
-            </p>
-            <div className="relative z-10 mt-1 font-massilia text-figure-lg font-bold leading-none text-gold md:mt-2 md:text-display">
-              {remainingSpots}
-            </div>
-            <p className="relative z-10 mb-4 text-fine text-white/70 md:mb-5 md:text-base">
-              out of {totalSpots} founding members
-            </p>
-            <div className="relative z-10 h-[7px] w-full overflow-hidden rounded-full bg-white/10 md:h-2">
-              <div
-                className="h-full rounded-full bg-gold"
-                style={{ width: `${progressPct}%` }}
-              />
-            </div>
-            <p className="relative z-10 mt-2 text-fine text-white/60 md:text-sm">
-              {claimedSpots} {claimedSpots === 1 ? "spot" : "spots"} claimed so far
-            </p>
+            <FoundingSpotsStats
+              totalSpots={totalSpots}
+              claimedSpots={claimedSpots}
+            />
             <p className="relative z-10 mt-3.5 max-w-[200px] text-meta text-white/80 md:mt-4 md:max-w-none md:text-base">
               Applications close once we reach 100. Be part of shaping the
               product from the start.
