@@ -85,10 +85,11 @@ export default async function OurStoryPage() {
     <>
       <Reveal />
 
-      {/* Split hero */}
-      <section className="grid grid-cols-1 md:grid-cols-2">
-        <div className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 py-20 text-white md:px-14">
-          <p className="font-caveat text-xl text-gold-soft">
+      {/* Split hero — wrapping section carries the same gradient as the homepage hero
+           so the nav (bg-forest) transitions seamlessly into the page */}
+      <section className="grid grid-cols-1 bg-gradient-to-br from-forest via-forest-mid to-[#007080] md:grid-cols-2">
+        <div className="relative overflow-hidden px-8 py-20 text-white md:px-14">
+          <p className="font-caveat text-[1.55rem] font-semibold leading-snug text-gold-soft">
             Our Story · Built from the ground up
           </p>
           <h1 className="mt-3 text-white">
@@ -116,7 +117,7 @@ export default async function OurStoryPage() {
 
         </div>
 
-        <div className="relative min-h-[320px] overflow-hidden bg-forest-dark md:min-h-0">
+        <div className="relative min-h-[320px] overflow-hidden bg-transparent md:min-h-0">
           <video
             autoPlay
             muted
@@ -130,6 +131,10 @@ export default async function OurStoryPage() {
               type="video/mp4"
             />
           </video>
+          {/* Strong left-edge blend — solid forest fading into video, matching the text panel */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-[55%] bg-gradient-to-r from-forest via-forest/60 to-transparent" />
+          {/* Subtle overall dark warm tint to take the edge off the brightness */}
+          <div className="pointer-events-none absolute inset-0 bg-[rgba(0,15,18,0.22)]" />
         </div>
       </section>
 
@@ -175,10 +180,10 @@ export default async function OurStoryPage() {
 
           <div className="rev overflow-hidden rounded-3xl shadow-[0_24px_60px_rgba(0,62,69,0.16)]">
             <Image
-              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663478487775/BxxxoQYbhf7FnKvPttwktS/duncans-woodland_6f11b5ea.jpg"
-              alt="The woodland daycare facility"
+              src="/images/team-certificates.png"
+              alt="The Duncan's Dog Co team holding their certificates"
               width={1600}
-              height={1000}
+              height={1200}
               className="block h-auto w-full"
               loading="lazy"
             />
@@ -302,6 +307,7 @@ export default async function OurStoryPage() {
             <h2 className="mt-2">It takes a team who actually cares.</h2>
           </div>
 
+          {/* Becks */}
           <div className="rev d1 grid gap-10 overflow-hidden rounded-3xl border border-cream-dark bg-cream shadow-[0_24px_60px_rgba(0,62,69,0.08)] md:grid-cols-[2fr_3fr]">
             <div className="relative aspect-[4/5] md:aspect-auto">
               <Image
@@ -341,6 +347,49 @@ export default async function OurStoryPage() {
                   day one.
                 </p>
               </div>
+            </div>
+          </div>
+
+          {/* Jess — photo on the right on desktop */}
+          <div className="rev d2 mt-8 grid gap-10 overflow-hidden rounded-3xl border border-cream-dark bg-cream shadow-[0_24px_60px_rgba(0,62,69,0.08)] md:grid-cols-[3fr_2fr]">
+            <div className="p-8 md:p-12 md:order-1">
+              <p className="eyebrow">Meet the team</p>
+              <h3 className="mt-2 font-poppins text-3xl font-extrabold text-forest">
+                Jess
+              </h3>
+              <p className="mt-1 font-medium text-gold">
+                Co-Founder &amp; Director
+              </p>
+              <div className="mt-5 flex flex-col gap-3 text-ink-soft">
+                <p>
+                  Jess co-founded Duncan&apos;s Dog Co alongside Duncan in 2011,
+                  building it from a dog walking round in South West London into
+                  one of the UK&apos;s longest-standing five-star licensed
+                  daycares.
+                </p>
+                <p>
+                  She has run every part of the business — from the early
+                  morning runs and client relationships to managing a full team
+                  and navigating the day-to-day realities of running a licensed
+                  facility. Every problem Genera solves is one she has lived
+                  first hand.
+                </p>
+                <p>
+                  As co-founder of Genera, Jess brings that same care and
+                  attention to detail to every part of how the product is built
+                  and how customers are supported.
+                </p>
+              </div>
+            </div>
+            <div className="relative aspect-[4/5] md:aspect-auto md:order-2">
+              <Image
+                src="/images/jess.png"
+                alt="Jess, Co-Founder of Genera Software"
+                fill
+                sizes="(max-width: 768px) 100vw, 400px"
+                className="object-cover object-top"
+                loading="lazy"
+              />
             </div>
           </div>
         </div>
@@ -393,14 +442,14 @@ function PolaroidPlaceholder({
     <div
       className={`group inline-block ${rotation} bg-white p-2 pb-7 shadow-[0_14px_30px_rgba(0,62,69,0.18)] transition-transform duration-300 hover:rotate-0 hover:scale-[1.04] md:p-3 md:pb-10`}
     >
-      <div className="relative flex h-24 w-28 items-center justify-center overflow-hidden bg-linear-to-br from-cream-dark via-cream to-teal-mid/30 md:h-36 md:w-44">
+      <div className="relative flex h-28 w-28 items-center justify-center overflow-hidden bg-linear-to-br from-cream-dark via-cream to-teal-mid/30 md:h-44 md:w-44">
         {imageUrl ? (
           <Image
             src={imageUrl}
             alt={`Photo from ${year}`}
             fill
             sizes="(max-width: 768px) 112px, 176px"
-            className="object-cover"
+            className="object-cover object-top"
           />
         ) : (
           <svg
