@@ -97,7 +97,7 @@ export default async function OurStoryPage() {
             <br />
             <em className="text-gold">We set out to walk dogs.</em>
           </h1>
-          <p className="mt-5 max-w-[480px] text-white/80">
+          <p className="mt-5 max-w-[480px] text-body-lg text-white/80">
             From a dog walking round in South West London in 2011 to software
             used by pet businesses across the UK. Here&apos;s how it happened.
           </p>

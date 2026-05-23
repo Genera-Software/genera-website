@@ -34,8 +34,8 @@
      semantic tokens below collapse close-but-different ad-hoc
      values into a small, consistent ramp.
      ───────────────────────────────────────────────────────────── */
-  --text-eyebrow:     0.7rem;   /* uppercase pills / fine badges */
-  --text-fine:        0.8rem;   /* captions on cards / dark backdrops */
+  --text-eyebrow:     0.9rem;   /* uppercase pills / fine badges */
+  --text-fine:        0.9rem;   /* captions on cards / dark backdrops */
   --text-meta:        0.95rem;  /* small body / muted copy */
   --text-body-lg:     1.125rem; /* slightly larger than base body */
   --text-mini-h:      1.4rem;   /* small section sub-heading */

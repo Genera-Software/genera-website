@@ -184,8 +184,8 @@ export default async function Home() {
             gets your daycare.
           </h1>
 
-          <p className="rev d1 mb-5 max-w-[300px] animate-[fadeInUp_0.7s_0.2s_ease_both] text-white/80 md:mb-6 md:max-w-[460px]">
-            Built by the people behind Duncan&apos;s Dog Co — 15 years in the
+          <p className="rev d1 mb-5 max-w-[300px] animate-[fadeInUp_0.7s_0.2s_ease_both] text-body-lg text-white/80 md:mb-6 md:max-w-[460px]">
+            Built by the people behind Duncan&apos;s Dog Co - 15 years in the
             industry, finally turning that experience into software that makes
             your business run the way it should.
           </p>
