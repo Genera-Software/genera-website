@@ -60,7 +60,7 @@ export default function ContactPage() {
             </p>
             <a
               href="mailto:info@generasoftware.com"
-              className="mt-6 inline-block font-poppins text-xl font-bold text-forest underline decoration-gold decoration-2 underline-offset-4 hover:text-forest-mid"
+              className="mt-6 inline-block font-massilia text-xl font-bold text-forest underline decoration-gold decoration-2 underline-offset-4 hover:text-forest-mid"
             >
               info@generasoftware.com
             </a>
@@ -129,7 +129,7 @@ export default function ContactPage() {
                   <div className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
                     {s.label}
                   </div>
-                  <div className="font-poppins font-bold text-forest">
+                  <div className="font-massilia font-bold text-forest">
                     {s.value}
                   </div>
                 </div>

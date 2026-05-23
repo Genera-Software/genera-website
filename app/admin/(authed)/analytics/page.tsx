@@ -474,7 +474,7 @@ function MetricCard({
           </div>
         )}
       </div>
-      <p className="font-poppins text-3xl font-extrabold text-ink">{value}</p>
+      <p className="font-massilia text-3xl font-bold text-ink">{value}</p>
       <p className="mt-1 text-sm text-ink-soft">{label}</p>
     </div>
   );
@@ -575,7 +575,7 @@ export default async function AnalyticsAdminPage({
 
       {/* Website Traffic Overview */}
       <section className="mb-8">
-        <h2 className="font-poppins text-xl font-bold text-ink">
+        <h2 className="font-massilia text-xl font-bold text-ink">
           Website traffic overview
         </h2>
         <p className="mt-1 text-sm text-ink-soft">
@@ -677,7 +677,7 @@ export default async function AnalyticsAdminPage({
 
       {/* Traffic sources */}
       <section className="mb-8">
-        <h2 className="font-poppins text-xl font-bold text-ink">
+        <h2 className="font-massilia text-xl font-bold text-ink">
           Traffic sources
         </h2>
         <p className="mt-1 text-sm text-ink-soft">
@@ -696,7 +696,7 @@ export default async function AnalyticsAdminPage({
                 className="flex items-center justify-between rounded-2xl border border-teal-mid bg-white p-5"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cream-dark font-poppins text-sm font-extrabold text-ink">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cream-dark font-massilia text-sm font-bold text-ink">
                     {i + 1}
                   </div>
                   <div>
@@ -730,7 +730,7 @@ export default async function AnalyticsAdminPage({
 
       {/* Top referrers */}
       <section className="mb-8">
-        <h2 className="font-poppins text-xl font-bold text-ink">
+        <h2 className="font-massilia text-xl font-bold text-ink">
           Top referrers
         </h2>
         <p className="mt-1 text-sm text-ink-soft">
@@ -781,7 +781,7 @@ export default async function AnalyticsAdminPage({
 
       {/* Top pages */}
       <section className="mb-8">
-        <h2 className="font-poppins text-xl font-bold text-ink">Top pages</h2>
+        <h2 className="font-massilia text-xl font-bold text-ink">Top pages</h2>
         <p className="mt-1 text-sm text-ink-soft">
           Most visited pages on the public site.
         </p>
@@ -827,7 +827,7 @@ export default async function AnalyticsAdminPage({
       {/* Device + Geo */}
       <div className="grid gap-6 md:grid-cols-2">
         <section>
-          <h2 className="font-poppins text-xl font-bold text-ink">
+          <h2 className="font-massilia text-xl font-bold text-ink">
             Device breakdown
           </h2>
           <p className="mt-1 text-sm text-ink-soft">
@@ -868,7 +868,7 @@ export default async function AnalyticsAdminPage({
         </section>
 
         <section>
-          <h2 className="font-poppins text-xl font-bold text-ink">
+          <h2 className="font-massilia text-xl font-bold text-ink">
             Top countries
           </h2>
           <p className="mt-1 text-sm text-ink-soft">

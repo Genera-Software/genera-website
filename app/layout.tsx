@@ -1,24 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Poppins, Caveat } from "next/font/google";
+import { Caveat } from "next/font/google";
 import Script from "next/script";
 import ConsentProvider from "@/components/ConsentProvider";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics/ga-measurement-id";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  variable: "--font-poppins",
-  display: "swap",
-});
 
 const caveat = Caveat({
   subsets: ["latin"],
@@ -103,9 +89,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${poppins.variable} ${caveat.variable}`}
+      className={caveat.variable}
     >
-      <body className="font-[family-name:var(--font-inter)] text-base leading-relaxed">
+      <head>
+        <link rel="stylesheet" href="https://use.typekit.net/frg5tgd.css" />
+      </head>
+      <body className="font-agenda text-base leading-relaxed">
         <ConsentProvider>
           <Script id="ga-consent-default" strategy="beforeInteractive">
             {`

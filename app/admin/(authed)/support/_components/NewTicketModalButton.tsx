@@ -74,7 +74,7 @@ export default function NewTicketModalButton({
               </svg>
             </button>
 
-            <h2 className="font-poppins text-lg font-extrabold text-ink">
+            <h2 className="font-massilia text-lg font-bold text-ink">
               New ticket
             </h2>
             <p className="mb-5 text-sm text-ink-soft">

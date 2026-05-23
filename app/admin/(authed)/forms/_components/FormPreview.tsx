@@ -54,7 +54,7 @@ export default function FormPreview({
     return (
       <Frame>
         <div className="p-10 text-center text-white/70">
-          <p className="font-poppins text-sm uppercase tracking-wider text-white/40">
+          <p className="font-massilia text-sm uppercase tracking-wider text-white/40">
             Preview
           </p>
           <p className="mt-3 text-lg">No questions yet.</p>
@@ -151,7 +151,7 @@ export default function FormPreview({
             <h2 className="!text-white text-[clamp(1.4rem,2.6vw,2rem)] leading-tight">
               {current.label}
               {current.is_optional && (
-                <span className="ml-2 align-middle font-poppins text-sm font-medium text-white/50">
+                <span className="ml-2 align-middle font-massilia text-sm font-medium text-white/50">
                   (optional)
                 </span>
               )}
@@ -173,7 +173,7 @@ export default function FormPreview({
                           setValues({ ...values, [current.key]: c });
                           setStepError(null);
                         }}
-                        className={`flex items-center gap-3 rounded-2xl border px-4 py-2.5 text-left font-poppins text-sm font-semibold transition ${
+                        className={`flex items-center gap-3 rounded-2xl border px-4 py-2.5 text-left font-massilia text-sm font-semibold transition ${
                           selected
                             ? "border-gold bg-gold text-ink"
                             : "border-white/25 bg-white/5 text-white hover:border-white/60 hover:bg-white/10"
@@ -206,7 +206,7 @@ export default function FormPreview({
                   onKeyDown={onKeyDown}
                   rows={3}
                   placeholder={current.placeholder}
-                  className="w-full resize-none border-0 border-b-2 border-white/30 bg-transparent pb-2 font-poppins text-base text-white placeholder-white/30 outline-none transition focus:border-gold"
+                  className="w-full resize-none border-0 border-b-2 border-white/30 bg-transparent pb-2 font-massilia text-base text-white placeholder-white/30 outline-none transition focus:border-gold"
                 />
               ) : (
                 <input
@@ -221,7 +221,7 @@ export default function FormPreview({
                   }}
                   onKeyDown={onKeyDown}
                   placeholder={current.placeholder}
-                  className="w-full border-0 border-b-2 border-white/30 bg-transparent pb-2 font-poppins text-lg text-white placeholder-white/30 outline-none transition focus:border-gold"
+                  className="w-full border-0 border-b-2 border-white/30 bg-transparent pb-2 font-massilia text-lg text-white placeholder-white/30 outline-none transition focus:border-gold"
                 />
               )}
             </div>
@@ -251,7 +251,7 @@ export default function FormPreview({
                   <path d="M13 5l7 7-7 7" />
                 </svg>
               </button>
-              <span className="font-poppins text-xs text-white/55">
+              <span className="font-massilia text-xs text-white/55">
                 press{" "}
                 <kbd className="rounded bg-white/10 px-1.5 py-0.5 text-[0.7rem] text-white/80">
                   Enter ↵

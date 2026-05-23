@@ -35,7 +35,7 @@ export default async function FoundingSpotsPage() {
           <p className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
             Remaining
           </p>
-          <p className="mt-2 font-poppins text-3xl font-extrabold text-forest">
+          <p className="mt-2 font-massilia text-3xl font-bold text-forest">
             {remaining}
           </p>
         </div>
@@ -43,7 +43,7 @@ export default async function FoundingSpotsPage() {
           <p className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
             Claimed
           </p>
-          <p className="mt-2 font-poppins text-3xl font-extrabold text-ink">
+          <p className="mt-2 font-massilia text-3xl font-bold text-ink">
             {initial.claimed_spots}
           </p>
         </div>
@@ -51,7 +51,7 @@ export default async function FoundingSpotsPage() {
           <p className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
             Total
           </p>
-          <p className="mt-2 font-poppins text-3xl font-extrabold text-ink">
+          <p className="mt-2 font-massilia text-3xl font-bold text-ink">
             {initial.total_spots}
           </p>
           <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-cream-dark">

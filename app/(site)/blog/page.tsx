@@ -91,7 +91,7 @@ export default async function BlogPage() {
                 )}
 
                 <div className="flex flex-1 flex-col p-7">
-                  <h2 className="mb-3 font-poppins text-xl font-extrabold leading-tight text-forest md:text-[1.4rem]">
+                  <h2 className="mb-3 font-massilia text-xl font-bold leading-tight text-forest md:text-[1.4rem]">
                     {p.title}
                   </h2>
                   <p className="mb-5 text-ink-soft">{p.excerpt}</p>

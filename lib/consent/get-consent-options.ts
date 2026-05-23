@@ -34,7 +34,7 @@ export function getConsentOptions(): ConsentManagerOptions {
         switchThumb: "#FFFFFF",
       },
       typography: {
-        fontFamily: "var(--font-inter)",
+        fontFamily: "var(--font-agenda)",
         fontSize: {
           sm: "0.875rem",
           base: "0.95rem",

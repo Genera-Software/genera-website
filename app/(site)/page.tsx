@@ -167,7 +167,7 @@ export default async function Home() {
         </div>
 
         <div className="relative z-10 mx-auto flex w-full max-w-[1160px] flex-col items-start text-left md:items-start md:text-left">
-          <div className="mb-4 inline-flex animate-[fadeInUp_0.6s_ease_both] items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-[1rem] font-bold text-gold-soft md:px-4 md:py-1.5 md:text-[1.05rem]">
+          <div className="mb-4 inline-flex animate-[fadeInUp_0.6s_ease_both] items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-[1.08rem] font-bold text-gold-soft md:px-4 md:py-1.5 md:text-[1.14rem]">
             <Paw className="h-[1.1em] w-[1.1em]" /> Built by a daycare, for
             daycares
           </div>
@@ -225,10 +225,10 @@ export default async function Home() {
               <span className="absolute right-4 top-4 rounded-full bg-white/35 px-2.5 py-0.5 text-[0.72rem] font-bold tracking-wide text-white backdrop-blur-sm">
                 Today
               </span>
-              <div className="mb-2 font-poppins text-[3.2rem] font-extrabold leading-none text-white">
+              <div className="mb-2 font-massilia text-[3.2rem] font-bold leading-none text-white">
                 12
               </div>
-              <p className="font-poppins text-base font-bold text-white">
+              <p className="font-massilia text-base font-bold text-white">
                 Bookings, handled.
               </p>
               <p className="text-[0.8rem] leading-snug text-white/80">
@@ -241,10 +241,10 @@ export default async function Home() {
               <span className="absolute right-4 top-4 rounded-full bg-white/35 px-2.5 py-0.5 text-[0.72rem] font-bold tracking-wide text-white backdrop-blur-sm">
                 Paid
               </span>
-              <div className="mb-2 font-poppins text-[2.4rem] font-extrabold leading-none text-white">
+              <div className="mb-2 font-massilia text-[2.4rem] font-bold leading-none text-white">
                 £840
               </div>
-              <p className="font-poppins text-base font-bold text-white">
+              <p className="font-massilia text-base font-bold text-white">
                 Money, in the bank.
               </p>
               <p className="text-[0.8rem] leading-snug text-white/80">
@@ -256,10 +256,10 @@ export default async function Home() {
               <span className="absolute right-4 top-4 rounded-full bg-white/35 px-2.5 py-0.5 text-[0.72rem] font-bold tracking-wide text-white backdrop-blur-sm">
                 Routed
               </span>
-              <div className="mb-2 font-poppins text-[3.2rem] font-extrabold leading-none text-white">
+              <div className="mb-2 font-massilia text-[3.2rem] font-bold leading-none text-white">
                 3
               </div>
-              <p className="font-poppins text-base font-bold text-white">
+              <p className="font-massilia text-base font-bold text-white">
                 Pickups, sorted.
               </p>
               <p className="text-[0.8rem] leading-snug text-white/80">
@@ -279,10 +279,10 @@ export default async function Home() {
           <span className="absolute right-2 top-2 rounded-full bg-white/35 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider">
             Today
           </span>
-          <div className="mt-1.5 mb-1 font-poppins text-[1.9rem] font-extrabold leading-none">
+          <div className="mt-1.5 mb-1 font-massilia text-[1.9rem] font-bold leading-none">
             12
           </div>
-          <p className="font-poppins text-[0.78rem] font-bold leading-tight">
+          <p className="font-massilia text-[0.78rem] font-bold leading-tight">
             Bookings, handled.
           </p>
           <p className="mt-0.5 text-[0.65rem] leading-snug opacity-80">
@@ -293,10 +293,10 @@ export default async function Home() {
           <span className="absolute right-2 top-2 rounded-full bg-white/35 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider">
             Paid
           </span>
-          <div className="mt-1.5 mb-1 font-poppins text-[1.55rem] font-extrabold leading-none">
+          <div className="mt-1.5 mb-1 font-massilia text-[1.55rem] font-bold leading-none">
             £840
           </div>
-          <p className="font-poppins text-[0.78rem] font-bold leading-tight">
+          <p className="font-massilia text-[0.78rem] font-bold leading-tight">
             In the bank.
           </p>
           <p className="mt-0.5 text-[0.65rem] leading-snug opacity-80">
@@ -307,10 +307,10 @@ export default async function Home() {
           <span className="absolute right-2 top-2 rounded-full bg-white/35 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider">
             Routed
           </span>
-          <div className="mt-1.5 mb-1 font-poppins text-[1.9rem] font-extrabold leading-none">
+          <div className="mt-1.5 mb-1 font-massilia text-[1.9rem] font-bold leading-none">
             3
           </div>
-          <p className="font-poppins text-[0.78rem] font-bold leading-tight">
+          <p className="font-massilia text-[0.78rem] font-bold leading-tight">
             Pickups sorted.
           </p>
           <p className="mt-0.5 text-[0.65rem] leading-snug opacity-80">
@@ -322,34 +322,51 @@ export default async function Home() {
       {/* ── Trust bar ──────────────────────────────────────────── */}
       <div
         aria-label="Businesses using Genera"
-        className="overflow-hidden border-y-2 border-teal-mid bg-teal-soft py-4 md:py-8"
+        className="overflow-x-hidden overflow-y-visible border-y-2 border-teal-mid bg-teal-soft py-4 md:py-8"
       >
         <p className="mb-2 text-center font-caveat text-[1.1rem] text-forest md:text-[1.3rem]">
           Businesses already on board
         </p>
-        <div className="overflow-hidden">
+        <div className="overflow-y-visible">
           <div className="flex w-max animate-[var(--animate-scroll-x)] gap-2 md:gap-4">
             {[...trustLogos, ...trustLogos].map((logo, i) =>
               logo.logo_url ? (
                 <span
                   key={`${logo.id}-${i}`}
-                  className="grid h-9 shrink-0 place-items-center rounded-full border-2 border-teal-mid bg-white px-3.5 md:h-11 md:px-4"
+                  className="relative mt-1.5 shrink-0 pt-7 md:mt-2 md:pt-8"
                 >
-                  <Image
-                    src={logo.logo_url}
-                    alt={logo.name}
-                    width={120}
-                    height={40}
-                    className="h-5 w-auto md:h-6"
-                    unoptimized
-                  />
+                  <span className="flex h-9 items-center justify-center rounded-full border-2 border-teal-mid bg-white px-3.5 md:h-11 md:px-4">
+                    <span className="whitespace-nowrap text-[0.68rem] font-semibold text-forest md:text-[0.78rem]">
+                      {logo.name}
+                    </span>
+                  </span>
+                  <span className="absolute -top-3 left-1/2 grid h-12 w-12 -translate-x-1/2 place-items-center overflow-hidden rounded-full border-2 border-teal-mid bg-white md:-top-4 md:h-14 md:w-14">
+                    <Image
+                      src={logo.logo_url}
+                      alt={logo.name}
+                      width={80}
+                      height={80}
+                      className="h-full w-full object-cover"
+                      unoptimized
+                    />
+                  </span>
                 </span>
               ) : (
                 <span
                   key={`${logo.id}-${i}`}
-                  className="shrink-0 whitespace-nowrap rounded-full border-2 border-teal-mid bg-white px-3.5 py-1.5 text-[0.78rem] font-semibold text-forest md:px-4 md:text-[0.88rem]"
+                  className="relative mt-1.5 shrink-0 pt-7 md:mt-2 md:pt-8"
                 >
-                  {logo.name}
+                  <span className="flex h-9 items-center justify-center whitespace-nowrap rounded-full border-2 border-teal-mid bg-white px-3.5 text-[0.68rem] font-semibold text-forest md:h-11 md:px-4 md:text-[0.78rem]">
+                    {logo.name}
+                  </span>
+                  <span className="absolute -top-3 left-1/2 grid h-12 w-12 -translate-x-1/2 place-items-center rounded-full border-2 border-teal-mid bg-white font-massilia text-[0.68rem] font-bold text-forest md:-top-4 md:h-14 md:w-14 md:text-[0.78rem]">
+                    {logo.name
+                      .split(" ")
+                      .filter(Boolean)
+                      .slice(0, 2)
+                      .map((word) => word[0]?.toUpperCase())
+                      .join("")}
+                  </span>
                 </span>
               ),
             )}
@@ -396,10 +413,10 @@ export default async function Home() {
                 key={p.n}
                 className={`rev d${i + 1} relative z-10 rounded-2xl border border-teal-mid/60 bg-white/80 p-5 shadow-[0_4px_20px_rgba(0,62,69,0.06)] backdrop-blur-sm md:p-7`}
               >
-                <div className="mb-1.5 font-poppins text-[1.6rem] font-extrabold leading-none text-gold/70 md:mb-3 md:text-[2.2rem]">
+                <div className="mb-1.5 font-massilia text-[1.6rem] font-bold leading-none text-gold/70 md:mb-3 md:text-[2.2rem]">
                   {p.n}
                 </div>
-                <h3 className="mb-1.5 font-poppins text-base font-bold md:mb-2 md:text-lg">
+                <h3 className="mb-1.5 font-massilia text-base font-bold md:mb-2 md:text-lg">
                   {p.title}
                 </h3>
                 <p className="text-[0.92rem] text-ink-soft md:text-base">
@@ -496,7 +513,7 @@ export default async function Home() {
                     {f.icon}
                   </svg>
                 </div>
-                <h3 className="mb-1.5 font-poppins text-base font-bold md:mb-2 md:text-lg">
+                <h3 className="mb-1.5 font-massilia text-base font-bold md:mb-2 md:text-lg">
                   {f.title}
                 </h3>
                 <p className="text-[0.9rem] text-ink-soft md:text-base">
@@ -548,7 +565,7 @@ export default async function Home() {
             <p className="relative z-10 text-[0.7rem] uppercase tracking-widest text-gold-soft md:text-sm">
               Spots remaining
             </p>
-            <div className="relative z-10 mt-1 font-poppins text-[3.6rem] font-extrabold leading-none text-gold md:mt-2 md:text-[5rem]">
+            <div className="relative z-10 mt-1 font-massilia text-[3.6rem] font-bold leading-none text-gold md:mt-2 md:text-[5rem]">
               {remainingSpots}
             </div>
             <p className="relative z-10 mb-4 text-[0.85rem] text-white/70 md:mb-5 md:text-base">
@@ -618,7 +635,7 @@ export default async function Home() {
             </p>
             <Link
               href="/our-story"
-              className="mt-3.5 inline-flex items-center gap-2 font-poppins font-bold text-forest hover:text-gold md:mt-5"
+              className="mt-3.5 inline-flex items-center gap-2 font-massilia font-bold text-forest hover:text-gold md:mt-5"
             >
               Read the full story →
             </Link>

@@ -37,7 +37,7 @@ export default function Footer() {
               height={36}
               className="h-9 w-9 object-contain"
             />
-            <span className="font-poppins text-lg font-extrabold tracking-[2px] text-white">
+            <span className="font-massilia text-lg font-bold tracking-[2px] text-white">
               GENERA
             </span>
           </div>

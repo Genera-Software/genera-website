@@ -184,7 +184,7 @@ export default async function FormsAdminPage() {
               {s.label}
             </p>
             <p
-              className={`mt-3 font-poppins text-3xl font-extrabold ${s.color}`}
+              className={`mt-3 font-massilia text-3xl font-bold ${s.color}`}
             >
               {formatNumber(s.value)}
             </p>
@@ -211,7 +211,7 @@ export default async function FormsAdminPage() {
                 >
                   <div className="flex items-center justify-between border-b border-cream-dark px-5 py-3">
                     <div>
-                      <h3 className="font-poppins text-sm font-bold text-ink">
+                      <h3 className="font-massilia text-sm font-bold text-ink">
                         {f.name}
                       </h3>
                       <p className="text-xs text-ink-soft">

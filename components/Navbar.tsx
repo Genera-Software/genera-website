@@ -75,7 +75,7 @@ export default function Navbar() {
               priority
             />
             <span className="flex flex-col leading-[1.1]">
-              <span className="font-poppins text-[1.1rem] font-extrabold tracking-[0.125rem] text-white">
+              <span className="font-massilia text-[1.1rem] font-bold tracking-[0.125rem] text-white">
                 GENERA
               </span>
               <span className="text-[0.62rem] tracking-[0.5px] text-white/60">
@@ -104,7 +104,7 @@ export default function Navbar() {
               Login
             </Link>
             <BookDemoButton
-              className="inline-flex items-center rounded-full bg-gold px-5 py-2 font-poppins text-[0.85rem] font-bold text-ink shadow-[0_4px_14px_rgba(255,168,0,0.35)] transition-shadow hover:shadow-[0_6px_22px_rgba(255,168,0,0.5)]"
+              className="inline-flex items-center rounded-full bg-gold px-5 py-2 font-massilia text-[0.85rem] font-bold text-ink shadow-[0_4px_14px_rgba(255,168,0,0.35)] transition-shadow hover:shadow-[0_6px_22px_rgba(255,168,0,0.5)]"
             >
               Join Genera
             </BookDemoButton>
@@ -156,7 +156,7 @@ export default function Navbar() {
             key={l.href}
             href={l.href}
             onClick={() => setOpen(false)}
-            className="border-b border-white/10 py-3 font-poppins text-[1.35rem] font-bold text-white/85 hover:text-gold"
+            className="border-b border-white/10 py-3 font-massilia text-[1.35rem] font-bold text-white/85 hover:text-gold"
           >
             {l.label}
           </Link>
