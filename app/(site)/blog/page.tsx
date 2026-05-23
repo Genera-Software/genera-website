@@ -45,7 +45,7 @@ export default async function BlogPage() {
       <Reveal />
 
       {/* Page hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 py-24 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 pt-32 pb-24 text-white">
         <div className="mx-auto max-w-[860px] text-center">
           <p className="eyebrow !text-gold-soft">Blog</p>
           <h1 className="mt-2 text-white">
@@ -91,7 +91,7 @@ export default async function BlogPage() {
                 )}
 
                 <div className="flex flex-1 flex-col p-7">
-                  <h2 className="mb-3 font-poppins text-xl font-extrabold leading-tight text-forest md:text-[1.4rem]">
+                  <h2 className="mb-3 font-massilia text-xl font-bold leading-none text-forest md:text-mini-h">
                     {p.title}
                   </h2>
                   <p className="mb-5 text-ink-soft">{p.excerpt}</p>

@@ -199,8 +199,8 @@ export default function RichTextEditor({
       <style>{`
         .prose-editor:focus { outline: none; }
         .prose-editor p { margin: 0 0 1em; }
-        .prose-editor h2 { font-family: var(--font-poppins, inherit); font-size: 1.5rem; font-weight: 800; margin: 1.4em 0 0.5em; color: #0f172a; }
-        .prose-editor h3 { font-family: var(--font-poppins, inherit); font-size: 1.2rem; font-weight: 700; margin: 1.2em 0 0.4em; color: #0f172a; }
+        .prose-editor h2 { font-family: var(--font-massilia, inherit); font-size: 1.5rem; font-weight: 700; line-height: 1.05; margin: 1.4em 0 0.5em; color: #0f172a; }
+        .prose-editor h3 { font-family: var(--font-massilia, inherit); font-size: 1.2rem; font-weight: 700; line-height: 1.05; margin: 1.2em 0 0.4em; color: #0f172a; }
         .prose-editor ul { list-style: disc; padding-left: 1.5em; margin: 0.8em 0; }
         .prose-editor ol { list-style: decimal; padding-left: 1.5em; margin: 0.8em 0; }
         .prose-editor a { color: #003E45; text-decoration: underline; text-decoration-color: #C8880A; text-underline-offset: 2px; font-weight: 600; }

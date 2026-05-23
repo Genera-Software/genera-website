@@ -156,7 +156,7 @@ export default async function AdminDashboard() {
     <div>
       <header className="mb-8">
         <p className="text-sm font-medium text-ink-soft">Welcome back</p>
-        <h1 className="mt-1 font-poppins text-3xl font-extrabold tracking-tight text-ink">
+        <h1 className="mt-1 font-massilia text-3xl font-bold tracking-tight text-ink">
           Genera CMS
         </h1>
       </header>
@@ -173,7 +173,7 @@ export default async function AdminDashboard() {
           </p>
           {analyticsMetrics ? (
             <>
-              <p className="mt-3 font-poppins text-3xl font-extrabold text-ink">
+              <p className="mt-3 font-massilia text-3xl font-bold text-ink">
                 {formatNumber(analyticsMetrics.users)}
               </p>
               <p
@@ -186,7 +186,7 @@ export default async function AdminDashboard() {
             </>
           ) : (
             <>
-              <p className="mt-3 font-poppins text-3xl font-extrabold text-ink-soft">
+              <p className="mt-3 font-massilia text-3xl font-bold text-ink-soft">
                 —
               </p>
               <p className="mt-1 text-sm text-ink-soft">
@@ -207,7 +207,7 @@ export default async function AdminDashboard() {
           <p className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
             Open tickets
           </p>
-          <p className="mt-3 font-poppins text-3xl font-extrabold text-ink">
+          <p className="mt-3 font-massilia text-3xl font-bold text-ink">
             {newCount + inProgressCount}
           </p>
           <p className="mt-1 text-sm text-ink-soft">
@@ -226,7 +226,7 @@ export default async function AdminDashboard() {
           <p className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
             Form submissions (7d)
           </p>
-          <p className="mt-3 font-poppins text-3xl font-extrabold text-ink">
+          <p className="mt-3 font-massilia text-3xl font-bold text-ink">
             {formatNumber(submissions7d)}
           </p>
           <p className="mt-1 text-sm text-ink-soft">
@@ -243,7 +243,7 @@ export default async function AdminDashboard() {
           <p className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
             Blog posts
           </p>
-          <p className="mt-3 font-poppins text-3xl font-extrabold text-ink">
+          <p className="mt-3 font-massilia text-3xl font-bold text-ink">
             {totalPosts}
           </p>
           <p className="mt-1 text-sm text-ink-soft">
@@ -258,7 +258,7 @@ export default async function AdminDashboard() {
         {/* Recent support tickets */}
         <section className="rounded-2xl border border-teal-mid bg-white">
           <div className="flex items-center justify-between border-b border-cream-dark px-5 py-4">
-            <h2 className="font-poppins text-lg font-bold text-ink">
+            <h2 className="font-massilia text-lg font-bold text-ink">
               Recent tickets
             </h2>
             <Link
@@ -308,7 +308,7 @@ export default async function AdminDashboard() {
         {/* Recent form submissions */}
         <section className="rounded-2xl border border-teal-mid bg-white">
           <div className="flex items-center justify-between border-b border-cream-dark px-5 py-4">
-            <h2 className="font-poppins text-lg font-bold text-ink">
+            <h2 className="font-massilia text-lg font-bold text-ink">
               Recent form submissions
             </h2>
             <Link
@@ -367,7 +367,7 @@ export default async function AdminDashboard() {
       {/* Recent blog posts */}
       <section className="mt-8 rounded-2xl border border-teal-mid bg-white">
         <div className="flex items-center justify-between border-b border-cream-dark px-5 py-4">
-          <h2 className="font-poppins text-lg font-bold text-ink">
+          <h2 className="font-massilia text-lg font-bold text-ink">
             Recent blog posts
           </h2>
           <div className="flex items-center gap-3">

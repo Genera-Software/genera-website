@@ -61,7 +61,7 @@ export default function NewQuestionModalButton({
               </svg>
             </button>
 
-            <h2 className="font-poppins text-lg font-extrabold text-ink">
+            <h2 className="font-massilia text-lg font-bold text-ink">
               New question
             </h2>
             <p className="mb-5 text-sm text-ink-soft">

@@ -174,7 +174,7 @@ export default function Sidebar({
         <div className="flex h-16 items-center justify-between border-b border-forest-mid/50 px-5">
           <Link
             href="/admin"
-            className="font-poppins text-lg font-extrabold text-white"
+            className="font-massilia text-lg font-bold text-white"
           >
             Genera <span className="text-gold">CMS</span>
           </Link>

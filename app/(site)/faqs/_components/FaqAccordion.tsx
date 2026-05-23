@@ -24,7 +24,7 @@ export default function FaqAccordion({ items }: { items: FaqItem[] }) {
               type="button"
               aria-expanded={isOpen}
               onClick={() => setOpen(isOpen ? null : item.id)}
-              className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left font-poppins text-base font-bold text-forest transition-colors hover:bg-cream md:text-lg"
+              className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left font-massilia text-base font-bold text-forest transition-colors hover:bg-cream md:text-lg"
             >
               <span>{item.q}</span>
               <svg

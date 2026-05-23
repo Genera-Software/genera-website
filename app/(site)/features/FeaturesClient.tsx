@@ -189,7 +189,7 @@ function FeatureSection({
   const copy = (
     <div className="rev">
       <p className="eyebrow">{feature.eyebrow}</p>
-      <h2 className="mt-2 text-[clamp(1.6rem,3vw,2.2rem)]">{feature.title}</h2>
+      <h2 className="mt-2 leading-none text-heading-mid">{feature.title}</h2>
       <p className="mt-4 text-ink-soft">{feature.body}</p>
       <ul className="mt-6 flex flex-col gap-3">
         {feature.bullets.map((b) => (
@@ -242,7 +242,7 @@ export default function FeaturesClient() {
     <>
       <Reveal />
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 py-24 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 pt-32 pb-24 text-white">
         <div className="mx-auto grid max-w-[1160px] items-center gap-12 md:grid-cols-2">
           <div>
             <p className="eyebrow !text-gold-soft">Features</p>

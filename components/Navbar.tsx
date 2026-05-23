@@ -17,17 +17,44 @@ const NAV_LINKS = [
 
 const PAW_LOGO = "/images/genera-svg.svg";
 
+/** How far the nav can slide upward before being fully tucked away (px). */
+const HIDE_DISTANCE = 110;
+/** Below this scrollY, the nav is always fully visible. */
+const PIN_AT_TOP = 60;
+
 export default function Navbar() {
   const [stuck, setStuck] = useState(false);
+  const [offset, setOffset] = useState(0); // 0 = visible, -HIDE_DISTANCE = hidden
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const hamRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setStuck(window.scrollY > 50);
+    let lastY = window.scrollY;
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const y = window.scrollY;
+        const delta = y - lastY;
+        lastY = y;
+        setStuck(y > 50);
+        if (y < PIN_AT_TOP) {
+          setOffset(0);
+        } else {
+          setOffset((prev) =>
+            Math.max(-HIDE_DISTANCE, Math.min(0, prev - delta)),
+          );
+        }
+      });
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
 
   useEffect(() => {
@@ -56,85 +83,89 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`sticky top-0 z-[100] bg-forest px-8 transition-shadow duration-300 ${
-          stuck ? "shadow-[0_4px_24px_rgba(0,0,0,0.18)]" : ""
+        style={{
+          transform: open ? "translateY(0)" : `translateY(${offset}px)`,
+          opacity: open ? 1 : 1 + offset / HIDE_DISTANCE,
+        }}
+        className={`fixed top-3 right-0 left-0 z-[100] mx-auto flex h-[58px] w-[calc(100%-1rem)] max-w-[1160px] items-center gap-4 rounded-full bg-forest/85 pl-4 pr-2 backdrop-blur-md transition-shadow duration-300 ease-out md:top-4 md:h-[68px] md:w-[calc(100%-2rem)] md:gap-8 md:pl-6 md:pr-3 ${
+          stuck
+            ? "shadow-[0_14px_36px_rgba(0,0,0,0.3)]"
+            : "shadow-[0_6px_22px_rgba(0,0,0,0.18)]"
         }`}
       >
-        <div className="mx-auto flex h-[68px] max-w-[1160px] items-center gap-8">
-          <Link
-            href="/"
-            aria-label="Genera home"
-            className="flex shrink-0 items-center gap-2.5"
-          >
-            <Image
-              src={PAW_LOGO}
-              alt="Genera paw logo"
-              width={38}
-              height={38}
-              className="h-[38px] w-[38px] object-contain"
-              priority
-            />
-            <span className="flex flex-col leading-[1.1]">
-              <span className="font-poppins text-[1.1rem] font-extrabold tracking-[0.125rem] text-white">
-                GENERA
-              </span>
-              <span className="text-[0.62rem] tracking-[0.5px] text-white/60">
-                A Better Breed of Software
-              </span>
+        <Link
+          href="/"
+          aria-label="Genera home"
+          className="flex shrink-0 items-center gap-2.5"
+        >
+          <Image
+            src={PAW_LOGO}
+            alt="Genera paw logo"
+            width={38}
+            height={38}
+            className="h-[38px] w-[38px] object-contain"
+            priority
+          />
+          <span className="flex flex-col leading-none">
+            <span className="font-massilia text-body-lg font-extrabold tracking-[0.125rem] text-white">
+              GENERA
             </span>
-          </Link>
+            <span className="my-[5px] text-eyebrow tracking-[0.5px] text-white/60">
+              A Better Breed of Software
+            </span>
+          </span>
+        </Link>
 
-          <div className="mx-auto hidden items-center gap-1 md:flex">
-            {NAV_LINKS.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                className="rounded-[20px] px-3 py-1.5 text-[0.9rem] font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
-              >
-                {l.label}
-              </Link>
-            ))}
-          </div>
-
-          <div className="hidden items-center gap-2 md:flex">
+        <div className="mx-auto hidden items-center gap-1 md:flex">
+          {NAV_LINKS.map((l) => (
             <Link
-              href={LOGIN_URL}
-              className="rounded-full px-3 py-1.5 text-[0.85rem] font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+              key={l.href}
+              href={l.href}
+              className="rounded-full px-3 py-1.5 text-meta font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
             >
-              Login
+              {l.label}
             </Link>
-            <BookDemoButton
-              className="inline-flex items-center rounded-full bg-gold px-5 py-2 font-poppins text-[0.85rem] font-bold text-ink shadow-[0_4px_14px_rgba(255,168,0,0.35)] transition-shadow hover:shadow-[0_6px_22px_rgba(255,168,0,0.5)]"
-            >
-              Join Genera
-            </BookDemoButton>
-          </div>
-
-          <button
-            ref={hamRef}
-            type="button"
-            aria-label="Open menu"
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
-            className="ml-auto flex flex-col gap-[5px] p-1.5 md:hidden"
-          >
-            <span
-              className={`block h-[2.5px] w-6 rounded bg-white transition-transform ${
-                open ? "translate-y-[7.5px] rotate-45" : ""
-              }`}
-            />
-            <span
-              className={`block h-[2.5px] w-6 rounded bg-white transition-opacity ${
-                open ? "opacity-0" : ""
-              }`}
-            />
-            <span
-              className={`block h-[2.5px] w-6 rounded bg-white transition-transform ${
-                open ? "-translate-y-[7.5px] -rotate-45" : ""
-              }`}
-            />
-          </button>
+          ))}
         </div>
+
+        <div className="hidden items-center gap-2 md:flex">
+          <Link
+            href={LOGIN_URL}
+            className="rounded-full px-3 py-1.5 text-fine font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+          >
+            Login
+          </Link>
+          <BookDemoButton
+            className="inline-flex items-center rounded-full bg-gold px-5 py-2 font-massilia text-fine font-bold text-ink shadow-[0_4px_14px_rgba(255,168,0,0.35)] transition-shadow hover:shadow-[0_6px_22px_rgba(255,168,0,0.5)]"
+          >
+            Join Genera
+          </BookDemoButton>
+        </div>
+
+        <button
+          ref={hamRef}
+          type="button"
+          aria-label="Open menu"
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+          className="ml-auto flex flex-col gap-[5px] p-1.5 md:hidden"
+        >
+          <span
+            className={`block h-[2.5px] w-6 rounded bg-white transition-transform ${
+              open ? "translate-y-[7.5px] rotate-45" : ""
+            }`}
+          />
+          <span
+            className={`block h-[2.5px] w-6 rounded bg-white transition-opacity ${
+              open ? "opacity-0" : ""
+            }`}
+          />
+          <span
+            className={`block h-[2.5px] w-6 rounded bg-white transition-transform ${
+              open ? "-translate-y-[7.5px] -rotate-45" : ""
+            }`}
+          />
+        </button>
       </nav>
 
       <div
@@ -156,7 +187,7 @@ export default function Navbar() {
             key={l.href}
             href={l.href}
             onClick={() => setOpen(false)}
-            className="border-b border-white/10 py-3 font-poppins text-[1.35rem] font-bold text-white/85 hover:text-gold"
+            className="border-b border-white/10 py-3 font-massilia text-mini-h font-bold text-white/85 hover:text-gold"
           >
             {l.label}
           </Link>

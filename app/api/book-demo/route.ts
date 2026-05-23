@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
   const htmlBody = `<!doctype html>
 <html><body style="margin:0;padding:24px;background:#F8FAFB;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#111827;">
   <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:16px;padding:28px;box-shadow:0 6px 24px rgba(0,62,69,0.08);">
-    <h2 style="margin:0 0 6px;color:#003E45;font-family:Poppins,sans-serif;">New demo request</h2>
+    <h2 style="margin:0 0 6px;color:#003E45;font-family:massilia,sans-serif;">New demo request</h2>
     <p style="margin:0 0 20px;color:#4B5563;font-size:14px;">From generasoftware.com</p>
     <table style="width:100%;border-collapse:collapse;font-size:14px;">
       ${rows

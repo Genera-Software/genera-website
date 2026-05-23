@@ -88,8 +88,8 @@ export default async function OurStoryPage() {
       {/* Split hero — wrapping section carries the same gradient as the homepage hero
            so the nav (bg-forest) transitions seamlessly into the page */}
       <section className="grid grid-cols-1 bg-gradient-to-br from-forest via-forest-mid to-[#007080] md:grid-cols-2">
-        <div className="relative overflow-hidden px-8 py-20 text-white md:px-14">
-          <p className="font-caveat text-[1.55rem] font-semibold leading-snug text-gold-soft">
+        <div className="relative overflow-hidden px-8 pt-28 pb-20 text-white md:px-14 md:pt-36">
+          <p className="font-caveat text-section-h font-semibold leading-snug text-gold-soft">
             Our Story · Built from the ground up
           </p>
           <h1 className="mt-3 text-white">
@@ -97,7 +97,7 @@ export default async function OurStoryPage() {
             <br />
             <em className="text-gold">We set out to walk dogs.</em>
           </h1>
-          <p className="mt-5 max-w-[480px] text-white/80">
+          <p className="mt-5 max-w-[480px] text-body-lg text-white/80">
             From a dog walking round in South West London in 2011 to software
             used by pet businesses across the UK. Here&apos;s how it happened.
           </p>
@@ -105,7 +105,7 @@ export default async function OurStoryPage() {
           <div className="mt-9 grid grid-cols-2 gap-6 md:grid-cols-4">
             {STATS.map((s) => (
               <div key={s.num}>
-                <div className="font-poppins text-[2.4rem] font-extrabold leading-none text-gold">
+                <div className="font-massilia text-figure-md font-bold leading-none text-gold">
                   {s.num}
                 </div>
                 <div className="mt-1 whitespace-pre-line text-xs uppercase tracking-widest text-white/60">
@@ -157,7 +157,7 @@ export default async function OurStoryPage() {
             </p>
           </article>
 
-          <blockquote className="rev rounded-2xl border-l-4 border-gold bg-cream px-7 py-6 font-poppins text-xl font-bold italic text-forest md:text-2xl">
+          <blockquote className="rev rounded-2xl border-l-4 border-gold bg-cream px-7 py-6 font-massilia text-xl font-bold leading-none italic text-forest md:text-2xl">
             &ldquo;We were running everything on spreadsheets and manual
             invoices. It worked until it did not.&rdquo;
           </blockquote>
@@ -206,7 +206,7 @@ export default async function OurStoryPage() {
             <p className="text-ink-soft">And he did.</p>
           </article>
 
-          <blockquote className="rev rounded-2xl bg-forest px-7 py-6 font-poppins text-xl font-bold italic text-white md:text-2xl">
+          <blockquote className="rev rounded-2xl bg-forest px-7 py-6 font-massilia text-xl font-bold leading-none italic text-white md:text-2xl">
             &ldquo;Instead of leaving a bad review, he said: I will build you
             something.&rdquo;
           </blockquote>
@@ -321,7 +321,7 @@ export default async function OurStoryPage() {
             </div>
             <div className="p-8 md:p-12">
               <p className="eyebrow">Meet the team</p>
-              <h3 className="mt-2 font-poppins text-3xl font-extrabold text-forest">
+              <h3 className="mt-2 font-massilia text-3xl font-bold text-forest">
                 Becks
               </h3>
               <p className="mt-1 font-medium text-gold">
@@ -420,7 +420,7 @@ export default async function OurStoryPage() {
 function TimelineCard({ year, text }: { year: string; text: string }) {
   return (
     <div className="rounded-2xl border border-cream-dark bg-white p-5 shadow-[0_4px_18px_rgba(0,62,69,0.06)]">
-      <div className="font-poppins text-xl font-extrabold text-gold">
+      <div className="font-massilia text-xl font-bold text-gold">
         {year}
       </div>
       <p className="mt-1 text-ink-soft">{text}</p>

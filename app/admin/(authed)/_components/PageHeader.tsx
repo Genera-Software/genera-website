@@ -36,7 +36,7 @@ export default function PageHeader({
       )}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="font-poppins text-2xl font-extrabold tracking-tight text-ink lg:text-3xl">
+          <h1 className="font-massilia text-2xl font-bold leading-none tracking-tight text-ink lg:text-3xl">
             {title}
           </h1>
           {description && (

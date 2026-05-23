@@ -37,11 +37,11 @@ export default function Footer() {
               height={36}
               className="h-9 w-9 object-contain"
             />
-            <span className="font-poppins text-lg font-extrabold tracking-[2px] text-white">
+            <span className="font-massilia text-lg font-extrabold tracking-[2px] text-white">
               GENERA
             </span>
           </div>
-          <p className="mb-7 max-w-[280px] text-[13.5px] leading-[1.85] text-white/50">
+          <p className="mb-7 max-w-[280px] text-fine leading-[1.85] text-white/50">
             Software built by pet business owners, for pet business owners.
           </p>
           <div className="flex gap-2.5">
@@ -85,13 +85,13 @@ export default function Footer() {
           © 2026 Genera Software Ltd. Built with love by Duncan&apos;s Dog Co.
         </p>
         <div className="flex flex-wrap gap-2.5">
-          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] tracking-wide text-white/50">
+          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-eyebrow tracking-wide text-white/50">
             GDPR Compliant
           </span>
-          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] tracking-wide text-white/50">
+          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-eyebrow tracking-wide text-white/50">
             DEFRA Aligned
           </span>
-          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] tracking-wide text-white/50">
+          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-eyebrow tracking-wide text-white/50">
             UK-Based Support
           </span>
         </div>
@@ -109,7 +109,7 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <p className="mb-5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/55">
+      <p className="mb-5 text-eyebrow font-bold uppercase tracking-[0.22em] text-white/55">
         {title}
       </p>
       <ul className="flex list-none flex-col gap-3">

@@ -131,7 +131,7 @@ export default async function EditFormPage({
       {tab === "build" && (
       <>
       <section className="rounded-2xl border border-teal-mid bg-white p-6">
-        <h2 className="mb-1 font-poppins text-lg font-extrabold text-ink">
+        <h2 className="mb-1 font-massilia text-lg font-bold text-ink">
           Settings
         </h2>
         <p className="mb-5 text-sm text-ink-soft">
@@ -175,7 +175,7 @@ export default async function EditFormPage({
 
       <section>
         <div className="mb-3 flex items-baseline justify-between">
-          <h2 className="font-poppins text-lg font-extrabold text-ink">
+          <h2 className="font-massilia text-lg font-bold text-ink">
             Live preview
           </h2>
           <p className="text-xs text-ink-soft">
@@ -192,7 +192,7 @@ export default async function EditFormPage({
       <section className="rounded-2xl border border-teal-mid bg-white p-6">
         <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h2 className="font-poppins text-lg font-extrabold text-ink">
+            <h2 className="font-massilia text-lg font-bold text-ink">
               Questions
             </h2>
             <p className="text-sm text-ink-soft">
@@ -349,7 +349,7 @@ export default async function EditFormPage({
       <section className="rounded-2xl border border-teal-mid bg-white p-6">
         <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h2 className="font-poppins text-lg font-extrabold text-ink">
+            <h2 className="font-massilia text-lg font-bold text-ink">
               Submissions
             </h2>
             <p className="text-sm text-ink-soft">

@@ -32,7 +32,7 @@ export default async function LoginPage({
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3 py-1 font-caveat text-[1rem] font-bold text-gold-soft">
             <Paw className="h-[1.1em] w-[1.1em]" /> Genera CMS
           </div>
-          <h1 className="font-poppins text-2xl font-extrabold text-white">
+          <h1 className="font-massilia text-2xl font-bold text-white">
             Sign in to admin
           </h1>
           <p className="mt-1 text-sm text-white/70">

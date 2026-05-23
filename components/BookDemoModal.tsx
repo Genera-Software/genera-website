@@ -254,7 +254,7 @@ function LoadingCard() {
   return (
     <div className="text-center text-white/80">
       <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-white/20 border-t-gold" />
-      <p className="font-poppins text-sm text-white/60">Loading…</p>
+      <p className="font-massilia text-sm text-white/60">Loading…</p>
     </div>
   );
 }
@@ -268,7 +268,7 @@ function ErrorCard({
 }) {
   return (
     <div className="animate-[fadeInUp_0.4s_ease_both] text-center text-white">
-      <h2 className="!text-white text-[clamp(1.6rem,3vw,2.2rem)]">{message}</h2>
+      <h2 className="!text-white text-heading-mid">{message}</h2>
       <button type="button" onClick={onClose} className="btn btn-outline-w mt-7">
         Close
       </button>
@@ -373,10 +373,10 @@ function StepView({
           {current.eyebrow}
         </div>
       )}
-      <h2 className="!text-white text-[clamp(1.7rem,3.6vw,2.6rem)] leading-tight">
+      <h2 className="!text-white text-heading-mid leading-none">
         {current.label}
         {current.optional && (
-          <span className="ml-2 align-middle font-poppins text-sm font-medium text-white/50">
+          <span className="ml-2 align-middle font-massilia text-sm font-medium text-white/50">
             (optional)
           </span>
         )}
@@ -396,7 +396,7 @@ function StepView({
                     setForm({ ...form, [current.key]: c });
                     setStepError(null);
                   }}
-                  className={`flex items-center gap-3 rounded-2xl border px-5 py-3 text-left font-poppins font-semibold transition ${
+                  className={`flex items-center gap-3 rounded-2xl border px-5 py-3 text-left font-massilia font-semibold transition ${
                     selected
                       ? "border-gold bg-gold text-ink"
                       : "border-white/25 bg-white/5 text-white hover:border-white/60 hover:bg-white/10"
@@ -427,7 +427,7 @@ function StepView({
             onKeyDown={onKeyDown}
             rows={3}
             placeholder={current.placeholder}
-            className="w-full resize-none border-0 border-b-2 border-white/30 bg-transparent pb-3 font-poppins text-[1.4rem] text-white placeholder-white/30 outline-none transition focus:border-gold"
+            className="w-full resize-none border-0 border-b-2 border-white/30 bg-transparent pb-3 font-massilia text-mini-h text-white placeholder-white/30 outline-none transition focus:border-gold"
           />
         ) : (
           <input
@@ -449,7 +449,7 @@ function StepView({
                   ? "name"
                   : "off"
             }
-            className="w-full border-0 border-b-2 border-white/30 bg-transparent pb-3 font-poppins text-[1.6rem] text-white placeholder-white/30 outline-none transition focus:border-gold"
+            className="w-full border-0 border-b-2 border-white/30 bg-transparent pb-3 font-massilia text-section-h text-white placeholder-white/30 outline-none transition focus:border-gold"
           />
         )}
       </div>
@@ -484,9 +484,9 @@ function StepView({
             </svg>
           )}
         </button>
-        <span className="font-poppins text-sm text-white/55">
+        <span className="font-massilia text-sm text-white/55">
           press{" "}
-          <kbd className="rounded bg-white/10 px-1.5 py-0.5 text-[0.75rem] text-white/80">
+          <kbd className="rounded bg-white/10 px-1.5 py-0.5 text-eyebrow text-white/80">
             Enter ↵
           </kbd>
         </span>
@@ -548,7 +548,7 @@ function SentCard({
           <path d="M5 12l5 5L20 7" />
         </svg>
       </div>
-      <h2 className="!text-white text-[clamp(1.8rem,3.6vw,2.6rem)]">{title}</h2>
+      <h2 className="!text-white text-heading-mid">{title}</h2>
       <p className="mx-auto mt-3 max-w-[460px] text-white/75">{message}</p>
       <button type="button" onClick={onClose} className="btn btn-outline-w mt-7">
         Close
