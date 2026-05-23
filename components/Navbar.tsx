@@ -75,7 +75,7 @@ export default function Navbar() {
               priority
             />
             <span className="flex flex-col leading-[1.1]">
-              <span className="font-massilia text-[1.1rem] font-bold tracking-[0.125rem] text-white">
+              <span className="font-massilia text-[1.1rem] font-extrabold tracking-[0.125rem] text-white">
                 GENERA
               </span>
               <span className="text-[0.62rem] tracking-[0.5px] text-white/60">
