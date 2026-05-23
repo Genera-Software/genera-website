@@ -134,6 +134,11 @@
     --legal-links-focus-color: var(--color-forest);
   }
 
+  html {
+    /* ~6% larger type site-wide (16px → ~17px); scales all rem-based sizes. */
+    font-size: 106.25%;
+  }
+
   html, body {
     background: var(--color-cream);
     color: var(--color-ink);
@@ -148,9 +153,9 @@
     line-height: 1.15;
     color: var(--color-ink);
   }
-  h1 { font-size: clamp(2.6rem, 5.6vw, 4.4rem); }
-  h2 { font-size: clamp(2.2rem, 4.4vw, 3.4rem); }
-  h3 { font-size: 1.4rem; }
+  h1 { font-size: clamp(2.75rem, 6vw, 4.65rem); }
+  h2 { font-size: clamp(2.35rem, 4.8vw, 3.65rem); }
+  h3 { font-size: 1.5rem; }
 
   em { font-style: italic; color: var(--color-gold); }
 }
@@ -185,7 +190,7 @@
 /* Buttons — kept as a class because the variants are reused on every page */
 .btn {
   display: inline-flex; align-items: center; gap: 8px;
-  font-family: var(--font-massilia); font-weight: 700; font-size: 0.95rem;
+  font-family: var(--font-massilia); font-weight: 700; font-size: 1rem;
   padding: 0.85rem 1.75rem; border-radius: 9999px;
   text-decoration: none; cursor: pointer;
   transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
@@ -200,12 +205,12 @@
 .btn-outline-w:hover { background: rgba(255,255,255,0.12); }
 .btn-outline-d { background: transparent; border-color: var(--color-forest); color: var(--color-forest); }
 .btn-outline-d:hover { background: var(--color-forest); color: #fff; }
-.btn-lg { padding: 1rem 2.2rem; font-size: 1rem; }
+.btn-lg { padding: 1rem 2.2rem; font-size: 1.0625rem; }
 
 /* Caveat handwritten "label" used above section headings */
 .eyebrow {
   font-family: var(--font-caveat);
-  font-size: 1.95rem; font-weight: 700;
+  font-size: 2.05rem; font-weight: 700;
   color: var(--color-forest);
   display: inline-flex; align-items: center; gap: 8px;
   margin-bottom: 0.85rem;
@@ -282,7 +287,7 @@
   align-items: center;
   justify-content: center;
   font-family: var(--font-caveat);
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 700;
   color: #666;
   letter-spacing: 0.3px;
@@ -295,6 +300,6 @@
   }
   .polaroid-caption {
     height: 64px;
-    font-size: 1.2rem;
+    font-size: 1.275rem;
   }
 }
