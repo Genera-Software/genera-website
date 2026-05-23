@@ -5,6 +5,7 @@ import Paw from "@/components/Paw";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
 import FoundingSpotsStats from "@/components/FoundingSpotsStats";
+import AdminMiniAnimation from "@/components/AdminMiniAnimation";
 import { FOUNDING_100_CTA_LABEL } from "@/lib/cta";
 import { getPublicSupabase } from "@/lib/supabase/server";
 
@@ -271,11 +272,11 @@ export default async function Home() {
         aria-label="At a glance"
         className="grid grid-cols-3 gap-2.5 bg-gradient-to-b from-[#007080] to-forest-mid px-4 pt-5 pb-7 md:hidden"
       >
-        <div className="relative overflow-hidden rounded-[18px_14px_20px_16px/16px_20px_14px_18px] bg-gradient-to-br from-[#E8856A] to-[#C96B52] px-3 pt-3.5 pb-3 text-left text-white shadow-[0_6px_18px_rgba(0,0,0,0.14)]">
-          <span className="absolute right-2 top-2 rounded-full bg-white/35 px-1.5 py-0.5 text-eyebrow font-bold uppercase tracking-wider">
+        <div className="relative overflow-hidden rounded-[18px_14px_20px_16px/16px_20px_14px_18px] bg-gradient-to-br from-[#E8856A] to-[#C96B52] px-3 pt-3 pb-3 text-left text-white shadow-[0_6px_18px_rgba(0,0,0,0.14)]">
+          <span className="inline-block rounded-full bg-white/35 px-1.5 py-0.5 text-eyebrow font-bold uppercase tracking-wider">
             Today
           </span>
-          <div className="mt-1.5 mb-1 font-massilia text-figure-md font-bold leading-none">
+          <div className="mt-2 mb-1 font-massilia text-figure-md font-bold leading-none">
             12
           </div>
           <p className="font-massilia text-fine font-bold leading-tight">
@@ -285,11 +286,11 @@ export default async function Home() {
             A calendar that fills itself.
           </p>
         </div>
-        <div className="relative overflow-hidden rounded-[18px_14px_20px_16px/16px_20px_14px_18px] bg-gradient-to-br from-[#6B9E72] to-[#4E7D58] px-3 pt-3.5 pb-3 text-left text-white shadow-[0_6px_18px_rgba(0,0,0,0.14)]">
-          <span className="absolute right-2 top-2 rounded-full bg-white/35 px-1.5 py-0.5 text-eyebrow font-bold uppercase tracking-wider">
+        <div className="relative overflow-hidden rounded-[18px_14px_20px_16px/16px_20px_14px_18px] bg-gradient-to-br from-[#6B9E72] to-[#4E7D58] px-3 pt-3 pb-3 text-left text-white shadow-[0_6px_18px_rgba(0,0,0,0.14)]">
+          <span className="inline-block rounded-full bg-white/35 px-1.5 py-0.5 text-eyebrow font-bold uppercase tracking-wider">
             Paid
           </span>
-          <div className="mt-1.5 mb-1 font-massilia text-section-h font-bold leading-none">
+          <div className="mt-2 mb-1 font-massilia text-section-h font-bold leading-none">
             £840
           </div>
           <p className="font-massilia text-fine font-bold leading-tight">
@@ -299,11 +300,11 @@ export default async function Home() {
             No chasing. Ever.
           </p>
         </div>
-        <div className="relative overflow-hidden rounded-[18px_14px_20px_16px/16px_20px_14px_18px] bg-gradient-to-br from-[#E8A430] to-[#C8880A] px-3 pt-3.5 pb-3 text-left text-white shadow-[0_6px_18px_rgba(0,0,0,0.14)]">
-          <span className="absolute right-2 top-2 rounded-full bg-white/35 px-1.5 py-0.5 text-eyebrow font-bold uppercase tracking-wider">
+        <div className="relative overflow-hidden rounded-[18px_14px_20px_16px/16px_20px_14px_18px] bg-gradient-to-br from-[#E8A430] to-[#C8880A] px-3 pt-3 pb-3 text-left text-white shadow-[0_6px_18px_rgba(0,0,0,0.14)]">
+          <span className="inline-block rounded-full bg-white/35 px-1.5 py-0.5 text-eyebrow font-bold uppercase tracking-wider">
             Routed
           </span>
-          <div className="mt-1.5 mb-1 font-massilia text-figure-md font-bold leading-none">
+          <div className="mt-2 mb-1 font-massilia text-figure-md font-bold leading-none">
             3
           </div>
           <p className="font-massilia text-fine font-bold leading-tight">
@@ -463,14 +464,7 @@ export default async function Home() {
                   app.generasoftware.com
                 </div>
               </div>
-              <Image
-                src="/images/app-screenshot.png"
-                alt="Genera software dashboard overview"
-                width={1600}
-                height={900}
-                className="block h-auto w-full"
-                loading="lazy"
-              />
+              <AdminMiniAnimation />
             </div>
           </div>
         </div>
