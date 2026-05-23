@@ -94,7 +94,7 @@ export default function RootLayout({
       <head>
         <link rel="stylesheet" href="https://use.typekit.net/frg5tgd.css" />
       </head>
-      <body className="font-agenda text-base leading-relaxed">
+      <body className="font-niveau text-base leading-relaxed">
         <ConsentProvider>
           <Script id="ga-consent-default" strategy="beforeInteractive">
             {`

@@ -21,7 +21,7 @@
   --color-ink-soft:     #4B5563;
 
   --font-massilia: "massilia", ui-sans-serif, system-ui, sans-serif;
-  --font-agenda:   "agenda", ui-sans-serif, system-ui, sans-serif;
+  --font-niveau:   "niveau-grotesk", sans-serif;
   --font-caveat:  "Caveat", ui-serif, cursive;
 
   --leading-title: 1;
@@ -108,7 +108,7 @@
     --c15t-text: #003E45;
     --c15t-text-muted: #4B5563;
     --c15t-text-on-primary: #ffffff;
-    --c15t-font-family: var(--font-agenda);
+    --c15t-font-family: var(--font-niveau);
     --c15t-font-weight-medium: 600;
     --c15t-font-weight-semibold: 700;
     --c15t-radius-lg: 8px;
@@ -163,7 +163,7 @@
   html, body {
     background: var(--color-cream);
     color: var(--color-ink);
-    font-family: var(--font-agenda);
+    font-family: var(--font-niveau);
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }

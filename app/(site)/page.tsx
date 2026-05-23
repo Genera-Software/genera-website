@@ -385,9 +385,7 @@ export default async function Home() {
           <div className="rev mb-6 text-center md:mb-14">
             <p className="eyebrow">Sound familiar?</p>
             <h2 className="text-section-h md:text-[length:inherit]">
-              Running a daycare is
-              <br />
-              harder than it looks.
+              Running a daycare is harder than it looks.
             </h2>
             <p className="mx-auto mt-2 max-w-[560px] text-meta text-ink-soft md:mt-3 md:text-body-lg">
               You got into this for the dogs — not the admin. We&apos;ll handle
