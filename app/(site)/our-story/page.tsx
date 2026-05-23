@@ -89,7 +89,7 @@ export default async function OurStoryPage() {
            so the nav (bg-forest) transitions seamlessly into the page */}
       <section className="grid grid-cols-1 bg-gradient-to-br from-forest via-forest-mid to-[#007080] md:grid-cols-2">
         <div className="relative overflow-hidden px-8 py-20 text-white md:px-14">
-          <p className="font-caveat text-[1.55rem] font-semibold leading-snug text-gold-soft">
+          <p className="font-caveat text-section-h font-semibold leading-snug text-gold-soft">
             Our Story · Built from the ground up
           </p>
           <h1 className="mt-3 text-white">
@@ -105,7 +105,7 @@ export default async function OurStoryPage() {
           <div className="mt-9 grid grid-cols-2 gap-6 md:grid-cols-4">
             {STATS.map((s) => (
               <div key={s.num}>
-                <div className="font-massilia text-[2.4rem] font-bold leading-none text-gold">
+                <div className="font-massilia text-figure-md font-bold leading-none text-gold">
                   {s.num}
                 </div>
                 <div className="mt-1 whitespace-pre-line text-xs uppercase tracking-widest text-white/60">

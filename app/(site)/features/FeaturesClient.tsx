@@ -189,7 +189,7 @@ function FeatureSection({
   const copy = (
     <div className="rev">
       <p className="eyebrow">{feature.eyebrow}</p>
-      <h2 className="mt-2 leading-none text-[clamp(1.6rem,3vw,2.2rem)]">{feature.title}</h2>
+      <h2 className="mt-2 leading-none text-heading-mid">{feature.title}</h2>
       <p className="mt-4 text-ink-soft">{feature.body}</p>
       <ul className="mt-6 flex flex-col gap-3">
         {feature.bullets.map((b) => (

@@ -24,7 +24,26 @@
   --font-agenda:   "agenda", ui-sans-serif, system-ui, sans-serif;
   --font-caveat:  "Caveat", ui-serif, cursive;
 
-  --leading-title: 1.05;
+  --leading-title: 1;
+
+  /* ── Semantic text scale ───────────────────────────────────────
+     Adjust here to retune sizes site-wide. Tailwind v4 generates
+     `text-{name}` utilities from --text-* tokens automatically, so
+     a class like `text-section-h` reads its size from this block.
+     Built-in `text-xs/sm/base/lg/xl/2xl/3xl/...` still work; the
+     semantic tokens below collapse close-but-different ad-hoc
+     values into a small, consistent ramp.
+     ───────────────────────────────────────────────────────────── */
+  --text-eyebrow:     0.7rem;   /* uppercase pills / fine badges */
+  --text-fine:        0.8rem;   /* captions on cards / dark backdrops */
+  --text-meta:        0.95rem;  /* small body / muted copy */
+  --text-body-lg:     1.125rem; /* slightly larger than base body */
+  --text-mini-h:      1.4rem;   /* small section sub-heading */
+  --text-section-h:   1.65rem;  /* mobile section heading */
+  --text-figure-md:   2.2rem;   /* mid figures (stat numbers) */
+  --text-figure-lg:   3.2rem;   /* large figures (hero stat numbers) */
+  --text-display:     5rem;     /* display-size figures */
+  --text-heading-mid: clamp(1.7rem, 3.5vw, 2.5rem); /* in-panel h2 */
 
   --animate-float-1: float1 4.5s ease-in-out infinite;
   --animate-float-2: float2 5.5s ease-in-out infinite;
@@ -158,6 +177,8 @@
   h1 { font-size: clamp(2.75rem, 6vw, 4.65rem); }
   h2 { font-size: clamp(2.35rem, 4.8vw, 3.65rem); }
   h3 { font-size: 1.5rem; }
+
+  p { font-size: 1.25rem; line-height: 1.25; }
 
   em { font-style: italic; color: var(--color-gold); }
 }

@@ -167,12 +167,12 @@ export default async function Home() {
         </div>
 
         <div className="relative z-10 mx-auto flex w-full max-w-[1160px] flex-col items-start text-left md:items-start md:text-left">
-          <div className="mb-4 inline-flex animate-[fadeInUp_0.6s_ease_both] items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-[1.08rem] font-bold text-gold-soft md:px-4 md:py-1.5 md:text-[1.14rem]">
+          <div className="mb-4 inline-flex animate-[fadeInUp_0.6s_ease_both] items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft md:px-4 md:py-1.5 md:text-body-lg">
             <Paw className="h-[1.1em] w-[1.1em]" /> Built by a daycare, for
             daycares
           </div>
 
-          <h1 className="rev mb-3 animate-[fadeInUp_0.7s_0.1s_ease_both] text-white text-[2.25rem] md:mb-4 md:[font-size:clamp(2.4rem,4vw,3.6rem)]">
+          <h1 className="rev mb-3 animate-[fadeInUp_0.7s_0.1s_ease_both] text-white text-figure-md md:mb-4 md:[font-size:clamp(2.4rem,4vw,3.6rem)]">
             Software that{" "}
             <span className="squig">
               actually
@@ -184,7 +184,7 @@ export default async function Home() {
             gets your daycare.
           </h1>
 
-          <p className="rev d1 mb-5 max-w-[300px] animate-[fadeInUp_0.7s_0.2s_ease_both] text-[0.98rem] text-white/80 md:mb-6 md:max-w-[460px]">
+          <p className="rev d1 mb-5 max-w-[300px] animate-[fadeInUp_0.7s_0.2s_ease_both] text-white/80 md:mb-6 md:max-w-[460px]">
             Built by the people behind Duncan&apos;s Dog Co — 15 years in the
             industry, finally turning that experience into software that makes
             your business run the way it should.
@@ -222,47 +222,47 @@ export default async function Home() {
           {/* Desktop floating UI cards — hidden on mobile (stats become their own section) */}
           <div className="rev d3 mt-20 hidden w-full flex-wrap items-start justify-center gap-5 md:flex md:justify-start">
             <div className="relative min-w-[200px] max-w-[220px] animate-[var(--animate-float-1)] overflow-hidden rounded-[20px_16px_22px_18px/18px_22px_16px_20px] bg-gradient-to-br from-[#E8856A] to-[#C96B52] px-7 pt-7 pb-5 text-left shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
-              <span className="absolute right-4 top-4 rounded-full bg-white/35 px-2.5 py-0.5 text-[0.72rem] font-bold tracking-wide text-white backdrop-blur-sm">
+              <span className="absolute right-4 top-4 rounded-full bg-white/35 px-2.5 py-0.5 text-eyebrow font-bold tracking-wide text-white backdrop-blur-sm">
                 Today
               </span>
-              <div className="mb-2 font-massilia text-[3.2rem] font-bold leading-none text-white">
+              <div className="mb-2 font-massilia text-figure-lg font-bold leading-none text-white">
                 12
               </div>
               <p className="font-massilia text-base font-bold text-white">
                 Bookings, handled.
               </p>
-              <p className="text-[0.8rem] leading-snug text-white/80">
+              <p className="text-fine leading-snug text-white/80">
                 A clean calendar that fills itself — no more &quot;did you get
                 my text?&quot;
               </p>
             </div>
 
             <div className="relative mt-8 min-w-[200px] max-w-[220px] animate-[var(--animate-float-2)] overflow-hidden rounded-[20px_16px_22px_18px/18px_22px_16px_20px] bg-gradient-to-br from-[#6B9E72] to-[#4E7D58] px-7 pt-7 pb-5 text-left shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
-              <span className="absolute right-4 top-4 rounded-full bg-white/35 px-2.5 py-0.5 text-[0.72rem] font-bold tracking-wide text-white backdrop-blur-sm">
+              <span className="absolute right-4 top-4 rounded-full bg-white/35 px-2.5 py-0.5 text-eyebrow font-bold tracking-wide text-white backdrop-blur-sm">
                 Paid
               </span>
-              <div className="mb-2 font-massilia text-[2.4rem] font-bold leading-none text-white">
+              <div className="mb-2 font-massilia text-figure-md font-bold leading-none text-white">
                 £840
               </div>
               <p className="font-massilia text-base font-bold text-white">
                 Money, in the bank.
               </p>
-              <p className="text-[0.8rem] leading-snug text-white/80">
+              <p className="text-fine leading-snug text-white/80">
                 Auto-charge, bulk invoices, direct debit. No chasing. Ever.
               </p>
             </div>
 
             <div className="relative mt-2 min-w-[200px] max-w-[220px] animate-[var(--animate-float-3)] overflow-hidden rounded-[20px_16px_22px_18px/18px_22px_16px_20px] bg-gradient-to-br from-[#E8A430] to-[#C8880A] px-7 pt-7 pb-5 text-left shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
-              <span className="absolute right-4 top-4 rounded-full bg-white/35 px-2.5 py-0.5 text-[0.72rem] font-bold tracking-wide text-white backdrop-blur-sm">
+              <span className="absolute right-4 top-4 rounded-full bg-white/35 px-2.5 py-0.5 text-eyebrow font-bold tracking-wide text-white backdrop-blur-sm">
                 Routed
               </span>
-              <div className="mb-2 font-massilia text-[3.2rem] font-bold leading-none text-white">
+              <div className="mb-2 font-massilia text-figure-lg font-bold leading-none text-white">
                 3
               </div>
               <p className="font-massilia text-base font-bold text-white">
                 Pickups, sorted.
               </p>
-              <p className="text-[0.8rem] leading-snug text-white/80">
+              <p className="text-fine leading-snug text-white/80">
                 Drag-and-drop routes your drivers can follow on their phone.
               </p>
             </div>
@@ -276,44 +276,44 @@ export default async function Home() {
         className="grid grid-cols-3 gap-2.5 bg-gradient-to-b from-[#007080] to-forest-mid px-4 pt-5 pb-7 md:hidden"
       >
         <div className="relative overflow-hidden rounded-[18px_14px_20px_16px/16px_20px_14px_18px] bg-gradient-to-br from-[#E8856A] to-[#C96B52] px-3 pt-3.5 pb-3 text-left text-white shadow-[0_6px_18px_rgba(0,0,0,0.14)]">
-          <span className="absolute right-2 top-2 rounded-full bg-white/35 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider">
+          <span className="absolute right-2 top-2 rounded-full bg-white/35 px-1.5 py-0.5 text-eyebrow font-bold uppercase tracking-wider">
             Today
           </span>
-          <div className="mt-1.5 mb-1 font-massilia text-[1.9rem] font-bold leading-none">
+          <div className="mt-1.5 mb-1 font-massilia text-figure-md font-bold leading-none">
             12
           </div>
-          <p className="font-massilia text-[0.78rem] font-bold leading-tight">
+          <p className="font-massilia text-fine font-bold leading-tight">
             Bookings, handled.
           </p>
-          <p className="mt-0.5 text-[0.65rem] leading-snug opacity-80">
+          <p className="mt-0.5 text-eyebrow leading-snug opacity-80">
             A calendar that fills itself.
           </p>
         </div>
         <div className="relative overflow-hidden rounded-[18px_14px_20px_16px/16px_20px_14px_18px] bg-gradient-to-br from-[#6B9E72] to-[#4E7D58] px-3 pt-3.5 pb-3 text-left text-white shadow-[0_6px_18px_rgba(0,0,0,0.14)]">
-          <span className="absolute right-2 top-2 rounded-full bg-white/35 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider">
+          <span className="absolute right-2 top-2 rounded-full bg-white/35 px-1.5 py-0.5 text-eyebrow font-bold uppercase tracking-wider">
             Paid
           </span>
-          <div className="mt-1.5 mb-1 font-massilia text-[1.55rem] font-bold leading-none">
+          <div className="mt-1.5 mb-1 font-massilia text-section-h font-bold leading-none">
             £840
           </div>
-          <p className="font-massilia text-[0.78rem] font-bold leading-tight">
+          <p className="font-massilia text-fine font-bold leading-tight">
             In the bank.
           </p>
-          <p className="mt-0.5 text-[0.65rem] leading-snug opacity-80">
+          <p className="mt-0.5 text-eyebrow leading-snug opacity-80">
             No chasing. Ever.
           </p>
         </div>
         <div className="relative overflow-hidden rounded-[18px_14px_20px_16px/16px_20px_14px_18px] bg-gradient-to-br from-[#E8A430] to-[#C8880A] px-3 pt-3.5 pb-3 text-left text-white shadow-[0_6px_18px_rgba(0,0,0,0.14)]">
-          <span className="absolute right-2 top-2 rounded-full bg-white/35 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider">
+          <span className="absolute right-2 top-2 rounded-full bg-white/35 px-1.5 py-0.5 text-eyebrow font-bold uppercase tracking-wider">
             Routed
           </span>
-          <div className="mt-1.5 mb-1 font-massilia text-[1.9rem] font-bold leading-none">
+          <div className="mt-1.5 mb-1 font-massilia text-figure-md font-bold leading-none">
             3
           </div>
-          <p className="font-massilia text-[0.78rem] font-bold leading-tight">
+          <p className="font-massilia text-fine font-bold leading-tight">
             Pickups sorted.
           </p>
-          <p className="mt-0.5 text-[0.65rem] leading-snug opacity-80">
+          <p className="mt-0.5 text-eyebrow leading-snug opacity-80">
             Drag-and-drop routes.
           </p>
         </div>
@@ -324,7 +324,7 @@ export default async function Home() {
         aria-label="Businesses using Genera"
         className="overflow-x-hidden overflow-y-visible border-y-2 border-teal-mid bg-teal-soft py-4 md:py-8"
       >
-        <p className="mb-2 text-center font-caveat text-[1.1rem] text-forest md:text-[1.3rem]">
+        <p className="mb-2 text-center font-caveat text-body-lg text-forest md:text-mini-h">
           Businesses already on board
         </p>
         <div className="overflow-y-visible">
@@ -336,7 +336,7 @@ export default async function Home() {
                   className="relative mt-1.5 shrink-0 pt-7 md:mt-2 md:pt-8"
                 >
                   <span className="flex h-9 items-center justify-center rounded-full border-2 border-teal-mid bg-white px-3.5 md:h-11 md:px-4">
-                    <span className="whitespace-nowrap text-[0.68rem] font-semibold text-forest md:text-[0.78rem]">
+                    <span className="whitespace-nowrap text-eyebrow font-semibold text-forest md:text-fine">
                       {logo.name}
                     </span>
                   </span>
@@ -356,10 +356,10 @@ export default async function Home() {
                   key={`${logo.id}-${i}`}
                   className="relative mt-1.5 shrink-0 pt-7 md:mt-2 md:pt-8"
                 >
-                  <span className="flex h-9 items-center justify-center whitespace-nowrap rounded-full border-2 border-teal-mid bg-white px-3.5 text-[0.68rem] font-semibold text-forest md:h-11 md:px-4 md:text-[0.78rem]">
+                  <span className="flex h-9 items-center justify-center whitespace-nowrap rounded-full border-2 border-teal-mid bg-white px-3.5 text-eyebrow font-semibold text-forest md:h-11 md:px-4 md:text-fine">
                     {logo.name}
                   </span>
-                  <span className="absolute -top-3 left-1/2 grid h-12 w-12 -translate-x-1/2 place-items-center rounded-full border-2 border-teal-mid bg-white font-massilia text-[0.68rem] font-bold text-forest md:-top-4 md:h-14 md:w-14 md:text-[0.78rem]">
+                  <span className="absolute -top-3 left-1/2 grid h-12 w-12 -translate-x-1/2 place-items-center rounded-full border-2 border-teal-mid bg-white font-massilia text-eyebrow font-bold text-forest md:-top-4 md:h-14 md:w-14 md:text-fine">
                     {logo.name
                       .split(" ")
                       .filter(Boolean)
@@ -373,7 +373,7 @@ export default async function Home() {
           </div>
         </div>
 
-        <div className="mt-3 flex items-center justify-center gap-2 px-6 font-caveat text-[0.95rem] text-forest md:mt-6 md:text-[1.15rem]">
+        <div className="mt-3 flex items-center justify-center gap-2 px-6 font-caveat text-meta text-forest md:mt-6 md:text-body-lg">
           <span className="tracking-widest text-gold">★★★★★</span>
           <span>Trusted by pet businesses across the UK</span>
         </div>
@@ -388,12 +388,12 @@ export default async function Home() {
         <div className="mx-auto max-w-[1160px]">
           <div className="rev mb-6 text-center md:mb-14">
             <p className="eyebrow">Sound familiar?</p>
-            <h2 className="text-[1.7rem] md:text-[length:inherit]">
+            <h2 className="text-section-h md:text-[length:inherit]">
               Running a daycare is
               <br />
               harder than it looks.
             </h2>
-            <p className="mx-auto mt-2 max-w-[560px] text-[0.95rem] text-ink-soft md:mt-3 md:text-[1.15rem]">
+            <p className="mx-auto mt-2 max-w-[560px] text-meta text-ink-soft md:mt-3 md:text-body-lg">
               You got into this for the dogs — not the admin. We&apos;ll handle
               the rest.
             </p>
@@ -413,13 +413,13 @@ export default async function Home() {
                 key={p.n}
                 className={`rev d${i + 1} relative z-10 rounded-2xl border border-teal-mid/60 bg-white/80 p-5 shadow-[0_4px_20px_rgba(0,62,69,0.06)] backdrop-blur-sm md:p-7`}
               >
-                <div className="mb-1.5 font-massilia text-[1.6rem] font-bold leading-none text-gold/70 md:mb-3 md:text-[2.2rem]">
+                <div className="mb-1.5 font-massilia text-section-h font-bold leading-none text-gold/70 md:mb-3 md:text-figure-md">
                   {p.n}
                 </div>
                 <h3 className="mb-1.5 font-massilia text-base font-bold md:mb-2 md:text-lg">
                   {p.title}
                 </h3>
-                <p className="text-[0.92rem] text-ink-soft md:text-base">
+                <p className="text-meta text-ink-soft md:text-base">
                   {p.body}
                 </p>
               </div>
@@ -448,13 +448,13 @@ export default async function Home() {
         <div className="mx-auto max-w-[1160px]">
           <div className="rev mb-4 text-center md:mb-14">
             <p className="eyebrow">See it in action</p>
-            <h2 className="text-[1.55rem] md:text-[length:inherit]">
+            <h2 className="text-section-h md:text-[length:inherit]">
               A dashboard built for busy people.
             </h2>
           </div>
 
           <div className="rev d1 relative mx-auto max-w-[1000px]">
-            <p className="mb-3 text-center font-caveat text-[1.05rem] text-forest md:text-xl">
+            <p className="mb-3 text-center font-caveat text-body-lg text-forest md:text-xl">
               Your 9am Monday, sorted ☕
             </p>
 
@@ -465,7 +465,7 @@ export default async function Home() {
                   <span className="block h-[9px] w-[9px] rounded-full bg-[#FFBD2E] md:h-3 md:w-3" />
                   <span className="block h-[9px] w-[9px] rounded-full bg-[#28C940] md:h-3 md:w-3" />
                 </div>
-                <div className="flex-1 rounded-md bg-white px-2.5 py-1 text-center text-[0.7rem] text-ink-soft md:flex-none md:text-xs">
+                <div className="flex-1 rounded-md bg-white px-2.5 py-1 text-center text-eyebrow text-ink-soft md:flex-none md:text-xs">
                   app.generasoftware.com
                 </div>
               </div>
@@ -487,7 +487,7 @@ export default async function Home() {
         <div className="mx-auto max-w-[1160px]">
           <div className="rev mb-6 text-center md:mb-14">
             <p className="eyebrow">What Genera does</p>
-            <h2 className="text-[1.6rem] md:text-[length:inherit]">
+            <h2 className="text-section-h md:text-[length:inherit]">
               Everything you need.
               <br />
               Nothing you don&apos;t.
@@ -516,7 +516,7 @@ export default async function Home() {
                 <h3 className="mb-1.5 font-massilia text-base font-bold md:mb-2 md:text-lg">
                   {f.title}
                 </h3>
-                <p className="text-[0.9rem] text-ink-soft md:text-base">
+                <p className="text-meta text-ink-soft md:text-base">
                   {f.body}
                 </p>
               </div>
@@ -533,10 +533,10 @@ export default async function Home() {
         <div className="mx-auto grid max-w-[1160px] gap-6 md:grid-cols-2 md:items-center md:gap-12">
           <div className="rev">
             <p className="eyebrow !text-gold">Limited offer</p>
-            <h2 className="text-[1.7rem] !text-white md:text-[length:inherit]">
+            <h2 className="text-section-h !text-white md:text-[length:inherit]">
               The Founding One Hundred.
             </h2>
-            <p className="mt-2.5 text-[0.95rem] text-white/80 md:mt-4 md:text-base">
+            <p className="mt-2.5 text-meta text-white/80 md:mt-4 md:text-base">
               We&apos;re selecting 100 pet businesses to join Genera before we
               open to the public. You&apos;ll get three months completely free,
               priority onboarding and a direct line to our team.
@@ -545,7 +545,7 @@ export default async function Home() {
               {FOUNDING_PERKS.map((p) => (
                 <li
                   key={p}
-                  className="flex items-start gap-2 text-[0.92rem] text-white/85 md:text-base"
+                  className="flex items-start gap-2 text-meta text-white/85 md:text-base"
                 >
                   <span className="mt-0.5 text-gold">✓</span> {p}
                 </li>
@@ -562,13 +562,13 @@ export default async function Home() {
               height={720}
               className="pointer-events-none absolute -right-6 bottom-0 z-0 h-[180px] w-auto select-none drop-shadow-[0_8px_20px_rgba(0,0,0,0.3)] md:-right-40 md:-bottom-16 md:z-20 md:h-[28rem] md:drop-shadow-[0_12px_28px_rgba(0,0,0,0.35)]"
             />
-            <p className="relative z-10 text-[0.7rem] uppercase tracking-widest text-gold-soft md:text-sm">
+            <p className="relative z-10 text-eyebrow uppercase tracking-widest text-gold-soft md:text-sm">
               Spots remaining
             </p>
-            <div className="relative z-10 mt-1 font-massilia text-[3.6rem] font-bold leading-none text-gold md:mt-2 md:text-[5rem]">
+            <div className="relative z-10 mt-1 font-massilia text-figure-lg font-bold leading-none text-gold md:mt-2 md:text-display">
               {remainingSpots}
             </div>
-            <p className="relative z-10 mb-4 text-[0.85rem] text-white/70 md:mb-5 md:text-base">
+            <p className="relative z-10 mb-4 text-fine text-white/70 md:mb-5 md:text-base">
               out of {totalSpots} founding members
             </p>
             <div className="relative z-10 h-[7px] w-full overflow-hidden rounded-full bg-white/10 md:h-2">
@@ -577,10 +577,10 @@ export default async function Home() {
                 style={{ width: `${progressPct}%` }}
               />
             </div>
-            <p className="relative z-10 mt-2 text-[0.78rem] text-white/60 md:text-sm">
+            <p className="relative z-10 mt-2 text-fine text-white/60 md:text-sm">
               {claimedSpots} {claimedSpots === 1 ? "spot" : "spots"} claimed so far
             </p>
-            <p className="relative z-10 mt-3.5 max-w-[200px] text-[0.9rem] text-white/80 md:mt-4 md:max-w-none md:text-base">
+            <p className="relative z-10 mt-3.5 max-w-[200px] text-meta text-white/80 md:mt-4 md:max-w-none md:text-base">
               Applications close once we reach 100. Be part of shaping the
               product from the start.
             </p>
@@ -618,17 +618,17 @@ export default async function Home() {
 
           <div className="rev d2">
             <p className="eyebrow">Why we built this</p>
-            <h2 className="text-[1.55rem] md:text-[length:inherit]">
+            <h2 className="text-section-h md:text-[length:inherit]">
               From a dog walking round in South West London to software used
               across the UK.
             </h2>
-            <p className="mt-2.5 text-[0.95rem] text-ink-soft md:mt-4 md:text-base">
+            <p className="mt-2.5 text-meta text-ink-soft md:mt-4 md:text-base">
               Duncan and Jess started with a dog walking round in 2011. Fifteen
               years later they&apos;re running a licensed daycare — and they
               still couldn&apos;t find software that actually understood how a
               pet business works.
             </p>
-            <p className="mt-3 text-[0.95rem] text-ink-soft md:text-base">
+            <p className="mt-3 text-meta text-ink-soft md:text-base">
               So they built Genera themselves. Every feature exists because they
               needed it. Every decision is made by people who&apos;ve been on
               the end of a very muddy lead.
@@ -646,10 +646,10 @@ export default async function Home() {
       {/* ── Final CTA ───────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-6 py-14 text-center text-white md:px-8 md:py-22">
         <div className="relative z-10 mx-auto max-w-[760px]">
-          <h2 className="text-[1.65rem] !text-white md:text-[length:inherit]">
+          <h2 className="text-section-h !text-white md:text-[length:inherit]">
             Ready when you are.
           </h2>
-          <p className="mt-2.5 text-[0.95rem] text-white/80 md:mt-4 md:text-base">
+          <p className="mt-2.5 text-meta text-white/80 md:mt-4 md:text-base">
             Apply for the Founding 100 today. No credit card required. No
             commitment. Just one simple path to see if Genera is right for you.
           </p>
