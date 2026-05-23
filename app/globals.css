@@ -24,6 +24,8 @@
   --font-agenda:   "agenda", ui-sans-serif, system-ui, sans-serif;
   --font-caveat:  "Caveat", ui-serif, cursive;
 
+  --leading-title: 1.05;
+
   --animate-float-1: float1 4.5s ease-in-out infinite;
   --animate-float-2: float2 5.5s ease-in-out infinite;
   --animate-float-3: float3 4s ease-in-out infinite;
@@ -150,7 +152,7 @@
   h1, h2, h3 {
     font-family: var(--font-massilia);
     font-weight: 700;
-    line-height: 1.15;
+    line-height: var(--leading-title);
     color: var(--color-ink);
   }
   h1 { font-size: clamp(2.75rem, 6vw, 4.65rem); }

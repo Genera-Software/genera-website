@@ -74,7 +74,7 @@ export default function Navbar() {
               className="h-[38px] w-[38px] object-contain"
               priority
             />
-            <span className="flex flex-col leading-[1.1]">
+            <span className="flex flex-col leading-none">
               <span className="font-massilia text-[1.1rem] font-extrabold tracking-[0.125rem] text-white">
                 GENERA
               </span>

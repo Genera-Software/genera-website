@@ -373,7 +373,7 @@ function StepView({
           {current.eyebrow}
         </div>
       )}
-      <h2 className="!text-white text-[clamp(1.7rem,3.6vw,2.6rem)] leading-tight">
+      <h2 className="!text-white text-[clamp(1.7rem,3.6vw,2.6rem)] leading-none">
         {current.label}
         {current.optional && (
           <span className="ml-2 align-middle font-massilia text-sm font-medium text-white/50">

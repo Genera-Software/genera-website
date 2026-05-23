@@ -152,7 +152,7 @@ export default async function OurStoryPage() {
             </p>
           </article>
 
-          <blockquote className="rev rounded-2xl border-l-4 border-gold bg-cream px-7 py-6 font-massilia text-xl font-bold italic text-forest md:text-2xl">
+          <blockquote className="rev rounded-2xl border-l-4 border-gold bg-cream px-7 py-6 font-massilia text-xl font-bold leading-none italic text-forest md:text-2xl">
             &ldquo;We were running everything on spreadsheets and manual
             invoices. It worked until it did not.&rdquo;
           </blockquote>
@@ -201,7 +201,7 @@ export default async function OurStoryPage() {
             <p className="text-ink-soft">And he did.</p>
           </article>
 
-          <blockquote className="rev rounded-2xl bg-forest px-7 py-6 font-massilia text-xl font-bold italic text-white md:text-2xl">
+          <blockquote className="rev rounded-2xl bg-forest px-7 py-6 font-massilia text-xl font-bold leading-none italic text-white md:text-2xl">
             &ldquo;Instead of leaving a bad review, he said: I will build you
             something.&rdquo;
           </blockquote>

@@ -148,7 +148,7 @@ export default function FormPreview({
                 {current.eyebrow}
               </div>
             )}
-            <h2 className="!text-white text-[clamp(1.4rem,2.6vw,2rem)] leading-tight">
+            <h2 className="!text-white text-[clamp(1.4rem,2.6vw,2rem)] leading-none">
               {current.label}
               {current.is_optional && (
                 <span className="ml-2 align-middle font-massilia text-sm font-medium text-white/50">
