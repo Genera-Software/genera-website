@@ -20,8 +20,8 @@ const COMPANY_LINKS = [
 
 const LEGAL_LINKS = [
   { href: "/privacy-policy", label: "Privacy Policy" },
-  { href: "/terms", label: "Terms of Service" },
-  { href: "/privacy-policy", label: "GDPR" },
+  { href: "/terms-of-service", label: "Terms of Service" },
+  { href: "/gdpr", label: "GDPR" },
 ];
 
 export default function Footer() {
