@@ -354,7 +354,7 @@ export default async function OurStoryPage() {
           <div className="rev d2 mt-8 grid gap-10 overflow-hidden rounded-3xl border border-cream-dark bg-cream shadow-[0_24px_60px_rgba(0,62,69,0.08)] md:grid-cols-[3fr_2fr]">
             <div className="p-8 md:p-12 md:order-1">
               <p className="eyebrow">Meet the team</p>
-              <h3 className="mt-2 font-poppins text-3xl font-extrabold text-forest">
+              <h3 className="mt-2 font-massilia text-3xl font-extrabold text-forest">
                 Jess
               </h3>
               <p className="mt-1 font-medium text-gold">
