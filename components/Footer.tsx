@@ -15,6 +15,7 @@ const PRODUCT_LINKS = [
 const COMPANY_LINKS = [
   { href: "/our-story", label: "Our Story" },
   { href: "/contact", label: "Contact" },
+  { href: "/badge-kit", label: "Badge Kit" },
   { href: "mailto:info@generasoftware.com", label: "Email Us" },
 ];
 
