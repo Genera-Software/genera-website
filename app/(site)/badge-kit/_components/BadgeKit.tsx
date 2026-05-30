@@ -251,7 +251,7 @@ export default function BadgeKit() {
         label +
         '">\n  <img src="' +
         BADGE_BASE_URL +
-        "/badges/" +
+        "/api/badge/" +
         spec.id +
         '.png"\n       alt="' +
         label +
@@ -272,7 +272,7 @@ export default function BadgeKit() {
         esc(label) +
         '"</span><span class="t">&gt;</span>\n  <span class="t">&lt;img</span> <span class="a">src</span>=<span class="s">"' +
         BADGE_BASE_URL +
-        "/badges/" +
+        "/api/badge/" +
         spec.id +
         '.png"</span>\n       <span class="a">alt</span>=<span class="s">"' +
         esc(label) +

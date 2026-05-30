@@ -258,6 +258,33 @@ export type Database = {
         };
         Relationships: [];
       };
+      badge_events: {
+        Row: {
+          id: string;
+          badge_id: string;
+          kind: "powered" | "book";
+          shape: "pill" | "card" | "stamp" | null;
+          referer_host: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          badge_id: string;
+          kind: "powered" | "book";
+          shape?: "pill" | "card" | "stamp" | null;
+          referer_host?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          badge_id?: string;
+          kind?: "powered" | "book";
+          shape?: "pill" | "card" | "stamp" | null;
+          referer_host?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       support_tickets: {
         Row: {
           id: string;

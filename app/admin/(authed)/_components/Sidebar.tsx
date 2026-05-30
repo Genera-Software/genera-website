@@ -43,6 +43,18 @@ const NAV: NavEntry[] = [
   },
   {
     kind: "item",
+    href: "/admin/badges",
+    label: "Badge Kit",
+    icon: (
+      <>
+        <path d="M12 2 4 5v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V5l-8-3Z" />
+        <circle cx="12" cy="10" r="2.5" />
+        <path d="M9 21l3-2 3 2" />
+      </>
+    ),
+  },
+  {
+    kind: "item",
     href: "/admin/forms",
     label: "Forms",
     icon: (
