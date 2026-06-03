@@ -348,11 +348,12 @@ export default function FeaturesClient() {
                 <li>New customers, bookings, memberships and direct debit alerts</li>
               </ul>
             </div>
-            <div className="grid grid-cols-2 gap-4 items-end">
+            {/* sm: = 640px — at smaller sizes one phone is enough; block is too narrow for two */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
               <Phone screenClass={s.scrStd}>
                 <Image src="/mockup-screens/business-customising.png" alt="Business customisation" fill className="object-cover object-top" />
               </Phone>
-              <Phone screenClass={s.scrStd}>
+              <Phone phoneClass="max-sm:hidden" screenClass={s.scrStd}>
                 <Image src="/mockup-screens/notifications.png" alt="Admin notification settings" fill className="object-cover object-top" />
               </Phone>
             </div>

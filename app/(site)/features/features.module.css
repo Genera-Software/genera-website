@@ -621,10 +621,15 @@
   .capacityImgCrop { height: 200px; }
   .bookingAnimation { min-height: 480px; }
   .animatedPhone { width: 230px; height: 490px; }
+  /* Two-phone grids: stack to single column, hide the secondary phone */
   .twoPhones,
-  .portalPhones { grid-template-columns: 1fr; }
+  .portalPhones { grid-template-columns: 1fr; min-height: 0; justify-items: center; }
+  /* width: 100% fills the grid cell (margin:auto collapses it to intrinsic width) */
   .twoPhones .phone,
-  .portalPhones .phone { transform: none !important; max-width: 310px; margin: 0 auto; }
+  .portalPhones .phone { transform: none !important; width: 100%; max-width: 310px; }
+  /* Hide the less-important phone in each pair to avoid 1200px-tall stacks */
+  .twoPhones .phone:first-child  { display: none; } /* keep pending-approval (2nd) */
+  .portalPhones .phone:last-child { display: none; } /* keep membership profile (1st) */
   .phoneRoute,
   .phoneStaff,
   .phoneDaily,
