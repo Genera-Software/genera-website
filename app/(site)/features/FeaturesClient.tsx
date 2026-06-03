@@ -302,7 +302,8 @@ export default function FeaturesClient() {
           </div>
 
           {/* ── Capacity & DEFRA ────────────────────────────── i=0 */}
-          <article id="capacity" className={`rev ${s.block} ${v(0).block} ${s.blockRecords}`}>
+          {/* paddingBottom:0 so the teal gradient tail of blockLight doesn't show as a blue strip */}
+          <article id="capacity" className={`rev ${s.block} ${v(0).block} ${s.blockRecords}`} style={{ paddingBottom: 0 }}>
             <div className={s.recordsCopyGrid}>
               <div>
                 <p className={`eyebrow ${v(0).eyebrow}`}>Capacity &amp; DEFRA Compliance</p>
@@ -422,7 +423,8 @@ export default function FeaturesClient() {
             </div>
             <div className={s.singlePhone}>
               <Phone phoneClass={s.phoneDaily} screenClass={s.scrXl}>
-                <Image src="/mockup-screens/features/mobile-daily-schedule-polished.png" alt="Mobile daily schedule for today" fill className="object-cover object-top" />
+                {/* left top: pet avatars are on the left — centering crops them */}
+                <Image src="/mockup-screens/features/mobile-daily-schedule-polished.png" alt="Mobile daily schedule for today" fill className="object-cover" style={{ objectPosition: 'left top' }} />
               </Phone>
             </div>
           </article>
@@ -477,7 +479,8 @@ export default function FeaturesClient() {
             </div>
             <div className={s.singlePhone}>
               <Phone phoneClass={s.phonePayment} screenClass={s.scrPay}>
-                <Image src="/mockup-screens/payment-methods.png" alt="Stripe and GoCardless payment methods" fill className="object-cover" style={{ objectPosition: "center 8%" }} />
+                {/* 22% skips past iOS status bar + browser URL bar at the top of the screenshot */}
+                <Image src="/mockup-screens/payment-methods.png" alt="Stripe and GoCardless payment methods" fill className="object-cover" style={{ objectPosition: "center 22%" }} />
               </Phone>
             </div>
           </article>
