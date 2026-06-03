@@ -235,22 +235,23 @@ export default function FeaturesClient() {
       <Reveal />
 
       {/* ── Hero ──────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] text-white px-[22px] pt-[116px] pb-0 md:pb-[74px]">
+      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] text-white px-[22px] pt-[88px] md:pt-[116px] pb-0 md:pb-[74px]">
         {/* decorative glow */}
         <div className="pointer-events-none absolute -right-[180px] -bottom-[260px] w-[620px] h-[620px] rounded-full bg-[radial-gradient(circle,rgba(255,168,0,.16),transparent_66%)]" aria-hidden />
 
         <div className="relative z-10 mx-auto grid max-w-[1180px] grid-cols-1 md:grid-cols-[minmax(0,1.02fr)_minmax(360px,.98fr)] gap-0 md:gap-[54px] items-center">
-          <div className="rev">
+          <div className="rev pb-6 md:pb-0">
             <p className="eyebrow !text-gold-soft">Features</p>
             <h1 className="text-white">Genera works around your daycare.</h1>
-            <p className="mt-5 mb-7 max-w-[560px] text-white/80 text-[clamp(1.05rem,2vw,1.25rem)] leading-relaxed">
+            <p className="mt-3 mb-5 md:mt-5 md:mb-7 max-w-[560px] text-white/80 text-[clamp(1rem,2vw,1.25rem)] leading-relaxed">
               Your services, your pricing, your approvals, your dog bus, your team. One operating system for the way pet care businesses actually run.
             </p>
-            <div className="flex gap-3 flex-wrap">
+            <div className="flex flex-col sm:flex-row gap-3">
               <BookDemoButton className="btn btn-gold btn-lg">{FOUNDING_100_CTA_LABEL}</BookDemoButton>
               <BookDemoButton className="btn btn-outline-w btn-lg">Book a Demo</BookDemoButton>
             </div>
-            <div className="mt-6 mb-6 md:mb-0 flex flex-wrap gap-2">
+            {/* Proof chips — hidden on mobile to keep hero compact */}
+            <div className="hidden md:flex mt-6 flex-wrap gap-2">
               {PROOF_CHIPS.map(chip => (
                 <span key={chip} className="border border-white/20 bg-white/10 rounded-full px-3 py-2 text-sm text-white/80">
                   {chip}
@@ -286,7 +287,7 @@ export default function FeaturesClient() {
       <FeatureNav />
 
       {/* ── Section intro ────────────────────────────────────── */}
-      <div className="px-[clamp(22px,3vw,56px)] pt-[78px]">
+      <div className="px-[clamp(22px,3vw,56px)] pt-10 md:pt-[78px]">
         <div className="max-w-[1380px] mx-auto">
           <div className="rev grid md:grid-cols-[minmax(0,.9fr)_minmax(320px,.75fr)] gap-10 items-end mb-10">
             <div>
@@ -454,7 +455,7 @@ export default function FeaturesClient() {
       </div>
 
       {/* ── Alt background section ───────────────────────────── */}
-      <div className="bg-white px-[clamp(22px,3vw,56px)] py-[78px]">
+      <div className="bg-white px-[clamp(22px,3vw,56px)] py-10 md:py-[78px]">
         <div className="max-w-[1380px] mx-auto">
 
           {/* ── Payments ───────────────────────────────────── i=6 */}
@@ -537,7 +538,7 @@ export default function FeaturesClient() {
       </div>
 
       {/* ── Staff ────────────────────────────────────────────── */}
-      <div className="px-[clamp(22px,3vw,56px)] py-[78px]">
+      <div className="px-[clamp(22px,3vw,56px)] py-10 md:py-[78px]">
         <div className="max-w-[1380px] mx-auto">
           {/* ── Staff ──────────────────────────────────────── i=9 */}
           <article id="staff" className={`rev ${s.block} ${v(9).block}`}>

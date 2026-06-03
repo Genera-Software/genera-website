@@ -597,22 +597,24 @@
   .twoPhones { grid-template-columns: 1fr 1fr; }
   .twoPhones .phone:first-child { transform: rotate(-2deg); }
   .portalPhones { grid-template-columns: 1fr 1fr; }
-  .featureNav { padding-bottom: 24px; }
+  /* Feature nav: no wrapping on mobile — scroll horizontally instead */
+  .featureNav { padding-bottom: 24px; margin-top: 0; }
+  .featureNavInner { flex-wrap: nowrap; }
   .floatIcon { display: none; }
   /* Mobile hero screenshot */
-  .heroStack { min-height: 180px; }
+  .heroStack { min-height: 160px; }
   .screenSide { display: none; }
   .screenMain {
     position: relative;
     width: calc(100% + 44px);
-    height: 210px;
+    height: 220px;
     top: 0;
     right: auto;
     left: -22px;
     transform: none;
-    border-radius: 16px 16px 0 0;
+    border-radius: 12px 12px 0 0;
     border-bottom: none;
-    box-shadow: 0 -14px 40px rgba(0,0,0,.24);
+    box-shadow: 0 -12px 36px rgba(0,0,0,.28);
   }
 }
 @media (max-width: 620px) {
