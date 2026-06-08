@@ -47,10 +47,18 @@ export default async function BlogPage() {
       {/* Page hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 pt-32 pb-24 text-white">
         <div className="mx-auto max-w-[860px] text-center">
-          <p className="eyebrow !text-gold-soft">Blog</p>
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft md:px-4 md:py-1.5">
+            🐾 The Genera Blog
+          </div>
           <h1 className="mt-2 text-white">
-            Insights from the <em className="text-gold">front line</em> of pet
-            care
+            Insights from the{" "}
+            <span className="squig">
+              front line
+              <svg viewBox="0 0 180 12" preserveAspectRatio="none">
+                <path d="M2,9 Q22,2 45,8 Q68,14 90,7 Q112,0 135,8 Q157,14 178,7" />
+              </svg>
+            </span>
+            {" "}of pet care
           </h1>
           <p className="mx-auto mt-5 max-w-[600px] text-white/80">
             Practical advice, industry commentary, and lessons learned from 15

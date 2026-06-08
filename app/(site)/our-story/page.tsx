@@ -93,11 +93,17 @@ export default async function OurStoryPage() {
            so the nav (bg-forest) transitions seamlessly into the page */}
       <section className="grid grid-cols-1 bg-gradient-to-br from-forest via-forest-mid to-[#007080] md:grid-cols-2">
         <div className="relative overflow-hidden px-8 pt-28 pb-20 text-white md:px-14 md:pt-36">
-          <p className="font-caveat text-section-h font-semibold leading-snug text-gold-soft">
-            Our Story · Built from the ground up
-          </p>
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft md:px-4 md:py-1.5">
+            🐾 Our Story · Built from the ground up
+          </div>
           <h1 className="mt-3 text-white">
-            We didn&apos;t set out to build software.
+            We didn&apos;t set out to{" "}
+            <span className="squig">
+              build software.
+              <svg viewBox="0 0 180 12" preserveAspectRatio="none">
+                <path d="M2,9 Q22,2 45,8 Q68,14 90,7 Q112,0 135,8 Q157,14 178,7" />
+              </svg>
+            </span>
             <br />
             <em className="text-gold">We set out to walk dogs.</em>
           </h1>
