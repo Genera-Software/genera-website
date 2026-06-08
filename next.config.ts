@@ -2,6 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  async redirects() {
+    return [
+      { source: "/community", destination: "/founding-100", permanent: true },
+    ];
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "d2xsxph8kpxj0f.cloudfront.net" },
