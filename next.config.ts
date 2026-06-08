@@ -1,3 +1,4 @@
+// Build: 2026-06-08-v2
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
