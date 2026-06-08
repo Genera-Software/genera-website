@@ -2,11 +2,60 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
 import FoundingSpotsStats from "@/components/FoundingSpotsStats";
 import Paw from "@/components/Paw";
 import { FOUNDING_100_CTA_LABEL } from "@/lib/cta";
+
+/* ── Animated paw trail ──────────────────────────────────────── */
+function PawTrail() {
+  return (
+    <svg width="280" height="400" viewBox="0 0 300 420" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <defs>
+        <style>{`
+          @keyframes pawDraw { from { stroke-dashoffset: 600; } to { stroke-dashoffset: 0; } }
+          @keyframes pawIn   { from { opacity: 0; } to { opacity: 1; } }
+          @keyframes goldGlow { 0%,100% { opacity:0.85; } 50% { opacity:1; } }
+          .pt-path { stroke-dasharray:600; stroke-dashoffset:600; animation: pawDraw 1.8s ease-out 0.3s forwards; }
+          .pt-0 { animation: pawIn 0.35s ease-out 0.6s both; }
+          .pt-1 { animation: pawIn 0.35s ease-out 0.9s both; }
+          .pt-2 { animation: pawIn 0.35s ease-out 1.2s both; }
+          .pt-3 { animation: pawIn 0.35s ease-out 1.5s both; }
+          .pt-4 { animation: pawIn 0.35s ease-out 1.8s both; }
+          .pt-gold { animation: pawIn 0.4s ease-out 2.1s both, goldGlow 1.8s ease-in-out 2.5s infinite; }
+        `}</style>
+      </defs>
+      <path className="pt-path" d="M80 400 C120 360 60 310 100 270 C140 230 200 240 180 190 C160 140 80 140 100 90 C120 40 200 30 220 20"
+        stroke="#003E45" strokeWidth="1.5" strokeDasharray="5 10" opacity="0.15" fill="none"/>
+      {([
+        {x:65,y:385,r:-10,c:"pt-0"},{x:135,y:345,r:8,c:"pt-1"},{x:75,y:285,r:-5,c:"pt-2"},
+        {x:160,y:215,r:10,c:"pt-3"},{x:75,y:140,r:-8,c:"pt-4"},
+      ] as const).map((p,i) => (
+        <g key={i} className={p.c} style={{opacity:0}} transform={`translate(${p.x},${p.y}) rotate(${p.r})`}>
+          <ellipse cx="0" cy="10" rx="13" ry="11" fill="#003E45"/>
+          <ellipse cx="-17" cy="-7" rx="7" ry="6" fill="#003E45"/>
+          <ellipse cx="-6" cy="-17" rx="7" ry="6" fill="#003E45"/>
+          <ellipse cx="6" cy="-17" rx="7" ry="6" fill="#003E45"/>
+          <ellipse cx="17" cy="-7" rx="7" ry="6" fill="#003E45"/>
+        </g>
+      ))}
+      <g className="pt-gold" style={{opacity:0}} transform="translate(185,55) rotate(6)">
+        <ellipse cx="0" cy="11" rx="16" ry="14" fill="#FFA800"/>
+        <ellipse cx="-19" cy="-8" rx="9" ry="8" fill="#FFA800"/>
+        <ellipse cx="-7" cy="-21" rx="9" ry="8" fill="#FFA800"/>
+        <ellipse cx="7" cy="-21" rx="9" ry="8" fill="#FFA800"/>
+        <ellipse cx="19" cy="-8" rx="9" ry="8" fill="#FFA800"/>
+      </g>
+      <ellipse cx="185" cy="44" rx="32" ry="32" fill="#FFA800" opacity="0.06"/>
+      <text x="10" y="398" fontFamily="massilia,sans-serif" fontSize="11" fill="#003E45" opacity="0.45">The first inspection</text>
+      <text x="10" y="295" fontFamily="massilia,sans-serif" fontSize="11" fill="#003E45" opacity="0.55">The planning battle</text>
+      <text x="18" y="152" fontFamily="massilia,sans-serif" fontSize="11" fill="#003E45" opacity="0.65">The licence wait</text>
+      <text x="105" y="68" fontFamily="massilia,sans-serif" fontSize="13" fill="#FFA800" opacity="0.9" fontWeight="700">First dog through ✓</text>
+    </svg>
+  );
+}
 
 /* ─────────────────────────────────────────────────────────────
    Static data
@@ -366,23 +415,8 @@ export default function CommunityClient({
       <section className="bg-white px-6 py-16 md:px-8 md:py-22">
         <div className="mx-auto max-w-[1160px]">
           <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
-            <div className="rev flex justify-center">
-              <div className="polaroid">
-                <div className="polaroid-window">
-                  <Image
-                    src="/images/duncan-jess.jpg"
-                    alt="Duncan and Jess, founders of Genera Software"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 520px"
-                    className="object-cover object-[center_55%]"
-                    loading="lazy"
-                  />
-                </div>
-                <p className="polaroid-caption">
-                  Duncan &amp; Jess, founders{" "}
-                  <Paw className="inline h-[1em] w-[1em] align-[-0.1em]" />
-                </p>
-              </div>
+            <div className="rev flex justify-center items-center">
+              <PawTrail />
             </div>
 
             <div className="rev d2">
@@ -435,15 +469,27 @@ export default function CommunityClient({
             </p>
           </div>
 
+          {/* Perks card */}
+          <div className="rev d2 mx-auto mt-8 inline-block rounded-2xl border border-white/15 px-8 py-6 text-left backdrop-blur-sm" style={{background:"rgba(255,255,255,0.06)"}}>
+            <ul className="flex flex-col gap-3">
+              {FOUNDING_PERKS.map((p, i) => (
+                <li key={i} className="flex items-center gap-3 text-white/85 text-sm font-niveau">
+                  <span className="text-base shrink-0">{p.icon}</span>
+                  {p.text}
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Spots counter */}
-          <div className="rev d2 mx-auto mt-10 max-w-[320px] rounded-2xl border border-white/10 bg-white/5 p-7 backdrop-blur-sm">
+          <div className="rev d3 mx-auto mt-8 max-w-[320px] rounded-2xl border border-white/10 bg-white/5 p-7 backdrop-blur-sm">
             <FoundingSpotsStats
               totalSpots={totalSpots}
               claimedSpots={claimedSpots}
             />
           </div>
 
-          <div className="rev d3 mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <div className="rev d4 mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <BookDemoButton className="btn btn-gold btn-lg">
               {FOUNDING_100_CTA_LABEL}
             </BookDemoButton>
