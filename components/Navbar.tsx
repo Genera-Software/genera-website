@@ -117,12 +117,12 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <div className="mx-auto hidden items-center gap-1 md:flex">
+        <div className="mx-auto hidden items-center gap-0.5 lg:flex">
           {NAV_LINKS.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className="rounded-full px-3 py-1.5 text-meta font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+              className="rounded-full px-2.5 py-1.5 text-fine font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white whitespace-nowrap"
             >
               {l.label}
             </Link>

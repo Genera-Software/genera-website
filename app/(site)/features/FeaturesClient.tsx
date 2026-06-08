@@ -243,7 +243,7 @@ export default function FeaturesClient() {
         <div className="relative z-10 mx-auto grid max-w-[1180px] grid-cols-1 md:grid-cols-[minmax(0,1.02fr)_minmax(360px,.98fr)] gap-0 md:gap-[54px] items-center">
           <div className="rev pb-6 md:pb-0">
             <p className="eyebrow !text-gold-soft">Features</p>
-            <h1 className="text-white">Genera works around your daycare.</h1>
+            <h1 className="text-white text-figure-md md:[font-size:clamp(2.4rem,4vw,3.6rem)]">Genera works around your daycare.</h1>
             <p className="mt-3 mb-5 md:mt-5 md:mb-7 max-w-[560px] text-white/80 text-[clamp(1rem,2vw,1.25rem)] leading-relaxed">
               Your services, your pricing, your approvals, your dog bus, your team. One operating system for the way pet care businesses actually run.
             </p>
