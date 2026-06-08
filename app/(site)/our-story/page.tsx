@@ -96,7 +96,7 @@ export default async function OurStoryPage() {
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft md:px-4 md:py-1.5">
             🐾 Our Story · Built from the ground up
           </div>
-          <h1 className="mt-3 text-white">
+          <h1 className="mt-3 text-white [font-size:clamp(2rem,4vw,3rem)] leading-tight">
             We didn&apos;t set out to{" "}
             <span className="squig">
               build software.
@@ -107,20 +107,16 @@ export default async function OurStoryPage() {
             <br />
             <em className="text-gold">We set out to walk dogs.</em>
           </h1>
-          <p className="mt-5 max-w-[480px] text-body-lg text-white/80">
+          <p className="mt-4 max-w-[480px] text-base text-white/75">
             From a dog walking round in South West London in 2011 to software
             used by pet businesses across the UK. Here&apos;s how it happened.
           </p>
 
-          <div className="mt-9 grid grid-cols-2 gap-6 md:grid-cols-4">
+          <div className="mt-7 flex flex-wrap gap-2.5">
             {STATS.map((s) => (
-              <div key={s.num}>
-                <div className="font-massilia text-figure-md font-bold leading-none text-gold">
-                  {s.num}
-                </div>
-                <div className="mt-1 whitespace-pre-line text-xs uppercase tracking-widest text-white/60">
-                  {s.label}
-                </div>
+              <div key={s.num} className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 backdrop-blur-sm">
+                <span className="font-massilia text-lg font-bold leading-none text-gold">{s.num}</span>
+                <span className="whitespace-pre-line text-[0.7rem] uppercase tracking-wider text-white/60">{s.label.replace("\n", " ")}</span>
               </div>
             ))}
           </div>

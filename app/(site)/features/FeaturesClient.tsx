@@ -292,20 +292,9 @@ export default function FeaturesClient() {
       {/* ── Feature nav ──────────────────────────────────────── */}
       <FeatureNav />
 
-      {/* ── Section intro ────────────────────────────────────── */}
-      <div className="px-[clamp(22px,3vw,56px)] pt-10 md:pt-[78px]">
+      {/* ── Feature sections ─────────────────────────────────── */}
+      <div className="px-[clamp(22px,3vw,56px)] pt-10 md:pt-[56px]">
         <div className="max-w-[1380px] mx-auto">
-          <div className="rev grid md:grid-cols-[minmax(0,.9fr)_minmax(320px,.75fr)] gap-10 items-end mb-10">
-            <div>
-              <p className="eyebrow">Where Genera separates itself</p>
-              <h2 className="text-forest text-[clamp(2rem,4vw,3.4rem)] mt-2">
-                Every feature is built around a real daycare workflow.
-              </h2>
-            </div>
-            <p className="text-ink-soft text-lg leading-relaxed">
-              Most pet software lists the same things: bookings, payments, records. Genera shows the operational details competitors gloss over — capacity, approvals, routes, client self-serve, compliance and staff records all working together.
-            </p>
-          </div>
 
           {/* ── Capacity & DEFRA ────────────────────────────── i=0 */}
           {/* paddingBottom:0 so the teal gradient tail of blockLight doesn't show as a blue strip */}
