@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     /* ─── Design Tokens ─────────────────────────────────────── */
@@ -259,14 +259,14 @@
       z-index: 2;
     }
     .split-eyebrow {
-      font-family: var(--font-b);
-      font-size: .68rem;
-      font-weight: 700;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      color: rgba(255,168,0,.75);
+      font-family: 'Caveat', cursive;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: .02em;
+      text-transform: none;
+      color: rgba(255,168,0,.88);
       display: block;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.1rem;
       opacity: 0;
       animation: fadeUp .6s .15s ease forwards;
     }
@@ -373,23 +373,25 @@
       object-fit: cover;
       object-position: center 30%;
     }
-    /* Left blend into text panel */
+    /* Left blend — wide soft fade into text panel */
     .split-hero-video::before {
       content: '';
       position: absolute;
       top: 0; left: 0;
-      width: 120px;
+      width: 220px;
       height: 100%;
-      background: linear-gradient(to right, var(--forest), transparent);
+      background: linear-gradient(to right, var(--forest) 0%, rgba(0,62,69,.6) 60%, transparent 100%);
       z-index: 1;
       pointer-events: none;
     }
-    /* Subtle dark vignette */
+    /* Warm overall overlay — softens video, removes harsh feel */
     .split-hero-video::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, transparent 50%, rgba(0,20,24,.35) 100%);
+      background:
+        linear-gradient(135deg, transparent 40%, rgba(0,20,24,.4) 100%),
+        rgba(0,30,36,.18);
       z-index: 1;
       pointer-events: none;
     }
