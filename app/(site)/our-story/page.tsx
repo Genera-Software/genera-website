@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import AdminMiniAnimation from "@/components/AdminMiniAnimation";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
 import { createMetadata } from "@/lib/seo";
 import { FOUNDING_100_CTA_LABEL } from "@/lib/cta";
 import { getPublicSupabase } from "@/lib/supabase/server";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   ...createMetadata({
@@ -89,10 +92,24 @@ export default async function OurStoryPage() {
     <>
       <Reveal />
 
-      {/* Split hero — wrapping section carries the same gradient as the homepage hero
-           so the nav (bg-forest) transitions seamlessly into the page */}
+      {/* Split hero */}
       <section className="grid grid-cols-1 bg-gradient-to-br from-forest via-forest-mid to-[#007080] md:grid-cols-2">
-        <div className="relative overflow-hidden px-8 pt-28 pb-20 text-white md:px-14 md:pt-36">
+
+        {/* Left — dashboard preview */}
+        <div className="flex items-center justify-center px-8 pt-28 pb-8 md:px-10 md:pt-32 md:pb-10">
+          <div className="w-full max-w-[480px] overflow-hidden rounded-2xl border border-white/10 shadow-[0_28px_80px_rgba(0,0,0,0.4)]">
+            <div className="flex items-center gap-2 border-b border-white/10 bg-forest-dark/80 px-3 py-2">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#FF6058]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#28C940]" />
+              <span className="ml-2 text-[0.65rem] text-white/40">app.generasoftware.com</span>
+            </div>
+            <AdminMiniAnimation />
+          </div>
+        </div>
+
+        {/* Right — text */}
+        <div className="relative overflow-hidden px-8 pt-10 pb-20 text-white md:px-14 md:pt-36">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft md:px-4 md:py-1.5">
             🐾 Our Story · Built from the ground up
           </div>
@@ -120,27 +137,6 @@ export default async function OurStoryPage() {
               </div>
             ))}
           </div>
-
-        </div>
-
-        <div className="relative min-h-[320px] overflow-hidden bg-transparent md:min-h-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            className="absolute inset-0 h-full w-full object-cover"
-          >
-            <source
-              src="https://video.wixstatic.com/video/a043b3_7798ca77d10a457781f9ce9380492181/720p/mp4/file.mp4"
-              type="video/mp4"
-            />
-          </video>
-          {/* Strong left-edge blend — solid forest fading into video, matching the text panel */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-[55%] bg-gradient-to-r from-forest via-forest/60 to-transparent" />
-          {/* Subtle overall dark warm tint to take the edge off the brightness */}
-          <div className="pointer-events-none absolute inset-0 bg-[rgba(0,15,18,0.22)]" />
         </div>
       </section>
 
@@ -148,7 +144,7 @@ export default async function OurStoryPage() {
       <section className="bg-white px-8 py-22">
         <div className="mx-auto flex max-w-[760px] flex-col gap-10">
           <article className="rev flex flex-col gap-4">
-            <h2>It started with a handful of leads and a lot of heart</h2>
+            <h2 className="text-forest">It started with a handful of leads and a lot of heart</h2>
             <p className="text-ink-soft">
               In 2011, Duncan and Jess started Duncan&apos;s Dog Co as a dog
               walking service in South West London. It was just the two of them
@@ -169,7 +165,7 @@ export default async function OurStoryPage() {
           </blockquote>
 
           <article className="rev flex flex-col gap-4">
-            <h2>Growing pains</h2>
+            <h2 className="text-forest">Growing pains</h2>
             <p className="text-ink-soft">
               Over the years, Duncan&apos;s Dog Co grew into one of the
               longest-standing, five-star licensed doggy daycares in the UK.
@@ -196,7 +192,7 @@ export default async function OurStoryPage() {
           </div>
 
           <article className="rev flex flex-col gap-4">
-            <h2>The missed booking</h2>
+            <h2 className="text-forest">The missed booking</h2>
             <p className="text-ink-soft">
               One day, a loyal customer&apos;s pickup was missed. A booking had
               slipped through the cracks. It was the kind of thing that happens
@@ -218,7 +214,7 @@ export default async function OurStoryPage() {
           </blockquote>
 
           <article className="rev flex flex-col gap-4">
-            <h2>From prototype to platform</h2>
+            <h2 className="text-forest">From prototype to platform</h2>
             <p className="text-ink-soft">
               That first version was rough. But it worked. Bookings stopped
               falling through. Invoices went out on time. Routes made sense.
@@ -235,7 +231,7 @@ export default async function OurStoryPage() {
           </article>
 
           <article className="rev flex flex-col gap-4">
-            <h2>Sharing it with the industry</h2>
+            <h2 className="text-forest">Sharing it with the industry</h2>
             <p className="text-ink-soft">
               After years of running Genera internally, Duncan and Jess
               realised something. Every small pet business they spoke to was
