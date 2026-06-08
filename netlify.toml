@@ -7,3 +7,9 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    CDN-Cache-Control = "no-store"
+    Netlify-CDN-Cache-Control = "no-store"
