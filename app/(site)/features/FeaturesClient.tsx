@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
+import AdminMiniAnimation from "@/components/AdminMiniAnimation";
 import { FOUNDING_100_CTA_LABEL } from "@/lib/cta";
 import s from "./features.module.css";
 
@@ -271,13 +272,7 @@ export default function FeaturesClient() {
               />
             </div>
             <div className={s.screenMain}>
-              <Image
-                src="/mockup-screens/features/desktop-bookings-calendar.png"
-                alt="Genera desktop booking calendar"
-                fill
-                priority
-                className="object-cover object-top"
-              />
+              <AdminMiniAnimation />
             </div>
           </div>
         </div>
