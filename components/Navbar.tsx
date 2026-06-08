@@ -130,12 +130,6 @@ export default function Navbar() {
         </div>
 
         <div className="hidden items-center gap-2 md:flex">
-          <Link
-            href={LOGIN_URL}
-            className="rounded-full px-3 py-1.5 text-fine font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
-          >
-            Login
-          </Link>
           <BookDemoButton
             className="inline-flex items-center rounded-full bg-gold px-5 py-2 font-massilia text-fine font-bold text-ink shadow-[0_4px_14px_rgba(255,168,0,0.35)] transition-shadow hover:shadow-[0_6px_22px_rgba(255,168,0,0.5)]"
           >
@@ -198,13 +192,6 @@ export default function Navbar() {
             className="btn btn-gold btn-lg"
             onClick={() => setOpen(false)}
           />
-          <Link
-            href={LOGIN_URL}
-            className="btn btn-outline-w btn-lg"
-            onClick={() => setOpen(false)}
-          >
-            Login
-          </Link>
         </div>
       </div>
     </>
