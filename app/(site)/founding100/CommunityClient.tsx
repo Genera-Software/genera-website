@@ -219,6 +219,19 @@ export default function CommunityClient({
         </div>
       </section>
 
+      {/* ── Dog photo banner ──────────────────────────────────────────── */}
+      <div className="flex gap-1.5 overflow-hidden md:gap-2" aria-hidden>
+        {[1,2,3,4,5].map(n => (
+          <div key={n} className="relative h-[180px] flex-1 overflow-hidden md:h-[260px]">
+            <img
+              src={`/daycare/dog${n}.jpg`}
+              alt=""
+              className="h-full w-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
+
       {/* ── The problem ───────────────────────────────────────────────── */}
       <section className="bg-white px-6 py-16 md:px-8 md:py-22">
         <div className="mx-auto max-w-[1160px]">

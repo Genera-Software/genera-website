@@ -236,7 +236,7 @@ export default function FeaturesClient() {
       <Reveal />
 
       {/* ── Hero ──────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] text-white px-[22px] pt-[88px] md:pt-[116px] pb-0 md:pb-[74px]">
+      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] text-white px-[22px] pt-[88px] md:pt-[116px] pb-10 md:pb-[74px]">
         {/* decorative glow */}
         <div className="pointer-events-none absolute -right-[180px] -bottom-[260px] w-[620px] h-[620px] rounded-full bg-[radial-gradient(circle,rgba(255,168,0,.16),transparent_66%)]" aria-hidden />
 
