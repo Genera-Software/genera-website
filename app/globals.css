@@ -1,0 +1,359 @@
+@import "tailwindcss";
+@import "@c15t/nextjs/styles.css";
+
+/* ─────────────────────────────────────────────────────────────
+   Design tokens — lifted from the original Genera CSS so every
+   page has the same palette, fonts and rhythm available as
+   Tailwind utilities (bg-forest, text-gold, font-massilia, …).
+   ───────────────────────────────────────────────────────────── */
+@theme {
+  --color-cream:        #F8FAFB;
+  --color-cream-dark:   #EEF4F5;
+  --color-forest:       #003E45;
+  --color-forest-mid:   #005060;
+  --color-forest-dark:  #002830;
+  --color-gold:         #FFA800;
+  --color-gold-light:   #FFF3CC;
+  --color-gold-soft:    #FFE099;
+  --color-teal-soft:    #E0F0F2;
+  --color-teal-mid:     #C2E2E6;
+  --color-ink:          #111827;
+  --color-ink-soft:     #4B5563;
+
+  --font-massilia: "massilia", ui-sans-serif, system-ui, sans-serif;
+  --font-niveau:   "niveau-grotesk", sans-serif;
+  --font-caveat:  "Caveat", ui-serif, cursive;
+
+  --leading-title: 1;
+
+  /* ── Semantic text scale ───────────────────────────────────────
+     Adjust here to retune sizes site-wide. Tailwind v4 generates
+     `text-{name}` utilities from --text-* tokens automatically, so
+     a class like `text-section-h` reads its size from this block.
+     Built-in `text-xs/sm/base/lg/xl/2xl/3xl/...` still work; the
+     semantic tokens below collapse close-but-different ad-hoc
+     values into a small, consistent ramp.
+     ───────────────────────────────────────────────────────────── */
+  --text-eyebrow:     0.9rem;   /* uppercase pills / fine badges */
+  --text-fine:        0.9rem;   /* captions on cards / dark backdrops */
+  --text-meta:        0.95rem;  /* small body / muted copy */
+  --text-body-lg:     1.125rem; /* slightly larger than base body */
+  --text-mini-h:      1.4rem;   /* small section sub-heading */
+  --text-section-h:   1.65rem;  /* mobile section heading */
+  --text-figure-md:   2.2rem;   /* mid figures (stat numbers) */
+  --text-figure-lg:   3.2rem;   /* large figures (hero stat numbers) */
+  --text-display:     5rem;     /* display-size figures */
+  --text-heading-mid: clamp(1.7rem, 3.5vw, 2.5rem); /* in-panel h2 */
+
+  --animate-float-1: float1 4.5s ease-in-out infinite;
+  --animate-float-2: float2 5.5s ease-in-out infinite;
+  --animate-float-3: float3 4s ease-in-out infinite;
+  --animate-illust-float: illustFloat 5s ease-in-out infinite;
+  --animate-fade-up:  fadeInUp 0.7s ease both;
+  --animate-scroll-x: scrollX 28s linear infinite;
+  --animate-draw-squig: drawSquig 1.2s 0.6s ease forwards;
+  --animate-wobble: wobble 6s ease-in-out infinite;
+}
+
+/* Keyframes referenced by --animate-* tokens above. */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes illustFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-10px); }
+}
+@keyframes float1 {
+  0%, 100% { transform: rotate(-3deg) translateY(0); }
+  50%      { transform: rotate(-2.5deg) translateY(-10px); }
+}
+@keyframes float2 {
+  0%, 100% { transform: rotate(1.5deg) translateY(0); }
+  50%      { transform: rotate(2deg) translateY(-14px); }
+}
+@keyframes float3 {
+  0%, 100% { transform: rotate(-1deg) translateY(0); }
+  50%      { transform: rotate(-1.5deg) translateY(-8px); }
+}
+@keyframes scrollX {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes drawSquig {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes wobble {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(8deg); }
+}
+@keyframes polaroidFloat {
+  0%, 100% { transform: rotate(-2.5deg) translateY(0); }
+  50%      { transform: rotate(-2deg)   translateY(-10px); }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Base — wrapped in @layer base so utilities like `text-white`
+   can override these defaults without specificity hacks.
+   ───────────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    color-scheme: light;
+    --c15t-primary: #003E45;
+    --c15t-primary-hover: #005060;
+    --c15t-surface: #ffffff;
+    --c15t-surface-hover: #F8FAFB;
+    --c15t-border: #C2E2E6;
+    --c15t-border-hover: #9CCDD4;
+    --c15t-text: #003E45;
+    --c15t-text-muted: #4B5563;
+    --c15t-text-on-primary: #ffffff;
+    --c15t-font-family: var(--font-niveau);
+    --c15t-font-weight-medium: 600;
+    --c15t-font-weight-semibold: 700;
+    --c15t-radius-lg: 8px;
+    --c15t-radius-md: 8px;
+    --c15t-shadow-sm: 0 4px 14px rgba(0, 62, 69, 0.08);
+    --c15t-shadow-md: 0 12px 32px rgba(0, 62, 69, 0.12);
+    --c15t-shadow-lg: 0 24px 60px rgba(0, 62, 69, 0.18);
+    --c15t-overlay: rgba(0, 40, 48, 0.48);
+    --button-border-radius: 9999px;
+    --button-font: var(--font-massilia);
+    --button-font-weight: 700;
+    --button-primary: var(--color-forest);
+    --button-primary-hover: var(--color-forest-mid);
+    --button-neutral: var(--color-forest);
+    --button-neutral-soft: var(--color-cream);
+    --button-border: var(--color-teal-mid);
+    --button-text: var(--color-forest);
+    --button-background-color: #ffffff;
+    --button-shadow: 0 4px 18px rgba(0, 62, 69, 0.08);
+    --button-shadow-primary: 0 4px 18px rgba(0, 62, 69, 0.24);
+    --button-shadow-primary-hover: 0 8px 24px rgba(0, 62, 69, 0.3);
+    --button-shadow-neutral: inset 0 0 0 1px var(--color-teal-mid);
+    --button-shadow-neutral-hover: inset 0 0 0 1px var(--color-forest);
+    --consent-banner-max-width: 520px;
+    --consent-banner-border-radius: 12px;
+    --consent-banner-background-color: #ffffff;
+    --consent-banner-footer-background-color: var(--color-cream);
+    --consent-banner-border-color: var(--color-teal-mid);
+    --consent-banner-title-color: var(--color-forest);
+    --consent-banner-description-color: var(--color-ink-soft);
+    --consent-banner-shadow: 0 24px 60px rgba(0, 62, 69, 0.18);
+    --consent-dialog-card-radius: 12px;
+    --consent-dialog-max-width: 34rem;
+    --consent-dialog-background-color: #ffffff;
+    --consent-dialog-border-color: var(--color-teal-mid);
+    --consent-dialog-foreground-color: var(--color-forest);
+    --consent-dialog-muted-color: var(--color-ink-soft);
+    --consent-dialog-stroke-color: var(--color-cream-dark);
+    --consent-dialog-card-shadow: 0 24px 60px rgba(0, 62, 69, 0.18);
+    --consent-widget-accordion-radius: 8px;
+    --consent-widget-accordion-border-color: var(--color-teal-mid);
+    --consent-widget-accordion-background-hover: var(--color-cream);
+    --legal-links-color: var(--color-forest-mid);
+    --legal-links-focus-color: var(--color-forest);
+  }
+
+  html {
+    /* ~6% larger type site-wide (16px → ~17px); scales all rem-based sizes. */
+    font-size: 106.25%;
+  }
+
+  html, body {
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-niveau);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-massilia);
+    font-weight: 700;
+    line-height: var(--leading-title);
+    color: var(--color-ink);
+  }
+  h1 { font-size: clamp(2.75rem, 6vw, 4.65rem); }
+  h2 { font-size: clamp(2.35rem, 4.8vw, 3.65rem); }
+  h3 { font-size: 1.5rem; }
+
+  p { font-size: 1.25rem; line-height: 1.25; }
+
+  em { font-style: italic; color: var(--color-gold); }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Reusable component classes — these stay as plain CSS because
+   they involve animations / decorative shapes / pseudo-elements
+   that would be unreadable as long Tailwind class strings.
+   ───────────────────────────────────────────────────────────── */
+
+/* Admin-mini animation (used in the "See it in action" showcase) */
+.anim-tabular { font-variant-numeric: tabular-nums; }
+
+.anim-device-shine {
+  position: absolute; inset: 0 auto 0 0; width: 30%;
+  background: linear-gradient(100deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
+  mix-blend-mode: overlay;
+  animation: animDeviceShine 7s ease-in-out infinite;
+  z-index: 2;
+}
+@keyframes animDeviceShine {
+  0%   { transform: translateX(-120%); opacity: 0; }
+  10%  { opacity: 0.4; }
+  35%  { opacity: 0.4; }
+  50%  { transform: translateX(220%); opacity: 0; }
+  100% { transform: translateX(220%); opacity: 0; }
+}
+
+.anim-cursor-dot {
+  width: 18px; height: 18px;
+  transform: translate(-2px, -2px);
+  z-index: 30;
+  transition: transform 600ms cubic-bezier(0.65, 0, 0.35, 1), opacity 200ms ease;
+}
+
+@keyframes animTodayPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,168,0,0.0); }
+  50%      { box-shadow: 0 0 0 6px rgba(255,168,0,0.18); }
+}
+.anim-today-pulse { animation: animTodayPulse 2.4s ease-in-out infinite; }
+
+/* Scroll-reveal: starts hidden, .in adds visibility */
+.rev { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.rev.in { opacity: 1; transform: translateY(0); }
+.rev.d1 { transition-delay: 0.05s; }
+.rev.d2 { transition-delay: 0.15s; }
+.rev.d3 { transition-delay: 0.25s; }
+.rev.d4 { transition-delay: 0.35s; }
+.rev.d5 { transition-delay: 0.45s; }
+.rev.d6 { transition-delay: 0.55s; }
+
+/* Squiggle underline used in hero h1 */
+.squig { position: relative; display: inline-block; }
+.squig svg {
+  position: absolute; left: 0; bottom: -6px;
+  width: 100%; height: 12px; overflow: visible;
+  stroke: var(--color-gold-soft); stroke-width: 3.5; fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 300; stroke-dashoffset: 300;
+  animation: var(--animate-draw-squig);
+}
+
+/* Buttons — kept as a class because the variants are reused on every page */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-massilia); font-weight: 700; font-size: 1rem;
+  padding: 0.85rem 1.75rem; border-radius: 9999px;
+  text-decoration: none; cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
+  border: 2.5px solid transparent; white-space: nowrap;
+}
+.btn:hover { transform: translateY(-3px) rotate(-0.5deg); }
+.btn-gold     { background: var(--color-gold); color: var(--color-ink); box-shadow: 0 4px 18px rgba(255,168,0,0.35); }
+.btn-gold:hover { box-shadow: 0 8px 28px rgba(255,168,0,0.45); }
+.btn-forest   { background: var(--color-forest); color: #fff; }
+.btn-forest:hover { box-shadow: 0 8px 24px rgba(0,62,69,0.3); }
+.btn-outline-w { background: transparent; border-color: #fff; color: #fff; }
+.btn-outline-w:hover { background: rgba(255,255,255,0.12); }
+.btn-outline-d { background: transparent; border-color: var(--color-forest); color: var(--color-forest); }
+.btn-outline-d:hover { background: var(--color-forest); color: #fff; }
+.btn-lg { padding: 1rem 2.2rem; font-size: 1.0625rem; }
+
+/* Caveat handwritten "label" used above section headings */
+.eyebrow {
+  font-family: var(--font-caveat);
+  font-size: 2.05rem; font-weight: 700;
+  color: var(--color-forest);
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: 0.85rem;
+}
+/* Mask-based paw glyph picks up `currentColor` from the eyebrow text,
+   so it always matches whatever color the eyebrow is rendered in. */
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  background-color: currentColor;
+  mask-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='5.5' cy='11' r='2.2'/%3E%3Ccircle cx='9.5' cy='6' r='2.2'/%3E%3Ccircle cx='14.5' cy='6' r='2.2'/%3E%3Ccircle cx='18.5' cy='11' r='2.2'/%3E%3Cpath d='M12 11.5c-3 0-5.5 2.5-5.5 5.5 0 1.5 1 3 2.5 3.5 1 0 2-.5 3-.5s2 .5 3 .5c1.5-.5 2.5-2 2.5-3.5 0-3-2.5-5.5-5.5-5.5z'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='5.5' cy='11' r='2.2'/%3E%3Ccircle cx='9.5' cy='6' r='2.2'/%3E%3Ccircle cx='14.5' cy='6' r='2.2'/%3E%3Ccircle cx='18.5' cy='11' r='2.2'/%3E%3Cpath d='M12 11.5c-3 0-5.5 2.5-5.5 5.5 0 1.5 1 3 2.5 3.5 1 0 2-.5 3-.5s2 .5 3 .5c1.5-.5 2.5-2 2.5-3.5 0-3-2.5-5.5-5.5-5.5z'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+}
+
+/* Polaroid frame for the story-section photo. The wrapper is the
+   tilted white card with paper-stack shadows; .photo-wrap clips the
+   image to a fixed 400px window; .polaroid-caption sits in the 64px
+   reserved gutter at the bottom of the frame. */
+.polaroid {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 300px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 14px 14px 50px;
+  transform: rotate(-2.5deg);
+  animation: polaroidFloat 5s ease-in-out infinite;
+  box-shadow:
+    0 2px 0 #e0e0e0,
+    0 6px 0 rgba(0,0,0,0.04),
+    0 24px 60px rgba(0,62,69,0.16),
+    0 8px 20px rgba(0,0,0,0.08);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.polaroid:hover {
+  animation: none;
+  transform: rotate(0deg) scale(1.02);
+  box-shadow:
+    0 2px 0 #e0e0e0,
+    0 6px 0 rgba(0,0,0,0.04),
+    0 40px 80px rgba(0,62,69,0.22);
+}
+.polaroid-window {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  width: 100%;
+  height: 280px;
+}
+@media (min-width: 768px) {
+  .polaroid-window { height: 400px; }
+}
+.polaroid-window img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center 55%;
+}
+.polaroid-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-caveat);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #666;
+  letter-spacing: 0.3px;
+}
+@media (min-width: 768px) {
+  .polaroid {
+    max-width: 520px;
+    border-radius: 22px;
+    padding: 16px 16px 64px;
+  }
+  .polaroid-caption {
+    height: 64px;
+    font-size: 1.275rem;
+  }
+}

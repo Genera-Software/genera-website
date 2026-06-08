@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The story behind Genera — how a dog walking round in South West London turned into software used by pet businesses across the UK.">
+  <title>Our Story — Genera Software</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── Design Tokens ─────────────────────────────────────── */
+    :root {
+      --forest:       #003E45;
+      --forest-light: #005060;
+      --forest-dark:  #002830;
+      --gold:         #FFA800;
+      --gold-dark:    #e09500;
+      --gold-light:   #fff4d9;
+      --charcoal:     #111827;
+      --grey-light:   #F9FAFB;
+      --grey-mid:     #E5E7EB;
+      --grey-text:    #6B7280;
+      --white:        #ffffff;
+      --r-sm: 6px;
+      --r:    10px;
+      --r-lg: 16px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+      --shadow-lg: 0 12px 48px rgba(0,0,0,.15), 0 4px 16px rgba(0,0,0,.08);
+      --font-h:  'Poppins', system-ui, sans-serif;
+      --font-b:  'Inter',   system-ui, sans-serif;
+      --max-w:   1200px;
+      --sp:      5rem 1.5rem;
+    }
+
+    /* ─── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { margin: 0; padding: 0; } html { scroll-behavior: smooth; } body { overflow-x: hidden; }
+    body {
+      font-family: var(--font-b);
+      color: var(--charcoal);
+      background: var(--white);
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a   { text-decoration: none; color: inherit; }
+    ul  { list-style: none; }
+
+    /* ─── Typography helpers ─────────────────────────────────── */
+    .label {
+      font-family: var(--font-h);
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .75rem;
+    }
+    .h2 {
+      font-family: var(--font-h);
+      font-weight: 800;
+      font-size: clamp(1.8rem, 3.8vw, 2.75rem);
+      line-height: 1.15;
+    }
+    .h2-light { color: var(--white); }
+    .sub {
+      font-size: 1.05rem;
+      color: var(--grey-text);
+      line-height: 1.75;
+      max-width: 560px;
+    }
+
+    /* ─── Layout ─────────────────────────────────────────────── */
+    .wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ─── Buttons ────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .9rem 1.75rem;
+      border-radius: var(--r-sm);
+      font-family: var(--font-b);
+      font-weight: 600;
+      font-size: .95rem;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all .18s ease;
+      white-space: nowrap;
+      text-align: center;
+      justify-content: center;
+    }
+    .btn-gold {
+      background: var(--gold);
+      color: var(--charcoal);
+    }
+    .btn-gold:hover {
+      background: var(--gold-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255,168,0,.35);
+    }
+    .btn-outline-w {
+      background: transparent;
+      color: var(--white);
+      border-color: rgba(255,255,255,.4);
+    }
+    .btn-outline-w:hover {
+      background: rgba(255,255,255,.1);
+      border-color: rgba(255,255,255,.8);
+    }
+    .btn-lg { padding: 1.05rem 2.1rem; font-size: 1rem; }
+
+    /* ─── Scroll reveal ──────────────────────────────────────── */
+    .rev {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .65s cubic-bezier(.22,1,.36,1),
+                  transform .65s cubic-bezier(.22,1,.36,1);
+    }
+    .rev.in { opacity: 1; transform: none; }
+    .d1 { transition-delay: .10s; }
+    .d2 { transition-delay: .20s; }
+    .d3 { transition-delay: .30s; }
+    .d4 { transition-delay: .40s; }
+    .d5 { transition-delay: .50s; }
+    .d6 { transition-delay: .60s; }
+
+    /* ═══════════════════════════════════════════════════════════
+       NAVBAR
+    ═══════════════════════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 900;
+      padding: 1.25rem 1.5rem;
+      transition: background .3s, backdrop-filter .3s, box-shadow .3s, padding .3s;
+    }
+    .nav.stuck {
+      background: rgba(0,40,48,.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 2px 24px rgba(0,0,0,.28);
+      padding: .875rem 1.5rem;
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: .625rem;
+      flex-shrink: 0;
+    }
+    .nav-logo img { width: 38px; height: 38px; object-fit: contain; }
+    .nav-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+    .nav-logo-name {
+      font-family: var(--font-h);
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: .1em;
+      color: var(--white);
+    }
+    .nav-logo-tag { font-size: .62rem; color: rgba(255,255,255,.5); letter-spacing: .04em; }
+    .nav-links { display: flex; align-items: center; gap: .15rem; }
+    .nav-links a {
+      font-size: .875rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.75);
+      padding: .5rem .8rem;
+      border-radius: 6px;
+      transition: color .15s, background .15s;
+    }
+    .nav-links a:hover { color: var(--white); background: rgba(255,255,255,.08); }
+    .nav-links a.active { color: var(--gold); }
+    .nav-cta { display: flex; align-items: center; gap: .75rem; flex-shrink: 0; }
+    .nav-cta .btn { padding: .6rem 1.25rem; font-size: .875rem; }
+    .ham {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: .25rem;
+    }
+    .ham span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: all .25s ease;
+    }
+    .ham.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .ham.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .ham.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mob-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--forest-dark);
+      z-index: 899;
+      padding: 5.5rem 2rem 2.5rem;
+      flex-direction: column;
+      gap: .375rem;
+    }
+    .mob-menu.open { display: flex; }
+    .mob-menu a {
+      font-family: var(--font-h);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.8);
+      padding: .875rem 0;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      transition: color .15s;
+    }
+    .mob-menu a:hover { color: var(--gold); }
+    .mob-menu .mob-btns { display: flex; flex-direction: column; gap: .75rem; margin-top: 2rem; }
+
+    /* ═══════════════════════════════════════════════════════════
+       SPLIT HERO (text left, video right)
+    ═══════════════════════════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .split-hero {
+      background: var(--forest);
+      padding-top: 70px; /* navbar offset */
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 560px;
+      overflow: hidden;
+    }
+
+    /* LEFT — text */
+    .split-hero-text {
+      padding: 56px 52px 56px 5vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+    .split-eyebrow {
+      font-family: var(--font-b);
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(255,168,0,.75);
+      display: block;
+      margin-bottom: 1.25rem;
+      opacity: 0;
+      animation: fadeUp .6s .15s ease forwards;
+    }
+    .split-hero-text h1 {
+      font-family: var(--font-h);
+      font-weight: 800;
+      font-size: clamp(2rem, 3.6vw, 3rem);
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 1.1rem;
+      letter-spacing: -.02em;
+      opacity: 0;
+      animation: fadeUp .7s .28s ease forwards;
+    }
+    .split-hero-text h1 em { font-style: normal; color: var(--gold); }
+    .split-hero-text > p {
+      font-size: .98rem;
+      color: rgba(255,255,255,.62);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      max-width: 420px;
+      opacity: 0;
+      animation: fadeUp .7s .42s ease forwards;
+    }
+
+    /* Stat pills */
+    .split-stats {
+      display: flex;
+      gap: .6rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.25rem;
+    }
+    .split-stat {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,168,0,.2);
+      border-radius: 999px;
+      padding: .5rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      opacity: 0;
+      animation: fadeUp .5s ease forwards;
+    }
+    .split-stat:nth-child(1) { animation-delay: .55s; }
+    .split-stat:nth-child(2) { animation-delay: .67s; }
+    .split-stat:nth-child(3) { animation-delay: .79s; }
+    .split-stat:nth-child(4) { animation-delay: .91s; }
+    .split-stat-num {
+      font-family: var(--font-h);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .split-stat-label {
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.45);
+      line-height: 1.3;
+    }
+
+    /* CTA */
+    .split-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      background: var(--gold);
+      color: var(--charcoal);
+      font-family: var(--font-b);
+      font-size: .84rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .875rem 1.75rem;
+      border-radius: 999px;
+      text-decoration: none;
+      opacity: 0;
+      animation: fadeUp .5s 1.05s ease forwards;
+      transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+      align-self: flex-start;
+    }
+    .split-cta:hover {
+      background: var(--gold-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255,168,0,.35);
+    }
+
+    /* RIGHT — video */
+    .split-hero-video {
+      position: relative;
+      min-height: 560px;
+      background: var(--forest-dark);
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeIn 1.2s .3s ease forwards;
+    }
+    .split-hero-video video {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+    }
+    /* Left blend into text panel */
+    .split-hero-video::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 120px;
+      height: 100%;
+      background: linear-gradient(to right, var(--forest), transparent);
+      z-index: 1;
+      pointer-events: none;
+    }
+    /* Subtle dark vignette */
+    .split-hero-video::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 50%, rgba(0,20,24,.35) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .split-hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+      .split-hero-video {
+        order: -1;
+        min-height: 280px;
+        height: 280px;
+      }
+      .split-hero-video::before { display: none; }
+      .split-hero-video::after {
+        background: linear-gradient(to top, var(--forest) 0%, transparent 50%);
+      }
+      .split-hero-text {
+        padding: 2rem 1.5rem 3rem;
+      }
+      .split-hero-text h1 { font-size: 2rem; }
+      .split-cta { align-self: stretch; justify-content: center; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       STORY BODY
+    ═══════════════════════════════════════════════════════════ */
+    .story-body {
+      background: var(--white);
+      padding: 5rem 1.5rem;
+    }
+    .story-prose {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .story-prose h2 {
+      font-family: var(--font-h);
+      font-weight: 800;
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      line-height: 1.2;
+      color: var(--charcoal);
+      margin: 3rem 0 1.25rem;
+    }
+    .story-prose h2:first-child { margin-top: 0; }
+    .story-prose p {
+      font-size: 1.05rem;
+      color: #374151;
+      line-height: 1.85;
+      margin-bottom: 1.15rem;
+    }
+    .story-prose p:last-child { margin-bottom: 0; }
+
+    /* Pullquote */
+    .pullquote {
+      border-left: 4px solid var(--gold);
+      margin: 2.5rem 0;
+      padding: 1.25rem 1.75rem;
+      background: var(--gold-light);
+      border-radius: 0 var(--r) var(--r) 0;
+    }
+    .pullquote p {
+      font-family: var(--font-h);
+      font-size: 1.2rem;
+      font-style: italic;
+      font-weight: 600;
+      color: var(--charcoal);
+      line-height: 1.6;
+      margin: 0;
+    }
+    .pullquote-forest {
+      border-left-color: var(--forest);
+      background: #eaf3f4;
+    }
+    .pullquote-forest p { color: var(--forest-dark); }
+
+    /* Inline image */
+    .inline-img {
+      margin: 2.5rem 0;
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .inline-img img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       TIMELINE
+    ═══════════════════════════════════════════════════════════ */
+    .timeline-section {
+      background: var(--white);
+      padding: 5rem 1.5rem 6rem;
+      border-top: 1px solid var(--grey-mid);
+    }
+    .timeline-title {
+      text-align: center;
+      font-family: var(--font-h);
+      font-weight: 800;
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      color: var(--charcoal);
+      margin-bottom: 4rem;
+    }
+    .timeline {
+      max-width: 860px;
+      margin: 0 auto;
+      position: relative;
+    }
+    /* Vertical line */
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--grey-mid);
+      transform: translateX(-50%);
+    }
+    .tl-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 2.5rem;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+    /* Alternating: even items flip */
+    .tl-item:nth-child(even) { flex-direction: row-reverse; }
+
+    .tl-content {
+      flex: 1;
+      background: var(--white);
+      border: 1px solid var(--grey-mid);
+      border-radius: var(--r-lg);
+      padding: 1.5rem 1.75rem;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow .22s, transform .22s;
+    }
+    .tl-content:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+    .tl-item:nth-child(odd) .tl-content { text-align: right; }
+    .tl-item:nth-child(even) .tl-content { text-align: left; }
+
+    .tl-year {
+      font-family: var(--font-h);
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: var(--gold);
+      margin-bottom: .35rem;
+    }
+    .tl-text {
+      font-size: .935rem;
+      color: var(--grey-text);
+      line-height: 1.7;
+    }
+
+    /* Gold dot in centre */
+    .tl-dot {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      background: var(--gold);
+      border: 3px solid var(--white);
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px var(--gold);
+      margin-top: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       TEAM SECTION
+    ═══════════════════════════════════════════════════════════ */
+    .team-section {
+      background: var(--grey-light);
+      padding: 5rem 1.5rem;
+    }
+    .team-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+    .team-hd {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+    .team-hd .label { margin-bottom: .5rem; }
+    .team-hd h2 {
+      font-family: var(--font-h);
+      font-weight: 800;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      color: var(--charcoal);
+      line-height: 1.2;
+    }
+    .team-card {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 4rem;
+      align-items: center;
+      background: var(--white);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,.07);
+    }
+    .team-card-img {
+      position: relative;
+      height: 100%;
+      min-height: 380px;
+    }
+    .team-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+    .team-card-body {
+      padding: 3rem 3rem 3rem 0;
+    }
+    .team-card-body .label { margin-bottom: .5rem; }
+    .team-name {
+      font-family: var(--font-h);
+      font-weight: 800;
+      font-size: 1.75rem;
+      color: var(--charcoal);
+      margin-bottom: .25rem;
+    }
+    .team-role {
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--forest);
+      letter-spacing: .04em;
+      margin-bottom: 1.5rem;
+    }
+    .team-bio p {
+      font-size: .975rem;
+      color: #374151;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .team-bio p:last-child { margin-bottom: 0; }
+    @media (max-width: 768px) {
+      .team-card { grid-template-columns: 1fr; }
+      .team-card-img { min-height: 280px; }
+      .team-card-body { padding: 1.75rem; }
+      .team-section { padding: 2.5rem 1.25rem; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       FINAL CTA
+    ═══════════════════════════════════════════════════════════ */
+    .final-cta {
+      background: var(--forest);
+      padding: 6.5rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(255,168,0,.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .final-cta-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .final-cta h2 {
+      font-family: var(--font-h);
+      font-weight: 800;
+      font-size: clamp(1.9rem, 4.5vw, 3.1rem);
+      color: var(--white);
+      line-height: 1.18;
+      margin-bottom: 1.25rem;
+    }
+    .final-cta h2 em { font-style: normal; color: var(--gold); }
+    .final-cta p {
+      color: rgba(255,255,255,.6);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      margin-bottom: 2.25rem;
+    }
+    .final-btns {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════════════ */
+    .footer {
+      background: var(--forest-dark);
+      color: rgba(255,255,255,.65);
+      padding: 4.5rem 1.5rem 2rem;
+    }
+    .footer-grid {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+      padding-bottom: 2.75rem;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+    .footer-logo { display: flex; align-items: center; gap: .6rem; margin-bottom: 1rem; }
+    .footer-logo img { width: 34px; height: 34px; object-fit: contain; }
+    .footer-logo-name {
+      font-family: var(--font-h);
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: .1em;
+      color: var(--white);
+    }
+    .footer-desc { font-size: .84rem; line-height: 1.7; color: rgba(255,255,255,.4); margin-bottom: 1.25rem; }
+    .footer-socials { display: flex; gap: .625rem; }
+    .social-btn {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,.07);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+    }
+    .social-btn:hover { background: rgba(255,255,255,.16); }
+    .social-btn svg { width: 15px; height: 15px; fill: rgba(255,255,255,.65); }
+    .fcol-title {
+      font-family: var(--font-h);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 1.1rem;
+    }
+    .fcol-links { display: flex; flex-direction: column; gap: .6rem; }
+    .fcol-links a { font-size: .865rem; color: rgba(255,255,255,.45); transition: color .15s; }
+    .fcol-links a:hover { color: var(--gold); }
+    .footer-bottom {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .footer-copy { font-size: .78rem; color: rgba(255,255,255,.28); }
+    .footer-tags { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .tag {
+      font-size: .67rem;
+      font-weight: 600;
+      padding: .28rem .6rem;
+      border-radius: 4px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.09);
+      color: rgba(255,255,255,.35);
+      letter-spacing: .04em;
+    }
+
+    /* ─── Responsive ────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    }
+    @media (max-width: 768px) {
+      :root { --sp: 2rem 1.25rem; }
+      .nav-links, .nav-cta { display: none; }
+      .ham { display: flex; }
+      .hero-img-wrap img { height: 220px; }
+      .tl-item, .tl-item:nth-child(even) { flex-direction: column; gap: .75rem; }
+      .timeline::before { left: 9px; }
+      .tl-dot { margin-top: 0; }
+      .tl-item:nth-child(odd) .tl-content { text-align: left; }
+      .tl-content { width: 100%; }
+      .timeline-section { padding: 2.5rem 1.25rem 3rem; }
+      .story-body { padding: 2.5rem 1.25rem; }
+      .final-cta { padding: 3rem 1.25rem; }
+      .footer { padding: 3rem 1.25rem 1.5rem; }
+      .footer-grid { margin-bottom: 2rem; padding-bottom: 2rem; }
+    }
+    @media (max-width: 540px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .btn-lg { width: 100%; }
+      .final-btns { flex-direction: column; align-items: center; }
+    }
+    @media (max-width: 380px) {
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="https://www.generasoftware.com" target="_top" class="nav-logo" aria-label="Genera home">
+      <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663478487775/BxxxoQYbhf7FnKvPttwktS/genera-paw-fixed_92730de9.png" alt="Genera paw logo">
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">GENERA</span>
+        <span class="nav-logo-tag">A Better Breed of Software</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="https://www.generasoftware.com" target="_top" >Home</a>
+            <a href="https://www.generasoftware.com/features" target="_top" >Features</a>
+      <a href="https://www.generasoftware.com/aboutus" target="_top" class="active">Our Story</a>
+      <a href="https://www.generasoftware.com/faqs" target="_top" >FAQs</a>
+      <a href="https://www.generasoftware.com/blog" target="_top" >Blog</a>
+      <a href="https://www.generasoftware.com/contact" target="_top" >Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a href="https://www.generasoftware.com/sign-up" target="_top" class="btn btn-gold">Start Free Trial</a>
+    </div>
+    <button class="ham" id="ham" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mob-menu" id="mobMenu" role="dialog" aria-label="Navigation">
+  <a href="https://www.generasoftware.com" target="_top" onclick="closeMenu()">Home</a>
+  <a href="https://www.generasoftware.com/features" target="_top" onclick="closeMenu()">Features</a>
+  <a href="https://www.generasoftware.com/aboutus" target="_top" onclick="closeMenu()">Our Story</a>
+  <a href="https://www.generasoftware.com/faqs" target="_top" onclick="closeMenu()">FAQs</a>
+  <a href="https://www.generasoftware.com/blog" target="_top" onclick="closeMenu()">Blog</a>
+  <a href="https://www.generasoftware.com/contact" target="_top" onclick="closeMenu()">Contact</a>
+  <div class="mob-btns">
+    <a href="https://www.generasoftware.com/sign-up" target="_top" class="btn btn-gold btn-lg">Start Free Trial</a>
+    <a href="https://www.generasoftware.com/contact" target="_top" class="btn btn-outline-w btn-lg">Book a Demo</a>
+  </div>
+</div>
+
+
+<!-- SPLIT HERO -->
+<div class="split-hero">
+
+  <!-- LEFT: text -->
+  <div class="split-hero-text">
+    <span class="split-eyebrow">Our Story · Built from the ground up</span>
+    <h1>We didn't set out to build software.<br><em>We set out to walk dogs.</em></h1>
+    <p>From a dog walking round in South West London in 2011 to software used by pet businesses across the UK. Here's how it happened.</p>
+
+    <div class="split-stats">
+      <div class="split-stat">
+        <span class="split-stat-num">2011</span>
+        <span class="split-stat-label">Where it<br>all started</span>
+      </div>
+      <div class="split-stat">
+        <span class="split-stat-num">15+</span>
+        <span class="split-stat-label">Years in<br>pet care</span>
+      </div>
+      <div class="split-stat">
+        <span class="split-stat-num">5★</span>
+        <span class="split-stat-label">Licensed<br>daycare</span>
+      </div>
+      <div class="split-stat">
+        <span class="split-stat-num">UK</span>
+        <span class="split-stat-label">Based &amp;<br>supported</span>
+      </div>
+    </div>
+
+    <a href="mailto:info@generasoftware.com?subject=Start%20Free%20Trial" class="split-cta">
+      Start Free Trial &nbsp;→
+    </a>
+  </div>
+
+  <!-- RIGHT: video -->
+  <div class="split-hero-video">
+    <video autoplay muted loop playsinline preload="metadata">
+      <source src="https://video.wixstatic.com/video/a043b3_7798ca77d10a457781f9ce9380492181/720p/mp4/file.mp4" type="video/mp4">
+    </video>
+  </div>
+
+</div>
+
+
+<!-- STORY BODY -->
+<section class="story-body">
+  <div class="story-prose">
+
+    <!-- Section 1 -->
+    <div class="rev">
+      <h2>It started with a handful of leads and a lot of heart</h2>
+      <p>In 2011, Duncan and Jess started Duncan's Dog Co as a dog walking service in South West London. It was just the two of them and a growing list of dogs who needed looking after during the day.</p>
+      <p>The business grew quickly. What started as a handful of walks turned into a full schedule. Then clients started asking about daycare. Then boarding. Before long, Duncan and Jess were running one of the busiest independent pet care businesses in the area.</p>
+    </div>
+
+    <div class="pullquote rev">
+      <p>"We were running everything on spreadsheets and manual invoices. It worked until it did not."</p>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="rev">
+      <h2>Growing pains</h2>
+      <p>Over the years, Duncan's Dog Co grew into one of the longest-standing, five-star licensed doggy daycares in the UK. They moved to a beautiful woodland facility in Surrey. The team grew. The client list grew. And the admin grew with it.</p>
+      <p>Bookings came in by text, email, phone, and Facebook. Invoices were raised manually, one by one, every week. Routes were planned on paper. Staff schedules lived in WhatsApp groups. It all sort of worked. Until it did not.</p>
+    </div>
+
+    <div class="inline-img rev">
+      <img
+        src="https://d2xsxph8kpxj0f.cloudfront.net/310519663478487775/BxxxoQYbhf7FnKvPttwktS/duncans-woodland_6f11b5ea.jpg"
+        alt="The woodland daycare facility"
+        loading="lazy"
+      >
+    </div>
+
+    <!-- Section 3 -->
+    <div class="rev">
+      <h2>The missed booking</h2>
+      <p>One day, a loyal customer's pickup was missed. A booking had slipped through the cracks. It was the kind of thing that happens when you are juggling too many systems and not enough hours. It was embarrassing. It was avoidable. And it was the moment everything changed.</p>
+      <p>That customer happened to be a developer. Instead of leaving a bad review, he said something unexpected: "I will build you something."</p>
+      <p>And he did.</p>
+    </div>
+
+    <div class="pullquote pullquote-forest rev">
+      <p>"Instead of leaving a bad review, he said: I will build you something."</p>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="rev">
+      <h2>From prototype to platform</h2>
+      <p>That first version was rough. But it worked. Bookings stopped falling through. Invoices went out on time. Routes made sense. Over the following years, the software was refined, rebuilt, and improved. Every feature was tested in a real business, every day, by real people.</p>
+      <p>It was not built in a lab by people guessing what pet businesses need. It was built in the mud, in the woods, at the front desk, and on those late Sunday evenings that used to be spent on invoices.</p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="rev">
+      <h2>Sharing it with the industry</h2>
+      <p>After years of running Genera internally, Duncan and Jess realised something. Every small pet business they spoke to was fighting the same battles. The same spreadsheets. The same missed messages. The same Sunday evening dread.</p>
+      <p>They decided to share it. Not as some corporate product launch, but as one small business helping others. That is why Genera exists. It is software built by people who have been up at 7am with muddy boots, chased late invoices, and stayed up planning the next day's schedule.</p>
+      <p>We have been where you are. And we built the thing we wish we had from the start.</p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- TIMELINE -->
+<section class="timeline-section">
+  <div class="wrap">
+    <h2 class="timeline-title rev">The journey so far</h2>
+
+    <div class="timeline">
+
+      <div class="tl-item rev">
+        <div class="tl-content">
+          <div class="tl-year">2011</div>
+          <p class="tl-text">Duncan and Jess start Duncan's Dog Co as a dog walking service in South West London.</p>
+        </div>
+        <div class="tl-dot"></div>
+        <div style="flex:1"></div>
+      </div>
+
+      <div class="tl-item rev d1">
+        <div style="flex:1"></div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-year">2013</div>
+          <p class="tl-text">The business expands into full daycare services as demand grows.</p>
+        </div>
+      </div>
+
+      <div class="tl-item rev d2">
+        <div class="tl-content">
+          <div class="tl-year">2016</div>
+          <p class="tl-text">Move to a beautiful woodland facility in Surrey. The team grows significantly.</p>
+        </div>
+        <div class="tl-dot"></div>
+        <div style="flex:1"></div>
+      </div>
+
+      <div class="tl-item rev d1">
+        <div style="flex:1"></div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-year">2018</div>
+          <p class="tl-text">The missed booking. A loyal customer (and developer) offers to build a solution.</p>
+        </div>
+      </div>
+
+      <div class="tl-item rev d2">
+        <div class="tl-content">
+          <div class="tl-year">2019</div>
+          <p class="tl-text">The first prototype of Genera goes live at Duncan's Dog Co.</p>
+        </div>
+        <div class="tl-dot"></div>
+        <div style="flex:1"></div>
+      </div>
+
+      <div class="tl-item rev d1">
+        <div style="flex:1"></div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-year">2022</div>
+          <p class="tl-text">After years of refinement, Genera is opened up to other pet businesses.</p>
+        </div>
+      </div>
+
+      <div class="tl-item rev d2">
+        <div class="tl-content">
+          <div class="tl-year">Today</div>
+          <p class="tl-text">Genera is used by pet businesses across the UK. And we are just getting started.</p>
+        </div>
+        <div class="tl-dot" style="background: var(--forest); box-shadow: 0 0 0 2px var(--forest);"></div>
+        <div style="flex:1"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- TEAM -->
+<section class="team-section">
+  <div class="team-inner">
+    <div class="team-hd rev">
+      <p class="label">The people behind Genera</p>
+      <h2>It takes a team who actually cares.</h2>
+    </div>
+    <div class="team-card rev d1">
+      <div class="team-card-img">
+        <img src="becks.jpg" alt="Becks, Operations & Customer Success at Genera Software" loading="lazy">
+      </div>
+      <div class="team-card-body">
+        <p class="label">Meet the team</p>
+        <h3 class="team-name">Becks</h3>
+        <p class="team-role">Operations & Customer Success</p>
+        <div class="team-bio">
+          <p>Becks was Duncan and Jess's very first employee — joining the team over ten years ago and playing a pivotal role in shaping what Duncan's Dog Co became.</p>
+          <p>She has been there through every stage of building the daycare, from the early days on the ground to the full operation it is today. She knows the industry inside out, understands exactly how a real pet business runs, and has lived every challenge that Genera was built to solve.</p>
+          <p>Now part of the Genera team, Becks brings that same hands-on expertise to our customers — helping new businesses get set up, get confident, and get the most out of the platform from day one.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="final-cta-inner rev">
+    <h2>We built Genera for businesses <em>like yours</em></h2>
+    <p>See how it can help you spend less time on admin and more time doing what you love.</p>
+    <div class="final-btns">
+      <a href="mailto:info@generasoftware.com?subject=Start%20Free%20Trial" target="_top" class="btn btn-gold btn-lg">Start 3-Month Free Trial</a>
+      <a href="https://www.generasoftware.com/contact" target="_top" class="btn btn-outline-w btn-lg">Book a Demo</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">
+        <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663478487775/BxxxoQYbhf7FnKvPttwktS/genera-paw-fixed_92730de9.png" alt="Genera">
+        <span class="footer-logo-name">GENERA</span>
+      </div>
+      <p class="footer-desc">Software built by pet business owners, for pet business owners.</p>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/generadogsoftware/?hl=en" class="social-btn" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@genera.dog" class="social-btn" aria-label="TikTok">
+          <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61555766818481" class="social-btn" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div>
+      <p class="fcol-title">Product</p>
+      <ul class="fcol-links">
+        <li><a href="https://www.generasoftware.com/features" target="_top" >Features</a></li>
+        <li><a href="mailto:info@generasoftware.com?subject=Start%20Free%20Trial">Free Trial</a></li>
+        <li><a href="https://www.generasoftware.com/faqs" target="_top" >FAQs</a></li>
+        <li><a href="https://www.generasoftware.com/blog" target="_top" >Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="fcol-title">Company</p>
+      <ul class="fcol-links">
+        <li><a href="https://www.generasoftware.com/aboutus" target="_top" >Our Story</a></li>
+        <li><a href="https://www.generasoftware.com/contact" target="_top" >Contact</a></li>
+        <li><a href="mailto:info@generasoftware.com">Email Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="fcol-title">Legal</p>
+      <ul class="fcol-links">
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">GDPR</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 Genera Software Ltd. Built with love by Duncan's Dog Co.</p>
+    <div class="footer-tags">
+      <span class="tag">GDPR Compliant</span>
+      <span class="tag">DEFRA Aligned</span>
+      <span class="tag">UK-Based Support</span>
+    </div>
+  </div>
+</footer>
+<script>
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('stuck', window.scrollY > 50);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const ham     = document.getElementById('ham');
+  const mobMenu = document.getElementById('mobMenu');
+
+  ham.addEventListener('click', () => {
+    const open = mobMenu.classList.toggle('open');
+    ham.classList.toggle('open', open);
+    ham.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+
+  function closeMenu() {
+    mobMenu.classList.remove('open');
+    ham.classList.remove('open');
+    ham.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', e => {
+    if (mobMenu.classList.contains('open') &&
+        !mobMenu.contains(e.target) &&
+        !ham.contains(e.target)) closeMenu();
+  });
+
+  const revEls = document.querySelectorAll('.rev');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revEls.forEach(el => io.observe(el));
+
+  /* ── Auto-resize iframe in Wix ──────────────────────────── */
+  function sendHeight() {
+    var els = document.body.children, h = 0;
+    for (var i = 0; i < els.length; i++) {
+      var b = els[i].getBoundingClientRect().bottom + window.scrollY;
+      if (b > h) h = b;
+    }
+    h = Math.ceil(h) || document.documentElement.scrollHeight;
+    window.parent.postMessage(JSON.stringify({ type: 'resize', height: h }), '*');
+    window.parent.postMessage({ type: 'resize', height: h }, '*');
+  }
+  window.addEventListener('load', function() {
+    sendHeight();
+    setTimeout(sendHeight, 500);
+    setTimeout(sendHeight, 1500);
+    setTimeout(sendHeight, 3000);
+  });
+  window.addEventListener('resize', sendHeight);
+  if (window.ResizeObserver) {
+    new ResizeObserver(sendHeight).observe(document.body);
+  }
+</script>
+</body>
+</html>

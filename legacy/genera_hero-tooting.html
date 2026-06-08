@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+html, body {
+  font-family: Arial, sans-serif;
+  background: transparent;
+  touch-action: pan-y;
+  margin: 0; padding: 0;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 622px;
+  align-items: center;
+  background: #1a2e14;
+}
+
+.hero-text {
+  padding: 48px 52px;
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s ease forwards;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.eyebrow {
+  display: block;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.26em; text-transform: uppercase;
+  color: #c8d9b8; opacity: 0.7; margin-bottom: 20px;
+}
+
+.hero-text h1 {
+  font-family: Georgia, serif;
+  font-size: 50px; font-weight: bold; font-style: italic;
+  color: #fff; line-height: 1.08; letter-spacing: -0.025em;
+  margin-bottom: 18px;
+}
+
+.hero-text h1 span { color: #c8d9b8; }
+
+.hero-text p {
+  font-size: 15.5px; color: rgba(255,255,255,0.65);
+  line-height: 1.78; margin-bottom: 36px;
+}
+
+.hero-stats {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 36px;
+}
+
+.stat-pill {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(200,217,184,0.2);
+  border-radius: 100px; padding: 8px 18px;
+  display: flex; align-items: center; gap: 8px;
+  opacity: 0; animation: fadeUp 0.5s ease forwards;
+}
+.stat-pill:nth-child(1) { animation-delay: 0.5s; }
+.stat-pill:nth-child(2) { animation-delay: 0.62s; }
+.stat-pill:nth-child(3) { animation-delay: 0.74s; }
+
+.stat-pill-num {
+  font-family: Georgia, serif; font-size: 19px;
+  font-weight: bold; font-style: italic; color: #fff; line-height: 1;
+}
+
+.stat-pill-label {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(200,217,184,0.65); line-height: 1.3;
+}
+
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: #c8d9b8; color: #1a2e14;
+  font-size: 15px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 18px 36px;
+  border-radius: 100px; text-decoration: none;
+  opacity: 0; animation: fadeUp 0.5s 1s ease forwards;
+  transition: background 0.22s, transform 0.22s;
+  align-self: flex-start;
+}
+.hero-cta:hover { background: #daedc8; transform: translateY(-2px); }
+
+.hero-video {
+  position: relative; height: 100%;
+  background: #0f1f0a; overflow: hidden;
+  opacity: 0; animation: fadeIn 1.2s 0.3s ease forwards;
+}
+
+.hero-video video {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center center;
+}
+
+.hero-video::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 100px; height: 100%;
+  background: linear-gradient(to right, #1a2e14, transparent);
+  z-index: 1; pointer-events: none;
+}
+
+@media (max-width: 760px) {
+  .hero { grid-template-columns: 1fr; height: auto; }
+  .hero-video { height: 280px; order: -1; }
+  .hero-video::before { display: none; }
+  .hero-text { padding: 32px 22px 40px; animation: none; opacity: 1; }
+  .hero-text h1 { font-size: 34px; }
+  .hero-text p { font-size: 14.5px; }
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-text">
+    <span class="eyebrow">Doggy Daycare · Tooting, South West London</span>
+    <h1>Beyond Tooting.<br><span>Private woodland every day.</span></h1>
+    <p>We collect from your door in Tooting, care for your dog in 40 acres of private Surrey woodland, and drop them home happy and worn out. Open every day of the year.</p>
+    <div class="hero-stats">
+      <div class="stat-pill">
+        <span class="stat-pill-num">5★</span>
+        <span class="stat-pill-label">Licensed<br>Rating</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-pill-num">365</span>
+        <span class="stat-pill-label">Days<br>a Year</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-pill-num">40+</span>
+        <span class="stat-pill-label">Acres of<br>Woodland</span>
+      </div>
+    </div>
+    <a href="https://www.duncansdogco.com/contact" class="hero-cta" target="_top">Enquire Now →</a>
+  </div>
+  <div class="hero-video">
+    <video autoplay muted loop playsinline preload="metadata">
+      <source src="https://video.wixstatic.com/video/4d2311_60a7a5c2d3264b3fb778671f4e3e86ec/720p/mp4/file.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+<script>
+function reportHeight(){
+  var h = document.documentElement.scrollHeight;
+  window.parent.postMessage({ type: 'resize', height: h }, '*');
+}
+window.addEventListener('load', reportHeight);
+if (window.ResizeObserver) { new ResizeObserver(reportHeight).observe(document.body); }
+</script>
+</body>
+</html>

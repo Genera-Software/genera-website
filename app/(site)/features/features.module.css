@@ -1,0 +1,639 @@
+/* ─────────────────────────────────────────────────────────────
+   Features page — component-scoped styles
+   Tailwind handles layout / colour / spacing; this file covers
+   the things Tailwind can't: CSS animations, phone/browser
+   chrome, perspective rotations, and clip-path tricks.
+   ───────────────────────────────────────────────────────────── */
+
+/* ── Feature block card ──────────────────────────────────────── */
+.block {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(420px, 1.1fr);
+  gap: 52px;
+  align-items: center;
+  padding: 54px;
+  border-radius: 20px;
+  border: 1px solid rgba(0,62,69,.13);
+  box-shadow: 0 20px 70px rgba(0,62,69,.10);
+  margin-bottom: 28px;
+  overflow: hidden;
+  transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease;
+}
+.block:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 32px 90px rgba(0,62,69,.16);
+}
+.blockLight  { background: linear-gradient(170deg, #fff 0%, #E0F0F2 100%); }
+.blockWhite  { background: #fff; }
+.blockDark {
+  background: linear-gradient(160deg, #003E45 0%, #005060 68%, #007080 100%);
+  color: #fff;
+  border-color: rgba(255,255,255,.10);
+}
+.blockGold { background: linear-gradient(170deg, #FFF3CC 0%, #FFD66C 100%); }
+
+/* Full-width records / capacity layout */
+.blockRecords {
+  grid-template-columns: 1fr;
+  gap: 36px;
+}
+.recordsCopyGrid {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(280px, .6fr);
+  gap: 40px;
+  align-items: start;
+}
+
+/* ── Bullets ─────────────────────────────────────────────────── */
+.bullets {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+  display: grid;
+  gap: 10px;
+}
+.bullets li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  color: #003E45;
+  font-weight: 700;
+  font-size: 1rem;
+}
+.blockDark .bullets li { color: rgba(255,255,255,.88); }
+.bullets li::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #FFA800;
+  flex: 0 0 auto;
+  margin-top: 7px;
+}
+
+/* ── Phone frame ─────────────────────────────────────────────── */
+.phone {
+  background: linear-gradient(145deg, #fff, #dfe7ea);
+  border-radius: 36px;
+  padding: 10px 8px 14px;
+  box-shadow: 0 34px 70px rgba(0,62,69,.24), inset 0 2px 4px rgba(255,255,255,.95);
+  border: 1px solid rgba(0,62,69,.18);
+  overflow: hidden;
+}
+.phoneScreen {
+  border-radius: 28px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+  position: relative;   /* needed for next/image fill */
+}
+
+/* Screen heights */
+.scrStd  { height: 420px; }
+.scrTall { height: 500px; }
+.scrXl   { height: 560px; }
+.scrXxl  { height: 580px; }
+.scrLg   { height: 610px; }
+.scrPay  { height: 700px; }
+
+/* Two phones side by side (Bookings) */
+.twoPhones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  align-items: end;
+  min-height: 680px;
+}
+.twoPhones .phone:first-child {
+  transform: rotate(-4deg);
+  opacity: .92;
+}
+.twoPhones .phone:last-child {
+  box-shadow:
+    0 44px 90px rgba(0,0,0,.32),
+    0 18px 36px rgba(0,40,48,.20),
+    inset 0 2px 4px rgba(255,255,255,.95);
+  margin-bottom: 18px;
+}
+
+/* Portal two phones */
+.portalPhones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: center;
+  min-height: 620px;
+}
+.portalPhones .phone { width: 100%; max-width: 340px; justify-self: center; }
+.portalPhones .phone:first-child {
+  transform: rotate(-2.5deg);
+  box-shadow: 0 46px 90px rgba(0,62,69,.30), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
+}
+.portalPhones .phone:last-child {
+  transform: rotate(2.5deg);
+  box-shadow: 0 46px 90px rgba(0,62,69,.28), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
+}
+
+/* Single centred phone (Staff, Payments, Daily, Routing) */
+.singlePhone {
+  display: grid;
+  place-items: center;
+}
+
+/* Specific phone styles */
+.phoneRoute {
+  width: min(340px, 100%);
+  transform: rotate(-2deg);
+  box-shadow: 0 46px 90px rgba(0,62,69,.28), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
+}
+.phoneStaff {
+  width: min(330px, 100%);
+  transform: rotate(2deg);
+  box-shadow: 0 46px 90px rgba(0,62,69,.28), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
+}
+.phonePayment {
+  width: min(360px, 100%);
+  transform: rotate(-2deg);
+  box-shadow: 0 46px 90px rgba(0,62,69,.28), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
+}
+.phoneDaily {
+  width: min(380px, 96%);
+  transform: rotate(-1deg);
+  box-shadow: 0 46px 90px rgba(0,62,69,.30), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
+}
+
+/* ── Browser chrome ──────────────────────────────────────────── */
+.browserChrome {
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 72px rgba(0,62,69,.18), 0 8px 24px rgba(0,62,69,.10);
+  border: 1px solid rgba(0,62,69,.10);
+}
+.chromeBar {
+  background: #f0f2f4;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  flex-shrink: 0;
+}
+.chromeDots { display: flex; gap: 6px; }
+.chromeDot  { width: 12px; height: 12px; border-radius: 50%; }
+.dot1 { background: #ff5f57; }
+.dot2 { background: #febc2e; }
+.dot3 { background: #28c840; }
+.chromeUrl {
+  flex: 1;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.10);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: .75rem;
+  color: #6b7280;
+  font-family: var(--font-niveau);
+}
+
+/* Capacity zoom — crop sidebar, zoom into service rows */
+.capacityImgCrop {
+  height: 420px;
+  overflow: hidden;
+  clip-path: inset(0);   /* reliably clips CSS-transformed children cross-browser */
+}
+.capacityImgCrop img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transform-origin: 78% 68%;
+  transform: scale(2.1);
+}
+
+/* ── Booking flow animation ──────────────────────────────────── */
+.bookingAnimation {
+  position: relative;
+  min-height: 640px;
+  display: grid;
+  place-items: center;
+}
+.animatedPhone {
+  width: 290px;
+  height: 610px;
+  border-radius: 46px;
+  padding: 14px 11px 18px;
+  background: linear-gradient(145deg, #fff 0%, #dfe8ec 100%);
+  border: 1px solid rgba(0,62,69,.22);
+  box-shadow:
+    0 46px 90px rgba(0,62,69,.28),
+    0 18px 36px rgba(0,40,48,.18),
+    inset 0 3px 5px rgba(255,255,255,.95),
+    inset 0 -4px 8px rgba(0,62,69,.10);
+  transform: rotate(-2deg);
+}
+.animatedScreen {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 34px;
+  background: #f5f7f8;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+}
+.animatedNotch {
+  width: 62px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(0,62,69,.18);
+  margin: 12px auto 8px;
+}
+.stepTrack {
+  height: 3px;
+  background: rgba(0,62,69,.10);
+  margin: 6px 20px 0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.stepFill {
+  height: 100%;
+  background: #FFA800;
+  border-radius: 2px;
+  animation: stepGrow 8s steps(1, end) infinite;
+}
+.portalTop {
+  padding: 8px 16px 10px;
+  border-bottom: 1px solid rgba(0,62,69,.08);
+  background: #fff;
+}
+.stepLabel {
+  font-size: .62rem;
+  font-weight: 700;
+  color: #4B5563;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.portalPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #E0F0F2;
+  color: #003E45;
+  font-weight: 800;
+  font-size: .7rem;
+  margin-bottom: 3px;
+}
+.portalTitle {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: 1.3rem;
+  line-height: 1.05;
+  margin-top: 4px;
+}
+.bookingStage {
+  position: relative;
+  height: 420px;
+  padding: 14px;
+}
+.bookingCard {
+  position: absolute;
+  inset: 14px;
+  background: #fff;
+  border: 1px solid rgba(0,62,69,.09);
+  border-radius: 20px;
+  padding: 16px 16px 68px;
+  box-shadow: 0 12px 32px rgba(0,62,69,.09);
+  opacity: 0;
+  transform: translateY(22px) scale(.98);
+  animation: bookingStep 8s cubic-bezier(.4,0,.2,1) infinite;
+}
+.bookingCard:nth-child(2) { animation-delay: 2s; }
+.bookingCard:nth-child(3) { animation-delay: 4s; }
+.bookingCard:nth-child(4) { animation-delay: 6s; padding-bottom: 22px; }
+
+.cardTitle {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+.cardBody {
+  margin: -4px 0 14px;
+  color: #4B5563;
+  font-size: .74rem;
+  line-height: 1.45;
+}
+.dogRow,
+.serviceRow,
+.summaryRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(0,62,69,.10);
+  margin-bottom: 10px;
+  color: #003E45;
+  font-weight: 800;
+  font-size: .82rem;
+}
+.dogAvatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #003E45;
+  color: #FFA800;
+  display: grid;
+  place-items: center;
+  font-size: .78rem;
+  font-family: var(--font-massilia);
+  font-weight: 900;
+  flex: 0 0 auto;
+}
+.rowMeta {
+  display: block;
+  margin-top: 2px;
+  color: #4B5563;
+  font-size: .68rem;
+  font-weight: 700;
+}
+.serviceIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background: rgba(255,168,0,.16);
+  display: grid;
+  place-items: center;
+  color: #FFA800;
+  font-size: 1rem;
+  flex: 0 0 auto;
+}
+.calendarMini {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-top: 12px;
+}
+.calDay {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: #F8FAFB;
+  color: #003E45;
+  font-weight: 800;
+  font-size: .64rem;
+}
+.calPicked {
+  background: #FFA800;
+  box-shadow: 0 8px 18px rgba(255,168,0,.28);
+}
+.requestBtn {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  height: 44px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: #FFA800;
+  color: #002830;
+  font-family: var(--font-massilia);
+  font-weight: 900;
+  font-size: .85rem;
+}
+.approvalCard {
+  border: 1px solid rgba(0,62,69,.10);
+  border-radius: 16px;
+  padding: 13px;
+  background: #F8FAFB;
+  color: #003E45;
+  font-weight: 800;
+  font-size: .85rem;
+  margin-bottom: 12px;
+}
+.approvalCard small {
+  display: block;
+  margin-top: 5px;
+  color: #4B5563;
+  font-weight: 700;
+  line-height: 1.35;
+  font-size: .72rem;
+}
+.approvalChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 11px;
+  border-radius: 999px;
+  background: #FFF3CC;
+  color: #9A5A00;
+  font-weight: 900;
+  font-size: .78rem;
+  margin-top: 6px;
+}
+
+/* Flow caption dots below the phone stage */
+.flowCaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -22px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.flowDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(0,62,69,.18);
+  animation: dotPulse 10s infinite;
+}
+.flowDot:nth-child(2) { animation-delay: 2.5s; }
+.flowDot:nth-child(3) { animation-delay: 5s; }
+.flowDot:nth-child(4) { animation-delay: 7.5s; }
+
+/* Floating icons beside the animated phone */
+.floatIcon {
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  box-shadow: 0 12px 32px rgba(0,62,69,.22);
+  z-index: 2;
+}
+.floatOne {
+  background: #fff;
+  top: 48px;
+  left: 8px;
+  animation: floatIconLeft 3.5s ease-in-out infinite;
+}
+.floatTwo {
+  background: #003E45;
+  color: #fff;
+  bottom: 88px;
+  right: 8px;
+  font-size: 1.3rem;
+  animation: floatIconRight 3.5s ease-in-out 1.8s infinite;
+}
+
+/* ── Feature nav bar ─────────────────────────────────────────── */
+.featureNav {
+  position: relative;
+  z-index: 3;
+  padding: 0 22px 38px;
+  margin-top: -30px;
+}
+.featureNavInner {
+  max-width: 1180px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid rgba(0,62,69,.13);
+  border-radius: 12px;
+  box-shadow: 0 28px 80px rgba(0,62,69,.18);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.featureNavInner::-webkit-scrollbar { display: none; }
+.navLink {
+  padding: 10px 13px;
+  border-radius: 8px;
+  background: #F8FAFB;
+  color: #003E45;
+  font-size: .9rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+  white-space: nowrap;
+  text-decoration: none;
+  border: none;
+  font-family: var(--font-massilia);
+}
+.navLink:hover { background: #E0F0F2; }
+.navLinkActive { background: #003E45 !important; color: #fff !important; }
+
+/* ── Hero screenshot stack ───────────────────────────────────── */
+.heroStack {
+  position: relative;
+  min-height: 610px;
+}
+.screenMain {
+  position: absolute;
+  width: 470px;
+  height: 350px;
+  right: -10px;
+  top: 70px;
+  transform: rotate(2deg);
+  border-radius: 24px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 28px 80px rgba(0,0,0,.34);
+  border: 10px solid rgba(255,255,255,.92);
+}
+.screenSide {
+  position: absolute;
+  width: 330px;
+  height: 500px;
+  left: -34px;
+  top: 96px;
+  transform: rotate(-5deg);
+  overflow: hidden;
+  border-radius: 12px;
+  filter: drop-shadow(0 34px 70px rgba(0,0,0,.38));
+}
+
+/* ── Keyframes ───────────────────────────────────────────────── */
+@keyframes bookingStep {
+  0%   { opacity: 0; transform: translateY(20px) scale(.98); }
+  10%  { opacity: 1; transform: translateY(0) scale(1); }
+  72%  { opacity: 1; transform: translateY(0) scale(1); }
+  85%  { opacity: 0; transform: translateY(-14px) scale(.99); }
+  100% { opacity: 0; transform: translateY(-14px) scale(.99); }
+}
+@keyframes stepGrow {
+  0%   { width: 5%; }
+  25%  { width: 25%; }
+  50%  { width: 50%; }
+  75%  { width: 75%; }
+  99%  { width: 100%; }
+  100% { width: 5%; }
+}
+@keyframes dotPulse {
+  0%, 19%   { background: #FFA800; transform: scale(1.35); }
+  25%, 100% { background: rgba(0,62,69,.18); transform: scale(1); }
+}
+@keyframes floatIconLeft {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50%       { transform: translateY(-12px) rotate(-4deg); }
+}
+@keyframes floatIconRight {
+  0%, 100% { transform: translateY(0) rotate(4deg); }
+  50%       { transform: translateY(-12px) rotate(4deg); }
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 920px) {
+  .block {
+    grid-template-columns: 1fr;
+    padding: 30px 22px;
+  }
+  .block:hover { transform: none; }
+  .blockRecords { gap: 24px; }
+  .recordsCopyGrid { grid-template-columns: 1fr; }
+  .capacityImgCrop { height: 260px; }
+  .bookingAnimation { min-height: 540px; }
+  .animatedPhone { width: 260px; height: 560px; }
+  .twoPhones { grid-template-columns: 1fr 1fr; }
+  .twoPhones .phone:first-child { transform: rotate(-2deg); }
+  .portalPhones { grid-template-columns: 1fr 1fr; }
+  /* Feature nav: no wrapping on mobile — scroll horizontally instead */
+  .featureNav { padding-bottom: 24px; margin-top: 0; }
+  .featureNavInner { flex-wrap: nowrap; }
+  .floatIcon { display: none; }
+  /* Mobile hero screenshot */
+  .heroStack { min-height: 160px; }
+  .screenSide { display: none; }
+  .screenMain {
+    position: relative;
+    width: calc(100% + 44px);
+    height: 220px;
+    top: 0;
+    right: auto;
+    left: -22px;
+    transform: none;
+    border-radius: 12px 12px 0 0;
+    border-bottom: none;
+    box-shadow: 0 -12px 36px rgba(0,0,0,.28);
+  }
+}
+@media (max-width: 620px) {
+  .capacityImgCrop { height: 200px; }
+  .bookingAnimation { min-height: 480px; }
+  .animatedPhone { width: 230px; height: 490px; }
+  /* Two-phone grids: stack to single column, hide the secondary phone */
+  .twoPhones,
+  .portalPhones { grid-template-columns: 1fr; min-height: 0; justify-items: center; }
+  /* width: 100% fills the grid cell (margin:auto collapses it to intrinsic width) */
+  .twoPhones .phone,
+  .portalPhones .phone { transform: none !important; width: 100%; max-width: 310px; }
+  /* Hide the less-important phone in each pair to avoid 1200px-tall stacks */
+  .twoPhones .phone:first-child  { display: none; } /* keep pending-approval (2nd) */
+  .portalPhones .phone:last-child { display: none; } /* keep membership profile (1st) */
+  .phoneRoute,
+  .phoneStaff,
+  .phoneDaily,
+  .phonePayment { transform: none; max-width: 310px; }
+  .heroStack { min-height: 180px; }
+  .screenMain { height: 200px; }
+}

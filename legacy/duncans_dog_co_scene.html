@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duncan's Dog Co — Dashboard</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /*
+    Photo: "Untitled design (24).jpg" — 1350 × 1080  (aspect 1.25)
+    Beautiful dog-daycare office with MacBook Pro on desk.
+    Scene fits the viewport without cropping.
+  */
+  .scene {
+    position: relative;
+    width:  min(100vw, calc(100vh * 1350 / 1080));
+    height: min(100vh, calc(100vw * 1080 / 1350));
+    flex-shrink: 0;
+  }
+
+  .bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: fill;
+  }
+
+  /*
+    SCREEN OVERLAY
+    ──────────────
+    Pixel analysis of the 1350×1080 office photo locates the MacBook screen:
+      Left edge   x ≈ 28%
+      Right edge  x ≈ 56.5%
+      Top edge    y ≈ 22.5%
+      Bottom edge y ≈ 47%
+
+    The laptop faces nearly straight toward the camera with only a very slight
+    rightward tilt (~5°). Almost no visible keystoning — the overlay is
+    effectively a rectangle.
+
+    The dashboard screenshot (3336×1764, ratio 1.89:1) is wider than the
+    apparent screen area (ratio ≈ 1.50:1), so we use object-fit:contain with
+    a dark-navy background matching the dashboard sidebar. The full screenshot
+    — including the left nav — is always visible; any unused vertical space at
+    the bottom blends invisibly into the matching background colour.
+  */
+  .screen-wrap {
+    position: absolute;
+    left:   28%;
+    top:    22.5%;
+    width:  28.5%;
+    height: 24.5%;
+    overflow: hidden;
+    border-radius: 3px;
+    /* Match the dark dashboard sidebar so any letterbox is invisible */
+    background: #1b2d50;
+    /* Very subtle depth — the laptop has ~5° rightward tilt */
+    transform: perspective(1800px) rotateY(3deg);
+    transform-origin: center center;
+  }
+
+  .screen-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    /*
+      contain = full dashboard visible including the nav sidebar.
+      object-position: top aligns it to the top edge so calendar rows
+      at the very bottom are clipped last.
+    */
+    object-fit: contain;
+    object-position: top center;
+    display: block;
+  }
+
+  /*
+    Window glare — a warm diagonal streak from top-left, matching the natural
+    light source visible in the photo (window on the left wall).
+  */
+  .screen-glare {
+    position: absolute;
+    inset: 0;
+    border-radius: 2px;
+    background:
+      linear-gradient(
+        130deg,
+        rgba(255, 252, 240, 0.30)  0%,
+        rgba(255, 245, 220, 0.18) 22%,
+        rgba(255, 240, 210, 0.08) 40%,
+        transparent                58%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(255, 250, 240, 0.08) 0%,
+        transparent               18%
+      );
+    pointer-events: none;
+  }
+
+  /*
+    Bezel shadow — thin inset darkness at screen edges gives a recessed,
+    glass-behind-bezel look.
+  */
+  .screen-edge {
+    position: absolute;
+    inset: 0;
+    border-radius: 2px;
+    box-shadow:
+      inset 0 0 0 1px rgba(0,0,0,0.40),
+      inset 3px 3px 10px rgba(0,0,0,0.18),
+      inset -2px -2px 6px  rgba(0,0,0,0.12);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div class="scene">
+
+  <!-- Office photo: modern dog daycare desk with MacBook Pro -->
+  <img
+    class="bg"
+    src="Untitled%20design%20(24).jpg"
+    alt="Dog daycare office"
+    draggable="false"
+  >
+
+  <!-- Full dashboard composited onto the MacBook screen -->
+  <div class="screen-wrap">
+    <img
+      class="screen-img"
+      src="Screenshot%202026-04-15%20at%2012.41.18.png"
+      alt="Booking dashboard"
+      draggable="false"
+    >
+    <div class="screen-glare"></div>
+    <div class="screen-edge"></div>
+  </div>
+
+</div>
+</body>
+</html>

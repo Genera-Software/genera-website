@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: Arial, sans-serif; background: transparent; touch-action: pan-y; }
+
+.footer {
+  background: #1a2e14;
+  padding: 64px 48px 0;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 56px;
+  border-bottom: 1px solid rgba(200,217,184,0.12);
+}
+
+.footer-brand-name {
+  font-family: Georgia, serif;
+  font-size: 22px;
+  font-weight: bold;
+  font-style: italic;
+  color: #fff;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.footer-brand-sub {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(200,217,184,0.55);
+  display: block;
+  margin-bottom: 20px;
+}
+
+.footer-brand-desc {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.85;
+  margin-bottom: 28px;
+  max-width: 280px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+}
+
+.social-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(200,217,184,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: background 0.18s;
+}
+.social-icon:hover { background: rgba(255,255,255,0.14); }
+.social-icon svg { width: 16px; height: 16px; fill: rgba(200,217,184,0.7); }
+
+.footer-col-heading {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(200,217,184,0.55);
+  display: block;
+  margin-bottom: 20px;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-links a {
+  font-size: 14px;
+  color: rgba(255,255,255,0.72);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.footer-links a:hover { color: #fff; }
+
+.footer-contact-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.footer-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-contact-item svg {
+  width: 15px;
+  height: 15px;
+  fill: rgba(200,217,184,0.55);
+  flex-shrink: 0;
+}
+
+.footer-contact-item a,
+.footer-contact-item span {
+  font-size: 14px;
+  color: rgba(255,255,255,0.72);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.footer-contact-item a:hover { color: #fff; }
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-bottom-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-bottom-left span {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.5;
+}
+
+.footer-bottom-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.footer-bottom-right a {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.footer-bottom-right a:hover { color: rgba(255,255,255,0.65); }
+
+.footer-bottom-right span {
+  font-size: 12px;
+  color: rgba(255,255,255,0.18);
+}
+
+@media (max-width: 900px) {
+  .footer { padding: 44px 20px 0; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+
+@media (max-width: 560px) {
+  .footer-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<footer class="footer">
+  <div class="footer-grid">
+
+    <!-- Brand -->
+    <div>
+      <span class="footer-brand-name">Duncan's Dog Co.</span>
+      <span class="footer-brand-sub">Est. 2011 · Cobham, Surrey</span>
+      <p class="footer-brand-desc">A family-run woodland daycare open 365 days a year. One site, a small team, and a genuine love for dogs — every breed welcome.</p>
+      <div class="social-icons">
+        <a href="https://www.facebook.com/duncansdogco" class="social-icon" target="_top" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/duncansdogco" class="social-icon" target="_top" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" style="fill:#1a2e14"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" style="stroke:rgba(200,217,184,0.7);stroke-width:2"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@duncansdogco" class="social-icon" target="_top" aria-label="TikTok">
+          <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Services -->
+    <div>
+      <span class="footer-col-heading">Services</span>
+      <ul class="footer-links">
+        <li><a href="https://www.duncansdogco.com/doggy-daycare" target="_top">Doggy Daycare</a></li>
+        <li><a href="https://www.duncansdogco.com/puppy-school" target="_top">Puppy School</a></li>
+        <li><a href="https://www.duncansdogco.com/sleepovers" target="_top">Sleepovers</a></li>
+        <li><a href="https://www.duncansdogco.com/rescue-dogs" target="_top">Rescue Dogs</a></li>
+        <li><a href="https://www.duncansdogco.com/pricing" target="_top">Pricing</a></li>
+      </ul>
+    </div>
+
+    <!-- Company -->
+    <div>
+      <span class="footer-col-heading">Company</span>
+      <ul class="footer-links">
+        <li><a href="https://www.duncansdogco.com/about" target="_top">About Us</a></li>
+        <li><a href="https://www.duncansdogco.com/blog" target="_top">Blog</a></li>
+        <li><a href="https://www.duncansdogco.com/careers" target="_top">Careers</a></li>
+        <li><a href="https://www.duncansdogco.com/faqs" target="_top">FAQs</a></li>
+        <li><a href="https://www.duncansdogco.com/startup-support" target="_top">Startup Support</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div>
+      <span class="footer-col-heading">Contact</span>
+      <ul class="footer-contact-list">
+        <li class="footer-contact-item">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <a href="tel:07731798899" target="_top">07731 798 899</a>
+        </li>
+        <li class="footer-contact-item">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <a href="mailto:info@duncansdogco.com" target="_top">info@duncansdogco.com</a>
+        </li>
+        <li class="footer-contact-item">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <a href="https://www.duncansdogco.com/client-bookings" target="_top">Client Bookings</a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-bottom-left">
+      <span>© 2026 Duncan's Dog Co. All rights reserved.</span>
+      <span>Daycare LN/201800994 · Boarding LN/202400651</span>
+    </div>
+    <div class="footer-bottom-right">
+      <a href="https://www.duncansdogco.com/privacy-policy" target="_top">Privacy Policy</a>
+      <span>|</span>
+      <a href="https://www.duncansdogco.com/terms-conditions" target="_top">Terms &amp; Conditions</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function reportHeight(){ var h = document.documentElement.scrollHeight; window.parent.postMessage({ type: 'resize', height: h }, '*'); }
+window.addEventListener('load', reportHeight);
+if (window.ResizeObserver) { new ResizeObserver(reportHeight).observe(document.body); }
+</script>
+</body>
+</html>

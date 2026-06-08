@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: Arial, sans-serif; background: #fff; color: #1a2a14; -webkit-font-smoothing: antialiased; touch-action: pan-y; }
+:root { --green-deep: #1a2e14; --green-label: #6e8f5a; --sage: #c8d9b8; --off-white: #f7f9f5; --border: #e4ead8; --text-mid: #555; }
+.eyebrow-dark { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--green-label); margin-bottom: 14px; }
+.why-section { padding: 68px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: stretch; background: #fff; }
+.why-left { display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+.why-left h2 { font-family: Georgia, serif; font-size: 36px; font-weight: bold; font-style: italic; color: var(--green-deep); line-height: 1.1; margin-bottom: 16px; }
+.why-left p { font-size: 15px; color: var(--text-mid); line-height: 1.85; margin-bottom: 32px; }
+.features-list { display: flex; flex-direction: column; gap: 14px; }
+.feature-item { display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px; background: var(--off-white); border: 1px solid var(--border); border-radius: 12px; }
+.feature-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-label); flex-shrink: 0; margin-top: 6px; }
+.feature-text { font-size: 14px; color: #1a2a14; line-height: 1.6; font-weight: 600; }
+.feature-text span { display: block; font-weight: 400; font-size: 13px; color: var(--text-mid); margin-top: 3px; }
+.why-right { border-radius: 20px; overflow: hidden; min-height: 480px; min-width: 0; width: 100%; }
+.why-right img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+.collection-section { background: var(--green-deep); padding: 68px 48px; }
+.collection-section h2 { font-family: Georgia, serif; font-size: 38px; font-weight: bold; font-style: italic; color: #fff; line-height: 1.1; margin-bottom: 12px; }
+.collection-intro { font-size: 15px; color: rgba(255,255,255,0.65); max-width: 580px; line-height: 1.85; margin-bottom: 40px; }
+.route-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 44px; }
+.route-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(200,217,184,0.2); border-radius: 14px; padding: 22px 24px; display: flex; gap: 16px; align-items: flex-start; }
+.route-card-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(200,217,184,0.15); border: 1px solid rgba(200,217,184,0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.route-card-icon svg { width: 18px; height: 18px; fill: var(--sage); }
+.route-card-label { font-size: 9.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(200,217,184,0.6); margin-bottom: 6px; display: block; }
+.route-card-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.route-card p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.7; }
+.vehicle-fact { display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.04); border-top: 1px solid rgba(200,217,184,0.12); border-bottom: 1px solid rgba(200,217,184,0.12); padding: 18px 0; margin-bottom: 44px; }
+.vehicle-fact svg { width: 22px; height: 22px; fill: rgba(200,217,184,0.5); flex-shrink: 0; }
+.vehicle-fact p { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.6; }
+.vehicle-fact strong { color: rgba(255,255,255,0.85); }
+.areas-heading { font-size: 9.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(200,217,184,0.55); margin-bottom: 16px; display: block; }
+.areas-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.area-tag { background: rgba(200,217,184,0.10); border: 1px solid rgba(200,217,184,0.22); border-radius: 100px; padding: 7px 16px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.78); text-decoration: none; transition: background 0.15s, color 0.15s; cursor: pointer; }
+.area-tag:hover { background: rgba(200,217,184,0.22); color: #fff; }
+.area-tag.home { background: rgba(200,217,184,0.18); border-color: rgba(200,217,184,0.45); color: var(--sage); }
+.area-tag.home:hover { background: rgba(200,217,184,0.28); }
+.steps-section { padding: 68px 48px; background: var(--off-white); border-top: 1px solid var(--border); }
+.steps-section h2 { font-family: Georgia, serif; font-size: 38px; font-weight: bold; font-style: italic; color: var(--green-deep); margin-bottom: 44px; line-height: 1.1; }
+.steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.step-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 28px 22px; }
+.step-num { font-family: Georgia, serif; font-size: 44px; font-weight: bold; font-style: italic; color: var(--sage); line-height: 1; margin-bottom: 14px; display: block; }
+.step-title { font-size: 14.5px; font-weight: 700; color: #1a2a14; margin-bottom: 8px; }
+.step-text { font-size: 13px; color: var(--text-mid); line-height: 1.75; }
+.cta-section { padding: 64px 48px; text-align: center; background: #fff; border-top: 1px solid var(--border); }
+.cta-section h2 { font-family: Georgia, serif; font-size: 36px; font-weight: bold; font-style: italic; color: var(--green-deep); margin-bottom: 12px; }
+.cta-section p { font-size: 15px; color: var(--text-mid); max-width: 480px; margin: 0 auto 32px; line-height: 1.8; }
+.cta-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--green-deep); color: var(--sage); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 18px 36px; border-radius: 100px; text-decoration: none; transition: background 0.2s, transform 0.2s; }
+.cta-btn:hover { background: #2a4a20; transform: translateY(-2px); }
+@media (max-width: 900px) { .why-section { grid-template-columns: 1fr; gap: 36px; padding: 44px 20px; } .why-right { min-height: 280px; } .collection-section { padding: 44px 20px; } .route-cards { grid-template-columns: 1fr; } .steps-section { padding: 44px 20px; } .steps-grid { grid-template-columns: 1fr 1fr; } .cta-section { padding: 48px 20px; } }
+@media (max-width: 560px) { .steps-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<section class="why-section">
+  <div class="why-left">
+    <span class="eyebrow-dark">Doggy Daycare in Oxshott</span>
+    <h2>More than a daycare.<br>A daily adventure.</h2>
+    <p>Oxshott is right on our doorstep. Your dog spends the day in private Surrey woodland — not a pen, not an indoor hall — with the same trusted team every time.</p>
+    <div class="features-list">
+      <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Open 7 days a week, 365 days a year<span>Including weekends and bank holidays — consistent care whenever you need it.</span></div></div>
+      <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Exclusive access to private, secure woodland<span>Over 40 acres of Surrey woodland — space to run, explore and be a dog.</span></div></div>
+      <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">Door-to-door collection from 7:45am<span>We come to you in our custom people carriers — no drop-offs required.</span></div></div>
+      <div class="feature-item"><div class="feature-dot"></div><div class="feature-text">5-star licensed by Elmbridge Council<span>One of the first daycares in the country to be inspected and rated.</span></div></div>
+    </div>
+  </div>
+  <div class="why-right"><img src="https://static.wixstatic.com/media/4d2311_df80b335345d4af4ac284e695581bee2~mv2.jpg" alt="Dog daycare Oxshott"></div>
+</section>
+
+<section class="collection-section">
+  <span class="eyebrow-dark" style="color:rgba(200,217,184,0.65);">Collection & Drop-Off</span>
+  <h2>Collection & drop-off<br>included as standard.</h2>
+  <p class="collection-intro">We collect from your door every morning and drop your dog home at the end of the day. Collection starts from 7:45am — just let us know when you enquire and we'll add you to the route.</p>
+  <div class="route-cards">
+    <div class="route-card">
+      <div class="route-card-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+      <div>
+        <span class="route-card-label">Regular Route</span>
+        <div class="route-card-title">Oxshott & Stoke D'Abernon</div>
+        <p>Oxshott is one of our core local routes — we collect every morning and have your dog home by early evening.</p>
+      </div>
+    </div>
+    <div class="route-card">
+      <div class="route-card-icon"><svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></div>
+      <div>
+        <span class="route-card-label">Drop Off Yourself</span>
+        <div class="route-card-title">Prefer to drive in?</div>
+        <p>If it's more convenient, you're welcome to drop your dog directly at our facility. We're easy to reach via the A3.</p>
+      </div>
+    </div>
+  </div>
+  <div class="vehicle-fact">
+    <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+    <p><strong>We don't use vans.</strong> Our custom people carriers are bright, airy, and built for dogs — not crates. Routes are planned every night to keep journey times as short as possible.</p>
+  </div>
+  <span class="areas-heading">Areas we serve — click to find out more</span>
+  <div class="areas-tags">
+    <a href="https://www.duncansdogco.com/cobham" class="area-tag" target="_top">Cobham</a>
+    <a href="https://www.duncansdogco.com/weybridge" class="area-tag" target="_top">Weybridge</a>
+    <a href="https://www.duncansdogco.com/esher" class="area-tag" target="_top">Esher</a>
+    <a href="https://www.duncansdogco.com/walton-on-thames" class="area-tag" target="_top">Walton-on-Thames</a>
+    <a href="https://www.duncansdogco.com/byfleet" class="area-tag" target="_top">Byfleet</a>
+    <a href="https://www.duncansdogco.com/oxshott" class="area-tag home" target="_top">📍 Oxshott</a>
+    <a href="https://www.duncansdogco.com/stoke-dabernon" class="area-tag" target="_top">Stoke D'Abernon</a>
+    <a href="https://www.duncansdogco.com/leatherhead" class="area-tag" target="_top">Leatherhead</a>
+    <a href="https://www.duncansdogco.com/bookham" class="area-tag" target="_top">Bookham</a>
+    <a href="https://www.duncansdogco.com/fetcham" class="area-tag" target="_top">Fetcham</a>
+    <a href="https://www.duncansdogco.com/ashtead" class="area-tag" target="_top">Ashtead</a>
+    <a href="https://www.duncansdogco.com/ripley" class="area-tag" target="_top">Ripley</a>
+    <a href="https://www.duncansdogco.com/send" class="area-tag" target="_top">Send</a>
+    <a href="https://www.duncansdogco.com/guildford" class="area-tag" target="_top">Guildford</a>
+  </div>
+</section>
+
+<section class="steps-section">
+  <span class="eyebrow-dark">Getting Started</span>
+  <h2>How it works.</h2>
+  <div class="steps-grid">
+    <div class="step-card"><span class="step-num">01</span><div class="step-title">Get in touch</div><p class="step-text">Fill in our enquiry form or give us a call. Tell us about your dog — breed, age, temperament — and we'll take it from there.</p></div>
+    <div class="step-card"><span class="step-num">02</span><div class="step-title">Meet & greet</div><p class="step-text">We arrange a complimentary visit to our Cobham facility so your dog can see the space and our team can meet them properly.</p></div>
+    <div class="step-card"><span class="step-num">03</span><div class="step-title">Assessment day</div><p class="step-text">Every dog does a settling-in session before joining the group. We take it at their pace — no rushing, no pressure.</p></div>
+    <div class="step-card"><span class="step-num">04</span><div class="step-title">First day in the woodland</div><p class="step-text">Once everyone's happy, your dog joins us. We collect from your door, care for them all day, and drop them home happy and tired.</p></div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <span class="eyebrow-dark" style="text-align:center;">Ready to get started?</span>
+  <h2>Get in touch today.</h2>
+  <p>We'd love to meet your dog. Enquire now and we'll be in touch within 24 hours to arrange a meet and greet.</p>
+  <a href="https://www.duncansdogco.com/contact" class="cta-btn" target="_top">Enquire Now →</a>
+</section>
+
+<script>
+function reportHeight(){ var h = document.documentElement.scrollHeight; window.parent.postMessage(JSON.stringify({ type: 'resize', height: h }), '*'); window.parent.postMessage({ type: 'resize', height: h }, '*'); }
+
+window.addEventListener('load', function(){ setTimeout(reportHeight, 200); setTimeout(reportHeight, 800); });
+if (window.ResizeObserver) { new ResizeObserver(reportHeight).observe(document.body); }
+</script>
+</body>
+</html>

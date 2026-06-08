@@ -1,0 +1,1276 @@
+<!--
+  GENERA SOFTWARE — Homepage (Redesign v3 — Warm / Hand-drawn)
+  ─────────────────────────────────────────────────────────────────
+  HOW TO PUT THIS ON WIX (keep your domain, full design control):
+  STEP 1 — HOST IT FREE: drag to https://app.netlify.com/drop
+  STEP 2 — EMBED IN WIX: Add → Embed & Social → Embed a Website → paste URL
+  STEP 3 — Set to Full Width / Full Height in Wix widget settings
+  ─────────────────────────────────────────────────────────────────
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Genera — purpose-built software for dog daycares, walkers and pet care businesses. Bookings, payments, transport, staff and pet records in one place.">
+  <title>Genera — The Software That Actually Understands Your Daycare</title>
+  <link rel="icon" type="image/png" href="https://d2xsxph8kpxj0f.cloudfront.net/310519663478487775/BxxxoQYbhf7FnKvPttwktS/genera-paw-fixed_92730de9.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── Reset & Base ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { margin: 0; padding: 0; background: var(--white); color: #111827; font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+    /* ─── Design Tokens ──────────────────────────────────────── */
+    :root {
+      --cream:        #F8FAFB;
+      --cream-dark:   #EEF4F5;
+      --forest:       #003E45;
+      --forest-mid:   #005060;
+      --forest-dark:  #002830;
+      --gold:         #FFA800;
+      --gold-light:   #FFF3CC;
+      --gold-soft:    #FFE099;
+      --teal-soft:    #E0F0F2;
+      --teal-mid:     #C2E2E6;
+      --text:         #111827;
+      --text-soft:    #4B5563;
+      --white:        #FFFFFF;
+      --sp:           5.5rem 2rem;
+    }
+
+    /* ─── Typography ─────────────────────────────────────────── */
+    h1, h2, h3 { font-family: 'Poppins', sans-serif; font-weight: 800; line-height: 1.15; color: var(--text); }
+    h1 { font-size: clamp(2.4rem, 5.5vw, 4rem); }
+    h2 { font-size: clamp(2rem, 4vw, 3rem); }
+    h3 { font-size: 1.15rem; font-weight: 700; }
+    em { font-style: italic; color: var(--gold); }
+    .caveat { font-family: 'Caveat', cursive; font-size: 1.15rem; font-weight: 600; }
+    .label {
+      font-family: 'Caveat', cursive;
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--forest);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.85rem;
+    }
+    .label::before { content: '🐾'; font-size: 1.1rem; }
+
+    /* ─── Layout helpers ─────────────────────────────────────── */
+    .wrap { max-width: 1160px; margin: 0 auto; padding: 0 2rem; }
+    .section-hd { text-align: center; margin-bottom: 3.5rem; }
+    .section-hd .sub { color: var(--text-soft); margin-top: 0.75rem; font-size: 1.15rem; max-width: 560px; margin-left: auto; margin-right: auto; }
+
+    /* ─── Scroll Reveal ──────────────────────────────────────── */
+    .rev { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .rev.in { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.05s; }
+    .d2 { transition-delay: 0.15s; }
+    .d3 { transition-delay: 0.25s; }
+    .d4 { transition-delay: 0.35s; }
+    .d5 { transition-delay: 0.45s; }
+    .d6 { transition-delay: 0.55s; }
+
+    /* ─── Squiggle underline ─────────────────────────────────── */
+    .squig { position: relative; display: inline-block; }
+    .squig svg {
+      position: absolute; left: 0; bottom: -6px;
+      width: 100%; height: 12px; overflow: visible;
+      stroke: var(--gold-soft); stroke-width: 3.5; fill: none; stroke-linecap: round;
+      stroke-dasharray: 300; stroke-dashoffset: 300;
+      animation: drawSquig 1.2s 0.6s ease forwards;
+    }
+    @keyframes drawSquig {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* ─── Buttons ─────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.95rem;
+      padding: 0.85rem 1.75rem; border-radius: 50px;
+      text-decoration: none; cursor: pointer; transition: transform 0.18s ease, box-shadow 0.18s ease;
+      border: 2.5px solid transparent; white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-3px) rotate(-0.5deg); }
+    .btn-gold { background: var(--gold); color: var(--text); box-shadow: 0 4px 18px rgba(255,168,0,0.35); }
+    .btn-gold:hover { box-shadow: 0 8px 28px rgba(255,168,0,0.45); }
+    .btn-forest { background: var(--forest); color: #fff; }
+    .btn-forest:hover { box-shadow: 0 8px 24px rgba(0,62,69,0.3); }
+    .btn-outline-w { background: transparent; border-color: #fff; color: #fff; }
+    .btn-outline-w:hover { background: rgba(255,255,255,0.12); }
+    .btn-outline-d { background: transparent; border-color: var(--forest); color: var(--forest); }
+    .btn-outline-d:hover { background: var(--forest); color: #fff; }
+    .btn-lg { padding: 1rem 2.2rem; font-size: 1rem; }
+
+    /* ════════════════════════════════════════════════════════════
+       NAVBAR
+    ════════════════════════════════════════════════════════════ */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--forest);
+      padding: 0 2rem;
+      transition: box-shadow 0.3s;
+    }
+    .nav.stuck { box-shadow: 0 4px 24px rgba(0,0,0,0.18); }
+    .nav-inner { max-width: 1160px; margin: 0 auto; height: 68px; display: flex; align-items: center; gap: 2rem; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .nav-logo img { width: 38px; height: 38px; object-fit: contain; }
+    .nav-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+    .nav-logo-name { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.1rem; color: #fff; letter-spacing: 2px; }
+    .nav-logo-tag { font-size: 0.62rem; color: rgba(255,255,255,0.6); letter-spacing: 0.5px; }
+    .nav-links { display: flex; align-items: center; gap: 0.25rem; margin-left: auto; }
+    .nav-links a { color: rgba(255,255,255,0.82); text-decoration: none; font-size: 0.9rem; font-weight: 500; padding: 0.4rem 0.8rem; border-radius: 20px; transition: color 0.2s, background 0.2s; }
+    .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+    .nav-cta { margin-left: 2.5rem; }
+    .ham { display: none; background: none; border: none; cursor: pointer; padding: 6px; margin-left: auto; flex-direction: column; gap: 5px; }
+    .ham span { display: block; width: 24px; height: 2.5px; background: #fff; border-radius: 2px; transition: all 0.3s; transform-origin: center; }
+    .ham.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .ham.open span:nth-child(2) { opacity: 0; }
+    .ham.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+    /* ─── Mobile Menu ─────────────────────────────────────────── */
+    .mob-menu {
+      display: none; position: fixed; inset: 0; z-index: 99;
+      background: var(--forest); flex-direction: column;
+      padding: 5rem 2rem 2rem; gap: 0.5rem;
+    }
+    .mob-menu.open { display: flex; }
+    .mob-menu a { color: rgba(255,255,255,0.85); font-size: 1.35rem; font-family: 'Poppins', sans-serif; font-weight: 700; text-decoration: none; padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .mob-menu a:hover { color: var(--gold); }
+    .mob-menu-btns { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
+    .mob-close { position: absolute; top: 1rem; right: 1.5rem; background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer; font-weight: 300; line-height: 1; }
+
+    /* ════════════════════════════════════════════════════════════
+       HERO
+    ════════════════════════════════════════════════════════════ */
+    .hero {
+      background: linear-gradient(160deg, var(--forest) 0%, var(--forest-mid) 60%, #007080 100%);
+      padding: 5rem 2rem 2rem;
+      overflow: hidden;
+      position: relative;
+    }
+    /* Decorative blob shapes */
+    .hero::before {
+      content: '';
+      position: absolute; top: -80px; right: -100px;
+      width: 420px; height: 420px;
+      background: rgba(255,168,0,0.12);
+      border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
+      z-index: 0;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: 0; left: -80px;
+      width: 280px; height: 280px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 40% 60% 55% 45% / 48% 52% 48% 52%;
+      z-index: 0;
+    }
+    .hero-inner {
+      max-width: 860px; margin: 0 auto;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      position: relative; z-index: 1;
+    }
+    .hero-left {
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      width: 100%;
+    }
+    /* Illustration — landscape strip between trust line and cards */
+    .hero-right {
+      width: 100%;
+      max-width: 320px;
+      margin: 0.8rem 0 0.2rem;
+      display: flex; justify-content: center;
+      pointer-events: none;
+    }
+    .hero-right img {
+      width: 100%;
+      height: auto;
+      display: block;
+      animation: illustFloat 5s ease-in-out infinite;
+      transform-origin: center bottom;
+    }
+    @keyframes illustFloat {
+      0%   { transform: translateY(0px); }
+      50%  { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,0.12); border: 2px solid rgba(255,168,0,0.5);
+      border-radius: 50px; padding: 0.4rem 1rem;
+      font-family: 'Caveat', cursive; font-size: 1.05rem; font-weight: 700;
+      color: var(--gold-soft); margin-bottom: 1.1rem;
+      animation: fadeInUp 0.6s ease both;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 4vw, 3.6rem);
+      margin-bottom: 1rem; color: #fff;
+      animation: fadeInUp 0.7s 0.1s ease both;
+    }
+    .hero-sub {
+      max-width: 460px; color: rgba(255,255,255,0.82); font-size: 0.98rem;
+      margin-bottom: 1.5rem; animation: fadeInUp 0.7s 0.2s ease both;
+    }
+    .hero-btns {
+      display: flex; flex-wrap: wrap; gap: 0.85rem; justify-content: center;
+      margin-bottom: 1.1rem; animation: fadeInUp 0.7s 0.3s ease both;
+    }
+    .hero-trust {
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'Caveat', cursive; font-size: 1.15rem; color: rgba(255,255,255,0.75);
+      margin-bottom: 0.5rem; animation: fadeInUp 0.7s 0.4s ease both;
+    }
+    .hero-trust .stars { color: var(--gold); font-size: 1rem; letter-spacing: 1px; }
+
+    /* ─── Hero cards — 3 in a row below illustration ─── */
+    .hero-cards {
+      display: flex; justify-content: center; align-items: flex-start;
+      gap: 1.25rem; flex-wrap: nowrap;
+      padding: 0.5rem 0 2rem;
+      width: 100%;
+      animation: fadeInUp 0.8s 0.5s ease both;
+    }
+    .hcard {
+      border-radius: 20px 16px 22px 18px / 18px 22px 16px 20px;
+      padding: 1.6rem 1.8rem 1.4rem;
+      min-width: 200px; max-width: 220px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      position: relative; overflow: hidden;
+    }
+    .hcard-badge {
+      position: absolute; top: 1rem; right: 1rem;
+      background: rgba(255,255,255,0.35); backdrop-filter: blur(4px);
+      border-radius: 20px; padding: 0.2rem 0.65rem;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px; color: #fff;
+    }
+    .hcard-num {
+      font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 3.2rem;
+      line-height: 1; color: #fff; margin-bottom: 0.6rem;
+    }
+    .hcard-money {
+      font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 2.4rem;
+      line-height: 1; color: #fff; margin-bottom: 0.6rem;
+    }
+    .hcard-title { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: #fff; margin-bottom: 0.3rem; }
+    .hcard-sub { font-size: 0.8rem; color: rgba(255,255,255,0.8); line-height: 1.4; }
+
+    .hcard-1 {
+      background: linear-gradient(145deg, #E8856A, #C96B52);
+      transform: rotate(-3deg);
+      animation: float1 4.5s ease-in-out infinite;
+    }
+    .hcard-2 {
+      background: linear-gradient(145deg, #6B9E72, #4E7D58);
+      transform: rotate(1.5deg);
+      animation: float2 5.5s ease-in-out infinite;
+      margin-top: 2rem;
+    }
+    .hcard-3 {
+      background: linear-gradient(145deg, #E8A430, #C8880A);
+      transform: rotate(-1deg);
+      animation: float3 4s ease-in-out infinite;
+      margin-top: 0.5rem;
+    }
+    @keyframes float1 {
+      0%, 100% { transform: rotate(-3deg) translateY(0); }
+      50% { transform: rotate(-2.5deg) translateY(-10px); }
+    }
+    @keyframes float2 {
+      0%, 100% { transform: rotate(1.5deg) translateY(0); }
+      50% { transform: rotate(2deg) translateY(-14px); }
+    }
+    @keyframes float3 {
+      0%, 100% { transform: rotate(-1deg) translateY(0); }
+      50% { transform: rotate(-1.5deg) translateY(-8px); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       TRUST BAR
+    ════════════════════════════════════════════════════════════ */
+    .trust-bar {
+      background: var(--teal-soft);
+      border-top: 2px solid var(--teal-mid); border-bottom: 2px solid var(--teal-mid);
+      padding: 1rem 0; overflow: hidden;
+    }
+    .trust-lbl {
+      text-align: center; font-family: 'Caveat', cursive; font-size: 1.3rem;
+      color: var(--forest); margin-bottom: 0.6rem;
+    }
+    .trust-mask { overflow: hidden; }
+    .trust-track {
+      display: flex; gap: 1rem; width: max-content;
+      animation: scroll 28s linear infinite;
+    }
+    .chip {
+      background: #fff; border: 2px solid var(--teal-mid);
+      border-radius: 50px; padding: 0.4rem 1.1rem;
+      font-size: 0.88rem; font-weight: 600; color: var(--forest);
+      white-space: nowrap; flex-shrink: 0;
+    }
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       PAIN POINTS
+    ════════════════════════════════════════════════════════════ */
+    .pain {
+      background: linear-gradient(170deg, var(--cream) 0%, var(--teal-soft) 100%);
+      padding: var(--sp);
+      position: relative; overflow: hidden;
+    }
+    /* Decorative paw doodle */
+    .pain-doodle {
+      position: absolute; right: 3%; top: 5%;
+      opacity: 0.1; font-size: 5rem;
+      animation: wobble 6s ease-in-out infinite;
+    }
+    @keyframes wobble {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+    .pain .section-hd h2 { color: var(--text); }
+    .pain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem; }
+    .pain-card {
+      background: #fff;
+      border-radius: 18px 14px 20px 16px / 16px 20px 14px 18px;
+      padding: 2.25rem 2rem;
+      box-shadow: 0 4px 24px rgba(0,62,69,0.08);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+    }
+    .pain-card:nth-child(1) { transform: rotate(-1.5deg); }
+    .pain-card:nth-child(2) { transform: rotate(0.8deg); }
+    .pain-card:nth-child(3) { transform: rotate(-0.6deg); }
+    .pain-card:hover { transform: rotate(0deg) translateY(-6px) scale(1.02) !important; box-shadow: 0 12px 36px rgba(0,62,69,0.12); }
+    .pain-num {
+      font-family: 'Caveat', cursive; font-size: 3rem; font-weight: 700;
+      color: var(--forest); opacity: 0.35; line-height: 1; margin-bottom: 0.75rem;
+    }
+    .pain-card h3 { font-size: 1.1rem; margin-bottom: 0.6rem; }
+    .pain-card p { color: var(--text-soft); font-size: 1rem; line-height: 1.7; }
+
+    /* ════════════════════════════════════════════════════════════
+       FEATURES
+    ════════════════════════════════════════════════════════════ */
+    .features {
+      background: linear-gradient(170deg, var(--white) 0%, var(--gold-light) 100%);
+      padding: var(--sp);
+      position: relative; overflow: hidden;
+    }
+    .features::after {
+      content: '';
+      position: absolute; top: -60px; left: -60px;
+      width: 220px; height: 220px;
+      background: var(--gold-soft);
+      border-radius: 40% 60% 65% 35% / 40% 45% 55% 60%;
+      opacity: 0.4; z-index: 0;
+    }
+    .features .wrap { position: relative; z-index: 1; }
+    .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem; }
+    .feat-card {
+      background: #fff;
+      border-radius: 16px 12px 18px 14px / 14px 18px 12px 16px;
+      padding: 2.25rem 2rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .feat-card:nth-child(odd) { transform: rotate(-0.8deg); }
+    .feat-card:nth-child(even) { transform: rotate(0.6deg); }
+    .feat-card:hover { transform: rotate(0deg) translateY(-6px) !important; box-shadow: 0 16px 40px rgba(0,0,0,0.1); }
+    .feat-icon {
+      width: 48px; height: 48px;
+      background: var(--teal-soft);
+      border-radius: 12px 8px 14px 10px / 10px 14px 8px 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.2rem;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .feat-card:hover .feat-icon { background: var(--gold-light); transform: rotate(-5deg) scale(1.1); }
+    .feat-icon svg { width: 22px; height: 22px; stroke: var(--forest); stroke-width: 2; }
+    .feat-card h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+    .feat-card p { color: var(--text-soft); font-size: 1rem; line-height: 1.7; }
+
+    /* ════════════════════════════════════════════════════════════
+       PRODUCT SHOWCASE
+    ════════════════════════════════════════════════════════════ */
+    .showcase {
+      background: linear-gradient(170deg, var(--teal-soft) 0%, var(--white) 100%);
+      padding: var(--sp);
+    }
+    .showcase-scene {
+      position: relative; margin-top: 1.5rem;
+      /* slight tilt on the whole frame */
+      transform: rotate(-0.8deg);
+      transition: transform 0.4s ease;
+    }
+    .showcase-scene:hover { transform: rotate(0deg); }
+
+    /* Browser chrome frame */
+    .browser-frame {
+      background: #fff;
+      border-radius: 14px 14px 14px 14px;
+      box-shadow: 0 30px 80px rgba(0,62,69,0.18), 0 4px 16px rgba(0,0,0,0.06);
+      overflow: hidden;
+      border: 1px solid rgba(0,62,69,0.1);
+    }
+    .browser-bar {
+      background: linear-gradient(180deg, #f0f4f5 0%, #e4ecee 100%);
+      padding: 0.65rem 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+      border-bottom: 1px solid rgba(0,62,69,0.1);
+    }
+    .browser-dots { display: flex; gap: 5px; }
+    .browser-dots span {
+      width: 11px; height: 11px; border-radius: 50%; display: block;
+    }
+    .browser-dots span:nth-child(1) { background: #FF5F57; }
+    .browser-dots span:nth-child(2) { background: #FEBC2E; }
+    .browser-dots span:nth-child(3) { background: #28C840; }
+    .browser-url {
+      flex: 1; background: #fff;
+      border: 1px solid rgba(0,62,69,0.15);
+      border-radius: 6px; padding: 0.3rem 0.8rem;
+      font-size: 0.78rem; color: var(--text-soft);
+      font-family: 'Inter', sans-serif;
+      display: flex; align-items: center; gap: 6px;
+      max-width: 340px; margin: 0 auto;
+    }
+    .browser-url::before {
+      content: '🔒';
+      font-size: 0.7rem;
+    }
+    .browser-frame img {
+      width: 100%; display: block;
+    }
+
+    /* Floating callout annotations */
+    .callout {
+      position: absolute; background: #fff;
+      border: 2px solid var(--forest);
+      border-radius: 50px;
+      padding: 0.5rem 1.2rem;
+      box-shadow: 3px 4px 0 rgba(0,62,69,0.15);
+      white-space: nowrap;
+      font-family: 'Caveat', cursive; font-size: 1.05rem; font-weight: 700; color: var(--forest);
+      z-index: 10;
+    }
+    .callout::before { content: '✓ '; color: var(--gold); }
+    .c1 { top: -18px; left: 5%; transform: rotate(-2.5deg); }
+    .c2 { top: 35%; right: -1%; transform: rotate(1.8deg); }
+    .c3 { bottom: -18px; left: 12%; transform: rotate(-1.2deg); }
+
+    /* Doodle accent near showcase */
+    .showcase-note {
+      position: absolute; top: -2.5rem; right: 2%;
+      font-family: 'Caveat', cursive; font-size: 1.4rem; font-weight: 700;
+      color: var(--forest); opacity: 0.6;
+      transform: rotate(3deg);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       FOUNDING 100
+    ════════════════════════════════════════════════════════════ */
+    .founding {
+      background: var(--forest);
+      padding: var(--sp);
+    }
+    .founding-grid {
+      max-width: 1160px; margin: 0 auto; padding: 0 2rem;
+      display: grid; grid-template-columns: 1fr 380px; gap: 4rem; align-items: center;
+    }
+    .founding-left .label { color: var(--gold); }
+    .founding-left .label::before { content: '⭐'; }
+    .founding-left h2 { color: #fff; }
+    .founding-left p { color: rgba(255,255,255,0.8); margin: 1rem 0; line-height: 1.7; }
+    .found-list { list-style: none; margin: 1.25rem 0 2rem; }
+    .found-list li {
+      color: rgba(255,255,255,0.85); padding: 0.5rem 0;
+      display: flex; align-items: flex-start; gap: 10px; font-size: 0.95rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .found-list li::before { content: '→'; color: var(--gold); flex-shrink: 0; font-family: 'Caveat', cursive; font-size: 1.1rem; }
+    .founding-card {
+      background: var(--cream);
+      border-radius: 20px 16px 22px 18px / 18px 22px 16px 20px;
+      padding: 2.5rem 2rem;
+      box-shadow: 6px 8px 0px rgba(0,0,0,0.25);
+      text-align: center;
+      transform: rotate(1.5deg);
+      transition: transform 0.3s;
+    }
+    .founding-card:hover { transform: rotate(0deg); }
+    .spots-lbl { font-family: 'Caveat', cursive; font-size: 1.3rem; color: var(--text-soft); }
+    .spots-num {
+      font-family: 'Poppins', sans-serif; font-size: 5rem; font-weight: 800;
+      color: var(--gold); line-height: 1; margin: 0.25rem 0;
+    }
+    .spots-total { font-size: 1rem; color: var(--text-soft); margin-bottom: 1.25rem; }
+    .progress-track { background: rgba(0,62,69,0.12); border-radius: 50px; height: 10px; margin: 0.75rem 0 0.4rem; overflow: hidden; border: 2px solid var(--teal-mid); }
+    .progress-fill { background: linear-gradient(90deg, #E8856A, var(--gold)); width: 27%; height: 100%; border-radius: 50px; }
+    .progress-note { font-family: 'Caveat', cursive; font-size: 1.2rem; color: var(--text-soft); margin-bottom: 1.25rem; }
+    .founding-card p { font-size: 0.88rem; color: var(--text-soft); margin-bottom: 1.5rem; line-height: 1.6; }
+    .founding-card .btn-gold { width: 100%; justify-content: center; }
+
+    /* ════════════════════════════════════════════════════════════
+       VIDEO BAND
+    ════════════════════════════════════════════════════════════ */
+    .vid-band {
+      position: relative; min-height: 620px; display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .vid-band video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .vid-band-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,62,69,0.45) 0%, rgba(0,20,28,0.55) 100%); }
+    .vid-band-text { position: relative; z-index: 2; text-align: center; padding: 4rem 2rem; max-width: 680px; }
+    .vid-label { font-family: 'Caveat', cursive; font-size: 1.55rem; color: var(--gold); margin-bottom: 1rem; }
+    .vid-band-text h2 { color: #fff; margin-bottom: 1rem; }
+    .vid-band-text p { color: rgba(255,255,255,0.8); font-size: 1.15rem; line-height: 1.7; }
+
+    /* ════════════════════════════════════════════════════════════
+       STORY TEASER
+    ════════════════════════════════════════════════════════════ */
+    .story {
+      background: linear-gradient(160deg, var(--white) 0%, var(--teal-soft) 100%);
+      padding: var(--sp);
+      position: relative; overflow: hidden;
+    }
+    .story::after {
+      content: '';
+      position: absolute; bottom: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: var(--teal-mid); opacity: 0.35;
+      border-radius: 40% 60% 55% 45% / 60% 40% 50% 50%;
+    }
+    .story-grid {
+      max-width: 1160px; margin: 0 auto; padding: 0 2rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .story-img {
+      background: #fff;
+      border-radius: 22px;
+      padding: 16px 16px 64px 16px;
+      box-shadow:
+        0 2px 0 #e0e0e0,
+        0 6px 0 rgba(0,0,0,0.04),
+        0 24px 60px rgba(0,62,69,0.16),
+        0 8px 20px rgba(0,0,0,0.08);
+      transform: rotate(-2.5deg);
+      display: inline-block; width: 100%; position: relative;
+      animation: polaroidFloat 5s ease-in-out infinite;
+    }
+    @keyframes polaroidFloat {
+      0%, 100% { transform: rotate(-2.5deg) translateY(0px); }
+      50%       { transform: rotate(-2deg)   translateY(-10px); }
+    }
+    .story-img:hover {
+      animation: none;
+      transform: rotate(0deg) scale(1.02);
+      box-shadow: 0 2px 0 #e0e0e0, 0 6px 0 rgba(0,0,0,0.04), 0 40px 80px rgba(0,62,69,0.22);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .story-img .photo-wrap {
+      overflow: hidden;
+      border-radius: 12px;
+      width: 100%; height: 400px;
+    }
+    .story-img img {
+      width: 100%; height: 100%; display: block;
+      object-fit: cover;
+      object-position: center 55%;
+    }
+    .story-img .polaroid-caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 64px; display: flex; align-items: center; justify-content: center;
+      font-family: 'Caveat', cursive; font-size: 1.2rem; font-weight: 700;
+      color: #666; letter-spacing: 0.3px;
+    }
+    .story-copy .label { color: var(--forest); }
+    .story-copy h2 { margin-bottom: 1.25rem; font-size: clamp(1.6rem, 3vw, 2.2rem); }
+    .story-copy p { color: var(--text-soft); line-height: 1.75; margin-bottom: 1rem; }
+    .story-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Caveat', cursive; font-size: 1.2rem; font-weight: 700;
+      color: var(--forest); text-decoration: none;
+      border-bottom: 2.5px solid var(--gold); padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .story-link:hover { color: var(--forest-mid); border-color: var(--forest-mid); }
+
+    /* ════════════════════════════════════════════════════════════
+       FINAL CTA
+    ════════════════════════════════════════════════════════════ */
+    .final-cta {
+      background: linear-gradient(135deg, var(--forest) 0%, #005060 100%);
+      padding: var(--sp);
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .final-cta::before {
+      content: '🐾';
+      position: absolute; font-size: 12rem; opacity: 0.05;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+    }
+    .final-cta-inner { max-width: 680px; margin: 0 auto; position: relative; z-index: 1; }
+    .final-cta h2 { color: #fff; margin-bottom: 1rem; }
+    .final-cta em { color: var(--gold); }
+    .final-cta > .final-cta-inner > p { color: rgba(255,255,255,0.8); margin-bottom: 2.25rem; font-size: 1.15rem; }
+    .final-btns { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: 1.25rem; }
+    .final-note { font-family: 'Caveat', cursive; font-size: 1.4rem; color: rgba(255,255,255,0.65); }
+
+    /* ════════════════════════════════════════════════════════════
+       FOOTER
+    ════════════════════════════════════════════════════════════ */
+    footer.footer {
+      background: linear-gradient(160deg, #003E45 0%, #002830 100%);
+      border-top: 3px solid var(--gold);
+      padding: 4rem 2rem 2rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 0; display: block;
+    }
+    .footer-grid { max-width: 1160px; margin: 0 auto 3rem; display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr; gap: 3rem; }
+    .footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+    .footer-logo img { width: 36px; height: 36px; object-fit: contain; }
+    .footer-logo-name { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.1rem; color: #fff; letter-spacing: 2px; }
+    .footer-desc { font-size: 0.88rem; line-height: 1.7; margin-bottom: 1.5rem; max-width: 280px; }
+    .footer-socials { display: flex; gap: 0.75rem; }
+    .social-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, transform 0.2s; text-decoration: none;
+    }
+    .social-btn:hover { background: var(--gold); transform: translateY(-3px) rotate(-5deg); }
+    .social-btn svg { width: 16px; height: 16px; fill: rgba(255,255,255,0.8); }
+    .social-btn:hover svg { fill: var(--text); }
+    .fcol-title { font-family: 'Caveat', cursive; font-size: 1.3rem; font-weight: 700; color: var(--gold); margin-bottom: 1rem; }
+    .fcol-links { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+    .fcol-links a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+    .fcol-links a:hover { color: var(--gold); }
+    .footer-desc { font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem; max-width: 280px; }
+    .footer-bottom {
+      max-width: 1160px; margin: 0 auto;
+      border-top: 1px solid rgba(255,168,0,0.2);
+      padding-top: 1.5rem;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;
+    }
+    .footer-copy { font-size: 0.88rem; color: rgba(255,255,255,0.45); }
+    .footer-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .tag {
+      background: rgba(255,168,0,0.1); border: 1px solid rgba(255,168,0,0.25);
+      border-radius: 50px; padding: 0.3rem 0.9rem;
+      font-size: 0.8rem; color: rgba(255,168,0,0.75);
+    }
+
+    /* ─── Doodle decorations ──────────────────────────────────── */
+    .doodle-circle {
+      position: absolute; border-radius: 50%;
+      border: 3px solid currentColor; opacity: 0.25;
+      animation: pulse-ring 4s ease-in-out infinite;
+    }
+    @keyframes pulse-ring {
+      0%, 100% { transform: scale(1); opacity: 0.25; }
+      50% { transform: scale(1.08); opacity: 0.15; }
+    }
+
+    /* ─── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      :root { --sp: 3.5rem 1.5rem; }
+      .hero-right { max-width: 440px; }
+      .hero-cards { flex-wrap: wrap; }
+      .pain-grid, .feat-grid { grid-template-columns: 1fr 1fr; }
+      .founding-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .founding-card { max-width: 420px; }
+      .story-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .nav-links, .nav-cta { display: none; }
+      .ham { display: flex; }
+    }
+    @media (max-width: 600px) {
+      :root { --sp: 3rem 1.25rem; }
+      h1 { font-size: 2.1rem; }
+      h2 { font-size: 1.75rem; }
+      .pain-grid, .feat-grid { grid-template-columns: 1fr; }
+      .pain-card:nth-child(n) { transform: rotate(0); }
+      .feat-card:nth-child(n) { transform: rotate(0); }
+      .hero-cards { gap: 1rem; }
+      .hcard { min-width: 160px; max-width: 180px; padding: 1.2rem 1.4rem; }
+      .hcard-num { font-size: 2.4rem; }
+      .hcard-money { font-size: 1.8rem; }
+      .hero { padding: 4rem 1.25rem 2rem; }
+      .hero::before, .hero::after { display: none; }
+      .founding-grid { padding: 0 1.25rem; }
+      .story-grid { padding: 0 1.25rem; }
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+      .c1, .c2, .c3 { display: none; }
+      .callout { display: none; }
+    }
+    html, body { scroll-behavior: smooth; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════
+     NAVBAR
+════════════════════════════════════════════════════════════ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="https://generasoftware.com" class="nav-logo" aria-label="Genera home">
+      <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663478487775/BxxxoQYbhf7FnKvPttwktS/genera-paw-fixed_92730de9.png" alt="Genera paw logo">
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">GENERA</span>
+        <span class="nav-logo-tag">A Better Breed of Software</span>
+      </div>
+    </a>
+
+    <div class="nav-links">
+      <a href="https://generasoftware.com">Home</a>
+      <a href="https://generasoftware.com/features">Features</a>
+      <a href="https://generasoftware.com/aboutus">Our Story</a>
+      <a href="https://generasoftware.com/blog">Blog</a>
+      <a href="https://generasoftware.com/faqs">FAQs</a>
+      <a href="https://generasoftware.com/contact">Contact</a>
+    </div>
+
+    <div class="nav-cta">
+      <a href="https://generasoftware.com/sign-up" class="btn btn-gold">Start Free Trial</a>
+    </div>
+
+    <button class="ham" id="ham" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mob-menu" id="mobMenu">
+  <button class="mob-close" onclick="closeMenu()" aria-label="Close menu">×</button>
+  <a href="https://generasoftware.com" onclick="closeMenu()">Home</a>
+  <a href="https://generasoftware.com/features" onclick="closeMenu()">Features</a>
+  <a href="https://generasoftware.com/aboutus" onclick="closeMenu()">Our Story</a>
+  <a href="https://generasoftware.com/blog" onclick="closeMenu()">Blog</a>
+  <a href="https://generasoftware.com/faqs" onclick="closeMenu()">FAQs</a>
+  <a href="https://generasoftware.com/contact" onclick="closeMenu()">Contact</a>
+  <div class="mob-menu-btns">
+    <a href="https://generasoftware.com/sign-up" class="btn btn-gold btn-lg">Start Free Trial</a>
+    <a href="mailto:info@duncansdogco.com?subject=Id%20like%20to%20know%20more%20about%20Genera" class="btn btn-outline-w btn-lg">Book a Demo</a>
+  </div>
+</div>
+
+
+
+<!-- ════════════════════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-inner">
+
+    <div class="hero-left">
+      <div class="hero-badge">🐾 Built by a daycare, for daycares</div>
+
+      <h1 class="rev">
+        Software that <span class="squig">actually<svg viewBox="0 0 180 12" preserveAspectRatio="none"><path d="M2,9 Q22,2 45,8 Q68,14 90,7 Q112,0 135,8 Q157,14 178,7" /></svg></span><br>
+        gets your daycare.
+      </h1>
+
+      <p class="hero-sub rev d1">
+        Built by the people behind Duncan's Dog Co — 15 years in the industry,
+        finally turning that experience into software that makes your business run the way it should.
+      </p>
+
+      <div class="hero-btns rev d2">
+        <a href="https://app.generasoftware.com/admin" class="btn btn-gold btn-lg">
+          Start Your 3-Month Free Trial
+        </a>
+        <a href="mailto:info@duncansdogco.com?subject=Id%20like%20to%20know%20more%20about%20Genera" class="btn btn-forest btn-lg">
+          Book a Demo
+        </a>
+      </div>
+
+      <div class="hero-trust rev d3">
+        <span class="stars">★★★★★</span>
+        <span>Trusted by pet businesses across the UK</span>
+      </div>
+    </div>
+
+    <!-- Illustration -->
+    <div class="hero-right" aria-hidden="true">
+      <img src="illustration.png" alt="">
+    </div>
+
+    <!-- Floating UI cards -->
+    <div class="hero-cards">
+      <div class="hcard hcard-1">
+        <span class="hcard-badge">Today</span>
+        <div class="hcard-num">12</div>
+        <p class="hcard-title">Bookings, handled.</p>
+        <p class="hcard-sub">A clean calendar that fills itself — no more "did you get my text?"</p>
+      </div>
+      <div class="hcard hcard-2">
+        <span class="hcard-badge">Paid</span>
+        <div class="hcard-money">£840</div>
+        <p class="hcard-title">Money, in the bank.</p>
+        <p class="hcard-sub">Auto-charge, bulk invoices, direct debit. No chasing. Ever.</p>
+      </div>
+      <div class="hcard hcard-3">
+        <span class="hcard-badge">Routed</span>
+        <div class="hcard-num">3</div>
+        <p class="hcard-title">Pickups, sorted.</p>
+        <p class="hcard-sub">Drag-and-drop routes your drivers can follow on their phone.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     TRUST BAR
+════════════════════════════════════════════════════════════ -->
+<div class="trust-bar" aria-label="Businesses using Genera">
+  <p class="trust-lbl">Businesses already on board</p>
+  <div class="trust-mask">
+    <div class="trust-track">
+      <div class="chip">Paws &amp; Play</div>
+      <div class="chip">Bark &amp; Stride</div>
+      <div class="chip">Wag Walkers</div>
+      <div class="chip">Tail End Daycare</div>
+      <div class="chip">The Dog Lodge</div>
+      <div class="chip">Muddy Paws Co</div>
+      <div class="chip">Happy Hounds HQ</div>
+      <div class="chip">Fetch &amp; Go</div>
+      <div class="chip">Pawsitive Vibes</div>
+      <div class="chip">Walkies Club</div>
+      <div class="chip">Snout &amp; About</div>
+      <div class="chip">Good Boy Daycare</div>
+      <div class="chip">Paws &amp; Play</div>
+      <div class="chip">Bark &amp; Stride</div>
+      <div class="chip">Wag Walkers</div>
+      <div class="chip">Tail End Daycare</div>
+      <div class="chip">The Dog Lodge</div>
+      <div class="chip">Muddy Paws Co</div>
+      <div class="chip">Happy Hounds HQ</div>
+      <div class="chip">Fetch &amp; Go</div>
+      <div class="chip">Pawsitive Vibes</div>
+      <div class="chip">Walkies Club</div>
+      <div class="chip">Snout &amp; About</div>
+      <div class="chip">Good Boy Daycare</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PAIN POINTS
+════════════════════════════════════════════════════════════ -->
+<section class="pain">
+  <span class="pain-doodle" aria-hidden="true">🐾</span>
+  <div class="wrap">
+    <div class="section-hd rev">
+      <p class="label">Sound familiar?</p>
+      <h2>Running a daycare is<br>harder than it looks.</h2>
+      <p class="sub">You got into this for the dogs — not the admin. We'll handle the rest.</p>
+    </div>
+
+    <div class="pain-grid">
+      <div class="pain-card rev d1">
+        <div class="pain-num">01</div>
+        <h3>Bookings from every direction</h3>
+        <p>Texts, emails, DMs, calls — all landing in different places. You spend more time managing messages than caring for dogs.</p>
+      </div>
+      <div class="pain-card rev d2">
+        <div class="pain-num">02</div>
+        <h3>Sunday evenings lost to invoicing</h3>
+        <p>Manually building invoices for every client, every week. Chasing payments. Wondering who's paid and who hasn't.</p>
+      </div>
+      <div class="pain-card rev d3">
+        <div class="pain-num">03</div>
+        <h3>Pickup logistics that break your brain</h3>
+        <p>Juggling driver routes, pickup windows and last-minute changes with no real system. Just a spreadsheet and a prayer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     FEATURES
+════════════════════════════════════════════════════════════ -->
+<section class="features" id="features">
+  <div class="wrap">
+    <div class="section-hd rev">
+      <p class="label">What Genera does</p>
+      <h2>Everything you need.<br>Nothing you don't.</h2>
+    </div>
+
+    <div class="feat-grid">
+
+      <div class="feat-card rev d1">
+        <div class="feat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <h3>Every pet. Every detail. One place.</h3>
+        <p>Full client and pet profiles — feeding notes, vet contacts, vaccination records — accessible in seconds by anyone on your team.</p>
+      </div>
+
+      <div class="feat-card rev d2">
+        <div class="feat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/><path d="m9 16 2 2 4-4"/>
+          </svg>
+        </div>
+        <h3>Bookings that run themselves</h3>
+        <p>24/7 online booking portal for your clients. No more inbound messages — just a clean calendar that fills itself.</p>
+      </div>
+
+      <div class="feat-card rev d3">
+        <div class="feat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+            <line x1="1" y1="10" x2="23" y2="10"/>
+          </svg>
+        </div>
+        <h3>Get paid without chasing anyone</h3>
+        <p>Auto-charge on collection, bulk invoicing, direct debit and card payments. Your money arrives on time, every time.</p>
+      </div>
+
+      <div class="feat-card rev d4">
+        <div class="feat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <h3>Routes planned in minutes, not hours</h3>
+        <p>Drag-and-drop transport scheduling with optimised routes for your drivers. No more scrambling on collection day.</p>
+      </div>
+
+      <div class="feat-card rev d5">
+        <div class="feat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M3 21v-2a4 4 0 0 1 4-4h4"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </div>
+        <h3>Your team, sorted</h3>
+        <p>Staff schedules, shift planning and payroll prep — all in one system. Know who's in, who's driving, and what everyone's owed.</p>
+      </div>
+
+      <div class="feat-card rev d6">
+        <div class="feat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+            <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/>
+            <path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+          </svg>
+        </div>
+        <h3>Support that actually understands</h3>
+        <p>UK-based support from people who've run a daycare. GDPR &amp; DEFRA compliant, cloud-based and always up to date.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PRODUCT SHOWCASE
+════════════════════════════════════════════════════════════ -->
+<section class="showcase">
+  <div class="wrap">
+    <div class="section-hd rev">
+      <p class="label">See it in action</p>
+      <h2>A dashboard built for busy people.</h2>
+    </div>
+
+    <div class="showcase-scene rev d1">
+      <p class="showcase-note">Your 9am Monday, sorted ☕</p>
+
+      <!-- Floating callout annotations -->
+      <div class="callout c1">Today's bookings at a glance</div>
+      <div class="callout c2">Automated payment collection</div>
+      <div class="callout c3">Driver routes, ready to go</div>
+
+      <!-- Browser chrome frame -->
+      <div class="browser-frame">
+        <div class="browser-bar">
+          <div class="browser-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="browser-url">app.generasoftware.com</div>
+        </div>
+        <img src="app-screenshot.png" alt="Genera software dashboard overview" loading="lazy">
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     FOUNDING 100
+════════════════════════════════════════════════════════════ -->
+<section class="founding" id="founding">
+  <div class="founding-grid">
+
+    <div class="founding-left rev">
+      <p class="label">Limited offer</p>
+      <h2>The Founding One Hundred.</h2>
+      <p>
+        We're selecting 100 pet businesses to join Genera before we open
+        to the public. You'll get three months completely free, priority
+        onboarding and a direct line to our team.
+      </p>
+      <ul class="found-list">
+        <li>3 months free — no credit card required</li>
+        <li>One-on-one onboarding call with the Genera team</li>
+        <li>Priority access to new features as they launch</li>
+        <li>Your feedback shapes the product roadmap</li>
+        <li>Locked-in founding member pricing, forever</li>
+      </ul>
+      <a href="https://app.generasoftware.com/admin" class="btn btn-outline-w btn-lg">
+        Apply for a Founding Spot →
+      </a>
+    </div>
+
+    <div class="founding-card rev d2">
+      <p class="spots-lbl">Spots remaining</p>
+      <div class="spots-num">73</div>
+      <p class="spots-total">out of 100 founding members</p>
+      <div class="progress-track">
+        <div class="progress-fill"></div>
+      </div>
+      <p class="progress-note">27 spots claimed so far</p>
+      <p>Applications close once we reach 100. Be part of shaping the product from the start.</p>
+      <a href="https://app.generasoftware.com/admin" class="btn btn-gold btn-lg">
+        Claim Your Spot Now
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     VIDEO BAND
+════════════════════════════════════════════════════════════ -->
+<section class="vid-band">
+  <video autoplay muted loop playsinline preload="metadata">
+    <source src="https://video.wixstatic.com/video/a043b3_7798ca77d10a457781f9ce9380492181/720p/mp4/file.mp4" type="video/mp4">
+  </video>
+  <div class="vid-band-overlay"></div>
+  <div class="vid-band-text">
+    <p class="vid-label">🐾 Real dogs. Real business.</p>
+    <h2>This is what we built Genera for.</h2>
+    <p>Fifteen years of muddy leads, early mornings and happy dogs — and still no software that actually got it. So we built our own.</p>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     STORY TEASER
+════════════════════════════════════════════════════════════ -->
+<section class="story" id="story">
+  <div class="story-grid">
+
+    <div class="story-img rev">
+      <div class="photo-wrap">
+        <img src="duncan-jess.jpg" alt="Duncan and Jess, founders of Genera Software" loading="lazy">
+      </div>
+      <p class="polaroid-caption">Duncan &amp; Jess, South West London 🐾</p>
+    </div>
+
+    <div class="story-copy rev d2">
+      <p class="label">Why we built this</p>
+      <h2>From a dog walking round in South West London to software used across the UK.</h2>
+      <p>
+        Duncan and Jess started with a dog walking round in 2011.
+        Fifteen years later they're running a licensed daycare — and
+        they still couldn't find software that actually understood how
+        a pet business works.
+      </p>
+      <p>
+        So they built Genera themselves. Every feature exists because they
+        needed it. Every decision is made by people who've been on the end
+        of a very muddy lead.
+      </p>
+      <a href="https://generasoftware.com/aboutus" class="story-link">
+        Read the full story →
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     FINAL CTA
+════════════════════════════════════════════════════════════ -->
+<section class="final-cta">
+  <div class="final-cta-inner rev">
+    <h2>You got into this because you love dogs.<br><em>Let us handle the rest.</em></h2>
+    <p>Start your 3-month free trial today. No credit card required. No commitment. Just the tools you need to run your business properly.</p>
+    <div class="final-btns">
+      <a href="https://app.generasoftware.com/admin" class="btn btn-gold btn-lg">
+        Start Your Free Trial
+      </a>
+      <a href="mailto:info@duncansdogco.com?subject=Id%20like%20to%20know%20more%20about%20Genera" class="btn btn-outline-w btn-lg">
+        Book a Demo
+      </a>
+    </div>
+    <p class="final-note">No credit card &nbsp;·&nbsp; No commitment &nbsp;·&nbsp; Cancel anytime</p>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-grid">
+
+    <div>
+      <div class="footer-logo">
+        <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663478487775/BxxxoQYbhf7FnKvPttwktS/genera-paw-fixed_92730de9.png" alt="Genera">
+        <span class="footer-logo-name">GENERA</span>
+      </div>
+      <p class="footer-desc">Software built by pet business owners, for pet business owners.</p>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/generadogsoftware/?hl=en" class="social-btn" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@genera.dog" class="social-btn" aria-label="TikTok">
+          <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61555766818481" class="social-btn" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div>
+      <p class="fcol-title">Product</p>
+      <ul class="fcol-links">
+        <li><a href="https://generasoftware.com/features">Features</a></li>
+        <li><a href="https://app.generasoftware.com/admin">Free Trial</a></li>
+        <li><a href="https://generasoftware.com/sign-up">Founding 100</a></li>
+        <li><a href="https://generasoftware.com/faqs">FAQs</a></li>
+        <li><a href="https://generasoftware.com/blog">Blog</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="fcol-title">Company</p>
+      <ul class="fcol-links">
+        <li><a href="https://generasoftware.com/aboutus">Our Story</a></li>
+        <li><a href="https://generasoftware.com/contact">Contact</a></li>
+        <li><a href="mailto:info@generasoftware.com">Email Us</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="fcol-title">Legal</p>
+      <ul class="fcol-links">
+        <li><a href="https://generasoftware.com/privacy-policy">Privacy Policy</a></li>
+        <li><a href="https://generasoftware.com/terms">Terms of Service</a></li>
+        <li><a href="https://generasoftware.com/privacy-policy">GDPR</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Genera Software Ltd. Built with love by Duncan's Dog Co.</p>
+    <div class="footer-tags">
+      <span class="tag">GDPR Compliant</span>
+      <span class="tag">DEFRA Aligned</span>
+      <span class="tag">UK-Based Support</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════════════════════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════════════════════════ -->
+<script>
+  /* ── Navbar scroll effect ───────────────────────────────── */
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('stuck', window.scrollY > 50);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ── Mobile menu ────────────────────────────────────────── */
+  const ham     = document.getElementById('ham');
+  const mobMenu = document.getElementById('mobMenu');
+
+  ham.addEventListener('click', () => {
+    const open = mobMenu.classList.toggle('open');
+    ham.classList.toggle('open', open);
+    ham.setAttribute('aria-expanded', String(open));
+  });
+
+  function closeMenu() {
+    mobMenu.classList.remove('open');
+    ham.classList.remove('open');
+    ham.setAttribute('aria-expanded', 'false');
+  }
+
+  document.addEventListener('visibilitychange', closeMenu);
+  window.addEventListener('pagehide', closeMenu);
+
+  document.addEventListener('click', e => {
+    if (mobMenu.classList.contains('open') &&
+        !mobMenu.contains(e.target) &&
+        !ham.contains(e.target)) closeMenu();
+  });
+
+  /* ── Scroll-reveal via IntersectionObserver ─────────────── */
+  const revEls = document.querySelectorAll('.rev');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  revEls.forEach(el => io.observe(el));
+
+  // Illustration parallax tilt on mouse move
+  const illustImg = document.querySelector('.hero-right img');
+  const heroEl    = document.querySelector('.hero');
+  if (illustImg && heroEl) {
+    heroEl.addEventListener('mousemove', (e) => {
+      const rect = heroEl.getBoundingClientRect();
+      const dx = (e.clientX - (rect.left + rect.width  / 2)) / rect.width;
+      const dy = (e.clientY - (rect.top  + rect.height / 2)) / rect.height;
+      illustImg.style.animationPlayState = 'paused';
+      illustImg.style.transform = `translateY(-5px) rotateY(${dx*8}deg) rotateX(${-dy*5}deg)`;
+    });
+    heroEl.addEventListener('mouseleave', () => {
+      illustImg.style.animationPlayState = 'running';
+      illustImg.style.transform = '';
+    });
+  }
+
+</script>
+</body>
+</html>
