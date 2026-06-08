@@ -9,6 +9,7 @@ import { LOGIN_URL } from "@/lib/urls";
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/features", label: "Features" },
+  { href: "/community", label: "Community" },
   { href: "/our-story", label: "Our Story" },
   { href: "/blog", label: "Blog" },
   { href: "/faqs", label: "FAQs" },
