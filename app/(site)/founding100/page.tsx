@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: "Founding 100 & Genera Business Network — Community for Pet Professionals",
     description:
       "Join the Genera Founding 100 — 3 months free, founding member pricing, and access to a private network of verified pet care professionals across the UK.",
-    path: "/founding-100",
+    path: "/founding100",
   }),
 };
 

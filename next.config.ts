@@ -4,7 +4,8 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   async redirects() {
     return [
-      { source: "/community", destination: "/founding-100", permanent: true },
+      { source: "/community", destination: "/founding100", permanent: true },
+      { source: "/founding-100", destination: "/founding100", permanent: true },
     ];
   },
   images: {
