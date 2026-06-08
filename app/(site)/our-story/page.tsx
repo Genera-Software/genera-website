@@ -69,14 +69,18 @@ const FALLBACK_TIMELINE: TimelineEntry[] = [
 ];
 
 async function getTimeline(): Promise<TimelineEntry[]> {
-  const supabase = getPublicSupabase();
-  const { data, error } = await supabase
-    .from("story_timeline")
-    .select("year, body, image_url")
-    .eq("is_visible", true)
-    .order("sort_order", { ascending: true });
-  if (error || !data || data.length === 0) return FALLBACK_TIMELINE;
-  return data;
+  try {
+    const supabase = getPublicSupabase();
+    const { data, error } = await supabase
+      .from("story_timeline")
+      .select("year, body, image_url")
+      .eq("is_visible", true)
+      .order("sort_order", { ascending: true });
+    if (error || !data || data.length === 0) return FALLBACK_TIMELINE;
+    return data;
+  } catch {
+    return FALLBACK_TIMELINE;
+  }
 }
 
 export default async function OurStoryPage() {
