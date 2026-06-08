@@ -242,8 +242,19 @@ export default function FeaturesClient() {
 
         <div className="relative z-10 mx-auto grid max-w-[1180px] grid-cols-1 md:grid-cols-[minmax(0,1.02fr)_minmax(360px,.98fr)] gap-0 md:gap-[54px] items-center">
           <div className="rev pb-6 md:pb-0">
-            <p className="eyebrow !text-gold-soft">Features</p>
-            <h1 className="text-white text-figure-md md:[font-size:clamp(2.4rem,4vw,3.6rem)]">Genera works around your daycare.</h1>
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft md:px-4 md:py-1.5">
+              🐾 Built for how pet care actually works
+            </div>
+            <h1 className="text-white text-figure-md md:[font-size:clamp(2.4rem,4vw,3.6rem)]">
+              Genera works{" "}
+              <span className="squig">
+                around
+                <svg viewBox="0 0 180 12" preserveAspectRatio="none">
+                  <path d="M2,9 Q22,2 45,8 Q68,14 90,7 Q112,0 135,8 Q157,14 178,7" />
+                </svg>
+              </span>
+              {" "}your daycare.
+            </h1>
             <p className="mt-3 mb-5 md:mt-5 md:mb-7 max-w-[560px] text-white/80 text-[clamp(1rem,2vw,1.25rem)] leading-relaxed">
               Your services, your pricing, your approvals, your dog bus, your team. One operating system for the way pet care businesses actually run.
             </p>
