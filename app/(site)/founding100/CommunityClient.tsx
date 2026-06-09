@@ -213,7 +213,7 @@ export default function CommunityClient({
       </div>
 
       {/* ── The problem ───────────────────────────────────────────────── */}
-      <section className="bg-white px-6 py-14 md:px-8 md:py-18">
+      <section className="px-6 py-14 md:px-8 md:py-18" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
         <div className="mx-auto max-w-[760px]">
           <div className="rev">
             <p className="eyebrow">Why this matters</p>
@@ -240,14 +240,14 @@ export default function CommunityClient({
       </section>
 
       {/* ── Who it's for ──────────────────────────────────────────────── */}
-      <section className="bg-cream px-6 py-16 md:px-8 md:py-22">
+      <section className="px-6 py-16 md:px-8 md:py-22" style={{ background: "linear-gradient(170deg,#FFF3CC 0%,#FFD66C 100%)" }}>
         <div className="mx-auto max-w-[1160px]">
           <div className="rev text-center mb-10 md:mb-14">
             <p className="eyebrow">Who it&apos;s for</p>
             <h2 className="mt-2 text-heading-mid">
               If you work in pet care, this is your community.
             </h2>
-            <p className="mt-4 text-ink-soft text-lg">
+            <p className="mt-4 text-forest/70 text-lg">
               Every discipline. Every size. One network.
             </p>
           </div>
@@ -255,7 +255,7 @@ export default function CommunityClient({
             {BUSINESS_TYPES.map((t) => (
               <div
                 key={t.label}
-                className="flex flex-col items-center gap-3 rounded-2xl bg-white px-4 py-6 shadow-sm border border-cream-dark"
+                className="flex flex-col items-center gap-3 rounded-2xl bg-white px-4 py-6 shadow-[0_4px_18px_rgba(0,62,69,0.10)] border border-white/80"
               >
                 <span className="text-5xl leading-none">{t.icon}</span>
                 <span className="font-massilia font-bold text-forest text-center text-sm leading-snug">
@@ -268,7 +268,7 @@ export default function CommunityClient({
       </section>
 
       {/* ── Learn / Share / Grow ──────────────────────────────────────── */}
-      <section className="bg-white px-6 py-16 md:px-8 md:py-22">
+      <section className="px-6 py-16 md:px-8 md:py-22" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
         <div className="mx-auto max-w-[1160px]">
           <div className="rev text-center mb-12">
             <p className="eyebrow">What you get</p>
@@ -310,7 +310,7 @@ export default function CommunityClient({
                 ],
               },
             ].map((col) => (
-              <div key={col.num} className="rounded-2xl border border-cream-dark bg-cream p-7 md:p-8">
+              <div key={col.num} className="rounded-2xl border border-white/80 bg-white p-7 shadow-[0_4px_18px_rgba(0,62,69,0.08)] md:p-8">
                 <div className="font-massilia text-[4.5rem] font-black leading-none text-forest/10 select-none">
                   {col.num}
                 </div>
