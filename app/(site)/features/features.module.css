@@ -1417,6 +1417,9 @@
   .phoneStaff,
   .phoneDaily,
   .phonePayment { transform: none; max-width: 310px; }
+  /* Prevent over-tall phone screens on mobile for content-driven animations */
+  .scrPay, .scrXl { height: 420px; }
+  .scrXxl { height: 440px; }
   .heroStack { min-height: 180px; }
   .screenMain { height: 200px; }
 }
