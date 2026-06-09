@@ -1561,6 +1561,10 @@
   .phoneStaff,
   .phoneDaily,
   .phonePayment { transform: none; }
+
+  /* Flatten the hero calendar's 3D tilt once it's no longer beside the copy,
+     so it reads as a clean upright panel on small screens. */
+  .heroBrowser { transform: none; box-shadow: 0 28px 64px rgba(0,20,24,.4); }
 }
 @media (max-width: 620px) {
   .capacityImgCrop { height: 200px; }
@@ -1571,4 +1575,15 @@
   /* Smaller phone mockups on mobile so each section's screenshot sits neatly
      centred with breathing room rather than spanning the column. */
   .phone { max-width: 230px; }
+
+  /* Hero calendar on phones: drop the stats + "New booking" button (they
+     overflow a narrow header), shrink the cells, and reduce each event chip to
+     just its colour dot so nothing gets clipped mid-word. */
+  .adminCalHead { padding: 10px 12px; }
+  .adminCalTitle { font-size: .95rem; }
+  .adminStats,
+  .adminNewBtn { display: none; }
+  .adminCell { min-height: 44px; padding: 4px 4px; }
+  .adminChip { font-size: 0; gap: 0; padding: 2px; justify-content: center; }
+  .adminChipIc { width: 7px; height: 7px; }
 }
