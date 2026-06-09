@@ -417,10 +417,13 @@ export default function FeaturesClient() {
               </ul>
             </div>
             <div className={s.singlePhone}>
-              <Phone phoneClass={s.phoneDaily} screenClass={s.scrXl}>
-                {/* left top: pet avatars are on the left — centering crops them */}
-                <Image src="/mockup-screens/features/mobile-daily-schedule-polished.png" alt="Mobile daily schedule for today" fill className="object-cover" style={{ objectPosition: 'left top' }} />
-              </Phone>
+              <div className={s.badgeWrap}>
+                <Phone phoneClass={s.phoneDaily} screenClass={s.scrXl}>
+                  {/* left top: pet avatars are on the left — centering crops them */}
+                  <Image src="/mockup-screens/features/mobile-daily-schedule-polished.png" alt="Mobile daily schedule for today" fill className="object-cover" style={{ objectPosition: 'left top' }} />
+                </Phone>
+                <div className={`${s.floatBadge} ${s.badgeGold}`}>📋 6 dogs today</div>
+              </div>
             </div>
           </article>
 
@@ -473,10 +476,13 @@ export default function FeaturesClient() {
               </ul>
             </div>
             <div className={s.singlePhone}>
-              <Phone phoneClass={s.phonePayment} screenClass={s.scrPay}>
-                {/* 22% skips past iOS status bar + browser URL bar at the top of the screenshot */}
-                <Image src="/mockup-screens/payment-methods.png" alt="Stripe and GoCardless payment methods" fill className="object-cover" style={{ objectPosition: "center 22%" }} />
-              </Phone>
+              <div className={s.badgeWrap}>
+                <Phone phoneClass={s.phonePayment} screenClass={s.scrPay}>
+                  {/* 30% skips past iOS status bar + browser URL bar at the top of the screenshot */}
+                  <Image src="/mockup-screens/payment-methods.png" alt="Stripe and GoCardless payment methods" fill className="object-cover" style={{ objectPosition: "center 30%" }} />
+                </Phone>
+                <div className={`${s.floatBadge} ${s.badgeWhite}`}>✓ GoCardless connected</div>
+              </div>
             </div>
           </article>
 
@@ -527,18 +533,15 @@ export default function FeaturesClient() {
               </ul>
             </div>
             <div className={s.singlePhone}>
-              <Phone phoneClass={s.phoneRoute} screenClass={s.scrXl}>
-                <Image src="/mockup-screens/features/mobile-route-pickups-latest.png" alt="Mobile morning pickup route for the dog bus" fill className="object-cover object-top" />
-              </Phone>
+              <div className={s.badgeWrap}>
+                <Phone phoneClass={s.phoneRoute} screenClass={s.scrXl}>
+                  <Image src="/mockup-screens/features/mobile-route-pickups-latest.png" alt="Mobile morning pickup route for the dog bus" fill className="object-cover object-top" />
+                </Phone>
+                <div className={`${s.floatBadge} ${s.badgeTeal}`}>🐾 Route ready</div>
+              </div>
             </div>
           </article>
 
-        </div>
-      </div>
-
-      {/* ── Staff ────────────────────────────────────────────── */}
-      <div className="px-[clamp(22px,3vw,56px)] py-10 md:py-[78px]">
-        <div className="max-w-[1380px] mx-auto">
           {/* ── Staff ──────────────────────────────────────── i=9 */}
           <article id="staff" className={`rev ${s.block} ${v(9).block}`}>
             <div>
@@ -556,9 +559,12 @@ export default function FeaturesClient() {
               </ul>
             </div>
             <div className={s.singlePhone}>
-              <Phone phoneClass={s.phoneStaff} screenClass={s.scrXl}>
-                <Image src="/mockup-screens/features/mobile-staff-schedule-latest.png" alt="Mobile staff schedule with holiday and sick day tracking" fill className="object-cover object-top" />
-              </Phone>
+              <div className={s.badgeWrap}>
+                <Phone phoneClass={s.phoneStaff} screenClass={s.scrXl}>
+                  <Image src="/mockup-screens/features/mobile-staff-schedule-latest.png" alt="Mobile staff schedule with holiday and sick day tracking" fill className="object-cover object-top" />
+                </Phone>
+                <div className={`${s.floatBadge} ${s.badgeGold}`} style={{ animationDelay: "1.2s" }}>🌴 5 days left</div>
+              </div>
             </div>
           </article>
         </div>

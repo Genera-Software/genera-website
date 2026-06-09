@@ -204,8 +204,36 @@
   width: 100%;
   height: auto;
   display: block;
-  transform-origin: 78% 68%;
+  transform-origin: 78% 74%;
   transform: scale(2.1);
+}
+
+/* ── Floating animated badge (used on Daily Schedule, Routing, Payments) ── */
+.badgeWrap {
+  position: relative;
+  display: inline-block;
+}
+.floatBadge {
+  position: absolute;
+  right: -28px;
+  top: 36px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .78rem;
+  white-space: nowrap;
+  box-shadow: 0 12px 32px rgba(0,62,69,.24);
+  z-index: 3;
+  animation: badgeFloat 3.4s ease-in-out infinite;
+}
+.badgeGold  { background: #FFA800; color: #002830; }
+.badgeTeal  { background: #003E45; color: #fff; }
+.badgeWhite { background: #fff;    color: #003E45; }
+
+@keyframes badgeFloat {
+  0%, 100% { transform: translateY(0) rotate(2deg); }
+  50%       { transform: translateY(-10px) rotate(2deg); }
 }
 
 /* ── Booking flow animation ──────────────────────────────────── */
