@@ -1359,13 +1359,6 @@
   border-bottom: 1px solid rgba(0,62,69,.12);
   padding-bottom: 20px;
 }
-.catNo {
-  font-family: var(--font-massilia);
-  font-weight: 700;
-  font-size: .92rem;
-  color: #FFA800;
-  letter-spacing: .16em;
-}
 .catTitle {
   font-family: var(--font-massilia);
   font-weight: 700;
@@ -1399,16 +1392,6 @@
   gap: 11px;
   margin-bottom: 15px;
   flex-wrap: wrap;
-}
-.featNum {
-  font-family: var(--font-massilia);
-  font-weight: 700;
-  font-size: .86rem;
-  color: #003E45;
-  background: #E0F0F2;
-  border-radius: 8px;
-  padding: 3px 9px;
-  letter-spacing: .04em;
 }
 .featEyebrow {
   font-family: var(--font-massilia);

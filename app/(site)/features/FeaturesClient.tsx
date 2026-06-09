@@ -1009,11 +1009,10 @@ const PROOF_CHIPS = [
 /* ─────────────────────────────────────────────────────────────
    Category band header
    ───────────────────────────────────────────────────────────── */
-function CategoryHeader({ no, title, desc }: { no: string; title: string; desc: string }) {
+function CategoryHeader({ title, desc }: { title: string; desc: string }) {
   return (
     <div className={`rev ${s.cat}`}>
       <div className={s.catInner}>
-        <span className={s.catNo}>{no}</span>
         <h2 className={s.catTitle}>{title}</h2>
         <p className={s.catDesc}>{desc}</p>
       </div>
@@ -1095,7 +1094,6 @@ export default function FeaturesClient() {
       <div className="bg-white px-[clamp(22px,4vw,56px)]">
         <div className="max-w-[1200px] mx-auto">
           <CategoryHeader
-            no="01"
             title="Set up your business"
             desc="Define your limits, your branding and your alerts before a single booking comes in."
           />
@@ -1104,7 +1102,6 @@ export default function FeaturesClient() {
           <article id="capacity" className={`rev ${s.feat}`}>
             <div className={s.featCopy}>
               <div className={s.featKicker}>
-                <span className={s.featNum}>01</span>
                 <span className={s.featEyebrow}>Capacity &amp; DEFRA</span>
                 <span className={s.featOnly}>Only on Genera</span>
               </div>
@@ -1127,7 +1124,6 @@ export default function FeaturesClient() {
           <article id="brand" className={`rev ${s.feat} ${s.featFlip}`}>
             <div className={s.featCopy}>
               <div className={s.featKicker}>
-                <span className={s.featNum}>02</span>
                 <span className={s.featEyebrow}>Customisation &amp; Alerts</span>
               </div>
               <h3 className={s.featTitle}>Your portal. Your alerts. Your way of working.</h3>
@@ -1159,7 +1155,6 @@ export default function FeaturesClient() {
       <div className="bg-cream px-[clamp(22px,4vw,56px)]">
         <div className="max-w-[1200px] mx-auto">
           <CategoryHeader
-            no="02"
             title="Bookings & your day"
             desc="Controlled self-serve bookings, a clear daily run sheet, and a portal customers actually use."
           />
@@ -1168,7 +1163,6 @@ export default function FeaturesClient() {
           <article id="bookings" className={`rev ${s.feat}`}>
             <div className={s.featCopy}>
               <div className={s.featKicker}>
-                <span className={s.featNum}>03</span>
                 <span className={s.featEyebrow}>Bookings</span>
               </div>
               <h3 className={s.featTitle}>Clients can request. You stay in control.</h3>
@@ -1197,7 +1191,6 @@ export default function FeaturesClient() {
           <article id="daily-schedule" className={`rev ${s.feat} ${s.featFlip}`}>
             <div className={s.featCopy}>
               <div className={s.featKicker}>
-                <span className={s.featNum}>04</span>
                 <span className={s.featEyebrow}>Daily Schedule</span>
               </div>
               <h3 className={s.featTitle}>Know exactly who&apos;s in today.</h3>
@@ -1223,7 +1216,6 @@ export default function FeaturesClient() {
           <article id="portal" className={`rev ${s.feat}`}>
             <div className={s.featCopy}>
               <div className={s.featKicker}>
-                <span className={s.featNum}>05</span>
                 <span className={s.featEyebrow}>Customer Portal</span>
               </div>
               <h3 className={s.featTitle}>Customers book, request memberships and update pet details.</h3>
@@ -1254,7 +1246,6 @@ export default function FeaturesClient() {
       <div className="bg-white px-[clamp(22px,4vw,56px)]">
         <div className="max-w-[1200px] mx-auto">
           <CategoryHeader
-            no="03"
             title="Money & records"
             desc="See who's paid, who hasn't, and keep every dog's history exactly where you need it."
           />
@@ -1263,7 +1254,6 @@ export default function FeaturesClient() {
           <article id="payments" className={`rev ${s.feat}`}>
             <div className={s.featCopy}>
               <div className={s.featKicker}>
-                <span className={s.featNum}>06</span>
                 <span className={s.featEyebrow}>Payments</span>
               </div>
               <h3 className={s.featTitle}>Every payment route, without losing track.</h3>
@@ -1289,7 +1279,6 @@ export default function FeaturesClient() {
           <article id="records" className={`rev ${s.feat} ${s.featFlip}`}>
             <div className={s.featCopy}>
               <div className={s.featKicker}>
-                <span className={s.featNum}>07</span>
                 <span className={s.featEyebrow}>Dog Records &amp; Compliance</span>
               </div>
               <h3 className={s.featTitle}>Every dog detail, ready when you need it.</h3>
@@ -1313,7 +1302,6 @@ export default function FeaturesClient() {
       <div className="bg-cream px-[clamp(22px,4vw,56px)] pb-12 md:pb-20">
         <div className="max-w-[1200px] mx-auto">
           <CategoryHeader
-            no="04"
             title="On the road & the team"
             desc="Plan the dog bus and keep staff days, holiday and sick records in the same place."
           />
@@ -1322,7 +1310,6 @@ export default function FeaturesClient() {
           <article id="routing" className={`rev ${s.feat}`}>
             <div className={s.featCopy}>
               <div className={s.featKicker}>
-                <span className={s.featNum}>08</span>
                 <span className={s.featEyebrow}>Routing</span>
               </div>
               <h3 className={s.featTitle}>Plan the dog bus without rebuilding it every morning.</h3>
@@ -1348,7 +1335,6 @@ export default function FeaturesClient() {
           <article id="staff" className={`rev ${s.feat} ${s.featFlip}`}>
             <div className={s.featCopy}>
               <div className={s.featKicker}>
-                <span className={s.featNum}>09</span>
                 <span className={s.featEyebrow}>Staff</span>
               </div>
               <h3 className={s.featTitle}>Staff days, holiday and sick records in one place.</h3>
