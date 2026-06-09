@@ -567,7 +567,7 @@ export default function FeaturesClient() {
       {/* ── Final CTA ────────────────────────────────────────── */}
       <section className="bg-forest-dark px-8 py-[86px] text-center text-white">
         <div className="rev mx-auto max-w-[760px]">
-          <h2 className="!text-white">
+          <h2 className="text-heading-mid !text-white">
             Run the daycare you already built, without rebuilding your admin every week.
           </h2>
           <p className="mx-auto mt-4 max-w-[640px] text-white/80 leading-relaxed">

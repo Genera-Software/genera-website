@@ -59,7 +59,7 @@ export default function ContactPage() {
                 <polyline points="22,6 12,13 2,6" />
               </svg>
             </div>
-            <h2>Drop us an email</h2>
+            <h2 className="text-heading-mid">Drop us an email</h2>
             <p className="mx-auto mt-3 max-w-[520px] text-ink-soft">
               Whether you want to join the Founding 100, have a question, or
               just want to know more about Genera — we are here. We reply

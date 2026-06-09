@@ -144,7 +144,7 @@ export default async function OurStoryPage() {
       <section className="bg-white px-8 py-22">
         <div className="mx-auto flex max-w-[760px] flex-col gap-10">
           <article className="rev flex flex-col gap-4">
-            <h2 className="text-forest">It started with a handful of leads and a lot of heart</h2>
+            <h2 className="text-heading-mid text-forest">It started with a handful of leads and a lot of heart</h2>
             <p className="text-ink-soft">
               In 2011, Duncan and Jess started Duncan&apos;s Dog Co as a dog
               walking service in South West London. It was just the two of them
@@ -165,7 +165,7 @@ export default async function OurStoryPage() {
           </blockquote>
 
           <article className="rev flex flex-col gap-4">
-            <h2 className="text-forest">Growing pains</h2>
+            <h2 className="text-heading-mid text-forest">Growing pains</h2>
             <p className="text-ink-soft">
               Over the years, Duncan&apos;s Dog Co grew into one of the
               longest-standing, five-star licensed doggy daycares in the UK.
@@ -192,7 +192,7 @@ export default async function OurStoryPage() {
           </div>
 
           <article className="rev flex flex-col gap-4">
-            <h2 className="text-forest">The missed booking</h2>
+            <h2 className="text-heading-mid text-forest">The missed booking</h2>
             <p className="text-ink-soft">
               One day, a loyal customer&apos;s pickup was missed. A booking had
               slipped through the cracks. It was the kind of thing that happens
@@ -214,7 +214,7 @@ export default async function OurStoryPage() {
           </blockquote>
 
           <article className="rev flex flex-col gap-4">
-            <h2 className="text-forest">From prototype to platform</h2>
+            <h2 className="text-heading-mid text-forest">From prototype to platform</h2>
             <p className="text-ink-soft">
               That first version was rough. But it worked. Bookings stopped
               falling through. Invoices went out on time. Routes made sense.
@@ -231,7 +231,7 @@ export default async function OurStoryPage() {
           </article>
 
           <article className="rev flex flex-col gap-4">
-            <h2 className="text-forest">Sharing it with the industry</h2>
+            <h2 className="text-heading-mid text-forest">Sharing it with the industry</h2>
             <p className="text-ink-soft">
               After years of running Genera internally, Duncan and Jess
               realised something. Every small pet business they spoke to was
@@ -256,7 +256,7 @@ export default async function OurStoryPage() {
       {/* Timeline */}
       <section className="bg-cream px-8 py-22">
         <div className="mx-auto max-w-[860px]">
-          <h2 className="rev mb-14 text-center">The journey so far</h2>
+          <h2 className="rev mb-14 text-center text-heading-mid">The journey so far</h2>
 
           <ol className="relative flex flex-col gap-8 before:absolute before:left-1/2 before:top-0 before:h-full before:w-px before:-translate-x-1/2 before:bg-teal-mid">
             {timeline.map((t, i) => {
@@ -306,7 +306,7 @@ export default async function OurStoryPage() {
         <div className="mx-auto max-w-[1000px]">
           <div className="rev mb-12 text-center">
             <p className="eyebrow">The people behind Genera</p>
-            <h2 className="mt-2">It takes a team who actually cares.</h2>
+            <h2 className="mt-2 text-heading-mid">It takes a team who actually cares.</h2>
           </div>
 
           {/* Becks */}
@@ -400,7 +400,7 @@ export default async function OurStoryPage() {
       {/* Final CTA */}
       <section className="bg-forest-dark px-8 py-22 text-center text-white">
         <div className="rev mx-auto max-w-[760px]">
-          <h2 className="!text-white">
+          <h2 className="text-heading-mid !text-white">
             We built Genera for businesses{" "}
             <em className="text-gold">like yours</em>
           </h2>

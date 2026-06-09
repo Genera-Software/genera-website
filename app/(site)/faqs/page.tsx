@@ -81,7 +81,7 @@ export default async function FaqsPage() {
       {/* CTA */}
       <section className="bg-forest-dark px-8 py-22 text-center text-white">
         <div className="rev mx-auto max-w-[760px]">
-          <h2 className="!text-white">Still have questions?</h2>
+          <h2 className="text-heading-mid !text-white">Still have questions?</h2>
           <p className="mx-auto mt-4 max-w-[560px] text-white/80">
             We are a small team and we read every message. Get in touch and we
             will help you figure out if Genera is right for your business.

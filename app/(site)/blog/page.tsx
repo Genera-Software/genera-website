@@ -146,7 +146,7 @@ export default async function BlogPage() {
       {/* CTA */}
       <section className="bg-forest-dark px-8 py-22 text-center text-white">
         <div className="rev mx-auto max-w-[760px]">
-          <h2 className="!text-white">Want to see Genera in action?</h2>
+          <h2 className="text-heading-mid !text-white">Want to see Genera in action?</h2>
           <p className="mx-auto mt-4 max-w-[560px] text-white/80">
             Apply for the Founding 100 today and see how Genera can transform
             the way you run your pet business.

@@ -174,8 +174,14 @@ export default function CommunityClient({
 
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center md:gap-16">
             <div className="rev max-w-[640px]">
-              <h1 className="text-white leading-[1.05]">
-                The future of pet care isn&apos;t built{" "}
+              <h1 className="text-white [font-size:clamp(2rem,3.8vw,3.4rem)] leading-[1.05]">
+                The future of pet care{" "}
+                <span className="squig">
+                  isn&apos;t built
+                  <svg viewBox="0 0 180 12" aria-hidden preserveAspectRatio="none">
+                    <path d="M2,9 Q22,2 45,8 Q68,14 90,7 Q112,0 135,8 Q157,14 178,7"/>
+                  </svg>
+                </span>{" "}
                 <em className="not-italic text-gold">behind closed doors.</em>
               </h1>
               <p className="mt-5 text-[1.15rem] leading-relaxed text-white/80 md:text-[1.25rem]">
@@ -238,7 +244,7 @@ export default function CommunityClient({
           <div className="rev grid gap-8 md:grid-cols-2 md:items-center md:gap-16">
             <div>
               <p className="eyebrow">Why this matters</p>
-              <h2 className="mt-2">
+              <h2 className="mt-2 text-heading-mid">
                 For too long, the pet care industry has operated in isolation.
               </h2>
               <div className="mt-6 space-y-4 text-ink-soft leading-relaxed">
@@ -308,7 +314,7 @@ export default function CommunityClient({
         <div className="relative z-10 mx-auto max-w-[1160px]">
           <div className="rev text-center md:text-left">
             <p className="eyebrow !text-gold">Limited offer</p>
-            <h2 className="mt-2 !text-white">The Founding One Hundred.</h2>
+            <h2 className="mt-2 text-heading-mid !text-white">The Founding One Hundred.</h2>
             <p className="mt-4 max-w-[680px] text-[1.1rem] text-white/80 leading-relaxed md:mx-0 mx-auto">
               We&apos;re selecting 100 pet businesses to join Genera before we
               open to the public. You&apos;ll get three months completely free,
@@ -365,7 +371,7 @@ export default function CommunityClient({
         <div className="mx-auto max-w-[1160px]">
           <div className="rev text-center">
             <p className="eyebrow">Genera Business Network</p>
-            <h2 className="mt-2">More than software. A community.</h2>
+            <h2 className="mt-2 text-heading-mid">More than software. A community.</h2>
             <p className="mx-auto mt-4 max-w-[600px] text-ink-soft leading-relaxed">
               Founding members get early access to the Genera Business Network
               — a private community of verified pet care professionals built to
@@ -434,7 +440,7 @@ export default function CommunityClient({
 
             <div className="rev d2">
               <p className="eyebrow">Supported by a team who&apos;ve been there</p>
-              <h2 className="mt-2">
+              <h2 className="mt-2 text-heading-mid">
                 Genera isn&apos;t built by people who{" "}
                 <em>read about</em> pet care.
               </h2>
@@ -472,7 +478,7 @@ export default function CommunityClient({
         <div className="relative z-10 mx-auto max-w-[760px]">
           <div className="rev">
             <p className="eyebrow !text-gold-soft">Only 100 spots</p>
-            <h2 className="mt-2 !text-white">
+            <h2 className="mt-2 text-heading-mid !text-white">
               First come, first in.
             </h2>
             <p className="mx-auto mt-4 max-w-[560px] text-[1.1rem] text-white/80 leading-relaxed">
