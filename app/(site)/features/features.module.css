@@ -1,0 +1,1590 @@
+/* ─────────────────────────────────────────────────────────────
+   Features page — component-scoped styles
+   Tailwind handles layout / colour / spacing; this file covers
+   the things Tailwind can't: CSS animations, phone/browser
+   chrome, perspective rotations, and clip-path tricks.
+   ───────────────────────────────────────────────────────────── */
+
+/* ── Bullets ─────────────────────────────────────────────────── */
+.bullets {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+  display: grid;
+  gap: 10px;
+}
+.bullets li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  color: #003E45;
+  font-weight: 700;
+  font-size: 1rem;
+}
+.bullets li::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #FFA800;
+  flex: 0 0 auto;
+  margin-top: 7px;
+}
+
+/* ── Phone frame ─────────────────────────────────────────────── */
+.phone {
+  background: linear-gradient(145deg, #fff, #dfe7ea);
+  border-radius: 36px;
+  padding: 10px 8px 14px;
+  box-shadow: 0 34px 70px rgba(0,62,69,.24), inset 0 2px 4px rgba(255,255,255,.95);
+  border: 1px solid rgba(0,62,69,.18);
+  overflow: hidden;
+}
+.phoneScreen {
+  border-radius: 28px;
+  background: #f5f7f8;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+  position: relative;   /* needed for next/image fill */
+}
+
+/* Screen heights */
+.scrStd  { height: 420px; }
+.scrTall { height: 500px; }
+.scrXl   { height: 560px; }
+.scrXxl  { height: 580px; }
+.scrLg   { height: 610px; }
+.scrPay  { height: 560px; }
+
+/* Two phones side by side (Bookings) */
+.twoPhones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  align-items: end;
+  min-height: 680px;
+}
+.twoPhones .phone:first-child {
+  transform: rotate(-2deg);
+  opacity: .92;
+}
+.twoPhones .phone:last-child {
+  box-shadow:
+    0 44px 90px rgba(0,0,0,.32),
+    0 18px 36px rgba(0,40,48,.20),
+    inset 0 2px 4px rgba(255,255,255,.95);
+  margin-bottom: 18px;
+}
+
+/* Portal two phones */
+.portalPhones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: center;
+  min-height: 620px;
+}
+.portalPhones .phone { width: 100%; max-width: 340px; justify-self: center; }
+.portalPhones .phone:first-child {
+  transform: rotate(-2.5deg);
+  box-shadow: 0 46px 90px rgba(0,62,69,.30), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
+}
+.portalPhones .phone:last-child {
+  transform: rotate(2.5deg);
+  box-shadow: 0 46px 90px rgba(0,62,69,.28), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
+}
+
+/* Single centred phone (Staff, Payments, Daily, Routing) */
+.singlePhone {
+  display: grid;
+  place-items: center;
+}
+
+/* Specific phone styles */
+.phoneRoute {
+  width: min(340px, 100%);
+  transform: rotate(-2deg);
+  box-shadow: 0 46px 90px rgba(0,62,69,.28), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
+}
+.phoneStaff {
+  width: min(330px, 100%);
+  transform: rotate(2deg);
+  box-shadow: 0 46px 90px rgba(0,62,69,.28), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
+}
+.phonePayment {
+  width: min(360px, 100%);
+  transform: rotate(-2deg);
+  box-shadow: 0 46px 90px rgba(0,62,69,.28), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
+}
+.phoneDaily {
+  width: min(380px, 96%);
+  transform: rotate(-1deg);
+  box-shadow: 0 46px 90px rgba(0,62,69,.30), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
+}
+
+/* ── Browser chrome ──────────────────────────────────────────── */
+.browserChrome {
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 72px rgba(0,62,69,.18), 0 8px 24px rgba(0,62,69,.10);
+  border: 1px solid rgba(0,62,69,.10);
+}
+.chromeBar {
+  background: #f0f2f4;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  flex-shrink: 0;
+}
+.chromeDots { display: flex; gap: 6px; }
+.chromeDot  { width: 12px; height: 12px; border-radius: 50%; }
+.dot1 { background: #ff5f57; }
+.dot2 { background: #febc2e; }
+.dot3 { background: #28c840; }
+.chromeUrl {
+  flex: 1;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.10);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: .75rem;
+  color: #6b7280;
+  font-family: var(--font-niveau);
+}
+
+/* Capacity zoom — crop sidebar, zoom into service rows */
+.capacityImgCrop {
+  height: 420px;
+  overflow: hidden;
+  clip-path: inset(0);   /* reliably clips CSS-transformed children cross-browser */
+}
+.capacityImgCrop img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transform-origin: 78% 82%;
+  transform: scale(1.85);
+}
+
+/* ── Floating animated badge (used on Daily Schedule, Routing, Payments) ── */
+/* badgeWrap must be a block with a known width so the phone's min(380px, 96%)
+   can resolve correctly — inline-block collapses the phone to a thin strip   */
+.badgeWrap {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+.floatBadge {
+  position: absolute;
+  right: -10px;
+  top: 36px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .78rem;
+  white-space: nowrap;
+  box-shadow: 0 12px 32px rgba(0,62,69,.24);
+  z-index: 3;
+  animation: badgeFloat 3.4s ease-in-out infinite;
+}
+.badgeGold  { background: #FFA800; color: #002830; }
+.badgeTeal  { background: #003E45; color: #fff; }
+.badgeWhite { background: #fff;    color: #003E45; }
+
+@keyframes badgeFloat {
+  0%, 100% { transform: translateY(0) rotate(2deg); }
+  50%       { transform: translateY(-10px) rotate(2deg); }
+}
+
+/* ── Booking flow animation ──────────────────────────────────── */
+.bookingAnimation {
+  position: relative;
+  min-height: 640px;
+  display: grid;
+  place-items: center;
+}
+.animatedPhone {
+  width: 290px;
+  height: 610px;
+  border-radius: 46px;
+  padding: 14px 11px 18px;
+  background: linear-gradient(145deg, #fff 0%, #dfe8ec 100%);
+  border: 1px solid rgba(0,62,69,.22);
+  box-shadow:
+    0 46px 90px rgba(0,62,69,.28),
+    0 18px 36px rgba(0,40,48,.18),
+    inset 0 3px 5px rgba(255,255,255,.95),
+    inset 0 -4px 8px rgba(0,62,69,.10);
+  transform: rotate(-2deg);
+}
+.animatedScreen {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 34px;
+  background: #f5f7f8;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+}
+.animatedNotch {
+  width: 62px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(0,62,69,.18);
+  margin: 12px auto 8px;
+}
+.stepTrack {
+  height: 3px;
+  background: rgba(0,62,69,.10);
+  margin: 6px 20px 0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.stepFill {
+  height: 100%;
+  background: #FFA800;
+  border-radius: 2px;
+  animation: stepGrow 8s steps(1, end) infinite;
+}
+.portalTop {
+  padding: 8px 16px 10px;
+  border-bottom: 1px solid rgba(0,62,69,.08);
+  background: #fff;
+}
+.stepLabel {
+  font-size: .62rem;
+  font-weight: 700;
+  color: #4B5563;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.portalPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #E0F0F2;
+  color: #003E45;
+  font-weight: 800;
+  font-size: .7rem;
+  margin-bottom: 3px;
+}
+.portalTitle {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: 1.3rem;
+  line-height: 1.05;
+  margin-top: 4px;
+}
+.bookingStage {
+  position: relative;
+  height: 420px;
+  padding: 14px;
+}
+.bookingCard {
+  position: absolute;
+  inset: 14px;
+  background: #fff;
+  border: 1px solid rgba(0,62,69,.09);
+  border-radius: 20px;
+  padding: 16px 16px 68px;
+  box-shadow: 0 12px 32px rgba(0,62,69,.09);
+  opacity: 0;
+  transform: translateY(22px) scale(.98);
+  animation: bookingStep 8s cubic-bezier(.4,0,.2,1) infinite;
+}
+.bookingCard:nth-child(2) { animation-delay: 2s; }
+.bookingCard:nth-child(3) { animation-delay: 4s; }
+.bookingCard:nth-child(4) { animation-delay: 6s; padding-bottom: 22px; }
+
+.cardTitle {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+.cardBody {
+  margin: -4px 0 14px;
+  color: #4B5563;
+  font-size: .74rem;
+  line-height: 1.45;
+}
+.dogRow,
+.serviceRow,
+.summaryRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(0,62,69,.10);
+  margin-bottom: 10px;
+  color: #003E45;
+  font-weight: 800;
+  font-size: .82rem;
+}
+.dogAvatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #003E45;
+  color: #FFA800;
+  display: grid;
+  place-items: center;
+  font-size: .78rem;
+  font-family: var(--font-massilia);
+  font-weight: 900;
+  flex: 0 0 auto;
+}
+.rowMeta {
+  display: block;
+  margin-top: 2px;
+  color: #4B5563;
+  font-size: .68rem;
+  font-weight: 700;
+}
+.serviceIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background: rgba(255,168,0,.16);
+  display: grid;
+  place-items: center;
+  color: #FFA800;
+  font-size: 1rem;
+  flex: 0 0 auto;
+}
+.calendarMini {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-top: 12px;
+}
+.calDay {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: #F8FAFB;
+  color: #003E45;
+  font-weight: 800;
+  font-size: .64rem;
+}
+.calPicked {
+  background: #FFA800;
+  box-shadow: 0 8px 18px rgba(255,168,0,.28);
+}
+.requestBtn {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  height: 44px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: #FFA800;
+  color: #002830;
+  font-family: var(--font-massilia);
+  font-weight: 900;
+  font-size: .85rem;
+}
+.approvalCard {
+  border: 1px solid rgba(0,62,69,.10);
+  border-radius: 16px;
+  padding: 13px;
+  background: #F8FAFB;
+  color: #003E45;
+  font-weight: 800;
+  font-size: .85rem;
+  margin-bottom: 12px;
+}
+.approvalCard small {
+  display: block;
+  margin-top: 5px;
+  color: #4B5563;
+  font-weight: 700;
+  line-height: 1.35;
+  font-size: .72rem;
+}
+.approvalChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 11px;
+  border-radius: 999px;
+  background: #FFF3CC;
+  color: #9A5A00;
+  font-weight: 900;
+  font-size: .78rem;
+  margin-top: 6px;
+}
+
+/* Flow caption dots below the phone stage */
+.flowCaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -22px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.flowDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(0,62,69,.18);
+  animation: dotPulse 10s infinite;
+}
+.flowDot:nth-child(2) { animation-delay: 2.5s; }
+.flowDot:nth-child(3) { animation-delay: 5s; }
+.flowDot:nth-child(4) { animation-delay: 7.5s; }
+
+/* Floating icons beside the animated phone */
+.floatIcon {
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  box-shadow: 0 12px 32px rgba(0,62,69,.22);
+  z-index: 2;
+}
+.floatOne {
+  background: #fff;
+  top: 48px;
+  left: 8px;
+  animation: floatIconLeft 3.5s ease-in-out infinite;
+}
+.floatTwo {
+  background: #003E45;
+  color: #fff;
+  bottom: 88px;
+  right: 8px;
+  font-size: 1.3rem;
+  animation: floatIconRight 3.5s ease-in-out 1.8s infinite;
+}
+
+/* ── Feature nav bar ─────────────────────────────────────────── */
+.featureNav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,62,69,.10);
+}
+.featureNavInner {
+  max-width: 1380px;
+  margin: 0 auto;
+  display: flex;
+  gap: 2px;
+  flex-wrap: nowrap;
+  padding: 8px clamp(16px,3vw,56px);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.featureNavInner::-webkit-scrollbar { display: none; }
+.navLink {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: transparent;
+  color: #5a7a7e;
+  font-size: .78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .18s, color .18s;
+  white-space: nowrap;
+  text-decoration: none;
+  font-family: var(--font-massilia);
+  letter-spacing: .01em;
+}
+.navLink:hover { background: rgba(0,62,69,.06); color: #003E45; }
+.navLinkActive {
+  background: #003E45 !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(0,62,69,.20);
+}
+
+/* ── Keyframes ───────────────────────────────────────────────── */
+@keyframes bookingStep {
+  0%   { opacity: 0; transform: translateY(20px) scale(.98); }
+  10%  { opacity: 1; transform: translateY(0) scale(1); }
+  72%  { opacity: 1; transform: translateY(0) scale(1); }
+  85%  { opacity: 0; transform: translateY(-14px) scale(.99); }
+  100% { opacity: 0; transform: translateY(-14px) scale(.99); }
+}
+@keyframes stepGrow {
+  0%   { width: 5%; }
+  25%  { width: 25%; }
+  50%  { width: 50%; }
+  75%  { width: 75%; }
+  99%  { width: 100%; }
+  100% { width: 5%; }
+}
+@keyframes dotPulse {
+  0%, 19%   { background: #FFA800; transform: scale(1.35); }
+  25%, 100% { background: rgba(0,62,69,.18); transform: scale(1); }
+}
+@keyframes floatIconLeft {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50%       { transform: translateY(-12px) rotate(-4deg); }
+}
+@keyframes floatIconRight {
+  0%, 100% { transform: translateY(0) rotate(4deg); }
+  50%       { transform: translateY(-12px) rotate(4deg); }
+}
+
+/* ── Capacity animated component ────────────────────────────── */
+.capacityAnim {
+  background: #f5f7f8;
+  padding: 4px 0 0;
+}
+.capRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 22px;
+  border-bottom: 1px solid rgba(0,62,69,.07);
+}
+.capLabel {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .9rem;
+}
+.capSub {
+  color: #9CA3AF;
+  font-size: .7rem;
+  margin-top: 2px;
+}
+.capInput {
+  min-width: 76px;
+  height: 40px;
+  border: 1.5px solid rgba(0,62,69,.18);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #003E45;
+  background: #fff;
+  flex-shrink: 0;
+  transition: border-color .25s, color .25s;
+}
+.capInputFilled {
+  border-color: #FFA800;
+  color: #FFA800;
+}
+.capFooter {
+  padding: 12px 22px 14px;
+  display: flex;
+  justify-content: flex-end;
+}
+.capSaveBtn {
+  padding: 9px 22px;
+  border-radius: 8px;
+  background: rgba(0,62,69,.10);
+  color: #9CA3AF;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .85rem;
+  transition: background .4s, color .4s;
+  user-select: none;
+}
+.capSaveBtnActive {
+  background: #FFA800;
+  color: #002830;
+}
+
+/* ── Notification toggles animated component ─────────────────── */
+.notifWrap {
+  padding: 14px 12px 10px;
+  background: #f5f7f8;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+.notifTitle {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .8rem;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0,62,69,.10);
+  margin-bottom: 2px;
+}
+.notifRow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid rgba(0,62,69,.07);
+  flex-shrink: 0;
+}
+.notifIcon { font-size: .95rem; flex-shrink: 0; }
+.notifRowText { flex: 1; min-width: 0; }
+.notifRowLabel {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .76rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.notifRowSub {
+  color: #9CA3AF;
+  font-size: .62rem;
+  line-height: 1.3;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.notifToggle {
+  width: 38px;
+  height: 21px;
+  border-radius: 999px;
+  background: #D1D5DB;
+  position: relative;
+  flex-shrink: 0;
+  transition: background .35s ease;
+}
+.notifToggleOn { background: #FFA800; }
+.notifThumb {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #fff;
+  top: 3px;
+  left: 3px;
+  transition: transform .35s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,.25);
+}
+.notifToggleOn .notifThumb { transform: translateX(17px); }
+
+/* ── Bookings admin animation ─────────────────────────────── */
+.bookAdminWrap {
+  background: #f5f7f8;
+  padding: 16px 14px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.bookAdminTitle {
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  color: #003E45;
+  font-size: .95rem;
+  padding-bottom: 9px;
+  border-bottom: 1px solid rgba(0,62,69,.10);
+}
+.bookAdminField {
+  background: #fff;
+  border: 1px solid rgba(0,62,69,.10);
+  border-radius: 10px;
+  padding: 9px 12px;
+}
+.bookAdminFieldLabel {
+  font-size: .62rem;
+  font-weight: 700;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 3px;
+}
+.bookAdminFieldValue {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .86rem;
+}
+.bookAdminDropdown {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .86rem;
+  transition: color .3s;
+}
+.bookAdminDropdownActive { color: #FFA800; }
+.bookAdminChevron { color: #9CA3AF; font-size: .7rem; }
+.bookAdminToggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid rgba(0,62,69,.10);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  font-size: .86rem;
+  color: #003E45;
+}
+.bookAdminSubmit {
+  margin-top: auto;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(0,62,69,.10);
+  color: #9CA3AF;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .86rem;
+  text-align: center;
+  transition: background .4s, color .4s;
+}
+.bookAdminSubmitReady {
+  background: #003E45;
+  color: #fff;
+}
+
+/* ── Bookings pending animation ──────────────────────────────── */
+.pendingWrap {
+  background: #f5f7f8;
+  padding: 12px 11px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  overflow: hidden;
+}
+.pendingWrapTitle {
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  color: #003E45;
+  font-size: .88rem;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(0,62,69,.10);
+}
+.pendingItem {
+  background: #fff;
+  border: 1px solid rgba(0,62,69,.08);
+  border-radius: 12px;
+  padding: 10px 11px;
+}
+.pendingItemTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+.pendingItemDate {
+  font-size: .7rem;
+  font-weight: 700;
+  color: #4B5563;
+}
+.pendingItemBadge {
+  font-size: .62rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #FFF3CC;
+  color: #9A5A00;
+  transition: background .35s, color .35s;
+}
+.pendingItemBadgeAccepted { background: #D1FAE5; color: #065F46; }
+.pendingDogRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.pendingDogAvatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #003E45;
+  color: #FFA800;
+  display: grid;
+  place-items: center;
+  font-size: .68rem;
+  font-weight: 800;
+  font-family: var(--font-massilia);
+  flex-shrink: 0;
+}
+.pendingDogName {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .78rem;
+}
+.pendingDogService { font-size: .66rem; color: #6B7280; margin-top: 1px; }
+.pendingActions { display: flex; gap: 6px; }
+.pendingAcceptBtn {
+  flex: 1;
+  padding: 7px;
+  border-radius: 8px;
+  background: #003E45;
+  color: #fff;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .72rem;
+  text-align: center;
+}
+.pendingDeclineBtn {
+  flex: 1;
+  padding: 7px;
+  border-radius: 8px;
+  background: #FEE2E2;
+  color: #DC2626;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .72rem;
+  text-align: center;
+}
+
+/* ── Daily schedule animation ────────────────────────────────── */
+.schedWrap {
+  background: #f5f7f8;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.schedTopBar {
+  background: #fff;
+  padding: 7px 12px;
+  border-bottom: 1px solid rgba(0,62,69,.08);
+  color: #9CA3AF;
+  font-size: .7rem;
+}
+.schedTitle {
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  color: #003E45;
+  font-size: .92rem;
+  padding: 9px 12px 1px;
+}
+.schedSubTitle {
+  color: #9CA3AF;
+  font-size: .62rem;
+  padding: 0 12px 6px;
+}
+.schedTabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 12px 7px;
+}
+.schedTab {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+  color: #6B7280;
+  font-size: .68rem;
+  background: rgba(0,62,69,.06);
+}
+.schedTabActive { background: #FFA800; color: #002830; }
+.schedDate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 5px 12px;
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .76rem;
+  border-top: 1px solid rgba(0,62,69,.07);
+  border-bottom: 1px solid rgba(0,62,69,.07);
+}
+.schedFilters {
+  display: flex;
+  gap: 4px;
+  padding: 5px 12px;
+}
+.schedFilterChip {
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: .62rem;
+  font-weight: 700;
+  background: rgba(0,62,69,.08);
+  color: #003E45;
+  white-space: nowrap;
+}
+.schedFilterChipActive { background: #003E45; color: #fff; }
+.schedCreateBtn {
+  display: block;
+  width: fit-content;
+  margin: 3px 12px 5px auto;
+  background: #FFA800;
+  color: #002830;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .72rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+.schedList {
+  flex: 1;
+  overflow: hidden;
+  padding: 0 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.schedRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 7px 9px;
+  border: 1px solid rgba(0,62,69,.07);
+}
+.schedRowNew { animation: schedRowEnter .4s ease both; }
+@keyframes schedRowEnter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.schedAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #003E45;
+  color: #FFA800;
+  display: grid;
+  place-items: center;
+  font-size: .68rem;
+  font-weight: 800;
+  font-family: var(--font-massilia);
+  flex-shrink: 0;
+}
+.schedDogName { font-family: var(--font-massilia); font-weight: 700; color: #003E45; font-size: .78rem; }
+.schedDogSub  { color: #9CA3AF; font-size: .62rem; }
+.schedWeeks   { margin-left: auto; font-size: .62rem; color: #9CA3AF; white-space: nowrap; }
+.schedViewBtn { font-family: var(--font-massilia); font-weight: 700; color: #FFA800; font-size: .68rem; white-space: nowrap; margin-left: 4px; }
+
+/* ── Customer portal animations ──────────────────────────────── */
+.cpProfileWrap {
+  background: #f5f7f8;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.cpUrlBar {
+  background: #F1F3F4;
+  padding: 6px 14px;
+  font-size: .62rem;
+  color: #6B7280;
+  text-align: center;
+  border-bottom: 1px solid rgba(0,62,69,.07);
+  letter-spacing: .01em;
+}
+.cpBackRow {
+  background: #fff;
+  padding: 8px 12px;
+  font-size: .7rem;
+  color: #003E45;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(0,62,69,.08);
+}
+.cpSection {
+  background: #fff;
+  margin: 5px 8px;
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0,62,69,.08);
+}
+.cpSectionTitle {
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  color: #003E45;
+  font-size: .8rem;
+  margin-bottom: 5px;
+}
+.cpMembershipDesc {
+  font-size: .66rem;
+  color: #6B7280;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+.cpMembershipBtn {
+  width: 100%;
+  padding: 9px;
+  border-radius: 10px;
+  background: #FFA800;
+  color: #002830;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .76rem;
+  text-align: center;
+  transition: background .35s, color .35s;
+}
+.cpMembershipBtnDone { background: #003E45; color: #fff; }
+.cpField {
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0,62,69,.06);
+  display: flex;
+  gap: 8px;
+}
+.cpFieldLabel { width: 88px; font-size: .66rem; color: #9CA3AF; font-weight: 600; flex-shrink: 0; }
+.cpFieldValue { font-size: .74rem; font-family: var(--font-massilia); font-weight: 700; color: #003E45; }
+.cpBookingWrap {
+  background: #f5f7f8;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.cpBookingHeader {
+  background: #fff;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(0,62,69,.08);
+}
+.cpBookingTitle { font-family: var(--font-massilia); font-weight: 800; color: #003E45; font-size: .88rem; }
+.cpBookingDate  { font-size: .68rem; color: #6B7280; margin-top: 2px; }
+.cpServiceLabel {
+  padding: 7px 12px 3px;
+  font-size: .6rem;
+  font-weight: 700;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.cpServiceRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(0,62,69,.05);
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .8rem;
+  transition: background .3s, color .3s;
+}
+.cpServiceRowSelected { background: #FFF3CC; color: #9A5A00; }
+.cpServiceIcon { font-size: .88rem; }
+
+/* ── Payments animation ──────────────────────────────────────── */
+.paymentsAnimWrap {
+  background: #f5f7f8;
+  padding: 10px 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  overflow: hidden;
+}
+.pmHeader {
+  padding: 4px 2px 8px;
+  border-bottom: 1px solid rgba(0,62,69,.08);
+  margin-bottom: 2px;
+}
+.pmHeaderTitle {
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  color: #003E45;
+  font-size: .92rem;
+}
+.pmHeaderSub {
+  font-size: .65rem;
+  color: #9CA3AF;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+.pmCard {
+  background: #fff;
+  border: 1px solid rgba(0,62,69,.09);
+  border-radius: 12px;
+  padding: 11px 11px 9px;
+}
+.pmCardActive { border-color: rgba(0,150,80,.25); background: #F0FFF7; }
+.pmCardTop { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 7px; }
+.pmIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-massilia);
+  font-weight: 900;
+  font-size: .82rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.pmName { font-family: var(--font-massilia); font-weight: 700; color: #003E45; font-size: .8rem; }
+.pmSub  { font-size: .62rem; color: #9CA3AF; line-height: 1.3; margin-top: 2px; }
+.pmStatusNotSet  { font-size: .68rem; color: #9CA3AF; font-weight: 600; margin-top: 3px; }
+.pmStatusConnecting { font-size: .68rem; color: #FFA800; font-weight: 700; margin-top: 3px; }
+.pmStatusConnected  { font-size: .68rem; color: #059669; font-weight: 700; margin-top: 3px; }
+.pmInUse {
+  font-size: .58rem;
+  background: #D1FAE5;
+  color: #065F46;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-weight: 700;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+.pmConnectBtn {
+  width: 100%;
+  padding: 7px;
+  border-radius: 8px;
+  background: #635BFF;
+  color: #fff;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .72rem;
+  text-align: center;
+  transition: background .4s;
+}
+.pmManageBtn { background: rgba(0,62,69,.08); color: #003E45; }
+
+/* ── Dog records animation ───────────────────────────────────── */
+.dogRecordsWrap {
+  background: #f5f7f8;
+  padding: 14px 18px 0;
+}
+.dogRecordsHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.dogRecordsTitle    { font-family: var(--font-massilia); font-weight: 800; color: #003E45; font-size: 1rem; }
+.dogRecordsSub      { color: #9CA3AF; font-size: .74rem; margin-top: 2px; }
+.dogRecordsAddBtn {
+  background: #FFA800;
+  color: #002830;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .78rem;
+  padding: 7px 13px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.dogRecordsTable { width: 100%; border-collapse: collapse; }
+.dogRecordsTable th {
+  padding: 7px 10px;
+  text-align: left;
+  font-size: .68rem;
+  font-weight: 700;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  border-bottom: 1px solid rgba(0,62,69,.10);
+}
+.dogRecordsTable td { padding: 11px 10px; border-bottom: 1px solid rgba(0,62,69,.06); vertical-align: top; }
+.dogRecordsTypeCell {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .8rem;
+  white-space: nowrap;
+}
+.dogRecordsTypeIcon { font-size: .9rem; }
+.dogRecordDetail { font-size: .76rem; color: #4B5563; max-width: 340px; line-height: 1.4; }
+.dogRecordDate   { font-size: .72rem; color: #9CA3AF; white-space: nowrap; }
+.dogRecordDelete { font-size: .72rem; color: #FFA800; font-weight: 700; white-space: nowrap; }
+.dogRecordNewRow td { background: #FFFEF0; }
+.dogRecordCursor {
+  animation: cursorBlink .7s step-end infinite;
+  color: #003E45;
+  font-weight: 400;
+}
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Routing animation ───────────────────────────────────────── */
+.routeWrap {
+  background: #f5f7f8;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.routeHeader {
+  background: #fff;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(0,62,69,.08);
+}
+.routeRouteName { font-size: .62rem; font-weight: 700; color: #9CA3AF; text-transform: uppercase; letter-spacing: .06em; }
+.routeDate { font-family: var(--font-massilia); font-weight: 800; color: #003E45; font-size: .88rem; margin: 2px 0; }
+.routeCompleted { font-size: .68rem; color: #6B7280; font-weight: 600; }
+.routeStopList { flex: 1; overflow: hidden; padding: 8px 12px; display: flex; flex-direction: column; gap: 5px; }
+.routeStop {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 10px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid rgba(0,62,69,.07);
+  transition: opacity .4s;
+}
+.routeStopDone { opacity: .45; }
+.routeCheckCircle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,62,69,.20);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-size: .6rem;
+  font-weight: 800;
+  color: transparent;
+  transition: background .3s, border-color .3s, color .3s;
+}
+.routeCheckCircleDone { background: #003E45; border-color: #003E45; color: #fff; }
+.routeStopNum  { font-family: var(--font-massilia); font-weight: 700; color: #003E45; font-size: .8rem; }
+.routeStopOwner{ font-size: .66rem; color: #6B7280; margin-top: 1px; }
+.routeStopAddr { font-size: .6rem; color: #9CA3AF; margin-top: 1px; }
+.routeNavBar {
+  display: flex;
+  justify-content: space-around;
+  padding: 9px 8px;
+  border-top: 1px solid rgba(0,62,69,.08);
+  background: #fff;
+  font-size: .6rem;
+  font-weight: 700;
+  color: #9CA3AF;
+}
+.routeNavActive { color: #FFA800; font-size: .88rem; }
+
+/* ── Staff animation ─────────────────────────────────────────── */
+.staffAnimWrap {
+  background: #f5f7f8;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.staffTopTabs {
+  background: #fff;
+  padding: 7px 10px;
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid rgba(0,62,69,.08);
+}
+.staffTopTab { font-size: .62rem; font-weight: 700; color: #9CA3AF; padding: 3px 6px; }
+.staffTopTabActive { background: #003E45; color: #fff; border-radius: 6px; }
+.staffSectionLabel {
+  padding: 8px 12px 3px;
+  font-size: .6rem;
+  font-weight: 700;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.staffTimeCard { margin: 3px 10px 5px; border-radius: 14px; padding: 11px 13px; }
+.staffCardRow  { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+.staffCardEmoji { font-size: .88rem; }
+.staffCardName  { font-family: var(--font-massilia); font-weight: 800; color: #003E45; font-size: .8rem; flex: 1; }
+.staffCardBalance { font-size: .7rem; font-weight: 700; color: #6B7280; }
+.staffUsed { font-size: .66rem; color: #9CA3AF; margin-bottom: 7px; }
+.staffReqBtn {
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  background: #FFA800;
+  color: #002830;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .74rem;
+  text-align: center;
+  transition: background .35s, color .35s;
+}
+.staffReqBtnPending  { background: #FFF3CC; color: #9A5A00; }
+.staffReqBtnApproved { background: #D1FAE5; color: #065F46; }
+
+/* ════════════════════════════════════════════════════════════
+   FEATURES 2.0 — category bands + calm alternating feature rows
+   Replaces the colour-cycling .block cards with a restrained,
+   hierarchical layout: numbered category headers, then 2-column
+   feature rows that flip side-to-side down the page.
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Hero browser + floating phone ───────────────────────────── */
+.heroBrowser {
+  transform: perspective(1600px) rotateY(-9deg) rotateX(3deg) rotate(.5deg);
+  box-shadow: 0 50px 100px rgba(0,20,24,.5), 0 18px 40px rgba(0,20,24,.35);
+}
+.heroVisual { position: relative; }
+.heroFloat {
+  position: absolute;
+  left: -26px;
+  bottom: -26px;
+  width: 172px;
+  z-index: 3;
+  filter: drop-shadow(0 26px 50px rgba(0,20,24,.5));
+  transform: rotate(-5deg);
+}
+.heroFloat .heroFloatScreen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 172 / 372;
+  border-radius: 26px;
+  overflow: hidden;
+}
+
+/* ── Category band header ────────────────────────────────────── */
+.cat { padding-top: clamp(46px, 6vw, 80px); }
+.catInner {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(0,62,69,.12);
+  padding-bottom: 20px;
+}
+.catNo {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  font-size: .92rem;
+  color: #FFA800;
+  letter-spacing: .16em;
+}
+.catTitle {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  color: #003E45;
+  line-height: 1.06;
+}
+.catDesc {
+  margin-left: auto;
+  max-width: 42ch;
+  color: #6B7280;
+  font-size: .96rem;
+  line-height: 1.5;
+}
+
+/* ── Feature row — the consistent unit ───────────────────────── */
+.feat {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+  gap: clamp(36px, 5vw, 72px);
+  align-items: center;
+  padding-block: clamp(48px, 6.5vw, 92px);
+}
+.feat + .feat { border-top: 1px solid rgba(0,62,69,.12); }
+.featFlip .featCopy   { order: 2; }
+.featFlip .featVisual { order: 1; }
+
+.featKicker {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+.featNum {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  font-size: .86rem;
+  color: #003E45;
+  background: #E0F0F2;
+  border-radius: 8px;
+  padding: 3px 9px;
+  letter-spacing: .04em;
+}
+.featEyebrow {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  font-size: .78rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #005060;
+}
+.featOnly {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFA800;
+  color: #002830;
+  border-radius: 999px;
+  padding: 4px 11px;
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  font-size: .72rem;
+}
+.featOnly::before { content: "★"; font-size: .7rem; }
+.featTitle {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+  color: #003E45;
+  line-height: 1.06;
+  max-width: 18ch;
+}
+.featLead {
+  margin-top: 14px;
+  color: #4B5563;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  max-width: 46ch;
+}
+.featVisual {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  width: 100%;
+}
+
+/* Two scrStd phones side by side (Customisation) */
+.twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: end;
+  width: 100%;
+}
+
+/* ════════════════════ HERO ADMIN CALENDAR ════════════════════ */
+.adminCal { background: #fff; color: #1f2937; font-family: var(--font-niveau); }
+.adminCalHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1efec;
+}
+.adminCalTitle { font-family: var(--font-massilia); font-weight: 700; color: #003E45; font-size: 1.05rem; line-height: 1; }
+.adminCalSub { font-size: .66rem; color: #9b938c; margin-top: 4px; }
+.adminStats {
+  display: flex;
+  background: #fff;
+  border-radius: 11px;
+  padding: 3px 4px;
+  box-shadow: 0 1px 0 rgba(0,0,0,.04);
+  border: 1px solid #efeae6;
+}
+.adminStat { padding: 3px 11px; display: flex; flex-direction: column; gap: 2px; border-right: 1px solid #f0ece8; }
+.adminStat:last-child { border-right: none; }
+.adminStatL { font-size: .56rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #a9a29b; }
+.adminStatV { font-family: var(--font-massilia); font-weight: 700; color: #003E45; font-size: .92rem; font-variant-numeric: tabular-nums; }
+.adminStatTotal .adminStatV { font-weight: 800; }
+.adminNewBtn {
+  background: #003E45;
+  color: #fff;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-family: var(--font-massilia);
+  font-weight: 600;
+  font-size: .72rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.adminWeekdays { display: grid; grid-template-columns: repeat(7,1fr); background: #fafafa; border-bottom: 1px solid #ececec; }
+.adminWeekdays div { text-align: center; padding: 6px 0; font-size: .6rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #a9a29b; }
+.adminGrid { display: grid; grid-template-columns: repeat(7,1fr); grid-auto-rows: 1fr; gap: 1px; background: #ececec; position: relative; }
+.adminCell { background: #fff; padding: 5px 6px; min-height: 58px; position: relative; }
+.adminCellOff { background: #fafafa; }
+.adminCellToday { background: #fff9ec; }
+.adminCellTop { display: flex; align-items: center; justify-content: space-between; }
+.adminDay { font-size: .72rem; font-weight: 700; color: #57534e; font-variant-numeric: tabular-nums; }
+.adminCellOff .adminDay { color: #bcb6af; font-weight: 500; }
+.adminCellToday .adminDay { color: #003E45; font-weight: 800; }
+.adminFull { font-size: .52rem; font-weight: 800; color: #dc2626; background: #fef2f2; border: 1px solid rgba(220,38,38,.12); border-radius: 999px; padding: 0 6px; }
+.adminChip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 2px 5px;
+  font-size: .56rem;
+  font-weight: 700;
+  color: #57534e;
+  line-height: 1.3;
+  opacity: 0;
+  transform: translateY(4px);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.adminChipIn { opacity: 1; transform: none; transition: opacity .35s ease, transform .35s ease; }
+.adminChipAmber { background: #fffbeb; border-color: #fef3c7; color: #b45309; }
+.adminChipIc { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
+.adminChipAmber .adminChipIc { background: #f59e0b; }
+.icSun { background: #f59e0b; }
+.icMoon { background: #4f46e5; }
+.icCombo { background: linear-gradient(90deg,#f59e0b 50%,#4f46e5 50%); }
+.icMeet { background: #0ea5e9; }
+.icCake { background: #ec4899; }
+.adminSweep {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 16%;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,.92),transparent);
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 920px) {
+  .feat { grid-template-columns: 1fr; gap: 32px; padding-block: clamp(36px, 8vw, 56px); }
+  .featFlip .featCopy   { order: 1; }
+  .featFlip .featVisual { order: 2; }
+  .catDesc { margin-left: 0; }
+  .capacityImgCrop { height: 260px; }
+  .bookingAnimation { min-height: 540px; }
+  .animatedPhone { width: 260px; height: 560px; }
+  .twoPhones { grid-template-columns: 1fr 1fr; }
+  .twoPhones .phone:first-child { transform: rotate(-2deg); }
+  .portalPhones { grid-template-columns: 1fr 1fr; }
+  .featureNavInner { padding: 6px 16px; }
+  .floatIcon { display: none; }
+}
+@media (max-width: 620px) {
+  .capacityImgCrop { height: 200px; }
+  .bookingAnimation { min-height: 480px; }
+  .animatedPhone { width: 230px; height: 490px; }
+  /* Two-phone grids: stack to single column, hide the secondary phone */
+  .twoPhones,
+  .portalPhones { grid-template-columns: 1fr; min-height: 0; justify-items: center; }
+  /* width: 100% fills the grid cell (margin:auto collapses it to intrinsic width) */
+  .twoPhones .phone,
+  .portalPhones .phone { transform: none !important; width: 100%; max-width: 310px; }
+  /* Hide the less-important phone in each pair to avoid 1200px-tall stacks */
+  .twoPhones .phone:first-child  { display: none; } /* keep pending-approval (2nd) */
+  .portalPhones .phone:last-child { display: none; } /* keep membership profile (1st) */
+  .phoneRoute,
+  .phoneStaff,
+  .phoneDaily,
+  .phonePayment { transform: none; max-width: 310px; }
+  /* Prevent over-tall phone screens on mobile for content-driven animations */
+  .scrPay, .scrXl { height: 420px; }
+  .scrXxl { height: 380px; }
+  .heroFloat { width: 116px; left: -8px; bottom: -12px; }
+  .featTitle { max-width: none; }
+}
