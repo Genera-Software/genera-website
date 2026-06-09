@@ -4,7 +4,11 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
-import { FOUNDING_100_CTA_LABEL } from "@/lib/cta";
+import {
+  BOOK_DEMO_FORM_SLUG,
+  FOUNDING_100_CTA_LABEL,
+  FOUNDING_100_FORM_SLUG,
+} from "@/lib/cta";
 import s from "./features.module.css";
 
 /* ─────────────────────────────────────────────────────────────
@@ -1045,8 +1049,8 @@ export default function FeaturesClient() {
               Your services, your pricing, your approvals, your dog bus, your team. Genera brings bookings, payments, routes, records, staff and compliance into one operating system — built by a licensed daycare.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
-              <BookDemoButton className="btn btn-gold btn-lg">{FOUNDING_100_CTA_LABEL}</BookDemoButton>
-              <BookDemoButton className="btn btn-outline-w btn-lg">Book a Demo</BookDemoButton>
+              <BookDemoButton slug={FOUNDING_100_FORM_SLUG} className="btn btn-gold btn-lg">{FOUNDING_100_CTA_LABEL}</BookDemoButton>
+              <BookDemoButton slug={BOOK_DEMO_FORM_SLUG} className="btn btn-outline-w btn-lg">Book a Demo</BookDemoButton>
             </div>
             <div className="flex flex-wrap gap-2.5 mt-6">
               {PROOF_CHIPS.map(chip => (
@@ -1378,8 +1382,8 @@ export default function FeaturesClient() {
             Bookings, payments, routes, dog records, staff and compliance in one system built around real pet care operations.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <BookDemoButton className="btn btn-gold btn-lg">{FOUNDING_100_CTA_LABEL}</BookDemoButton>
-            <BookDemoButton className="btn btn-outline-w btn-lg">Book a Demo</BookDemoButton>
+            <BookDemoButton slug={FOUNDING_100_FORM_SLUG} className="btn btn-gold btn-lg">{FOUNDING_100_CTA_LABEL}</BookDemoButton>
+            <BookDemoButton slug={BOOK_DEMO_FORM_SLUG} className="btn btn-outline-w btn-lg">Book a Demo</BookDemoButton>
           </div>
         </div>
       </section>
