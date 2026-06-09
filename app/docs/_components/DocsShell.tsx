@@ -1,0 +1,223 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { LOGIN_URL } from "@/lib/urls";
+import SectionIcon from "./SectionIcon";
+
+type NavEntry = { slug: string; num: number; title: string; tagline: string };
+
+export default function DocsShell({
+  nav,
+  children,
+}: {
+  nav: NavEntry[];
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false); // mobile drawer
+  const [q, setQ] = useState("");
+
+  // Close the mobile drawer whenever the route changes.
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  const filtered = useMemo(() => {
+    const term = q.trim().toLowerCase();
+    if (!term) return nav;
+    return nav.filter(
+      (s) =>
+        s.title.toLowerCase().includes(term) ||
+        s.tagline.toLowerCase().includes(term),
+    );
+  }, [nav, q]);
+
+  const isActive = (slug: string) => pathname === `/docs/${slug}`;
+
+  const SidebarNav = (
+    <nav className="flex flex-col gap-1">
+      <Link
+        href="/docs"
+        className={`rounded-xl px-3 py-2 font-massilia text-[0.95rem] font-bold transition-colors ${
+          pathname === "/docs"
+            ? "bg-forest text-white"
+            : "text-forest hover:bg-teal-soft"
+        }`}
+      >
+        Overview
+      </Link>
+
+      <div className="mt-3 mb-1 px-3 text-eyebrow font-semibold tracking-[0.14em] text-ink-soft/70 uppercase">
+        Sections
+      </div>
+
+      {filtered.map((s) => {
+        const active = isActive(s.slug);
+        return (
+          <Link
+            key={s.slug}
+            href={`/docs/${s.slug}`}
+            className={`group flex items-center gap-3 rounded-xl px-3 py-2 transition-colors ${
+              active ? "bg-forest text-white" : "text-ink hover:bg-teal-soft"
+            }`}
+          >
+            <span
+              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors ${
+                active
+                  ? "bg-white/15 text-gold"
+                  : "bg-cream-dark text-forest group-hover:bg-white"
+              }`}
+            >
+              <SectionIcon slug={s.slug} className="h-[18px] w-[18px]" />
+            </span>
+            <span className="flex flex-col leading-tight">
+              <span className="font-massilia text-[0.95rem] font-bold">
+                {s.title}
+              </span>
+              <span
+                className={`text-[0.72rem] ${
+                  active ? "text-white/70" : "text-ink-soft"
+                }`}
+              >
+                {s.tagline}
+              </span>
+            </span>
+          </Link>
+        );
+      })}
+
+      {filtered.length === 0 && (
+        <p className="px-3 py-2 text-meta text-ink-soft">No sections match.</p>
+      )}
+    </nav>
+  );
+
+  return (
+    <div className="min-h-screen bg-cream">
+      {/* ── Top bar ─────────────────────────────────────────────── */}
+      <header className="sticky top-0 z-50 border-b border-teal-mid/60 bg-white/85 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-[1240px] items-center gap-3 px-4 sm:px-6">
+          <button
+            type="button"
+            aria-label="Toggle sections"
+            onClick={() => setOpen((v) => !v)}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-forest hover:bg-teal-soft lg:hidden"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              className="h-5 w-5"
+            >
+              {open ? (
+                <path d="M6 6l12 12M18 6L6 18" />
+              ) : (
+                <path d="M4 7h16M4 12h16M4 17h16" />
+              )}
+            </svg>
+          </button>
+
+          <Link href="/docs" className="flex shrink-0 items-center gap-2.5">
+            <Image
+              src="/images/genera-svg.svg"
+              alt="Genera"
+              width={32}
+              height={32}
+              className="h-8 w-8 object-contain"
+              priority
+            />
+            <span className="flex items-baseline gap-2 leading-none">
+              <span className="font-massilia text-body-lg font-extrabold tracking-[0.08em] text-forest">
+                GENERA
+              </span>
+              <span className="rounded-full bg-gold-light px-2 py-0.5 font-massilia text-[0.72rem] font-bold tracking-wide text-forest">
+                HELP CENTRE
+              </span>
+            </span>
+          </Link>
+
+          <div className="ml-auto flex items-center gap-2 sm:gap-3">
+            <Link
+              href="/"
+              className="hidden rounded-full px-3 py-1.5 text-meta font-medium text-ink-soft transition-colors hover:bg-cream-dark hover:text-forest sm:inline-flex"
+            >
+              ← Main site
+            </Link>
+            <Link
+              href={LOGIN_URL}
+              className="inline-flex items-center rounded-full bg-forest px-4 py-2 font-massilia text-fine font-bold text-white shadow-[0_4px_14px_rgba(0,62,69,0.18)] transition-shadow hover:shadow-[0_6px_22px_rgba(0,62,69,0.3)]"
+            >
+              Open the app
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* ── Body: sidebar + content ─────────────────────────────── */}
+      <div className="mx-auto flex max-w-[1240px] gap-8 px-4 sm:px-6">
+        {/* Desktop sidebar */}
+        <aside className="hidden w-[270px] shrink-0 lg:block">
+          <div className="sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto py-7 pr-1">
+            <SearchBox q={q} setQ={setQ} />
+            <div className="mt-4">{SidebarNav}</div>
+          </div>
+        </aside>
+
+        {/* Mobile drawer */}
+        {open && (
+          <div className="fixed inset-0 z-40 lg:hidden">
+            <button
+              type="button"
+              aria-label="Close sections"
+              onClick={() => setOpen(false)}
+              className="absolute inset-0 bg-forest-dark/40 backdrop-blur-sm"
+            />
+            <div className="absolute top-16 bottom-0 left-0 w-[290px] max-w-[85vw] overflow-y-auto border-r border-teal-mid/60 bg-white p-5 shadow-2xl">
+              <SearchBox q={q} setQ={setQ} />
+              <div className="mt-4">{SidebarNav}</div>
+            </div>
+          </div>
+        )}
+
+        {/* Content */}
+        <main className="min-w-0 flex-1 py-8 sm:py-10">{children}</main>
+      </div>
+    </div>
+  );
+}
+
+function SearchBox({
+  q,
+  setQ,
+}: {
+  q: string;
+  setQ: (v: string) => void;
+}) {
+  return (
+    <div className="relative">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-soft"
+      >
+        <circle cx="11" cy="11" r="7" />
+        <path d="M21 21l-4-4" />
+      </svg>
+      <input
+        type="search"
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+        placeholder="Filter sections…"
+        className="w-full rounded-full border border-teal-mid bg-cream py-2 pr-3 pl-9 text-meta text-ink outline-none transition-colors focus:border-forest focus:bg-white"
+      />
+    </div>
+  );
+}
