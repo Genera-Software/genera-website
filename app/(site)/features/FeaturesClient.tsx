@@ -995,18 +995,6 @@ function HeroCalendarAnimation() {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Proof chips
-   ───────────────────────────────────────────────────────────── */
-const PROOF_CHIPS = [
-  "Built by a licensed daycare",
-  "Customer portal included",
-  "Routes, payments and compliance together",
-];
-
-/* ─────────────────────────────────────────────────────────────
-   Main component
-   ───────────────────────────────────────────────────────────── */
-/* ─────────────────────────────────────────────────────────────
    Category band header
    ───────────────────────────────────────────────────────────── */
 function CategoryHeader({ title, desc }: { title: string; desc: string }) {
@@ -1050,13 +1038,6 @@ export default function FeaturesClient() {
             <div className="flex flex-col sm:flex-row gap-3">
               <BookDemoButton slug={FOUNDING_100_FORM_SLUG} className="btn btn-gold btn-lg">{FOUNDING_100_CTA_LABEL}</BookDemoButton>
               <BookDemoButton slug={BOOK_DEMO_FORM_SLUG} className="btn btn-outline-w btn-lg">Book a Demo</BookDemoButton>
-            </div>
-            <div className="flex flex-wrap gap-2.5 mt-6">
-              {PROOF_CHIPS.map(chip => (
-                <span key={chip} className="border border-white/20 bg-white/10 rounded-full px-3.5 py-1.5 text-sm font-semibold text-white/80">
-                  {chip}
-                </span>
-              ))}
             </div>
           </div>
 
