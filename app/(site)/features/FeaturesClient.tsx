@@ -508,6 +508,7 @@ function CustomerPortalMembershipAnimation() {
   const done = phase >= 3;
   return (
     <div className={s.cpProfileWrap}>
+      <div className={s.cpUrlBar}>🔒 portal.generasoftware.com</div>
       <div className={s.cpBackRow}>← Pet Profile</div>
       <div className={s.cpSection}>
         <div className={s.cpSectionTitle}>Membership</div>
@@ -549,6 +550,7 @@ function CustomerPortalBookingAnimation() {
   }, []);
   return (
     <div className={s.cpBookingWrap}>
+      <div className={s.cpUrlBar}>🔒 portal.generasoftware.com</div>
       <div className={s.cpBookingHeader}>
         <div className={s.cpBookingTitle}>Bookings</div>
         <div className={s.cpBookingDate}>Saturday, 30 May 2026</div>
