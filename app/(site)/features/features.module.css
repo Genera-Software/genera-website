@@ -1568,4 +1568,7 @@
   .animatedPhone { width: 230px; height: 490px; }
   .heroFloat { width: 116px; left: -8px; bottom: -12px; }
   .featTitle { max-width: none; }
+  /* Smaller phone mockups on mobile so each section's screenshot sits neatly
+     centred with breathing room rather than spanning the column. */
+  .phone { max-width: 230px; }
 }
