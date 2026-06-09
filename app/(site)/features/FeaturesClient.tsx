@@ -981,10 +981,10 @@ export default function FeaturesClient() {
               </ul>
             </div>
             <div className={s.twoPhones}>
-              <Phone screenClass={s.scrLg}>
-                <BookingsAdminAnimation />
+              <Phone screenClass={s.scrTall}>
+                <Image src="/mockup-screens/features/mobile-add-booking-recurring.png" alt="Quick recurring admin booking" fill className="object-cover object-top" />
               </Phone>
-              <Phone screenClass={s.scrLg}>
+              <Phone screenClass={s.scrTall}>
                 <BookingsPendingAnimation />
               </Phone>
             </div>
