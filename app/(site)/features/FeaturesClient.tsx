@@ -328,6 +328,516 @@ function NotificationAnimation() {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Bookings admin animation — left phone
+   Service dropdown cycles through options, recurring toggle
+   flicks, then Submit flashes green
+   ───────────────────────────────────────────────────────────── */
+const ADMIN_SERVICES = ["Daycare", "Full Groom", "Nail Clipping", "Sleepover", "SWIMMING"];
+
+function BookingsAdminAnimation() {
+  const [svcIdx, setSvcIdx]       = useState(0);
+  const [recurring, setRecurring] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    // each "phase" advances the dropdown by 1, then submits, then resets
+    const TOTAL = ADMIN_SERVICES.length + 2; // +1 submit, +1 reset hold
+    let phase = 0;
+    const id = setInterval(() => {
+      phase = (phase + 1) % TOTAL;
+      if (phase < ADMIN_SERVICES.length) {
+        setSvcIdx(phase);
+        setRecurring(phase % 2 === 0);
+        setSubmitted(false);
+      } else if (phase === ADMIN_SERVICES.length) {
+        setSubmitted(true);
+      } else {
+        setSvcIdx(0);
+        setRecurring(false);
+        setSubmitted(false);
+      }
+    }, 1500);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className={s.bookAdminWrap}>
+      <div className={s.bookAdminTitle}>Add Booking</div>
+      <div className={s.bookAdminField}>
+        <div className={s.bookAdminFieldLabel}>Owner</div>
+        <div className={s.bookAdminFieldValue}>Ashton · Mila Kunis</div>
+      </div>
+      <div className={s.bookAdminField}>
+        <div className={s.bookAdminFieldLabel}>Service</div>
+        <div className={`${s.bookAdminDropdown} ${submitted ? s.bookAdminDropdownActive : ""}`}>
+          {ADMIN_SERVICES[svcIdx]}
+          <span className={s.bookAdminChevron}>▾</span>
+        </div>
+      </div>
+      <div className={s.bookAdminField}>
+        <div className={s.bookAdminFieldLabel}>Start date</div>
+        <div className={s.bookAdminFieldValue}>27 May 2026</div>
+      </div>
+      <div className={s.bookAdminToggleRow}>
+        <span>Recurring booking</span>
+        <div className={`${s.notifToggle} ${recurring ? s.notifToggleOn : ""}`}>
+          <div className={s.notifThumb} />
+        </div>
+      </div>
+      <div className={`${s.bookAdminSubmit} ${submitted ? s.bookAdminSubmitReady : ""}`}>
+        {submitted ? "✓ Booking created" : "Create booking"}
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Bookings pending animation — right phone
+   Approval queue: requests get accepted one by one
+   ───────────────────────────────────────────────────────────── */
+const PENDING_BOOKINGS = [
+  { date: "22/06/2026", name: "Taylor Swift",  dog: "Bruno",  service: "🌙 Sleepover"  },
+  { date: "29/05/2026", name: "Oprah",         dog: "Chewie", service: "☀️ Daycare"    },
+  { date: "16/06/2026", name: "Mila Kunis",    dog: "Ashton", service: "✂️ Full Groom" },
+];
+// phases: 0=none accepted, 1=first accepted, 2=second, 3=all, 4=hold, then reset
+const PENDING_PHASES = 6;
+
+function BookingsPendingAnimation() {
+  const [phase, setPhase] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setPhase(p => (p + 1) % PENDING_PHASES), 1300);
+    return () => clearInterval(id);
+  }, []);
+  const accepted = [phase >= 1, phase >= 2, phase >= 3];
+  return (
+    <div className={s.pendingWrap}>
+      <div className={s.pendingWrapTitle}>Pending Approval</div>
+      {PENDING_BOOKINGS.map((b, i) => (
+        <div key={b.name} className={s.pendingItem}>
+          <div className={s.pendingItemTop}>
+            <span className={s.pendingItemDate}>{b.date}</span>
+            <span className={`${s.pendingItemBadge} ${accepted[i] ? s.pendingItemBadgeAccepted : ""}`}>
+              {accepted[i] ? "✓ Accepted" : "● Pending"}
+            </span>
+          </div>
+          <div className={s.pendingDogRow}>
+            <div className={s.pendingDogAvatar}>{b.name[0]}</div>
+            <div>
+              <div className={s.pendingDogName}>{b.name}</div>
+              <div className={s.pendingDogService}>{b.service}</div>
+            </div>
+          </div>
+          {!accepted[i] && (
+            <div className={s.pendingActions}>
+              <div className={s.pendingAcceptBtn}>✓ Accept</div>
+              <div className={s.pendingDeclineBtn}>✗ Decline</div>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Daily schedule animation — dogs appear one by one,
+   count badge increments, + Create booking button pulses
+   ───────────────────────────────────────────────────────────── */
+const SCHED_DOGS = [
+  { name: "Zendaya",   owner: "Tom Holland",  svc: "Sleepover", wks: "0 this wk" },
+  { name: "Charlotte", owner: "Mia Cat",      svc: "Daycare",   wks: "5 this wk" },
+  { name: "Ashton",    owner: "Mila Kunis",   svc: "Daycare",   wks: "6 this wk" },
+  { name: "Dolly",     owner: "Miley Cyrus",  svc: "Sleepover", wks: "1 this wk" },
+  { name: "Bruno",     owner: "Tom Hardy",    svc: "Full Groom",wks: "2 this wk" },
+];
+
+function DailyScheduleAnimation() {
+  const [count, setCount] = useState(2);
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCount(c => (c >= SCHED_DOGS.length ? 2 : c + 1));
+    }, 900);
+    return () => clearInterval(id);
+  }, []);
+  return (
+    <div className={s.schedWrap}>
+      <div className={s.schedTopBar}>🔍 Search pets and customers</div>
+      <div className={s.schedTitle}>Daily Schedule</div>
+      <div className={s.schedSubTitle}>Plan today's bookings, routes and drop-offs</div>
+      <div className={s.schedTabs}>
+        <span className={s.schedTab}>Monthly</span>
+        <span className={`${s.schedTab} ${s.schedTabActive}`}>🐾 Daily</span>
+        <span className={s.schedTab}>Map</span>
+      </div>
+      <div className={s.schedDate}>‹ TODAY · 27 May 2026 ›</div>
+      <div className={s.schedFilters}>
+        <span className={`${s.schedFilterChip} ${s.schedFilterChipActive}`}>🐾 All Pets {count}</span>
+        <span className={s.schedFilterChip}>Collections</span>
+        <span className={s.schedFilterChip}>Drop-offs</span>
+      </div>
+      <div className={s.schedCreateBtn}>+ Create booking</div>
+      <div className={s.schedList}>
+        {SCHED_DOGS.slice(0, count).map((dog, i) => (
+          <div key={dog.name} className={`${s.schedRow} ${i >= 2 ? s.schedRowNew : ""}`}>
+            <div className={s.schedAvatar}>{dog.name[0]}</div>
+            <div>
+              <div className={s.schedDogName}>{dog.name}</div>
+              <div className={s.schedDogSub}>{dog.svc} · {dog.owner}</div>
+            </div>
+            <span className={s.schedWeeks}>{dog.wks}</span>
+            <span className={s.schedViewBtn}>View</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Customer portal — left phone (membership)
+   Membership button cycles: idle → active → "Requested ✓"
+   ───────────────────────────────────────────────────────────── */
+function CustomerPortalMembershipAnimation() {
+  // phases: 0-1=idle, 2=button highlight, 3-4=done, then reset
+  const [phase, setPhase] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setPhase(p => (p + 1) % 7), 900);
+    return () => clearInterval(id);
+  }, []);
+  const done = phase >= 3;
+  return (
+    <div className={s.cpProfileWrap}>
+      <div className={s.cpBackRow}>← Pet Profile</div>
+      <div className={s.cpSection}>
+        <div className={s.cpSectionTitle}>Membership</div>
+        <div className={s.cpMembershipDesc}>
+          Choose a membership plan for a fixed weekly schedule. Requests go to your daycare for approval.
+        </div>
+        <div className={`${s.cpMembershipBtn} ${done ? s.cpMembershipBtnDone : ""}`}>
+          {done ? "✓ Requested" : "Request membership"}
+        </div>
+      </div>
+      <div className={s.cpSection}>
+        <div className={s.cpSectionTitle}>Profile Information</div>
+        <div className={s.cpField}><span className={s.cpFieldLabel}>Name</span><span className={s.cpFieldValue}>Oprah</span></div>
+        <div className={s.cpField}><span className={s.cpFieldLabel}>Last name</span><span className={s.cpFieldValue}>Bruno</span></div>
+        <div className={s.cpField}><span className={s.cpFieldLabel}>Breed</span><span className={s.cpFieldValue}>Bedlington Terrier</span></div>
+        <div className={s.cpField}><span className={s.cpFieldLabel}>Date of birth</span><span className={s.cpFieldValue}>05/03/2016</span></div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Customer portal — right phone (service selection)
+   Service rows cycle through highlighted selection
+   ───────────────────────────────────────────────────────────── */
+const PORTAL_SERVICES = [
+  { icon: "☀️", name: "Book Daycare"        },
+  { icon: "✂️", name: "Book Full Groom"     },
+  { icon: "💅", name: "Book Nail Clipping"  },
+  { icon: "🏊", name: "Book SWIMMING"       },
+  { icon: "🌙", name: "Book Sleepover"      },
+];
+
+function CustomerPortalBookingAnimation() {
+  const [selIdx, setSelIdx] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setSelIdx(i => (i + 1) % PORTAL_SERVICES.length), 1100);
+    return () => clearInterval(id);
+  }, []);
+  return (
+    <div className={s.cpBookingWrap}>
+      <div className={s.cpBookingHeader}>
+        <div className={s.cpBookingTitle}>Bookings</div>
+        <div className={s.cpBookingDate}>Saturday, 30 May 2026</div>
+      </div>
+      <div className={s.cpServiceLabel}>CHOOSE SERVICE TYPE</div>
+      {PORTAL_SERVICES.map((svc, i) => (
+        <div key={svc.name} className={`${s.cpServiceRow} ${i === selIdx ? s.cpServiceRowSelected : ""}`}>
+          <span className={s.cpServiceIcon}>{svc.icon}</span>
+          <span>{svc.name}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Payments animation — inside phone frame
+   Stripe cycles: Not set up → Connecting → Connected ✓
+   GoCardless and Manual stay connected throughout
+   ───────────────────────────────────────────────────────────── */
+function PaymentsAnimation() {
+  // 0=not set up, 1=connecting, 2+=connected
+  const [stripePhase, setStripePhase] = useState(0);
+  useEffect(() => {
+    const durations = [2200, 1100, 2800];
+    let phase = 0;
+    let t: ReturnType<typeof setTimeout>;
+    function advance() {
+      phase = (phase + 1) % 3;
+      setStripePhase(phase);
+      t = setTimeout(advance, durations[phase]);
+    }
+    t = setTimeout(advance, durations[0]);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <div className={s.paymentsAnimWrap}>
+      {/* Stripe — animated */}
+      <div className={s.pmCard}>
+        <div className={s.pmCardTop}>
+          <div className={s.pmIcon} style={{ background: "#635BFF" }}>S</div>
+          <div>
+            <div className={s.pmName}>Stripe</div>
+            <div className={s.pmSub}>Card + BACS, hosted invoice pages, automatic reconciliation</div>
+            {stripePhase === 0 && <div className={s.pmStatusNotSet}>Not set up</div>}
+            {stripePhase === 1 && <div className={s.pmStatusConnecting}>Connecting…</div>}
+            {stripePhase >= 2 && <div className={s.pmStatusConnected}>● Connected</div>}
+          </div>
+        </div>
+        <div className={`${s.pmConnectBtn} ${stripePhase >= 2 ? s.pmManageBtn : ""}`}>
+          {stripePhase >= 2 ? "Manage ↗" : "Connect Stripe ↗"}
+        </div>
+      </div>
+      {/* GoCardless — always connected */}
+      <div className={`${s.pmCard} ${s.pmCardActive}`}>
+        <div className={s.pmCardTop}>
+          <div className={s.pmIcon} style={{ background: "#00B140" }}>G</div>
+          <div>
+            <div className={s.pmName}>GoCardless <span className={s.pmInUse}>● In use</span></div>
+            <div className={s.pmSub}>BACS Direct Debit — auto-debit invoices once owners sign a mandate</div>
+            <div className={s.pmStatusConnected}>● Connected</div>
+          </div>
+        </div>
+        <div className={`${s.pmConnectBtn} ${s.pmManageBtn}`}>Manage GoCardless ↗</div>
+      </div>
+      {/* Manual */}
+      <div className={`${s.pmCard} ${s.pmCardActive}`}>
+        <div className={s.pmCardTop}>
+          <div className={s.pmIcon} style={{ background: "#4CAF50" }}>M</div>
+          <div>
+            <div className={s.pmName}>Manual invoicing</div>
+            <div className={s.pmSub}>PDF invoices with your bank details — owners pay by bank transfer</div>
+            <div className={s.pmStatusConnected}>● Connected</div>
+          </div>
+        </div>
+        <div className={`${s.pmConnectBtn} ${s.pmManageBtn}`}>Edit bank details ↗</div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Dog records animation — inside BrowserChrome
+   Two existing records shown, then a third row types itself in
+   ───────────────────────────────────────────────────────────── */
+const BASE_RECORDS = [
+  { icon: "💜", type: "Behavioural", detail: "She wouldn't stop barking at the new member of staff", date: "28/05/2026" },
+  { icon: "🚗", type: "Logistic",    detail: "Lives on a school road — can't pick up between 8.20–9am",  date: "28/05/2026" },
+];
+const TYPING_RECORD = "Vaccines up to date as of June 2026";
+
+function DogRecordsAnimation() {
+  const [typedLen, setTypedLen] = useState(0);
+  const [showNew, setShowNew]   = useState(false);
+  const [done, setDone]         = useState(false);
+
+  useEffect(() => {
+    let outer: ReturnType<typeof setTimeout>;
+    function run() {
+      setShowNew(false); setTypedLen(0); setDone(false);
+      outer = setTimeout(() => {
+        setShowNew(true);
+        let i = 0;
+        const typer = setInterval(() => {
+          i++;
+          setTypedLen(i);
+          if (i >= TYPING_RECORD.length) {
+            clearInterval(typer);
+            setDone(true);
+            outer = setTimeout(run, 2800);
+          }
+        }, 46);
+      }, 1400);
+    }
+    run();
+    return () => clearTimeout(outer);
+  }, []);
+
+  return (
+    <BrowserChrome url="app.generasoftware.com / records">
+      <div className={s.dogRecordsWrap}>
+        <div className={s.dogRecordsHeader}>
+          <div>
+            <div className={s.dogRecordsTitle}>Records</div>
+            <div className={s.dogRecordsSub}>Notes and incidents logged for this pet.</div>
+          </div>
+          <div className={s.dogRecordsAddBtn}>+ Add Record</div>
+        </div>
+        <table className={s.dogRecordsTable}>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Details</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {BASE_RECORDS.map(r => (
+              <tr key={r.type}>
+                <td><div className={s.dogRecordsTypeCell}><span className={s.dogRecordsTypeIcon}>{r.icon}</span><span>{r.type}</span></div></td>
+                <td className={s.dogRecordDetail}>{r.detail}</td>
+                <td className={s.dogRecordDate}>{r.date}</td>
+                <td className={s.dogRecordDelete}>Delete</td>
+              </tr>
+            ))}
+            {showNew && (
+              <tr className={s.dogRecordNewRow}>
+                <td><div className={s.dogRecordsTypeCell}><span className={s.dogRecordsTypeIcon}>💚</span><span>Health</span></div></td>
+                <td className={s.dogRecordDetail}>
+                  {TYPING_RECORD.slice(0, typedLen)}
+                  {!done && <span className={s.dogRecordCursor}>|</span>}
+                </td>
+                <td className={s.dogRecordDate}>{done ? "09/06/2026" : "—"}</td>
+                <td className={s.dogRecordDelete}>{done ? "Delete" : ""}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </BrowserChrome>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Routing animation — checkboxes tick off stop by stop,
+   completed counter increments, then resets
+   ───────────────────────────────────────────────────────────── */
+const ROUTE_STOPS = [
+  { num: 1, name: "Stomzi",    owner: "Maya James",      addr: "17 Effra Road, London"        },
+  { num: 2, name: "Bailey",    owner: "Carole Fontaine", addr: "18 Mantlet Close, London"     },
+  { num: 3, name: "Ashton",    owner: "Mila Kunis",      addr: "15 Clapham High St, London"   },
+  { num: 4, name: "Bart",      owner: "Marge Simpson",   addr: "Felsham Road, London"         },
+  { num: 5, name: "Charlotte", owner: "Mia Cat",         addr: "12 Lombard Road, London"      },
+];
+
+function RoutingAnimation() {
+  const [completed, setCompleted] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCompleted(c => (c >= ROUTE_STOPS.length ? 0 : c + 1));
+    }, 950);
+    return () => clearInterval(id);
+  }, []);
+  return (
+    <div className={s.routeWrap}>
+      <div className={s.routeHeader}>
+        <div className={s.routeRouteName}>Route · RONNIE</div>
+        <div className={s.routeDate}>Thu, 28 May 2026</div>
+        <div className={s.routeCompleted}>Completed {completed}/{ROUTE_STOPS.length}</div>
+      </div>
+      <div className={s.routeStopList}>
+        {ROUTE_STOPS.map((stop, i) => (
+          <div key={stop.name} className={`${s.routeStop} ${i < completed ? s.routeStopDone : ""}`}>
+            <div className={`${s.routeCheckCircle} ${i < completed ? s.routeCheckCircleDone : ""}`}>
+              {i < completed ? "✓" : ""}
+            </div>
+            <div>
+              <div className={s.routeStopNum}>{stop.num}. {stop.name}</div>
+              <div className={s.routeStopOwner}>{stop.owner}</div>
+              <div className={s.routeStopAddr}>{stop.addr}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className={s.routeNavBar}>
+        <span>Pickups</span>
+        <span>Dropoffs</span>
+        <span className={s.routeNavActive}>📍</span>
+        <span>Schedule</span>
+        <span>Profile</span>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Staff animation — holiday request cycles through states:
+   idle → pending → approved → balance decrements → reset
+   ───────────────────────────────────────────────────────────── */
+const STAFF_HOLIDAY_TOTAL = 20;
+// sequence of states (index into array)
+const STAFF_SEQ = [0, 0, 0, 1, 2, 3, 3, 0] as const; // 0=idle,1=pending,2=approved,3=done
+
+function StaffAnimation() {
+  const [tick, setTick]   = useState(0);
+  const [used, setUsed]   = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTick(t => {
+        const next = (t + 1) % STAFF_SEQ.length;
+        // When transitioning into "approved" bump the used count
+        if (STAFF_SEQ[next] === 3 && STAFF_SEQ[t] !== 3) {
+          setUsed(u => Math.min(u + 1, STAFF_HOLIDAY_TOTAL));
+        }
+        // Reset used when cycling back to start
+        if (next === 0) setUsed(0);
+        return next;
+      });
+    }, 900);
+    return () => clearInterval(id);
+  }, []);
+
+  const state   = STAFF_SEQ[tick];
+  const left    = STAFF_HOLIDAY_TOTAL - used;
+  const btnText = state === 1 ? "● Pending…"
+                : state === 2 ? "✓ Approved!"
+                : state === 3 ? "✓ Approved!"
+                : "Request holiday";
+  const btnCls  = state === 1 ? s.staffReqBtnPending
+                : state >= 2  ? s.staffReqBtnApproved
+                : "";
+
+  return (
+    <div className={s.staffAnimWrap}>
+      <div className={s.staffTopTabs}>
+        <span className={`${s.staffTopTab} ${s.staffTopTabActive}`}>Today</span>
+        <span className={s.staffTopTab}>● Working</span>
+        <span className={s.staffTopTab}>● Holiday</span>
+        <span className={s.staffTopTab}>● Sick</span>
+      </div>
+      <div className={s.staffSectionLabel}>TIME OFF · 2026</div>
+      {/* Holiday card */}
+      <div className={s.staffTimeCard} style={{ background: "#FFFAEB" }}>
+        <div className={s.staffCardRow}>
+          <span className={s.staffCardEmoji}>☀️</span>
+          <span className={s.staffCardName}>HOLIDAY</span>
+          <span className={s.staffCardBalance}>{left}/{STAFF_HOLIDAY_TOTAL} left</span>
+        </div>
+        <div className={s.staffUsed}>{used} used</div>
+        <div className={`${s.staffReqBtn} ${btnCls}`}>{btnText}</div>
+      </div>
+      {/* Sick card */}
+      <div className={s.staffTimeCard} style={{ background: "#FFF0F0" }}>
+        <div className={s.staffCardRow}>
+          <span className={s.staffCardEmoji}>❤️</span>
+          <span className={s.staffCardName}>SICK</span>
+          <span className={s.staffCardBalance}>20/20 left</span>
+        </div>
+        <div className={s.staffUsed}>0 used</div>
+        <div className={s.staffReqBtn}>Request sick day</div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
    Proof chips
    ───────────────────────────────────────────────────────────── */
 const PROOF_CHIPS = [
@@ -472,10 +982,10 @@ export default function FeaturesClient() {
             </div>
             <div className={s.twoPhones}>
               <Phone screenClass={s.scrLg}>
-                <Image src="/mockup-screens/features/mobile-add-booking-recurring.png" alt="Quick recurring admin booking" fill className="object-cover object-top" />
+                <BookingsAdminAnimation />
               </Phone>
               <Phone screenClass={s.scrLg}>
-                <Image src="/mockup-screens/features/mobile-pending-approval.png" alt="Mobile pending approval requests" fill className="object-cover object-top" />
+                <BookingsPendingAnimation />
               </Phone>
             </div>
           </article>
@@ -516,13 +1026,9 @@ export default function FeaturesClient() {
               </ul>
             </div>
             <div className={s.singlePhone}>
-              <div className={s.badgeWrap}>
-                <Phone phoneClass={s.phoneDaily} screenClass={s.scrXl}>
-                  {/* left top: pet avatars are on the left — centering crops them */}
-                  <Image src="/mockup-screens/features/mobile-daily-schedule-polished.png" alt="Mobile daily schedule for today" fill className="object-cover" style={{ objectPosition: 'left top' }} />
-                </Phone>
-                <div className={`${s.floatBadge} ${s.badgeGold}`}>📋 6 dogs today</div>
-              </div>
+              <Phone phoneClass={s.phoneDaily} screenClass={s.scrXl}>
+                <DailyScheduleAnimation />
+              </Phone>
             </div>
           </article>
 
@@ -544,10 +1050,10 @@ export default function FeaturesClient() {
             </div>
             <div className={s.portalPhones}>
               <Phone screenClass={s.scrXxl}>
-                <Image src="/mockup-screens/features/customer-portal-membership-profile.png" alt="Customer portal membership and pet profile" fill className="object-cover object-top" />
+                <CustomerPortalMembershipAnimation />
               </Phone>
               <Phone screenClass={s.scrXxl}>
-                <Image src="/mockup-screens/features/customer-portal-book-service.png" alt="Customer portal booking details" fill className="object-cover object-top" />
+                <CustomerPortalBookingAnimation />
               </Phone>
             </div>
           </article>
@@ -575,13 +1081,9 @@ export default function FeaturesClient() {
               </ul>
             </div>
             <div className={s.singlePhone}>
-              <div className={s.badgeWrap}>
-                <Phone phoneClass={s.phonePayment} screenClass={s.scrPay}>
-                  {/* scrPay=560px → scaled image=747px → 187px scroll range; 35% skips ~65px which clears the iOS status bar + dev URL bar */}
-                  <Image src="/mockup-screens/payment-methods.png" alt="Stripe and GoCardless payment methods" fill className="object-cover" style={{ objectPosition: "center 35%" }} />
-                </Phone>
-                <div className={`${s.floatBadge} ${s.badgeWhite}`}>✓ GoCardless connected</div>
-              </div>
+              <Phone phoneClass={s.phonePayment} screenClass={s.scrPay}>
+                <PaymentsAnimation />
+              </Phone>
             </div>
           </article>
 
@@ -603,16 +1105,7 @@ export default function FeaturesClient() {
                 <li>Behavioural, logistic and health records kept together</li>
               </ul>
             </div>
-            <BrowserChrome url="app.generasoftware.com / records">
-              <Image
-                src="/mockup-screens/features/desktop-records-log-polished.png"
-                alt="Desktop pet records log with behavioural and logistic notes"
-                width={1600}
-                height={900}
-                className="w-full h-auto block"
-                loading="lazy"
-              />
-            </BrowserChrome>
+            <DogRecordsAnimation />
           </article>
 
           {/* ── Routing ────────────────────────────────────── i=8 */}
@@ -632,12 +1125,9 @@ export default function FeaturesClient() {
               </ul>
             </div>
             <div className={s.singlePhone}>
-              <div className={s.badgeWrap}>
-                <Phone phoneClass={s.phoneRoute} screenClass={s.scrXl}>
-                  <Image src="/mockup-screens/features/mobile-route-pickups-latest.png" alt="Mobile morning pickup route for the dog bus" fill className="object-cover object-top" />
-                </Phone>
-                <div className={`${s.floatBadge} ${s.badgeTeal}`}>🐾 Route ready</div>
-              </div>
+              <Phone phoneClass={s.phoneRoute} screenClass={s.scrXl}>
+                <RoutingAnimation />
+              </Phone>
             </div>
           </article>
 
@@ -658,12 +1148,9 @@ export default function FeaturesClient() {
               </ul>
             </div>
             <div className={s.singlePhone}>
-              <div className={s.badgeWrap}>
-                <Phone phoneClass={s.phoneStaff} screenClass={s.scrXl}>
-                  <Image src="/mockup-screens/features/mobile-staff-schedule-latest.png" alt="Mobile staff schedule with holiday and sick day tracking" fill className="object-cover object-top" />
-                </Phone>
-                <div className={`${s.floatBadge} ${s.badgeGold}`} style={{ animationDelay: "1.2s" }}>🌴 5 days left</div>
-              </div>
+              <Phone phoneClass={s.phoneStaff} screenClass={s.scrXl}>
+                <StaffAnimation />
+              </Phone>
             </div>
           </article>
         </div>

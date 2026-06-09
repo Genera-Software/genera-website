@@ -753,6 +753,617 @@
 }
 .notifToggleOn .notifThumb { transform: translateX(17px); }
 
+/* ── Bookings admin animation ─────────────────────────────── */
+.bookAdminWrap {
+  background: #f5f7f8;
+  padding: 16px 14px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.bookAdminTitle {
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  color: #003E45;
+  font-size: .95rem;
+  padding-bottom: 9px;
+  border-bottom: 1px solid rgba(0,62,69,.10);
+}
+.bookAdminField {
+  background: #fff;
+  border: 1px solid rgba(0,62,69,.10);
+  border-radius: 10px;
+  padding: 9px 12px;
+}
+.bookAdminFieldLabel {
+  font-size: .62rem;
+  font-weight: 700;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 3px;
+}
+.bookAdminFieldValue {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .86rem;
+}
+.bookAdminDropdown {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .86rem;
+  transition: color .3s;
+}
+.bookAdminDropdownActive { color: #FFA800; }
+.bookAdminChevron { color: #9CA3AF; font-size: .7rem; }
+.bookAdminToggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid rgba(0,62,69,.10);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  font-size: .86rem;
+  color: #003E45;
+}
+.bookAdminSubmit {
+  margin-top: auto;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(0,62,69,.10);
+  color: #9CA3AF;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .86rem;
+  text-align: center;
+  transition: background .4s, color .4s;
+}
+.bookAdminSubmitReady {
+  background: #003E45;
+  color: #fff;
+}
+
+/* ── Bookings pending animation ──────────────────────────────── */
+.pendingWrap {
+  background: #f5f7f8;
+  padding: 12px 11px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  overflow: hidden;
+}
+.pendingWrapTitle {
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  color: #003E45;
+  font-size: .88rem;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(0,62,69,.10);
+}
+.pendingItem {
+  background: #fff;
+  border: 1px solid rgba(0,62,69,.08);
+  border-radius: 12px;
+  padding: 10px 11px;
+}
+.pendingItemTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+.pendingItemDate {
+  font-size: .7rem;
+  font-weight: 700;
+  color: #4B5563;
+}
+.pendingItemBadge {
+  font-size: .62rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #FFF3CC;
+  color: #9A5A00;
+  transition: background .35s, color .35s;
+}
+.pendingItemBadgeAccepted { background: #D1FAE5; color: #065F46; }
+.pendingDogRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.pendingDogAvatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #003E45;
+  color: #FFA800;
+  display: grid;
+  place-items: center;
+  font-size: .68rem;
+  font-weight: 800;
+  font-family: var(--font-massilia);
+  flex-shrink: 0;
+}
+.pendingDogName {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .78rem;
+}
+.pendingDogService { font-size: .66rem; color: #6B7280; margin-top: 1px; }
+.pendingActions { display: flex; gap: 6px; }
+.pendingAcceptBtn {
+  flex: 1;
+  padding: 7px;
+  border-radius: 8px;
+  background: #003E45;
+  color: #fff;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .72rem;
+  text-align: center;
+}
+.pendingDeclineBtn {
+  flex: 1;
+  padding: 7px;
+  border-radius: 8px;
+  background: #FEE2E2;
+  color: #DC2626;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .72rem;
+  text-align: center;
+}
+
+/* ── Daily schedule animation ────────────────────────────────── */
+.schedWrap {
+  background: #f5f7f8;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.schedTopBar {
+  background: #fff;
+  padding: 7px 12px;
+  border-bottom: 1px solid rgba(0,62,69,.08);
+  color: #9CA3AF;
+  font-size: .7rem;
+}
+.schedTitle {
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  color: #003E45;
+  font-size: .92rem;
+  padding: 9px 12px 1px;
+}
+.schedSubTitle {
+  color: #9CA3AF;
+  font-size: .62rem;
+  padding: 0 12px 6px;
+}
+.schedTabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 12px 7px;
+}
+.schedTab {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+  color: #6B7280;
+  font-size: .68rem;
+  background: rgba(0,62,69,.06);
+}
+.schedTabActive { background: #FFA800; color: #002830; }
+.schedDate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 5px 12px;
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .76rem;
+  border-top: 1px solid rgba(0,62,69,.07);
+  border-bottom: 1px solid rgba(0,62,69,.07);
+}
+.schedFilters {
+  display: flex;
+  gap: 4px;
+  padding: 5px 12px;
+}
+.schedFilterChip {
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: .62rem;
+  font-weight: 700;
+  background: rgba(0,62,69,.08);
+  color: #003E45;
+  white-space: nowrap;
+}
+.schedFilterChipActive { background: #003E45; color: #fff; }
+.schedCreateBtn {
+  display: block;
+  width: fit-content;
+  margin: 3px 12px 5px auto;
+  background: #FFA800;
+  color: #002830;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .72rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+.schedList {
+  flex: 1;
+  overflow: hidden;
+  padding: 0 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.schedRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 7px 9px;
+  border: 1px solid rgba(0,62,69,.07);
+}
+.schedRowNew { animation: schedRowEnter .4s ease both; }
+@keyframes schedRowEnter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.schedAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #003E45;
+  color: #FFA800;
+  display: grid;
+  place-items: center;
+  font-size: .68rem;
+  font-weight: 800;
+  font-family: var(--font-massilia);
+  flex-shrink: 0;
+}
+.schedDogName { font-family: var(--font-massilia); font-weight: 700; color: #003E45; font-size: .78rem; }
+.schedDogSub  { color: #9CA3AF; font-size: .62rem; }
+.schedWeeks   { margin-left: auto; font-size: .62rem; color: #9CA3AF; white-space: nowrap; }
+.schedViewBtn { font-family: var(--font-massilia); font-weight: 700; color: #FFA800; font-size: .68rem; white-space: nowrap; margin-left: 4px; }
+
+/* ── Customer portal animations ──────────────────────────────── */
+.cpProfileWrap {
+  background: #f5f7f8;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.cpBackRow {
+  background: #fff;
+  padding: 8px 12px;
+  font-size: .7rem;
+  color: #003E45;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(0,62,69,.08);
+}
+.cpSection {
+  background: #fff;
+  margin: 5px 8px;
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0,62,69,.08);
+}
+.cpSectionTitle {
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  color: #003E45;
+  font-size: .8rem;
+  margin-bottom: 5px;
+}
+.cpMembershipDesc {
+  font-size: .66rem;
+  color: #6B7280;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+.cpMembershipBtn {
+  width: 100%;
+  padding: 9px;
+  border-radius: 10px;
+  background: #FFA800;
+  color: #002830;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .76rem;
+  text-align: center;
+  transition: background .35s, color .35s;
+}
+.cpMembershipBtnDone { background: #003E45; color: #fff; }
+.cpField {
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0,62,69,.06);
+  display: flex;
+  gap: 8px;
+}
+.cpFieldLabel { width: 88px; font-size: .66rem; color: #9CA3AF; font-weight: 600; flex-shrink: 0; }
+.cpFieldValue { font-size: .74rem; font-family: var(--font-massilia); font-weight: 700; color: #003E45; }
+.cpBookingWrap {
+  background: #f5f7f8;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.cpBookingHeader {
+  background: #fff;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(0,62,69,.08);
+}
+.cpBookingTitle { font-family: var(--font-massilia); font-weight: 800; color: #003E45; font-size: .88rem; }
+.cpBookingDate  { font-size: .68rem; color: #6B7280; margin-top: 2px; }
+.cpServiceLabel {
+  padding: 7px 12px 3px;
+  font-size: .6rem;
+  font-weight: 700;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.cpServiceRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(0,62,69,.05);
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .8rem;
+  transition: background .3s, color .3s;
+}
+.cpServiceRowSelected { background: #FFF3CC; color: #9A5A00; }
+.cpServiceIcon { font-size: .88rem; }
+
+/* ── Payments animation ──────────────────────────────────────── */
+.paymentsAnimWrap {
+  background: #f5f7f8;
+  padding: 10px 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  overflow: hidden;
+}
+.pmCard {
+  background: #fff;
+  border: 1px solid rgba(0,62,69,.09);
+  border-radius: 12px;
+  padding: 11px 11px 9px;
+}
+.pmCardActive { border-color: rgba(0,150,80,.25); background: #F0FFF7; }
+.pmCardTop { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 7px; }
+.pmIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-massilia);
+  font-weight: 900;
+  font-size: .82rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.pmName { font-family: var(--font-massilia); font-weight: 700; color: #003E45; font-size: .8rem; }
+.pmSub  { font-size: .62rem; color: #9CA3AF; line-height: 1.3; margin-top: 2px; }
+.pmStatusNotSet  { font-size: .68rem; color: #9CA3AF; font-weight: 600; margin-top: 3px; }
+.pmStatusConnecting { font-size: .68rem; color: #FFA800; font-weight: 700; margin-top: 3px; }
+.pmStatusConnected  { font-size: .68rem; color: #059669; font-weight: 700; margin-top: 3px; }
+.pmInUse {
+  font-size: .58rem;
+  background: #D1FAE5;
+  color: #065F46;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-weight: 700;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+.pmConnectBtn {
+  width: 100%;
+  padding: 7px;
+  border-radius: 8px;
+  background: #635BFF;
+  color: #fff;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .72rem;
+  text-align: center;
+  transition: background .4s;
+}
+.pmManageBtn { background: rgba(0,62,69,.08); color: #003E45; }
+
+/* ── Dog records animation ───────────────────────────────────── */
+.dogRecordsWrap {
+  background: #f5f7f8;
+  padding: 14px 18px 0;
+}
+.dogRecordsHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.dogRecordsTitle    { font-family: var(--font-massilia); font-weight: 800; color: #003E45; font-size: 1rem; }
+.dogRecordsSub      { color: #9CA3AF; font-size: .74rem; margin-top: 2px; }
+.dogRecordsAddBtn {
+  background: #FFA800;
+  color: #002830;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .78rem;
+  padding: 7px 13px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.dogRecordsTable { width: 100%; border-collapse: collapse; }
+.dogRecordsTable th {
+  padding: 7px 10px;
+  text-align: left;
+  font-size: .68rem;
+  font-weight: 700;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  border-bottom: 1px solid rgba(0,62,69,.10);
+}
+.dogRecordsTable td { padding: 11px 10px; border-bottom: 1px solid rgba(0,62,69,.06); vertical-align: top; }
+.dogRecordsTypeCell {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .8rem;
+  white-space: nowrap;
+}
+.dogRecordsTypeIcon { font-size: .9rem; }
+.dogRecordDetail { font-size: .76rem; color: #4B5563; max-width: 340px; line-height: 1.4; }
+.dogRecordDate   { font-size: .72rem; color: #9CA3AF; white-space: nowrap; }
+.dogRecordDelete { font-size: .72rem; color: #FFA800; font-weight: 700; white-space: nowrap; }
+.dogRecordNewRow td { background: #FFFEF0; }
+.dogRecordCursor {
+  animation: cursorBlink .7s step-end infinite;
+  color: #003E45;
+  font-weight: 400;
+}
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Routing animation ───────────────────────────────────────── */
+.routeWrap {
+  background: #f5f7f8;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.routeHeader {
+  background: #fff;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(0,62,69,.08);
+}
+.routeRouteName { font-size: .62rem; font-weight: 700; color: #9CA3AF; text-transform: uppercase; letter-spacing: .06em; }
+.routeDate { font-family: var(--font-massilia); font-weight: 800; color: #003E45; font-size: .88rem; margin: 2px 0; }
+.routeCompleted { font-size: .68rem; color: #6B7280; font-weight: 600; }
+.routeStopList { flex: 1; overflow: hidden; padding: 8px 12px; display: flex; flex-direction: column; gap: 5px; }
+.routeStop {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 10px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid rgba(0,62,69,.07);
+  transition: opacity .4s;
+}
+.routeStopDone { opacity: .45; }
+.routeCheckCircle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,62,69,.20);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-size: .6rem;
+  font-weight: 800;
+  color: transparent;
+  transition: background .3s, border-color .3s, color .3s;
+}
+.routeCheckCircleDone { background: #003E45; border-color: #003E45; color: #fff; }
+.routeStopNum  { font-family: var(--font-massilia); font-weight: 700; color: #003E45; font-size: .8rem; }
+.routeStopOwner{ font-size: .66rem; color: #6B7280; margin-top: 1px; }
+.routeStopAddr { font-size: .6rem; color: #9CA3AF; margin-top: 1px; }
+.routeNavBar {
+  display: flex;
+  justify-content: space-around;
+  padding: 9px 8px;
+  border-top: 1px solid rgba(0,62,69,.08);
+  background: #fff;
+  font-size: .6rem;
+  font-weight: 700;
+  color: #9CA3AF;
+}
+.routeNavActive { color: #FFA800; font-size: .88rem; }
+
+/* ── Staff animation ─────────────────────────────────────────── */
+.staffAnimWrap {
+  background: #f5f7f8;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.staffTopTabs {
+  background: #fff;
+  padding: 7px 10px;
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid rgba(0,62,69,.08);
+}
+.staffTopTab { font-size: .62rem; font-weight: 700; color: #9CA3AF; padding: 3px 6px; }
+.staffTopTabActive { background: #003E45; color: #fff; border-radius: 6px; }
+.staffSectionLabel {
+  padding: 8px 12px 3px;
+  font-size: .6rem;
+  font-weight: 700;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.staffTimeCard { margin: 3px 10px 5px; border-radius: 14px; padding: 11px 13px; }
+.staffCardRow  { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+.staffCardEmoji { font-size: .88rem; }
+.staffCardName  { font-family: var(--font-massilia); font-weight: 800; color: #003E45; font-size: .8rem; flex: 1; }
+.staffCardBalance { font-size: .7rem; font-weight: 700; color: #6B7280; }
+.staffUsed { font-size: .66rem; color: #9CA3AF; margin-bottom: 7px; }
+.staffReqBtn {
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  background: #FFA800;
+  color: #002830;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .74rem;
+  text-align: center;
+  transition: background .35s, color .35s;
+}
+.staffReqBtnPending  { background: #FFF3CC; color: #9A5A00; }
+.staffReqBtnApproved { background: #D1FAE5; color: #065F46; }
+
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 920px) {
   .block {
