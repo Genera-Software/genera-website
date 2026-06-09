@@ -487,7 +487,7 @@
 .featureNav {
   position: relative;
   z-index: 3;
-  padding: 0 22px 38px;
+  padding: 0 22px 16px;
   margin-top: 0;
 }
 .featureNavInner {
@@ -526,7 +526,7 @@
 /* ── Hero screenshot stack ───────────────────────────────────── */
 .heroStack {
   position: relative;
-  min-height: 610px;
+  min-height: 520px;
 }
 .screenMain {
   position: absolute;

@@ -95,48 +95,50 @@ export default async function OurStoryPage() {
       {/* Split hero */}
       <section className="grid grid-cols-1 bg-gradient-to-br from-forest via-forest-mid to-[#007080] md:grid-cols-2">
 
-        {/* Left — dashboard preview */}
-        <div className="flex items-center justify-center px-8 pt-28 pb-8 md:px-10 md:pt-32 md:pb-10">
-          <div className="w-full max-w-[480px] overflow-hidden rounded-2xl border border-white/10 shadow-[0_28px_80px_rgba(0,0,0,0.4)]">
-            <div className="flex items-center gap-2 border-b border-white/10 bg-forest-dark/80 px-3 py-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#FF6058]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#28C940]" />
-              <span className="ml-2 text-[0.65rem] text-white/40">app.generasoftware.com</span>
-            </div>
-            <AdminMiniAnimation />
-          </div>
-        </div>
-
-        {/* Right — text */}
-        <div className="relative overflow-hidden px-8 pt-10 pb-20 text-white md:px-14 md:pt-36">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft md:px-4 md:py-1.5">
-            🐾 Our Story · Built from the ground up
-          </div>
-          <h1 className="mt-3 text-white [font-size:clamp(2rem,4vw,3rem)] leading-tight">
-            We didn&apos;t set out to{" "}
-            <span className="squig">
-              build software.
-              <svg viewBox="0 0 180 12" preserveAspectRatio="none">
-                <path d="M2,9 Q22,2 45,8 Q68,14 90,7 Q112,0 135,8 Q157,14 178,7" />
-              </svg>
-            </span>
+        {/* Left — text */}
+        <div className="relative overflow-hidden px-8 pt-28 pb-20 text-white md:px-14 md:pt-36">
+          <p className="font-caveat text-section-h font-semibold leading-snug text-gold-soft">
+            Our Story · Built from the ground up
+          </p>
+          <h1 className="mt-3 text-white">
+            We didn&apos;t set out to build software.
             <br />
             <em className="text-gold">We set out to walk dogs.</em>
           </h1>
-          <p className="mt-4 max-w-[480px] text-base text-white/75">
+          <p className="mt-5 max-w-[480px] text-body-lg text-white/80">
             From a dog walking round in South West London in 2011 to software
             used by pet businesses across the UK. Here&apos;s how it happened.
           </p>
 
-          <div className="mt-7 flex flex-wrap gap-2.5">
+          <div className="mt-9 grid grid-cols-2 gap-6 md:grid-cols-4">
             {STATS.map((s) => (
-              <div key={s.num} className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 backdrop-blur-sm">
-                <span className="font-massilia text-lg font-bold leading-none text-gold">{s.num}</span>
-                <span className="whitespace-pre-line text-[0.7rem] uppercase tracking-wider text-white/60">{s.label.replace("\n", " ")}</span>
+              <div key={s.num}>
+                <div className="font-massilia text-figure-md font-bold leading-none text-gold">
+                  {s.num}
+                </div>
+                <div className="mt-1 whitespace-pre-line text-xs uppercase tracking-widest text-white/60">
+                  {s.label}
+                </div>
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Right — animated dashboard preview */}
+        <div className="relative min-h-[320px] overflow-hidden md:min-h-0">
+          <div className="absolute inset-0 flex items-center justify-center p-8 md:p-12">
+            <div className="w-full max-w-[480px] overflow-hidden rounded-2xl border border-white/10 shadow-[0_28px_80px_rgba(0,0,0,0.4)]">
+              <div className="flex items-center gap-2 border-b border-white/10 bg-forest-dark/80 px-3 py-2">
+                <span className="h-2.5 w-2.5 rounded-full bg-[#FF6058]" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E]" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#28C940]" />
+                <span className="ml-2 text-[0.65rem] text-white/40">app.generasoftware.com</span>
+              </div>
+              <AdminMiniAnimation />
+            </div>
+          </div>
+          {/* Left-edge blend matching the text panel */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-[30%] bg-gradient-to-r from-forest to-transparent" />
         </div>
       </section>
 

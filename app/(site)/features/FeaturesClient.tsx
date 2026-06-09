@@ -293,7 +293,7 @@ export default function FeaturesClient() {
       <FeatureNav />
 
       {/* ── Feature sections ─────────────────────────────────── */}
-      <div className="px-[clamp(22px,3vw,56px)] pt-10 md:pt-[56px]">
+      <div className="px-[clamp(22px,3vw,56px)] pt-6 md:pt-8">
         <div className="max-w-[1380px] mx-auto">
 
           {/* ── Capacity & DEFRA ────────────────────────────── i=0 */}
