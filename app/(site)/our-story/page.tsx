@@ -154,12 +154,12 @@ export default async function OurStoryPage() {
             <p className="mt-2 text-ink-soft">
               The UK&apos;s longest-standing five-star licensed doggy daycare in Surrey — and the business that Genera was born inside.{" "}
               <a
-                href="https://www.duncansdogco.co.uk"
+                href="https://www.duncansdogco.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-semibold text-forest underline underline-offset-2 hover:text-gold"
               >
-                Visit duncansdogco.co.uk →
+                Visit duncansdogco.com →
               </a>
             </p>
           </div>
