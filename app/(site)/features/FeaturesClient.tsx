@@ -30,7 +30,6 @@ const NAV_ITEMS = [
   { id: "capacity",       label: "Capacity" },
   { id: "brand",          label: "Customisation" },
   { id: "bookings",       label: "Bookings" },
-  { id: "booking-flow",   label: "Booking Flow" },
   { id: "daily-schedule", label: "Daily Schedule" },
   { id: "portal",         label: "Customer Portal" },
   { id: "payments",       label: "Payments" },
@@ -996,33 +995,14 @@ export default function FeaturesClient() {
             </div>
           </article>
 
-          {/* ── Booking Flow ───────────────────────────────── i=3 */}
-          <article id="booking-flow" className={`rev ${s.block} ${v(3).block}`}>
+          {/* ── Daily Schedule ─────────────────────────────── i=3 */}
+          <article id="daily-schedule" className={`rev ${s.block} ${v(3).block}`}>
             <div>
-              <p className={`eyebrow ${v(3).eyebrow}`}>Booking Flow</p>
+              <p className={`eyebrow ${v(3).eyebrow}`}>Daily Schedule</p>
               <h3 className={`${v(3).h3} text-[clamp(1.8rem,3.4vw,3.1rem)]`}>
-                From customer request to owner approval.
-              </h3>
-              <p className={`${v(3).body} mt-4 leading-relaxed`}>
-                The complete customer booking journey: pick the dog, choose the service, request the booking, then wait for your approval. Nothing is confirmed without you.
-              </p>
-              <ul className={s.bullets}>
-                <li>Client selects their dog from the portal</li>
-                <li>Chooses service type and dates</li>
-                <li>Request lands in admin for approval</li>
-              </ul>
-            </div>
-            <BookingFlowAnimation />
-          </article>
-
-          {/* ── Daily Schedule ─────────────────────────────── i=4 */}
-          <article id="daily-schedule" className={`rev ${s.block} ${v(4).block}`}>
-            <div>
-              <p className={`eyebrow ${v(4).eyebrow}`}>Daily Schedule</p>
-              <h3 className={`${v(4).h3} text-[clamp(1.8rem,3.4vw,3.1rem)]`}>
                 Know exactly who&apos;s in today.
               </h3>
-              <p className={`${v(4).body} mt-4 leading-relaxed`}>
+              <p className={`${v(3).body} mt-4 leading-relaxed`}>
                 Once bookings are in, the daily schedule becomes the control room. See the day&apos;s dogs, services, collections, drop-offs and unassigned tasks without digging around.
               </p>
               <ul className={s.bullets}>
@@ -1038,14 +1018,14 @@ export default function FeaturesClient() {
             </div>
           </article>
 
-          {/* ── Customer Portal ────────────────────────────── i=5 */}
-          <article id="portal" className={`rev ${s.block} ${v(5).block}`}>
+          {/* ── Customer Portal ────────────────────────────── i=4 */}
+          <article id="portal" className={`rev ${s.block} ${v(4).block}`}>
             <div>
-              <p className={`eyebrow ${v(5).eyebrow}`}>Customer Portal</p>
-              <h3 className={`${v(5).h3} text-[clamp(1.8rem,3.4vw,3.1rem)]`}>
+              <p className={`eyebrow ${v(4).eyebrow}`}>Customer Portal</p>
+              <h3 className={`${v(4).h3} text-[clamp(1.8rem,3.4vw,3.1rem)]`}>
                 Customers can book, request memberships and update pet details.
               </h3>
-              <p className={`${v(5).body} mt-4 leading-relaxed`}>
+              <p className={`${v(4).body} mt-4 leading-relaxed`}>
                 Give customers a branded place to manage their pets and request the services they need, while every important action still comes back to your team for approval.
               </p>
               <ul className={s.bullets}>
@@ -1055,10 +1035,10 @@ export default function FeaturesClient() {
               </ul>
             </div>
             <div className={s.portalPhones}>
-              <Phone screenClass={s.scrTall}>
+              <Phone screenClass={s.scrStd}>
                 <CustomerPortalMembershipAnimation />
               </Phone>
-              <Phone screenClass={s.scrTall}>
+              <Phone screenClass={s.scrStd}>
                 <CustomerPortalBookingAnimation />
               </Phone>
             </div>
@@ -1070,14 +1050,14 @@ export default function FeaturesClient() {
       <div className="bg-white px-[clamp(22px,3vw,56px)] py-10 md:py-[78px]">
         <div className="max-w-[1380px] mx-auto">
 
-          {/* ── Payments ───────────────────────────────────── i=6 */}
-          <article id="payments" className={`rev ${s.block} ${v(6).block}`}>
+          {/* ── Payments ───────────────────────────────────── i=5 */}
+          <article id="payments" className={`rev ${s.block} ${v(5).block}`}>
             <div>
-              <p className={`eyebrow ${v(6).eyebrow}`}>Payments</p>
-              <h3 className={`${v(6).h3} text-[clamp(1.8rem,3.4vw,3.1rem)]`}>
+              <p className={`eyebrow ${v(5).eyebrow}`}>Payments</p>
+              <h3 className={`${v(5).h3} text-[clamp(1.8rem,3.4vw,3.1rem)]`}>
                 Every payment route, without losing track.
               </h3>
-              <p className={`${v(6).body} mt-4 leading-relaxed`}>
+              <p className={`${v(5).body} mt-4 leading-relaxed`}>
                 Financial visibility, not just &quot;payments supported&quot;. See who has paid, who has not, and stop spending Sunday night on invoicing.
               </p>
               <ul className={s.bullets}>
@@ -1093,15 +1073,15 @@ export default function FeaturesClient() {
             </div>
           </article>
 
-          {/* ── Dog Records ────────────────────────────────── i=7 */}
-          <article id="records" className={`rev ${s.block} ${v(7).block} ${s.blockRecords}`}>
+          {/* ── Dog Records ────────────────────────────────── i=6 */}
+          <article id="records" className={`rev ${s.block} ${v(6).block} ${s.blockRecords}`}>
             <div className={s.recordsCopyGrid}>
               <div>
-                <p className={`eyebrow ${v(7).eyebrow}`}>Dog Records &amp; Compliance</p>
-                <h3 className={`${v(7).h3} text-[clamp(1.8rem,3.4vw,3.1rem)]`}>
+                <p className={`eyebrow ${v(6).eyebrow}`}>Dog Records &amp; Compliance</p>
+                <h3 className={`${v(6).h3} text-[clamp(1.8rem,3.4vw,3.1rem)]`}>
                   Every dog detail, ready when you need it.
                 </h3>
-                <p className={`${v(7).body} mt-4 leading-relaxed`}>
+                <p className={`${v(6).body} mt-4 leading-relaxed`}>
                   Pet status, memberships, custom prices, behavioural notes and incident logs. Practical records that help the business run, not fluffy extras.
                 </p>
               </div>
@@ -1114,14 +1094,14 @@ export default function FeaturesClient() {
             <DogRecordsAnimation />
           </article>
 
-          {/* ── Routing ────────────────────────────────────── i=8 */}
-          <article id="routing" className={`rev ${s.block} ${v(8).block}`}>
+          {/* ── Routing ────────────────────────────────────── i=7 */}
+          <article id="routing" className={`rev ${s.block} ${v(7).block}`}>
             <div>
-              <p className={`eyebrow ${v(8).eyebrow}`}>Routing</p>
-              <h3 className={`${v(8).h3} text-[clamp(1.8rem,3.4vw,3.1rem)]`}>
+              <p className={`eyebrow ${v(7).eyebrow}`}>Routing</p>
+              <h3 className={`${v(7).h3} text-[clamp(1.8rem,3.4vw,3.1rem)]`}>
                 Plan the dog bus without rebuilding the route every morning.
               </h3>
-              <p className={`${v(8).body} mt-4 leading-relaxed`}>
+              <p className={`${v(7).body} mt-4 leading-relaxed`}>
                 Routing as a practical transport workflow: set up route groups, assign pets and drivers, then check the pickup run on the map.
               </p>
               <ul className={s.bullets}>
@@ -1137,14 +1117,14 @@ export default function FeaturesClient() {
             </div>
           </article>
 
-          {/* ── Staff ──────────────────────────────────────── i=9 */}
-          <article id="staff" className={`rev ${s.block} ${v(9).block}`}>
+          {/* ── Staff ──────────────────────────────────────── i=8 */}
+          <article id="staff" className={`rev ${s.block} ${v(8).block}`}>
             <div>
-              <p className={`eyebrow ${v(9).eyebrow}`}>Staff</p>
-              <h3 className={`${v(9).h3} text-[clamp(1.8rem,3.4vw,3.1rem)]`}>
+              <p className={`eyebrow ${v(8).eyebrow}`}>Staff</p>
+              <h3 className={`${v(8).h3} text-[clamp(1.8rem,3.4vw,3.1rem)]`}>
                 Staff days, holiday and sick records in one place.
               </h3>
-              <p className={`${v(9).body} mt-4 leading-relaxed`}>
+              <p className={`${v(8).body} mt-4 leading-relaxed`}>
                 Log time off, track allowances and keep payroll-ready staff records in the same system as everything else.
               </p>
               <ul className={s.bullets}>
