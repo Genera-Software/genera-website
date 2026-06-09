@@ -587,6 +587,10 @@ function PaymentsAnimation() {
 
   return (
     <div className={s.paymentsAnimWrap}>
+      <div className={s.pmHeader}>
+        <div className={s.pmHeaderTitle}>Payment Methods</div>
+        <div className={s.pmHeaderSub}>Connect the payment providers your business uses</div>
+      </div>
       {/* Stripe — animated */}
       <div className={s.pmCard}>
         <div className={s.pmCardTop}>
