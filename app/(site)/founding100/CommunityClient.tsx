@@ -263,43 +263,6 @@ export default function CommunityClient({
         </div>
       </section>
 
-      {/* ── What you get: Founding 100 benefits ───────────────────────── */}
-      <section
-        id="what-you-get"
-        className="relative overflow-hidden bg-forest-dark px-6 py-16 text-white md:px-8 md:py-22"
-      >
-        <span aria-hidden className="pointer-events-none absolute -top-32 -right-32 h-[400px] w-[400px] rounded-full bg-gold/5" />
-
-        <div className="relative z-10 mx-auto max-w-[1160px]">
-          <div className="rev text-center md:text-left">
-            <p className="eyebrow !text-gold">Limited offer</p>
-            <h2 className="mt-2 text-heading-mid !text-white">The Founding One Hundred.</h2>
-            <p className="mt-4 max-w-[680px] text-[1.1rem] text-white/80 leading-relaxed md:mx-0 mx-auto">
-              We&apos;re selecting 100 pet businesses to join Genera before we
-              open to the public. You&apos;ll get three months completely free,
-              priority onboarding, and a direct line to our team — plus
-              founding member access to the Genera Business Network when it
-              launches.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-            {FOUNDING_PERKS.map((perk, i) => (
-              <div
-                key={i}
-                className="rev flex gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm md:p-6"
-                style={{ transitionDelay: `${i * 0.06}s` }}
-              >
-                <span className="mt-0.5 text-2xl">{perk.icon}</span>
-                <p className="text-base text-white/85 leading-relaxed">
-                  {perk.text}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Learn / Share / Grow ──────────────────────────────────────── */}
       <section className="bg-white px-6 py-16 md:px-8 md:py-22">
         <div className="mx-auto max-w-[1160px]">
@@ -356,6 +319,43 @@ export default function CommunityClient({
                     </li>
                   ))}
                 </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── What you get: Founding 100 benefits ───────────────────────── */}
+      <section
+        id="what-you-get"
+        className="relative overflow-hidden bg-forest-dark px-6 py-16 text-white md:px-8 md:py-22"
+      >
+        <span aria-hidden className="pointer-events-none absolute -top-32 -right-32 h-[400px] w-[400px] rounded-full bg-gold/5" />
+
+        <div className="relative z-10 mx-auto max-w-[1160px]">
+          <div className="rev text-center md:text-left">
+            <p className="eyebrow !text-gold">Limited offer</p>
+            <h2 className="mt-2 text-heading-mid !text-white">The Founding One Hundred.</h2>
+            <p className="mt-4 max-w-[680px] text-[1.1rem] text-white/80 leading-relaxed md:mx-0 mx-auto">
+              We&apos;re selecting 100 pet businesses to join Genera before we
+              open to the public. You&apos;ll get three months completely free,
+              priority onboarding, and a direct line to our team — plus
+              founding member access to the Genera Business Network when it
+              launches.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+            {FOUNDING_PERKS.map((perk, i) => (
+              <div
+                key={i}
+                className="rev flex gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm md:p-6"
+                style={{ transitionDelay: `${i * 0.06}s` }}
+              >
+                <span className="mt-0.5 text-2xl">{perk.icon}</span>
+                <p className="text-base text-white/85 leading-relaxed">
+                  {perk.text}
+                </p>
               </div>
             ))}
           </div>
