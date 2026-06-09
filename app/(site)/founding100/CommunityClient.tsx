@@ -231,9 +231,6 @@ export default function CommunityClient({
                 &ldquo;The industry has been behind closed doors for too long.
                 We&apos;re changing that.&rdquo;
               </p>
-              <cite className="mt-2 block text-sm text-ink-soft not-italic">
-                — Duncan &amp; Jess, founders of Genera
-              </cite>
             </blockquote>
           </div>
         </div>
