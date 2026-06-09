@@ -134,8 +134,40 @@ export default async function OurStoryPage() {
         </div>
       </section>
 
+      {/* DDC origin callout */}
+      <section className="px-8 py-14" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
+        <div className="mx-auto flex max-w-[760px] items-center gap-8 rounded-3xl border border-teal-mid/20 bg-white p-8 shadow-[0_8px_32px_rgba(0,62,69,0.08)] md:p-10">
+          <div className="shrink-0">
+            <Image
+              src="/images/duncans-dog-co-logo.png"
+              alt="Duncan's Dog Co logo"
+              width={96}
+              height={96}
+              className="rounded-full"
+            />
+          </div>
+          <div>
+            <p className="eyebrow mb-1">Where it all began</p>
+            <h3 className="font-massilia text-xl font-bold text-forest md:text-2xl">
+              Duncan&apos;s Dog Co.
+            </h3>
+            <p className="mt-2 text-ink-soft">
+              The UK&apos;s longest-standing five-star licensed doggy daycare in Surrey — and the business that Genera was born inside.{" "}
+              <a
+                href="https://www.duncansdogco.co.uk"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-forest underline underline-offset-2 hover:text-gold"
+              >
+                Visit duncansdogco.co.uk →
+              </a>
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Story prose */}
-      <section className="px-8 py-22" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
+      <section className="px-8 pb-22 pt-0" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
         <div className="mx-auto flex max-w-[760px] flex-col gap-10">
           <article className="rev flex flex-col gap-4">
             <h2>It started with a handful of leads and a lot of heart</h2>

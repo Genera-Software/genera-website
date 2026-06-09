@@ -68,65 +68,58 @@ export default async function BlogPage() {
       </section>
 
       {/* Blog grid */}
-      <section className="bg-cream px-8 py-22">
+      <section className="px-8 py-22" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
         {posts && posts.length > 0 ? (
           <div className="mx-auto grid max-w-[1160px] gap-7 md:grid-cols-2">
             {posts.map((p, i) => (
               <Link
                 key={p.id}
                 href={`/blog/${p.slug}`}
-                className={`rev d${(i % 6) + 1} group flex flex-col overflow-hidden rounded-2xl border border-cream-dark bg-white shadow-[0_8px_24px_rgba(0,62,69,0.05)] transition-all hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,62,69,0.12)]`}
+                className={`rev d${(i % 6) + 1} group flex flex-col overflow-hidden rounded-2xl border border-teal-mid/20 bg-white shadow-[0_8px_24px_rgba(0,62,69,0.07)] transition-all hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,62,69,0.14)]`}
               >
-                {p.cover_image_url ? (
-                  <div className="relative h-52 w-full overflow-hidden bg-cream-dark">
-                    <Image
-                      src={p.cover_image_url}
-                      alt={p.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 580px"
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    />
-                    <span className="absolute left-4 top-4 rounded-full bg-gold-light px-3 py-1 text-xs font-bold uppercase tracking-wider text-forest">
-                      {p.category}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="flex h-32 items-end bg-gradient-to-br from-forest-mid to-forest-dark p-7">
-                    <span className="rounded-full bg-gold-light px-3 py-1 text-xs font-bold uppercase tracking-wider text-forest">
-                      {p.category}
-                    </span>
-                  </div>
-                )}
+                {/* Cover image — full height with gradient overlay for legibility */}
+                <div className="relative h-52 w-full overflow-hidden">
+                  {p.cover_image_url ? (
+                    <>
+                      <Image
+                        src={p.cover_image_url}
+                        alt={p.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 580px"
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                        unoptimized
+                      />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest/60 via-transparent to-transparent" />
+                    </>
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-forest via-forest-mid to-[#007080]">
+                      <span className="font-caveat text-3xl font-bold text-gold-soft opacity-60">🐾</span>
+                    </div>
+                  )}
+                  <span className="absolute left-4 top-4 rounded-full border border-gold/40 bg-forest/70 px-3 py-1 text-xs font-bold uppercase tracking-wider text-gold-soft backdrop-blur-sm">
+                    {p.category}
+                  </span>
+                </div>
 
                 <div className="flex flex-1 flex-col p-7">
-                  <h2 className="mb-3 font-massilia text-xl font-bold leading-none text-forest md:text-mini-h">
+                  <h2 className="mb-3 font-massilia text-xl font-bold leading-tight text-forest md:text-mini-h">
                     {p.title}
                   </h2>
-                  <p className="mb-5 text-ink-soft">{p.excerpt}</p>
+                  <p className="mb-5 text-sm text-ink-soft">{p.excerpt}</p>
 
-                  <div className="mt-auto flex items-center justify-between border-t border-cream-dark pt-4 text-sm">
+                  <div className="mt-auto flex items-center justify-between border-t border-teal-mid/15 pt-4 text-sm">
                     <div className="flex flex-wrap items-center gap-2 text-ink-soft">
-                      <span className="grid h-7 w-7 place-items-center rounded-full bg-forest font-bold text-white">
+                      <span className="grid h-7 w-7 place-items-center rounded-full bg-forest font-bold text-white text-xs">
                         {p.author_name.charAt(0)}
                       </span>
-                      <span className="font-medium text-forest">
-                        {p.author_name}
-                      </span>
-                      <span className="h-3 w-px bg-cream-dark" />
+                      <span className="font-medium text-forest">{p.author_name}</span>
+                      <span className="h-3 w-px bg-teal-mid/30" />
                       <span>{formatDate(p.published_at)}</span>
-                      <span className="h-3 w-px bg-cream-dark" />
+                      <span className="h-3 w-px bg-teal-mid/30" />
                       <span>{p.read_time_minutes} min read</span>
                     </div>
                     <span className="text-forest transition-transform group-hover:translate-x-1">
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="h-5 w-5"
-                      >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
                         <line x1="5" y1="12" x2="19" y2="12" />
                         <polyline points="12 5 19 12 12 19" />
                       </svg>
@@ -137,9 +130,11 @@ export default async function BlogPage() {
             ))}
           </div>
         ) : (
-          <p className="mx-auto max-w-[860px] text-center text-ink-soft">
-            New posts are on the way. Subscribe via email to be notified.
-          </p>
+          <div className="mx-auto max-w-[560px] rounded-3xl border border-teal-mid/20 bg-white p-14 text-center shadow-[0_8px_32px_rgba(0,62,69,0.07)]">
+            <p className="mb-2 text-4xl">🐾</p>
+            <h3 className="font-massilia text-xl font-bold text-forest">Posts coming soon</h3>
+            <p className="mt-3 text-ink-soft">We&apos;re writing up 15 years of pet business experience. Check back soon.</p>
+          </div>
         )}
       </section>
 
