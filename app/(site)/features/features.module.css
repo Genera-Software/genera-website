@@ -531,7 +531,7 @@
 .screenMain {
   position: absolute;
   width: 470px;
-  height: 380px;
+  height: 260px;
   right: -10px;
   top: 70px;
   transform: rotate(2deg);
