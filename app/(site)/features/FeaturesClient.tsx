@@ -219,6 +219,115 @@ function BookingFlowAnimation() {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Capacity animation — numbers count up service by service,
+   then Save button flashes gold and resets
+   ───────────────────────────────────────────────────────────── */
+const CAP_SERVICES = [
+  { name: "Daycare",       sub: "Maximum bookings per day", max: 15 },
+  { name: "Full Groom",    sub: "Maximum bookings per day", max: 6  },
+  { name: "Nail Clipping", sub: "Maximum bookings per day", max: 12 },
+  { name: "SWIMMING",      sub: "Maximum bookings per day", max: 4  },
+  { name: "Sleepover",     sub: "Maximum bookings per day", max: 8  },
+];
+
+function CapacityAnimation() {
+  const maxTotal = CAP_SERVICES.reduce((a, sv) => a + sv.max, 0);
+  const HOLD = 22;
+  const [tick, setTick] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTick(t => (t >= maxTotal + HOLD ? 0 : t + 1));
+    }, 65);
+    return () => clearInterval(id);
+  }, [maxTotal]);
+
+  const vals = CAP_SERVICES.map((sv, i) => {
+    const offset = CAP_SERVICES.slice(0, i).reduce((a, s) => a + s.max, 0);
+    return Math.min(sv.max, Math.max(0, tick - offset));
+  });
+  const allFull = vals.every((v, i) => v === CAP_SERVICES[i].max);
+
+  return (
+    <BrowserChrome url="app.generasoftware.com / service-settings">
+      <div className={s.capacityAnim}>
+        {CAP_SERVICES.map((sv, i) => (
+          <div key={sv.name} className={s.capRow}>
+            <div>
+              <div className={s.capLabel}>{sv.name}</div>
+              <div className={s.capSub}>{sv.sub}</div>
+            </div>
+            <div className={`${s.capInput} ${vals[i] === sv.max && vals[i] > 0 ? s.capInputFilled : ""}`}>
+              {vals[i] > 0 ? vals[i] : ""}
+            </div>
+          </div>
+        ))}
+        <div className={s.capFooter}>
+          <div className={`${s.capSaveBtn} ${allFull ? s.capSaveBtnActive : ""}`}>
+            {allFull ? "Saved ✓" : "Save"}
+          </div>
+        </div>
+      </div>
+    </BrowserChrome>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Notification toggle animation — switches flick on then off
+   and back, cycling through all five types
+   ───────────────────────────────────────────────────────────── */
+const NOTIF_ITEMS = [
+  { emoji: "📅", label: "Approval needed",         sub: "A service requires your sign-off before confirming" },
+  { emoji: "🔔", label: "New booking",             sub: "A booking has been scheduled or confirmed" },
+  { emoji: "👤", label: "New customer",            sub: "A new owner signed up via the portal" },
+  { emoji: "💳", label: "Membership request",      sub: "A customer requested a membership plan" },
+  { emoji: "💰", label: "Direct debit collected",  sub: "A GoCardless payment was taken" },
+];
+const NOTIF_SEQ: boolean[][] = [
+  [false, false, false, false, false],
+  [true,  false, false, false, false],
+  [true,  true,  false, false, false],
+  [true,  true,  true,  false, false],
+  [true,  true,  true,  true,  false],
+  [true,  true,  true,  true,  true ],
+  [true,  true,  true,  true,  true ], // hold
+  [true,  true,  true,  true,  true ], // hold
+  [false, true,  true,  true,  true ],
+  [true,  true,  true,  true,  true ],
+  [true,  true,  false, true,  true ],
+  [true,  true,  true,  true,  true ],
+  [true,  true,  true,  false, true ],
+  [true,  true,  true,  true,  true ],
+  [true,  true,  true,  true,  true ], // hold before reset
+];
+
+function NotificationAnimation() {
+  const [phase, setPhase] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setPhase(p => (p + 1) % NOTIF_SEQ.length), 820);
+    return () => clearInterval(id);
+  }, []);
+  const states = NOTIF_SEQ[phase];
+  return (
+    <div className={s.notifWrap}>
+      <div className={s.notifTitle}>Notification Types</div>
+      {NOTIF_ITEMS.map((item, i) => (
+        <div key={item.label} className={s.notifRow}>
+          <span className={s.notifIcon}>{item.emoji}</span>
+          <div className={s.notifRowText}>
+            <div className={s.notifRowLabel}>{item.label}</div>
+            <div className={s.notifRowSub}>{item.sub}</div>
+          </div>
+          <div className={`${s.notifToggle} ${states[i] ? s.notifToggleOn : ""}`}>
+            <div className={s.notifThumb} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
    Proof chips
    ───────────────────────────────────────────────────────────── */
 const PROOF_CHIPS = [
@@ -315,17 +424,7 @@ export default function FeaturesClient() {
                 <li>Stay DEFRA-compliant without counting manually</li>
               </ul>
             </div>
-            <BrowserChrome url="app.generasoftware.com / service-settings">
-              <div className={s.capacityImgCrop}>
-                {/* Regular img: needs direct CSS transforms that next/image wrapping complicates */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/mockup-screens/features/desktop-service-settings-capacity.png"
-                  alt="Desktop service capacity settings"
-                  loading="lazy"
-                />
-              </div>
-            </BrowserChrome>
+            <CapacityAnimation />
           </article>
 
           {/* ── Customisation & Alerts ──────────────────────── i=1 */}
@@ -350,7 +449,7 @@ export default function FeaturesClient() {
                 <Image src="/mockup-screens/business-customising.png" alt="Business customisation" fill className="object-cover object-top" />
               </Phone>
               <Phone phoneClass="max-sm:hidden" screenClass={s.scrStd}>
-                <Image src="/mockup-screens/notifications.png" alt="Admin notification settings" fill className="object-cover object-top" />
+                <NotificationAnimation />
               </Phone>
             </div>
           </article>

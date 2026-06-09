@@ -617,6 +617,142 @@
   50%       { transform: translateY(-12px) rotate(4deg); }
 }
 
+/* ── Capacity animated component ────────────────────────────── */
+.capacityAnim {
+  background: #f5f7f8;
+  padding: 4px 0 0;
+}
+.capRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 22px;
+  border-bottom: 1px solid rgba(0,62,69,.07);
+}
+.capLabel {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .9rem;
+}
+.capSub {
+  color: #9CA3AF;
+  font-size: .7rem;
+  margin-top: 2px;
+}
+.capInput {
+  min-width: 76px;
+  height: 40px;
+  border: 1.5px solid rgba(0,62,69,.18);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #003E45;
+  background: #fff;
+  flex-shrink: 0;
+  transition: border-color .25s, color .25s;
+}
+.capInputFilled {
+  border-color: #FFA800;
+  color: #FFA800;
+}
+.capFooter {
+  padding: 12px 22px 14px;
+  display: flex;
+  justify-content: flex-end;
+}
+.capSaveBtn {
+  padding: 9px 22px;
+  border-radius: 8px;
+  background: rgba(0,62,69,.10);
+  color: #9CA3AF;
+  font-family: var(--font-massilia);
+  font-weight: 800;
+  font-size: .85rem;
+  transition: background .4s, color .4s;
+  user-select: none;
+}
+.capSaveBtnActive {
+  background: #FFA800;
+  color: #002830;
+}
+
+/* ── Notification toggles animated component ─────────────────── */
+.notifWrap {
+  padding: 14px 12px 10px;
+  background: #f5f7f8;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+.notifTitle {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .8rem;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0,62,69,.10);
+  margin-bottom: 2px;
+}
+.notifRow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid rgba(0,62,69,.07);
+  flex-shrink: 0;
+}
+.notifIcon { font-size: .95rem; flex-shrink: 0; }
+.notifRowText { flex: 1; min-width: 0; }
+.notifRowLabel {
+  font-family: var(--font-massilia);
+  font-weight: 700;
+  color: #003E45;
+  font-size: .76rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.notifRowSub {
+  color: #9CA3AF;
+  font-size: .62rem;
+  line-height: 1.3;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.notifToggle {
+  width: 38px;
+  height: 21px;
+  border-radius: 999px;
+  background: #D1D5DB;
+  position: relative;
+  flex-shrink: 0;
+  transition: background .35s ease;
+}
+.notifToggleOn { background: #FFA800; }
+.notifThumb {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #fff;
+  top: 3px;
+  left: 3px;
+  transition: transform .35s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,.25);
+}
+.notifToggleOn .notifThumb { transform: translateX(17px); }
+
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 920px) {
   .block {
