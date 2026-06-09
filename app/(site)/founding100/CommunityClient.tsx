@@ -93,12 +93,12 @@ const COMMUNITY_PILLARS = [
 ];
 
 const BUSINESS_TYPES = [
-  "Dog daycare",
-  "Dog walking",
-  "Home boarding",
-  "Grooming salon",
-  "Pet sitting",
-  "Training company",
+  { icon: "🐕",  label: "Dog Daycare"         },
+  { icon: "🦮",  label: "Dog Walking"          },
+  { icon: "✂️",  label: "Grooming Salons"      },
+  { icon: "🏠",  label: "Home Boarding"        },
+  { icon: "🎓",  label: "Training Companies"   },
+  { icon: "🐾",  label: "Pet Sitting"          },
 ];
 
 const TEAM_CREDENTIALS = [
@@ -240,66 +240,67 @@ export default function CommunityClient({
 
       {/* ── The problem ───────────────────────────────────────────────── */}
       <section className="bg-white px-6 py-16 md:px-8 md:py-22">
-        <div className="mx-auto max-w-[1160px]">
-          <div className="rev grid gap-8 md:grid-cols-2 md:items-center md:gap-16">
-            <div>
-              <p className="eyebrow">Why this matters</p>
-              <h2 className="mt-2 text-heading-mid">
-                For too long, the pet care industry has operated in isolation.
-              </h2>
-              <div className="mt-6 space-y-4 text-ink-soft leading-relaxed">
-                <p>
-                  Business owners have faced challenges alone, guarded ideas, and
-                  missed opportunities to learn from others who already solved the
-                  same problems.
-                </p>
-                <p>
-                  The licensing battle that felt unique to you? Someone else just
-                  went through exactly the same thing. The staff ratio question you
-                  couldn&apos;t get a straight answer on? Another business figured
-                  it out last month.
-                </p>
-                <p>
-                  Without a community to share knowledge, the whole industry moves
-                  slower — and the dogs and owners who rely on you deserve better
-                  than that.
-                </p>
-              </div>
-              <blockquote className="mt-8 border-l-4 border-gold/50 pl-5">
-                <p className="font-massilia text-[1.15rem] font-bold leading-snug text-forest">
-                  &ldquo;The industry has been behind closed doors for too long.
-                  We&apos;re changing that.&rdquo;
-                </p>
-                <cite className="mt-2 block text-sm text-ink-soft not-italic">
-                  — Duncan &amp; Jess, founders of Genera
-                </cite>
-              </blockquote>
+        <div className="mx-auto max-w-[760px]">
+          <div className="rev">
+            <p className="eyebrow">Why this matters</p>
+            <h2 className="mt-2 text-heading-mid">
+              For too long, the pet care industry has operated in isolation.
+            </h2>
+            <div className="mt-6 space-y-4 text-ink-soft leading-relaxed">
+              <p>
+                Business owners have faced challenges alone, guarded ideas, and
+                missed opportunities to learn from others who already solved the
+                same problems.
+              </p>
+              <p>
+                The licensing battle that felt unique to you? Someone else just
+                went through exactly the same thing. The staff ratio question you
+                couldn&apos;t get a straight answer on? Another business figured
+                it out last month.
+              </p>
+              <p>
+                Without a community to share knowledge, the whole industry moves
+                slower — and the dogs and owners who rely on you deserve better
+                than that.
+              </p>
             </div>
+            <blockquote className="mt-8 border-l-4 border-gold/50 pl-5">
+              <p className="font-massilia text-[1.15rem] font-bold leading-snug text-forest">
+                &ldquo;The industry has been behind closed doors for too long.
+                We&apos;re changing that.&rdquo;
+              </p>
+              <cite className="mt-2 block text-sm text-ink-soft not-italic">
+                — Duncan &amp; Jess, founders of Genera
+              </cite>
+            </blockquote>
+          </div>
+        </div>
+      </section>
 
-            <div className="rev d2 flex justify-center">
-              <div className="relative w-full max-w-[400px] overflow-hidden rounded-2xl bg-gradient-to-br from-forest to-forest-mid p-8 text-white shadow-[0_24px_60px_rgba(0,62,69,0.22)]">
-                <p className="eyebrow !text-gold-soft mb-6">Every discipline. Every size.</p>
-                <p className="mb-5 text-white/80 leading-relaxed">
-                  Whether you run a dog daycare, dog walking business, home
-                  boarding service, grooming salon or training company —
-                  you&apos;ll be part of a community that wants to see you
-                  succeed.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {BUSINESS_TYPES.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-sm font-bold text-white/90"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <p className="mt-6 text-sm font-bold text-gold">
-                  One network. →
-                </p>
+      {/* ── Who it's for ──────────────────────────────────────────────── */}
+      <section className="bg-cream px-6 py-16 md:px-8 md:py-22">
+        <div className="mx-auto max-w-[1160px]">
+          <div className="rev text-center mb-10 md:mb-14">
+            <p className="eyebrow">Who it&apos;s for</p>
+            <h2 className="mt-2 text-heading-mid">
+              If you work in pet care, this is your community.
+            </h2>
+            <p className="mt-4 text-ink-soft text-lg">
+              Every discipline. Every size. One network.
+            </p>
+          </div>
+          <div className="rev d2 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-6">
+            {BUSINESS_TYPES.map((t) => (
+              <div
+                key={t.label}
+                className="flex flex-col items-center gap-3 rounded-2xl bg-white px-4 py-6 shadow-sm border border-cream-dark"
+              >
+                <span className="text-5xl leading-none">{t.icon}</span>
+                <span className="font-massilia font-bold text-forest text-center text-sm leading-snug">
+                  {t.label}
+                </span>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
