@@ -196,14 +196,18 @@ export default function CommunityClient({
       </section>
 
       {/* ── Dog photo banner ──────────────────────────────────────────── */}
-      <div className="flex gap-1.5 overflow-hidden md:gap-2" aria-hidden>
+      <div className="flex gap-2 px-4 py-6 md:gap-3 md:px-8 md:py-8" aria-hidden>
         {[1,2,3,4,5].map(n => (
-          <div key={n} className="relative h-[180px] flex-1 overflow-hidden md:h-[260px]">
+          <div
+            key={n}
+            className="group relative h-[180px] flex-1 overflow-hidden rounded-2xl shadow-[0_8px_28px_rgba(0,62,69,0.18)] md:h-[260px] md:rounded-3xl"
+          >
             <img
               src={`/daycare/dog${n}.jpg`}
               alt=""
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-forest/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           </div>
         ))}
       </div>
