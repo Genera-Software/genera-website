@@ -1055,10 +1055,10 @@ export default function FeaturesClient() {
               </ul>
             </div>
             <div className={s.portalPhones}>
-              <Phone screenClass={s.scrXxl}>
+              <Phone screenClass={s.scrTall}>
                 <CustomerPortalMembershipAnimation />
               </Phone>
-              <Phone screenClass={s.scrXxl}>
+              <Phone screenClass={s.scrTall}>
                 <CustomerPortalBookingAnimation />
               </Phone>
             </div>
