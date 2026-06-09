@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import AdminMiniAnimation from "@/components/AdminMiniAnimation";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
 import { createMetadata } from "@/lib/seo";
 import { FOUNDING_100_CTA_LABEL } from "@/lib/cta";
 import { getPublicSupabase } from "@/lib/supabase/server";
-
-export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   ...createMetadata({
@@ -72,18 +69,14 @@ const FALLBACK_TIMELINE: TimelineEntry[] = [
 ];
 
 async function getTimeline(): Promise<TimelineEntry[]> {
-  try {
-    const supabase = getPublicSupabase();
-    const { data, error } = await supabase
-      .from("story_timeline")
-      .select("year, body, image_url")
-      .eq("is_visible", true)
-      .order("sort_order", { ascending: true });
-    if (error || !data || data.length === 0) return FALLBACK_TIMELINE;
-    return data;
-  } catch {
-    return FALLBACK_TIMELINE;
-  }
+  const supabase = getPublicSupabase();
+  const { data, error } = await supabase
+    .from("story_timeline")
+    .select("year, body, image_url")
+    .eq("is_visible", true)
+    .order("sort_order", { ascending: true });
+  if (error || !data || data.length === 0) return FALLBACK_TIMELINE;
+  return data;
 }
 
 export default async function OurStoryPage() {
@@ -92,10 +85,9 @@ export default async function OurStoryPage() {
     <>
       <Reveal />
 
-      {/* Split hero */}
+      {/* Split hero — wrapping section carries the same gradient as the homepage hero
+           so the nav (bg-forest) transitions seamlessly into the page */}
       <section className="grid grid-cols-1 bg-gradient-to-br from-forest via-forest-mid to-[#007080] md:grid-cols-2">
-
-        {/* Left — text */}
         <div className="relative overflow-hidden px-8 pt-28 pb-20 text-white md:px-14 md:pt-36">
           <p className="font-caveat text-section-h font-semibold leading-snug text-gold-soft">
             Our Story · Built from the ground up
@@ -122,23 +114,27 @@ export default async function OurStoryPage() {
               </div>
             ))}
           </div>
+
         </div>
 
-        {/* Right — animated dashboard preview */}
-        <div className="relative min-h-[320px] overflow-hidden md:min-h-0">
-          <div className="absolute inset-0 flex items-center justify-center p-8 md:p-12">
-            <div className="w-full max-w-[480px] overflow-hidden rounded-2xl border border-white/10 shadow-[0_28px_80px_rgba(0,0,0,0.4)]">
-              <div className="flex items-center gap-2 border-b border-white/10 bg-forest-dark/80 px-3 py-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-[#FF6058]" />
-                <span className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E]" />
-                <span className="h-2.5 w-2.5 rounded-full bg-[#28C940]" />
-                <span className="ml-2 text-[0.65rem] text-white/40">app.generasoftware.com</span>
-              </div>
-              <AdminMiniAnimation />
-            </div>
-          </div>
-          {/* Left-edge blend matching the text panel */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-[30%] bg-gradient-to-r from-forest to-transparent" />
+        <div className="relative min-h-[320px] overflow-hidden bg-transparent md:min-h-0">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 h-full w-full object-cover"
+          >
+            <source
+              src="https://video.wixstatic.com/video/a043b3_7798ca77d10a457781f9ce9380492181/720p/mp4/file.mp4"
+              type="video/mp4"
+            />
+          </video>
+          {/* Strong left-edge blend — solid forest fading into video, matching the text panel */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-[55%] bg-gradient-to-r from-forest via-forest/60 to-transparent" />
+          {/* Subtle overall dark warm tint to take the edge off the brightness */}
+          <div className="pointer-events-none absolute inset-0 bg-[rgba(0,15,18,0.22)]" />
         </div>
       </section>
 
@@ -146,7 +142,7 @@ export default async function OurStoryPage() {
       <section className="bg-white px-8 py-22">
         <div className="mx-auto flex max-w-[760px] flex-col gap-10">
           <article className="rev flex flex-col gap-4">
-            <h2 className="text-heading-mid text-forest">It started with a handful of leads and a lot of heart</h2>
+            <h2>It started with a handful of leads and a lot of heart</h2>
             <p className="text-ink-soft">
               In 2011, Duncan and Jess started Duncan&apos;s Dog Co as a dog
               walking service in South West London. It was just the two of them
@@ -167,7 +163,7 @@ export default async function OurStoryPage() {
           </blockquote>
 
           <article className="rev flex flex-col gap-4">
-            <h2 className="text-heading-mid text-forest">Growing pains</h2>
+            <h2>Growing pains</h2>
             <p className="text-ink-soft">
               Over the years, Duncan&apos;s Dog Co grew into one of the
               longest-standing, five-star licensed doggy daycares in the UK.
@@ -194,7 +190,7 @@ export default async function OurStoryPage() {
           </div>
 
           <article className="rev flex flex-col gap-4">
-            <h2 className="text-heading-mid text-forest">The missed booking</h2>
+            <h2>The missed booking</h2>
             <p className="text-ink-soft">
               One day, a loyal customer&apos;s pickup was missed. A booking had
               slipped through the cracks. It was the kind of thing that happens
@@ -216,7 +212,7 @@ export default async function OurStoryPage() {
           </blockquote>
 
           <article className="rev flex flex-col gap-4">
-            <h2 className="text-heading-mid text-forest">From prototype to platform</h2>
+            <h2>From prototype to platform</h2>
             <p className="text-ink-soft">
               That first version was rough. But it worked. Bookings stopped
               falling through. Invoices went out on time. Routes made sense.
@@ -233,7 +229,7 @@ export default async function OurStoryPage() {
           </article>
 
           <article className="rev flex flex-col gap-4">
-            <h2 className="text-heading-mid text-forest">Sharing it with the industry</h2>
+            <h2>Sharing it with the industry</h2>
             <p className="text-ink-soft">
               After years of running Genera internally, Duncan and Jess
               realised something. Every small pet business they spoke to was
@@ -258,7 +254,7 @@ export default async function OurStoryPage() {
       {/* Timeline */}
       <section className="bg-cream px-8 py-22">
         <div className="mx-auto max-w-[860px]">
-          <h2 className="rev mb-14 text-center text-heading-mid">The journey so far</h2>
+          <h2 className="rev mb-14 text-center">The journey so far</h2>
 
           <ol className="relative flex flex-col gap-8 before:absolute before:left-1/2 before:top-0 before:h-full before:w-px before:-translate-x-1/2 before:bg-teal-mid">
             {timeline.map((t, i) => {
@@ -308,7 +304,7 @@ export default async function OurStoryPage() {
         <div className="mx-auto max-w-[1000px]">
           <div className="rev mb-12 text-center">
             <p className="eyebrow">The people behind Genera</p>
-            <h2 className="mt-2 text-heading-mid">It takes a team who actually cares.</h2>
+            <h2 className="mt-2">It takes a team who actually cares.</h2>
           </div>
 
           {/* Becks */}
@@ -402,7 +398,7 @@ export default async function OurStoryPage() {
       {/* Final CTA */}
       <section className="bg-forest-dark px-8 py-22 text-center text-white">
         <div className="rev mx-auto max-w-[760px]">
-          <h2 className="text-heading-mid !text-white">
+          <h2 className="!text-white">
             We built Genera for businesses{" "}
             <em className="text-gold">like yours</em>
           </h2>
