@@ -41,7 +41,7 @@ export default async function FaqsPage() {
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft md:px-4 md:py-1.5">
             🐾 Frequently Asked Questions
           </div>
-          <h1 className="mt-2 text-white">
+          <h1 className="mt-2 text-[clamp(1.75rem,3.2vw,2.4rem)] font-bold leading-tight text-white">
             Everything you need to know about{" "}
             <span className="squig">
               Genera
