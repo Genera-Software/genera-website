@@ -83,7 +83,8 @@ export default function Footer() {
 
       <div className="mx-auto flex max-w-[1160px] flex-wrap items-center justify-between gap-4 py-5">
         <p className="text-xs text-white/35">
-          © 2026 Genera Software Ltd. Built with love by Duncan&apos;s Dog Co.
+          © 2026 Genera Software Ltd. Built with love by{" "}
+          <a href="https://www.duncansdogco.com" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-white/70 transition-colors">Duncan&apos;s Dog Co</a>.
         </p>
         <div className="flex flex-wrap gap-2.5">
           <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-eyebrow tracking-wide text-white/50">
