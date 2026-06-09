@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import BookDemoButton from "@/components/BookDemoButton";
 import { LOGIN_URL } from "@/lib/urls";
@@ -28,6 +29,11 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const hamRef = useRef<HTMLButtonElement>(null);
+  const pathname = usePathname();
+  // On the Features page the sticky section nav owns the top, so once the user
+  // scrolls past the top we keep this bar tucked away and never reveal it on
+  // scroll-up (it only shows while pinned at the very top).
+  const lockHiddenOnScroll = pathname === "/features";
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -42,6 +48,8 @@ export default function Navbar() {
         setStuck(y > 50);
         if (y < PIN_AT_TOP) {
           setOffset(0);
+        } else if (lockHiddenOnScroll) {
+          setOffset(-HIDE_DISTANCE);
         } else {
           setOffset((prev) =>
             Math.max(-HIDE_DISTANCE, Math.min(0, prev - delta)),
@@ -55,7 +63,7 @@ export default function Navbar() {
       window.removeEventListener("scroll", onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [lockHiddenOnScroll]);
 
   useEffect(() => {
     if (!open) return;

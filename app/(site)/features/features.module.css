@@ -487,6 +487,7 @@
   max-width: 1380px;
   margin: 0 auto;
   display: flex;
+  justify-content: center;
   gap: 2px;
   flex-wrap: nowrap;
   padding: 8px clamp(16px,3vw,56px);
@@ -1556,7 +1557,9 @@
   .capacityImgCrop { height: 260px; }
   .bookingAnimation { min-height: 540px; }
   .animatedPhone { width: 260px; height: 560px; }
-  .featureNavInner { padding: 6px 16px; }
+  /* On narrow screens the items overflow and scroll, so anchor to the start
+     (centering would hide the leading items behind an unreachable scroll). */
+  .featureNavInner { padding: 6px 16px; justify-content: flex-start; }
   .floatIcon { display: none; }
 
   /* Once the feature row stacks, every section shows ONE phone at the same
