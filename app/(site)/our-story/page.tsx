@@ -89,10 +89,10 @@ export default async function OurStoryPage() {
            so the nav (bg-forest) transitions seamlessly into the page */}
       <section className="grid grid-cols-1 bg-gradient-to-br from-forest via-forest-mid to-[#007080] md:grid-cols-2">
         <div className="relative overflow-hidden px-8 pt-28 pb-20 text-white md:px-14 md:pt-36">
-          <p className="font-caveat text-section-h font-semibold leading-snug text-gold-soft">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft">
             Our Story · Built from the ground up
-          </p>
-          <h1 className="mt-3 text-white">
+          </div>
+          <h1 className="mt-3 text-[clamp(1.9rem,3.8vw,3rem)] font-bold leading-[1.1] text-white">
             We didn&apos;t set out to build software.
             <br />
             <em className="text-gold">We set out to walk dogs.</em>
@@ -102,15 +102,11 @@ export default async function OurStoryPage() {
             used by pet businesses across the UK. Here&apos;s how it happened.
           </p>
 
-          <div className="mt-9 grid grid-cols-2 gap-6 md:grid-cols-4">
+          <div className="mt-9 flex flex-wrap gap-3">
             {STATS.map((s) => (
-              <div key={s.num}>
-                <div className="font-massilia text-figure-md font-bold leading-none text-gold">
-                  {s.num}
-                </div>
-                <div className="mt-1 whitespace-pre-line text-xs uppercase tracking-widest text-white/60">
-                  {s.label}
-                </div>
+              <div key={s.num} className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-white/10 px-4 py-2 backdrop-blur-sm">
+                <span className="font-massilia text-lg font-bold leading-none text-gold">{s.num}</span>
+                <span className="text-xs uppercase tracking-wider text-white/60">{s.label.replace("\n", " ")}</span>
               </div>
             ))}
           </div>
