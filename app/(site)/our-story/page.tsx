@@ -134,38 +134,6 @@ export default async function OurStoryPage() {
         </div>
       </section>
 
-      {/* DDC origin callout */}
-      <section className="px-8 py-14" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
-        <div className="mx-auto flex max-w-[760px] items-center gap-8 rounded-3xl border border-teal-mid/20 bg-white p-8 shadow-[0_8px_32px_rgba(0,62,69,0.08)] md:p-10">
-          <div className="shrink-0">
-            <Image
-              src="/images/duncans-dog-co-logo.png"
-              alt="Duncan's Dog Co logo"
-              width={96}
-              height={96}
-              className="rounded-full"
-            />
-          </div>
-          <div>
-            <p className="eyebrow mb-1">Where it all began</p>
-            <h3 className="font-massilia text-xl font-bold text-forest md:text-2xl">
-              Duncan&apos;s Dog Co.
-            </h3>
-            <p className="mt-2 text-ink-soft">
-              The UK&apos;s longest-standing five-star licensed doggy daycare in Surrey — and the business that Genera was born inside.{" "}
-              <a
-                href="https://www.duncansdogco.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold text-forest underline underline-offset-2 hover:text-gold"
-              >
-                Visit duncansdogco.com →
-              </a>
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Story prose — short paragraphs broken up by photos */}
       <section className="px-8 py-16 md:py-20" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
         <div className="mx-auto flex max-w-[760px] flex-col gap-8">
@@ -209,23 +177,11 @@ export default async function OurStoryPage() {
             &ldquo;Instead of leaving a bad review, he said: I will build you something.&rdquo;
           </blockquote>
 
-          {/* Photo break 3 */}
-          <div className="rev grid grid-cols-2 gap-4">
-            <div className="overflow-hidden rounded-2xl shadow-[0_12px_32px_rgba(0,62,69,0.14)]">
-              <Image src="/images/ddc-team-dogs.jpg" alt="Duncan's Dog Co dogs" width={600} height={500} className="block h-full w-full object-cover" loading="lazy" />
-            </div>
-            <div className="flex flex-col justify-center rounded-2xl bg-gradient-to-br from-[#FFF3CC] to-[#FFD66C] p-8 shadow-[0_12px_32px_rgba(0,62,69,0.10)]">
-              <p className="font-massilia text-5xl font-bold text-forest">2022</p>
-              <p className="mt-1 text-xs font-semibold uppercase tracking-widest text-forest/60">Opened to the industry</p>
-              <p className="mt-3 text-sm text-forest/80">After years refining it at Duncan&apos;s Dog Co, Genera was shared with the industry — software built by people who&apos;ve been where you are.</p>
-            </div>
-          </div>
-
         </div>
       </section>
 
       {/* Timeline */}
-      <section className="px-8 py-22" style={{ background: "linear-gradient(170deg,#FFF3CC 0%,#FFD66C 100%)" }}>
+      <section className="px-8 py-22" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
         <div className="mx-auto max-w-[860px]">
           <h2 className="rev mb-10 text-center text-2xl font-bold text-forest md:text-3xl">The journey so far</h2>
 
@@ -250,7 +206,7 @@ export default async function OurStoryPage() {
                     )}
                   </div>
                   <span
-                    className={`relative z-10 block h-4 w-4 rounded-full ring-4 ring-gold/30 ${
+                    className={`relative z-10 block h-4 w-4 rounded-full ring-4 ring-[#E0F0F2] ${
                       isLast ? "bg-forest" : "bg-gold"
                     }`}
                   />
