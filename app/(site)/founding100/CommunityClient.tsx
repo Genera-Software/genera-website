@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
@@ -69,29 +68,6 @@ const FOUNDING_PERKS = [
   { icon: "🏅", text: "Lifetime founding member status in the Genera Network" },
 ];
 
-const COMMUNITY_PILLARS = [
-  {
-    icon: "📚",
-    heading: "Real-world guides and playbooks",
-    body: "From people who've actually done it. Licensing navigation, planning applications, DEFRA compliance — step by step from businesses that went through it first.",
-  },
-  {
-    icon: "🤝",
-    heading: "Peer-to-peer knowledge",
-    body: "Ask a question, get an answer from someone who solved the same problem last month. No gatekeeping. No competition. Just progress.",
-  },
-  {
-    icon: "🎤",
-    heading: "Expert sessions and community Q&As",
-    body: "Regular sessions with industry professionals, compliance experts, and the Genera team. Built around what the community actually wants to learn.",
-  },
-  {
-    icon: "🔒",
-    heading: "A private verified community",
-    body: "Every member is a real pet care professional. No noise, no spam — just the people who understand exactly what you're dealing with.",
-  },
-];
-
 const BUSINESS_TYPES = [
   { icon: "🐕",  label: "Dog Daycare"         },
   { icon: "🦮",  label: "Dog Walking"          },
@@ -101,12 +77,6 @@ const BUSINESS_TYPES = [
   { icon: "🐾",  label: "Pet Sitting"          },
 ];
 
-const TEAM_CREDENTIALS = [
-  "Operated licensed dog daycare businesses from the ground up",
-  "Navigated full DEFRA licensing and planning compliance first-hand",
-  "Built software because the right tools simply didn't exist",
-  "Faced every challenge you're facing — and found the way through",
-];
 
 /* ─────────────────────────────────────────────────────────────
    Check icon
@@ -239,32 +209,20 @@ export default function CommunityClient({
       </div>
 
       {/* ── The problem ───────────────────────────────────────────────── */}
-      <section className="bg-white px-6 py-16 md:px-8 md:py-22">
+      <section className="bg-white px-6 py-14 md:px-8 md:py-18">
         <div className="mx-auto max-w-[760px]">
           <div className="rev">
             <p className="eyebrow">Why this matters</p>
             <h2 className="mt-2 text-heading-mid">
               For too long, the pet care industry has operated in isolation.
             </h2>
-            <div className="mt-6 space-y-4 text-ink-soft leading-relaxed">
-              <p>
-                Business owners have faced challenges alone, guarded ideas, and
-                missed opportunities to learn from others who already solved the
-                same problems.
-              </p>
-              <p>
-                The licensing battle that felt unique to you? Someone else just
-                went through exactly the same thing. The staff ratio question you
-                couldn&apos;t get a straight answer on? Another business figured
-                it out last month.
-              </p>
-              <p>
-                Without a community to share knowledge, the whole industry moves
-                slower — and the dogs and owners who rely on you deserve better
-                than that.
-              </p>
-            </div>
-            <blockquote className="mt-8 border-l-4 border-gold/50 pl-5">
+            <p className="mt-6 text-ink-soft leading-relaxed">
+              Business owners have faced challenges alone, missed opportunities
+              to learn from others who already solved the same problems, and
+              guarded ideas that could have helped the whole industry move
+              faster.
+            </p>
+            <blockquote className="mt-7 border-l-4 border-gold/50 pl-5">
               <p className="font-massilia text-[1.15rem] font-bold leading-snug text-forest">
                 &ldquo;The industry has been behind closed doors for too long.
                 We&apos;re changing that.&rdquo;
@@ -339,135 +297,67 @@ export default function CommunityClient({
               </div>
             ))}
           </div>
-
-          <div className="rev mt-12 flex flex-col items-center gap-6 rounded-3xl border border-white/10 bg-white/5 p-8 md:flex-row md:gap-12 md:p-10">
-            <div className="w-full md:max-w-[260px]">
-              <FoundingSpotsStats
-                totalSpots={totalSpots}
-                claimedSpots={claimedSpots}
-              />
-              <p className="relative z-10 mt-3 text-sm text-white/70">
-                Be part of shaping the product from the start. Applications
-                close once we reach 100.
-              </p>
-            </div>
-            <div className="flex flex-col items-start gap-4">
-              <p className="text-lg font-bold text-white">
-                Ready to be one of the first 100?
-              </p>
-              <p className="text-white/70 leading-relaxed">
-                No credit card required. No commitment. Just one simple
-                application to see if Genera is right for your business.
-              </p>
-              <BookDemoButton className="btn btn-gold btn-lg">
-                {FOUNDING_100_CTA_LABEL}
-              </BookDemoButton>
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* ── Community pillars ─────────────────────────────────────────── */}
-      <section className="bg-cream px-6 py-16 md:px-8 md:py-22">
-        <div className="mx-auto max-w-[1160px]">
-          <div className="rev text-center">
-            <p className="eyebrow">Genera Business Network</p>
-            <h2 className="mt-2 text-heading-mid">More than software. A community.</h2>
-            <p className="mx-auto mt-4 max-w-[600px] text-ink-soft leading-relaxed">
-              Founding members get early access to the Genera Business Network
-              — a private community of verified pet care professionals built to
-              raise standards across the industry.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            {COMMUNITY_PILLARS.map((pillar, i) => (
-              <div
-                key={i}
-                className="rev flex gap-5 rounded-2xl border border-teal-mid/40 bg-white p-6 shadow-[0_8px_32px_rgba(0,62,69,0.07)] md:p-7"
-                style={{ transitionDelay: `${i * 0.08}s` }}
-              >
-                <span className="mt-1 text-3xl">{pillar.icon}</span>
-                <div>
-                  <h3 className="text-forest">{pillar.heading}</h3>
-                  <p className="mt-2 text-ink-soft leading-relaxed">
-                    {pillar.body}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Big quote */}
-          <div className="rev mt-12 overflow-hidden rounded-3xl bg-gradient-to-br from-forest to-forest-mid p-8 text-white md:p-12">
-            <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-center md:gap-12">
-              <div>
-                <p className="text-[1.4rem] font-bold leading-snug text-white md:text-[1.8rem]">
-                  Together, we&apos;re raising standards in pet care, improving
-                  the experience for pets and owners, and building stronger
-                  businesses along the way.
-                </p>
-                <p className="mt-5 text-white/70 leading-relaxed">
-                  No gatekeeping. No competition. Just a community of people
-                  who want to see the whole industry succeed.
-                </p>
-              </div>
-              <div className="flex flex-col gap-3">
-                {[
-                  "Learn from people who've already solved your problems",
-                  "Grow with state-of-the-art software behind you",
-                  "Backed by a team who has walked in your paws",
-                ].map((b) => (
-                  <div key={b} className="flex items-start gap-3">
-                    <CheckWhite />
-                    <span className="text-sm text-white/80 leading-relaxed">
-                      {b}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Backed by experience ──────────────────────────────────────── */}
+      {/* ── Learn / Share / Grow ──────────────────────────────────────── */}
       <section className="bg-white px-6 py-16 md:px-8 md:py-22">
         <div className="mx-auto max-w-[1160px]">
-          <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
-            <div className="rev flex justify-center items-center">
-              <PawTrail />
-            </div>
-
-            <div className="rev d2">
-              <p className="eyebrow">Supported by a team who&apos;ve been there</p>
-              <h2 className="mt-2 text-heading-mid">
-                Genera isn&apos;t built by people who{" "}
-                <em>read about</em> pet care.
-              </h2>
-              <p className="mt-4 text-ink-soft leading-relaxed">
-                It&apos;s built by people who&apos;ve lived it. The
-                inspections, the planning battles, the licensing letters, the
-                sleepless nights before opening day.
-              </p>
-              <ul className="mt-6 flex flex-col gap-3">
-                {TEAM_CREDENTIALS.map((c) => (
-                  <li key={c} className="flex items-start gap-3">
-                    <Check />
-                    <span className="text-ink-soft leading-relaxed">{c}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-6 text-sm font-bold text-forest">
-                Everything shaped by real experience. Nothing generic.
-              </p>
-              <Link
-                href="/our-story"
-                className="mt-3 inline-flex items-center gap-2 font-massilia font-bold text-forest hover:text-gold transition-colors"
-              >
-                Read our story →
-              </Link>
-            </div>
+          <div className="rev text-center mb-12">
+            <p className="eyebrow">What you get</p>
+            <h2 className="mt-2 text-heading-mid">Tools, knowledge, people.</h2>
+            <p className="mt-4 text-ink-soft text-lg">
+              Everything shaped by real experience. Nothing generic.
+            </p>
+          </div>
+          <div className="rev d2 grid gap-5 md:grid-cols-3">
+            {[
+              {
+                num: "01",
+                heading: "Learn",
+                points: [
+                  "Real-world guides and playbooks from people who've done it",
+                  "Licensing navigation — what to expect, when, and from who",
+                  "Business setup templates built from lived experience",
+                  "Regular expert sessions and community Q&As",
+                ],
+              },
+              {
+                num: "02",
+                heading: "Share",
+                points: [
+                  "A private community of verified pet care professionals",
+                  "Peer-to-peer knowledge — ask, answer, grow",
+                  "Share what's working in your business right now",
+                  "No gatekeeping. No competition. Just progress.",
+                ],
+              },
+              {
+                num: "03",
+                heading: "Grow",
+                points: [
+                  "State of the art software built specifically for pet care",
+                  "A team that's been in your shoes — and your paws",
+                  "Tools to raise your star rating and your standards",
+                  "A community that wants to see you succeed",
+                ],
+              },
+            ].map((col) => (
+              <div key={col.num} className="rounded-2xl border border-cream-dark bg-cream p-7 md:p-8">
+                <div className="font-massilia text-[4.5rem] font-black leading-none text-forest/10 select-none">
+                  {col.num}
+                </div>
+                <h3 className="mt-2 font-massilia text-2xl font-black text-forest">{col.heading}</h3>
+                <ul className="mt-5 flex flex-col gap-3">
+                  {col.points.map((p) => (
+                    <li key={p} className="flex items-start gap-3 text-ink-soft text-sm leading-relaxed">
+                      <span className="mt-0.5 font-bold text-gold shrink-0">→</span>
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -475,47 +365,28 @@ export default function CommunityClient({
       {/* ── Final CTA ─────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-6 py-16 text-center text-white md:px-8 md:py-24">
         <span aria-hidden className="pointer-events-none absolute -top-20 -right-24 h-[300px] w-[300px] rounded-[63%_37%_54%_46%/55%_48%_52%_45%] bg-gold/8" />
-
         <div className="relative z-10 mx-auto max-w-[760px]">
           <div className="rev">
-            <p className="eyebrow !text-gold-soft">Only 100 spots</p>
+            <p className="eyebrow !text-gold-soft">Founding members</p>
             <h2 className="mt-2 text-heading-mid !text-white">
-              First come, first in.
+              Be one of the first 100.
             </h2>
             <p className="mx-auto mt-4 max-w-[560px] text-[1.1rem] text-white/80 leading-relaxed">
               The Founding 100 get early access, a lifetime founding member
-              status, and a direct voice in shaping what the Genera Business
-              Network becomes. These spots won&apos;t last.
+              status, and a direct voice in shaping what Genera becomes.
+              These spots won&apos;t last.
             </p>
           </div>
-
-          {/* Perks card */}
-          <div className="rev d2 mx-auto mt-8 inline-block rounded-2xl border border-white/15 px-8 py-6 text-left backdrop-blur-sm" style={{background:"rgba(255,255,255,0.06)"}}>
-            <ul className="flex flex-col gap-3">
-              {FOUNDING_PERKS.map((p, i) => (
-                <li key={i} className="flex items-center gap-3 text-white/85 text-sm font-niveau">
-                  <span className="text-base shrink-0">{p.icon}</span>
-                  {p.text}
-                </li>
-              ))}
-            </ul>
+          <div className="rev d2 mx-auto mt-8 max-w-[320px] rounded-2xl border border-white/10 bg-white/5 p-7 backdrop-blur-sm">
+            <FoundingSpotsStats totalSpots={totalSpots} claimedSpots={claimedSpots} />
           </div>
-
-          {/* Spots counter */}
-          <div className="rev d3 mx-auto mt-8 max-w-[320px] rounded-2xl border border-white/10 bg-white/5 p-7 backdrop-blur-sm">
-            <FoundingSpotsStats
-              totalSpots={totalSpots}
-              claimedSpots={claimedSpots}
-            />
-          </div>
-
-          <div className="rev d4 mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <div className="rev d3 mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <BookDemoButton className="btn btn-gold btn-lg">
               {FOUNDING_100_CTA_LABEL}
             </BookDemoButton>
           </div>
           <p className="mt-4 text-sm text-white/60">
-            No credit card · No commitment · Cancel anytime
+            No credit card · No commitment · First come, first in.
           </p>
         </div>
       </section>
