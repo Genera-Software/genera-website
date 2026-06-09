@@ -478,8 +478,8 @@ export default function FeaturesClient() {
             <div className={s.singlePhone}>
               <div className={s.badgeWrap}>
                 <Phone phoneClass={s.phonePayment} screenClass={s.scrPay}>
-                  {/* 30% skips past iOS status bar + browser URL bar at the top of the screenshot */}
-                  <Image src="/mockup-screens/payment-methods.png" alt="Stripe and GoCardless payment methods" fill className="object-cover" style={{ objectPosition: "center 30%" }} />
+                  {/* scrPay=560px → scaled image=747px → 187px scroll range; 35% skips ~65px which clears the iOS status bar + dev URL bar */}
+                  <Image src="/mockup-screens/payment-methods.png" alt="Stripe and GoCardless payment methods" fill className="object-cover" style={{ objectPosition: "center 35%" }} />
                 </Phone>
                 <div className={`${s.floatBadge} ${s.badgeWhite}`}>✓ GoCardless connected</div>
               </div>

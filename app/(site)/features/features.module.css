@@ -94,7 +94,7 @@
 .scrXl   { height: 560px; }
 .scrXxl  { height: 580px; }
 .scrLg   { height: 610px; }
-.scrPay  { height: 700px; }
+.scrPay  { height: 560px; }
 
 /* Two phones side by side (Bookings) */
 .twoPhones {
