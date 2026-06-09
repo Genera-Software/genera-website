@@ -166,73 +166,61 @@ export default async function OurStoryPage() {
         </div>
       </section>
 
-      {/* Story — card blocks, alternating teal / gold like Features page */}
-      <section className="px-6 py-16 md:px-8 md:py-20" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
-        <div className="mx-auto max-w-[900px]">
-          <div className="rev mb-3 text-center">
-            <p className="eyebrow">The story</p>
+      {/* Story prose — short paragraphs broken up by photos */}
+      <section className="px-8 py-16 md:py-20" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
+        <div className="mx-auto flex max-w-[760px] flex-col gap-8">
+
+          <article className="rev flex flex-col gap-3">
+            <h2 className="text-xl font-bold text-forest md:text-2xl">It started with a handful of leads and a lot of heart</h2>
+            <p className="text-ink-soft">In 2011, Duncan and Jess started Duncan&apos;s Dog Co as a dog walking service in South West London — just the two of them and a growing list of dogs who needed looking after.</p>
+            <p className="text-ink-soft">The business grew quickly. Walks turned into daycare, then boarding. Before long they were running one of the busiest independent pet businesses in the area.</p>
+          </article>
+
+          {/* Photo break 1 */}
+          <div className="rev grid grid-cols-2 gap-4">
+            <div className="overflow-hidden rounded-2xl shadow-[0_12px_32px_rgba(0,62,69,0.14)]">
+              <Image src="/images/duncan-jess.jpg" alt="Duncan and Jess, founders of Duncan's Dog Co" width={600} height={500} className="block h-full w-full object-cover" loading="lazy" />
+            </div>
+            <div className="overflow-hidden rounded-2xl shadow-[0_12px_32px_rgba(0,62,69,0.14)]">
+              <Image src="/images/ddc-woodland.jpg" alt="The Duncan's Dog Co woodland facility" width={600} height={500} className="block h-full w-full object-cover" loading="lazy" />
+            </div>
           </div>
-          <div className="flex flex-col gap-6">
 
-            {/* Card 1 — origins */}
-            <div className="rev d1 overflow-hidden rounded-3xl border border-teal-mid/20 bg-white shadow-[0_8px_32px_rgba(0,62,69,0.07)] md:grid md:grid-cols-[1fr_1fr]">
-              <div className="p-8 md:p-10">
-                <p className="eyebrow mb-2">2011</p>
-                <h3 className="mb-4 font-massilia text-xl font-bold text-forest md:text-2xl">It started with a handful of leads and a lot of heart</h3>
-                <p className="text-sm text-ink-soft">Duncan and Jess started Duncan&apos;s Dog Co as a dog walking service in South West London. Just the two of them and a growing list of dogs who needed looking after during the day.</p>
-                <p className="mt-3 text-sm text-ink-soft">The business grew quickly — walks turned into a full schedule, then daycare, then boarding. Before long they were running one of the busiest independent pet businesses in the area.</p>
-              </div>
-              <div className="relative min-h-[220px] overflow-hidden bg-gradient-to-br from-forest-mid to-forest">
-                <Image src="/images/duncan-jess.jpg" alt="Duncan and Jess, founders" fill sizes="450px" className="object-cover object-top" loading="lazy" />
-              </div>
-            </div>
+          <blockquote className="rev rounded-2xl border-l-4 border-gold bg-white px-7 py-5 font-massilia text-lg font-bold italic text-forest shadow-[0_4px_18px_rgba(0,62,69,0.07)]">
+            &ldquo;We were running everything on spreadsheets and manual invoices. It worked until it did not.&rdquo;
+          </blockquote>
 
-            {/* Card 2 — growing pains */}
-            <div className="rev d2 overflow-hidden rounded-3xl border border-teal-mid/20 bg-white shadow-[0_8px_32px_rgba(0,62,69,0.07)] md:grid md:grid-cols-[1fr_1fr]">
-              <div className="relative order-2 min-h-[220px] overflow-hidden bg-gradient-to-br from-teal-mid/30 to-forest-mid/40 md:order-1">
-                <Image src="/images/team-certificates.png" alt="The Duncan's Dog Co team" fill sizes="450px" className="object-cover" loading="lazy" />
-              </div>
-              <div className="order-1 p-8 md:order-2 md:p-10">
-                <p className="eyebrow mb-2">The growing pains</p>
-                <h3 className="mb-4 font-massilia text-xl font-bold text-forest md:text-2xl">Five stars. Woodland facility. One spreadsheet too many.</h3>
-                <p className="text-sm text-ink-soft">They moved to a beautiful woodland facility in Surrey. The team grew. The client list grew. And the admin grew with it.</p>
-                <p className="mt-3 text-sm text-ink-soft">Bookings by text, email, phone and Facebook. Invoices raised one by one every week. Routes planned on paper. Staff schedules in WhatsApp groups. It all sort of worked. Until it didn&apos;t.</p>
-                <blockquote className="mt-5 border-l-4 border-gold pl-4 font-massilia text-base italic text-forest">
-                  &ldquo;We were running everything on spreadsheets. It worked until it did not.&rdquo;
-                </blockquote>
-              </div>
-            </div>
+          <article className="rev flex flex-col gap-3">
+            <h2 className="text-xl font-bold text-forest md:text-2xl">Growing pains</h2>
+            <p className="text-ink-soft">They moved to a beautiful woodland facility in Surrey. The team grew. The client list grew. And the admin grew with it — bookings by text, email, phone and Facebook, invoices raised one by one every week, routes planned on paper.</p>
+          </article>
 
-            {/* Card 3 — the missed booking */}
-            <div className="rev d3 rounded-3xl border border-forest/10 bg-forest p-8 shadow-[0_8px_32px_rgba(0,62,69,0.18)] md:p-10">
-              <div className="md:max-w-[640px]">
-                <p className="eyebrow mb-2 !text-gold/70">The turning point</p>
-                <h3 className="mb-4 font-massilia text-xl font-bold text-white md:text-2xl">The missed booking that changed everything</h3>
-                <p className="text-sm text-white/75">One day a loyal customer&apos;s pickup was missed. A booking had slipped through the cracks. It was embarrassing. It was avoidable. And it was the moment everything changed.</p>
-                <p className="mt-3 text-sm text-white/75">That customer happened to be a developer. Instead of leaving a bad review, he said something unexpected.</p>
-                <blockquote className="mt-5 font-massilia text-lg font-bold italic text-gold md:text-xl">
-                  &ldquo;Instead of leaving a bad review, he said: I will build you something.&rdquo;
-                </blockquote>
-              </div>
-            </div>
-
-            {/* Card 4 — prototype to platform */}
-            <div className="rev d4 overflow-hidden rounded-3xl border border-teal-mid/20 bg-white shadow-[0_8px_32px_rgba(0,62,69,0.07)] md:grid md:grid-cols-2">
-              <div className="p-8 md:p-10">
-                <p className="eyebrow mb-2">2019 – today</p>
-                <h3 className="mb-4 font-massilia text-xl font-bold text-forest md:text-2xl">From prototype to platform — built in the mud, not a lab</h3>
-                <p className="text-sm text-ink-soft">That first version was rough. But it worked. Bookings stopped falling through. Invoices went out on time. Routes made sense.</p>
-                <p className="mt-3 text-sm text-ink-soft">Every feature was tested in a real business, every day. It wasn&apos;t built by people guessing what pet businesses need — it was built at 7am with muddy boots, on late Sunday evenings that used to be spent on invoices.</p>
-                <p className="mt-3 text-sm text-ink-soft">After years of refining it internally, Duncan and Jess decided to share it. Not as a corporate product launch, but as one small business helping others.</p>
-              </div>
-              <div className="flex flex-col justify-center bg-gradient-to-br from-[#FFF3CC] to-[#FFD66C] p-8 md:p-10">
-                <p className="font-massilia text-4xl font-bold text-forest">2022</p>
-                <p className="mt-1 text-sm font-semibold uppercase tracking-widest text-forest/60">Opened to the industry</p>
-                <p className="mt-4 text-sm text-forest/80">Genera is now used by pet businesses across the UK — and we are just getting started.</p>
-              </div>
-            </div>
-
+          {/* Photo break 2 — full width */}
+          <div className="rev overflow-hidden rounded-2xl shadow-[0_12px_32px_rgba(0,62,69,0.14)]">
+            <Image src="/images/team-certificates.png" alt="The Duncan's Dog Co team" width={1600} height={900} className="block h-auto w-full" loading="lazy" />
           </div>
+
+          <article className="rev flex flex-col gap-3">
+            <h2 className="text-xl font-bold text-forest md:text-2xl">The missed booking</h2>
+            <p className="text-ink-soft">One day a loyal customer&apos;s pickup was missed. It was embarrassing. It was avoidable. It was the moment everything changed. That customer happened to be a developer — and instead of leaving a bad review, he said something unexpected.</p>
+          </article>
+
+          <blockquote className="rev rounded-2xl bg-forest px-7 py-5 font-massilia text-lg font-bold italic text-white shadow-[0_4px_18px_rgba(0,62,69,0.14)]">
+            &ldquo;Instead of leaving a bad review, he said: I will build you something.&rdquo;
+          </blockquote>
+
+          {/* Photo break 3 */}
+          <div className="rev grid grid-cols-2 gap-4">
+            <div className="overflow-hidden rounded-2xl shadow-[0_12px_32px_rgba(0,62,69,0.14)]">
+              <Image src="/images/ddc-team-dogs.jpg" alt="Duncan's Dog Co dogs" width={600} height={500} className="block h-full w-full object-cover" loading="lazy" />
+            </div>
+            <div className="flex flex-col justify-center rounded-2xl bg-gradient-to-br from-[#FFF3CC] to-[#FFD66C] p-8 shadow-[0_12px_32px_rgba(0,62,69,0.10)]">
+              <p className="font-massilia text-5xl font-bold text-forest">2022</p>
+              <p className="mt-1 text-xs font-semibold uppercase tracking-widest text-forest/60">Opened to the industry</p>
+              <p className="mt-3 text-sm text-forest/80">After years refining it at Duncan&apos;s Dog Co, Genera was shared with the industry — software built by people who&apos;ve been where you are.</p>
+            </div>
+          </div>
+
         </div>
       </section>
 
