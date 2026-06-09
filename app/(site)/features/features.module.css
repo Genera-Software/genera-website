@@ -32,6 +32,9 @@
 }
 
 /* ── Phone frame ─────────────────────────────────────────────── */
+/* Every phone shares one shape + size: a real phone aspect ratio (≈9:19.5,
+   matching the screenshot exports) capped at a single max-width, so single
+   and paired phones look identical throughout the page. */
 .phone {
   background: linear-gradient(145deg, #fff, #dfe7ea);
   border-radius: 36px;
@@ -39,22 +42,18 @@
   box-shadow: 0 34px 70px rgba(0,62,69,.24), inset 0 2px 4px rgba(255,255,255,.95);
   border: 1px solid rgba(0,62,69,.18);
   overflow: hidden;
+  width: 100%;
+  max-width: 300px;
+  margin-inline: auto;
 }
 .phoneScreen {
   border-radius: 28px;
   background: #f5f7f8;
   overflow: hidden;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
-  position: relative;   /* needed for next/image fill */
+  position: relative;       /* needed for next/image fill */
+  aspect-ratio: 9 / 19.5;   /* one consistent mobile shape across the page */
 }
-
-/* Screen heights */
-.scrStd  { height: 420px; }
-.scrTall { height: 500px; }
-.scrXl   { height: 560px; }
-.scrXxl  { height: 580px; }
-.scrLg   { height: 610px; }
-.scrPay  { height: 560px; }
 
 /* Two phones side by side (Bookings) */
 .twoPhones {
@@ -62,7 +61,6 @@
   grid-template-columns: 1fr 1fr;
   gap: 22px;
   align-items: end;
-  min-height: 680px;
 }
 .twoPhones .phone:first-child {
   transform: rotate(-2deg);
@@ -82,9 +80,8 @@
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   align-items: center;
-  min-height: 620px;
 }
-.portalPhones .phone { width: 100%; max-width: 340px; justify-self: center; }
+.portalPhones .phone { justify-self: center; }
 .portalPhones .phone:first-child {
   transform: rotate(-2.5deg);
   box-shadow: 0 46px 90px rgba(0,62,69,.30), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
@@ -100,24 +97,21 @@
   place-items: center;
 }
 
-/* Specific phone styles */
+/* Specific phone styles — shape/size are shared (.phone); these only add the
+   subtle tilt and a deeper shadow for the single-phone showcases. */
 .phoneRoute {
-  width: min(340px, 100%);
   transform: rotate(-2deg);
   box-shadow: 0 46px 90px rgba(0,62,69,.28), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
 }
 .phoneStaff {
-  width: min(330px, 100%);
   transform: rotate(2deg);
   box-shadow: 0 46px 90px rgba(0,62,69,.28), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
 }
 .phonePayment {
-  width: min(360px, 100%);
   transform: rotate(-2deg);
   box-shadow: 0 46px 90px rgba(0,62,69,.28), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
 }
 .phoneDaily {
-  width: min(380px, 96%);
   transform: rotate(-1deg);
   box-shadow: 0 46px 90px rgba(0,62,69,.30), 0 18px 36px rgba(0,40,48,.18), inset 0 2px 4px rgba(255,255,255,.95);
 }
@@ -1571,20 +1565,16 @@
   .animatedPhone { width: 230px; height: 490px; }
   /* Two-phone grids: stack to single column, hide the secondary phone */
   .twoPhones,
-  .portalPhones { grid-template-columns: 1fr; min-height: 0; justify-items: center; }
-  /* width: 100% fills the grid cell (margin:auto collapses it to intrinsic width) */
+  .portalPhones { grid-template-columns: 1fr; justify-items: center; }
   .twoPhones .phone,
-  .portalPhones .phone { transform: none !important; width: 100%; max-width: 310px; }
+  .portalPhones .phone { transform: none !important; }
   /* Hide the less-important phone in each pair to avoid 1200px-tall stacks */
   .twoPhones .phone:first-child  { display: none; } /* keep pending-approval (2nd) */
   .portalPhones .phone:last-child { display: none; } /* keep membership profile (1st) */
   .phoneRoute,
   .phoneStaff,
   .phoneDaily,
-  .phonePayment { transform: none; max-width: 310px; }
-  /* Prevent over-tall phone screens on mobile for content-driven animations */
-  .scrPay, .scrXl { height: 420px; }
-  .scrXxl { height: 380px; }
+  .phonePayment { transform: none; }
   .heroFloat { width: 116px; left: -8px; bottom: -12px; }
   .featTitle { max-width: none; }
 }

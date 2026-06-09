@@ -87,16 +87,14 @@ function BrowserChrome({ url, children }: { url: string; children: React.ReactNo
    ───────────────────────────────────────────────────────────── */
 function Phone({
   phoneClass = "",
-  screenClass = s.scrStd,
   children,
 }: {
   phoneClass?: string;
-  screenClass?: string;
   children: React.ReactNode;
 }) {
   return (
     <div className={`${s.phone} ${phoneClass}`}>
-      <div className={`${s.phoneScreen} ${screenClass}`}>{children}</div>
+      <div className={s.phoneScreen}>{children}</div>
     </div>
   );
 }
@@ -1141,10 +1139,10 @@ export default function FeaturesClient() {
             <div className={s.featVisual}>
               {/* sm: = 640px — at smaller sizes one phone is enough */}
               <div className={s.twoCol}>
-                <Phone screenClass={s.scrStd}>
+                <Phone>
                   <Image src="/mockup-screens/business-customising.png" alt="Business customisation" fill className="object-cover object-top" />
                 </Phone>
-                <Phone phoneClass="max-sm:hidden" screenClass={s.scrStd}>
+                <Phone phoneClass="max-sm:hidden">
                   <NotificationAnimation />
                 </Phone>
               </div>
@@ -1181,10 +1179,10 @@ export default function FeaturesClient() {
             </div>
             <div className={s.featVisual}>
               <div className={s.twoPhones}>
-                <Phone screenClass={s.scrTall}>
+                <Phone>
                   <Image src="/mockup-screens/features/mobile-add-booking-recurring.png" alt="Quick recurring admin booking" fill className="object-cover object-top" />
                 </Phone>
-                <Phone screenClass={s.scrTall}>
+                <Phone>
                   <BookingsPendingAnimation />
                 </Phone>
               </div>
@@ -1210,7 +1208,7 @@ export default function FeaturesClient() {
             </div>
             <div className={s.featVisual}>
               <div className={s.singlePhone}>
-                <Phone phoneClass={s.phoneDaily} screenClass={s.scrXl}>
+                <Phone phoneClass={s.phoneDaily}>
                   <DailyScheduleAnimation />
                 </Phone>
               </div>
@@ -1236,10 +1234,10 @@ export default function FeaturesClient() {
             </div>
             <div className={s.featVisual}>
               <div className={s.portalPhones}>
-                <Phone screenClass={s.scrStd}>
+                <Phone>
                   <CustomerPortalMembershipAnimation />
                 </Phone>
-                <Phone screenClass={s.scrStd}>
+                <Phone>
                   <CustomerPortalBookingAnimation />
                 </Phone>
               </div>
@@ -1276,7 +1274,7 @@ export default function FeaturesClient() {
             </div>
             <div className={s.featVisual}>
               <div className={s.singlePhone}>
-                <Phone phoneClass={s.phonePayment} screenClass={s.scrPay}>
+                <Phone phoneClass={s.phonePayment}>
                   <PaymentsAnimation />
                 </Phone>
               </div>
@@ -1335,7 +1333,7 @@ export default function FeaturesClient() {
             </div>
             <div className={s.featVisual}>
               <div className={s.singlePhone}>
-                <Phone phoneClass={s.phoneRoute} screenClass={s.scrXl}>
+                <Phone phoneClass={s.phoneRoute}>
                   <RoutingAnimation />
                 </Phone>
               </div>
@@ -1361,7 +1359,7 @@ export default function FeaturesClient() {
             </div>
             <div className={s.featVisual}>
               <div className={s.singlePhone}>
-                <Phone phoneClass={s.phoneStaff} screenClass={s.scrXl}>
+                <Phone phoneClass={s.phoneStaff}>
                   <StaffAnimation />
                 </Phone>
               </div>
