@@ -1553,28 +1553,30 @@
   .capacityImgCrop { height: 260px; }
   .bookingAnimation { min-height: 540px; }
   .animatedPhone { width: 260px; height: 560px; }
-  .twoPhones { grid-template-columns: 1fr 1fr; }
-  .twoPhones .phone:first-child { transform: rotate(-2deg); }
-  .portalPhones { grid-template-columns: 1fr 1fr; }
   .featureNavInner { padding: 6px 16px; }
   .floatIcon { display: none; }
+
+  /* Once the feature row stacks, every section shows ONE phone at the same
+     size: collapse the multi-phone groups to a single centred column, hide
+     the secondary phone, and drop the decorative tilts so all phones match. */
+  .twoCol,
+  .twoPhones,
+  .portalPhones { grid-template-columns: 1fr; justify-items: center; }
+  .twoCol .phone,
+  .twoPhones .phone,
+  .portalPhones .phone { transform: none !important; margin-bottom: 0; }
+  .twoCol .phone:last-child       { display: none; } /* keep branding screenshot */
+  .twoPhones .phone:first-child   { display: none; } /* keep pending-approval anim */
+  .portalPhones .phone:last-child { display: none; } /* keep membership profile */
+  .phoneRoute,
+  .phoneStaff,
+  .phoneDaily,
+  .phonePayment { transform: none; }
 }
 @media (max-width: 620px) {
   .capacityImgCrop { height: 200px; }
   .bookingAnimation { min-height: 480px; }
   .animatedPhone { width: 230px; height: 490px; }
-  /* Two-phone grids: stack to single column, hide the secondary phone */
-  .twoPhones,
-  .portalPhones { grid-template-columns: 1fr; justify-items: center; }
-  .twoPhones .phone,
-  .portalPhones .phone { transform: none !important; }
-  /* Hide the less-important phone in each pair to avoid 1200px-tall stacks */
-  .twoPhones .phone:first-child  { display: none; } /* keep pending-approval (2nd) */
-  .portalPhones .phone:last-child { display: none; } /* keep membership profile (1st) */
-  .phoneRoute,
-  .phoneStaff,
-  .phoneDaily,
-  .phonePayment { transform: none; }
   .heroFloat { width: 116px; left: -8px; bottom: -12px; }
   .featTitle { max-width: none; }
 }

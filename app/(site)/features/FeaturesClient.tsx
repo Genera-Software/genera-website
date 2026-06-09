@@ -1142,7 +1142,7 @@ export default function FeaturesClient() {
                 <Phone>
                   <Image src="/mockup-screens/business-customising.png" alt="Business customisation" fill className="object-cover object-top" />
                 </Phone>
-                <Phone phoneClass="max-sm:hidden">
+                <Phone>
                   <NotificationAnimation />
                 </Phone>
               </div>
