@@ -85,38 +85,24 @@ export default async function OurStoryPage() {
     <>
       <Reveal />
 
-      {/* Full-bleed video hero — video sits behind text, gradient overlay for readability */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 pt-32 pb-24 text-white">
-        {/* Background video */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          className="absolute inset-0 h-full w-full object-cover opacity-30 mix-blend-luminosity"
-        >
-          <source
-            src="https://video.wixstatic.com/video/a043b3_7798ca77d10a457781f9ce9380492181/720p/mp4/file.mp4"
-            type="video/mp4"
-          />
-        </video>
-        {/* Gradient overlay to keep text legible */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-forest/60 via-forest/40 to-[#007080]/70" />
-
-        <div className="relative z-10 mx-auto max-w-[860px] text-center">
+      {/* Split hero — text left, video right with soft blended edge */}
+      <section className="grid grid-cols-1 bg-gradient-to-br from-forest via-forest-mid to-[#007080] md:grid-cols-2">
+        {/* Left: text */}
+        <div className="relative z-10 overflow-hidden px-8 pt-28 pb-20 text-white md:px-14 md:pt-36">
+          <span aria-hidden className="pointer-events-none absolute -top-20 -right-24 h-[320px] w-[320px] rounded-[63%_37%_54%_46%/55%_48%_52%_45%] bg-gold/8" />
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft md:px-4 md:py-1.5">
             Our Story · Built from the ground up
           </div>
-          <h1 className="mt-2 text-[clamp(1.75rem,3.2vw,2.4rem)] font-bold leading-tight text-white">
-            We didn&apos;t set out to build software.{" "}
+          <h1 className="mt-2 text-white [font-size:clamp(2rem,3.8vw,3.4rem)] leading-[1.05]">
+            We didn&apos;t set out to build software.
+            <br />
             <em className="text-gold">We set out to walk dogs.</em>
           </h1>
-          <p className="mx-auto mt-5 max-w-[600px] text-white/80">
+          <p className="mt-5 max-w-[480px] text-white/80">
             From a dog walking round in South West London in 2011 to software
             used by pet businesses across the UK. Here&apos;s how it happened.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <div className="mt-9 flex flex-wrap gap-3">
             {STATS.map((s) => (
               <div key={s.num} className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-white/10 px-4 py-2 backdrop-blur-sm">
                 <span className="font-massilia text-lg font-bold leading-none text-gold">{s.num}</span>
@@ -125,10 +111,31 @@ export default async function OurStoryPage() {
             ))}
           </div>
         </div>
+
+        {/* Right: video with soft left-edge blend into text panel */}
+        <div className="relative min-h-[300px] overflow-hidden md:min-h-0">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 h-full w-full object-cover"
+          >
+            <source
+              src="https://video.wixstatic.com/video/a043b3_7798ca77d10a457781f9ce9380492181/720p/mp4/file.mp4"
+              type="video/mp4"
+            />
+          </video>
+          {/* Soft left-edge blend matching the text panel gradient */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-2/3 bg-gradient-to-r from-forest via-forest/55 to-transparent" />
+          {/* Top tint to tie into the section gradient */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#007080]/30 via-transparent to-transparent" />
+        </div>
       </section>
 
       {/* Story prose */}
-      <section className="bg-white px-8 py-22">
+      <section className="px-8 py-22" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
         <div className="mx-auto flex max-w-[760px] flex-col gap-10">
           <article className="rev flex flex-col gap-4">
             <h2>It started with a handful of leads and a lot of heart</h2>
@@ -241,7 +248,7 @@ export default async function OurStoryPage() {
       </section>
 
       {/* Timeline */}
-      <section className="bg-cream px-8 py-22">
+      <section className="px-8 py-22" style={{ background: "linear-gradient(170deg,#FFF3CC 0%,#FFD66C 100%)" }}>
         <div className="mx-auto max-w-[860px]">
           <h2 className="rev mb-14 text-center">The journey so far</h2>
 
@@ -266,7 +273,7 @@ export default async function OurStoryPage() {
                     )}
                   </div>
                   <span
-                    className={`relative z-10 block h-4 w-4 rounded-full ring-4 ring-cream ${
+                    className={`relative z-10 block h-4 w-4 rounded-full ring-4 ring-gold/30 ${
                       isLast ? "bg-forest" : "bg-gold"
                     }`}
                   />
@@ -289,7 +296,7 @@ export default async function OurStoryPage() {
       </section>
 
       {/* Team card */}
-      <section className="bg-white px-8 py-22">
+      <section className="px-8 py-22" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
         <div className="mx-auto max-w-[1000px]">
           <div className="rev mb-12 text-center">
             <p className="eyebrow">The people behind Genera</p>
