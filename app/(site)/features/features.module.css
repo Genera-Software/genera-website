@@ -61,6 +61,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 22px;
   align-items: end;
+  width: 100%;   /* definite width so the phones resolve to the 300px cap, not content width */
 }
 .twoPhones .phone:first-child {
   transform: rotate(-2deg);
@@ -80,6 +81,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   align-items: center;
+  width: 100%;
 }
 .portalPhones .phone { justify-self: center; }
 .portalPhones .phone:first-child {
@@ -95,6 +97,7 @@
 .singlePhone {
   display: grid;
   place-items: center;
+  width: 100%;   /* definite width so .phone resolves to the 300px cap, not content width */
 }
 
 /* Specific phone styles — shape/size are shared (.phone); these only add the
