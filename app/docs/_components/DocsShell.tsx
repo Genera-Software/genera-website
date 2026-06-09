@@ -54,7 +54,7 @@ export default function DocsShell({
     <div className="min-h-screen bg-cream">
       {/* ── Top bar ─────────────────────────────────────────────── */}
       <header className="sticky top-0 z-50 border-b border-teal-mid/60 bg-white/85 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-[1240px] items-center gap-3 px-4 sm:px-6">
+        <div className="mx-auto flex h-16 max-w-[1240px] items-center gap-2 px-3 sm:gap-3 sm:px-6">
           <button
             type="button"
             aria-label="Toggle sections"
@@ -77,26 +77,29 @@ export default function DocsShell({
             </svg>
           </button>
 
-          <Link href="/docs" className="flex shrink-0 items-center gap-2.5">
+          <Link
+            href="/docs"
+            className="flex min-w-0 shrink items-center gap-2 sm:gap-2.5"
+          >
             <Image
               src="/images/genera-svg.svg"
               alt="Genera"
               width={32}
               height={32}
-              className="h-8 w-8 object-contain"
+              className="h-7 w-7 shrink-0 object-contain sm:h-8 sm:w-8"
               priority
             />
-            <span className="flex items-baseline gap-2 leading-none">
+            <span className="flex min-w-0 items-baseline gap-2 leading-none">
               <span className="font-massilia text-body-lg font-extrabold tracking-[0.08em] text-forest">
                 GENERA
               </span>
-              <span className="rounded-full bg-gold-light px-2 py-0.5 font-massilia text-[0.72rem] font-bold tracking-wide text-forest">
+              <span className="hidden rounded-full bg-gold-light px-2 py-0.5 font-massilia text-[0.72rem] font-bold tracking-wide text-forest min-[420px]:inline-block">
                 HELP CENTRE
               </span>
             </span>
           </Link>
 
-          <div className="ml-auto flex items-center gap-2 sm:gap-3">
+          <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
             <Link
               href="/"
               className="hidden rounded-full px-3 py-1.5 text-meta font-medium text-ink-soft transition-colors hover:bg-cream-dark hover:text-forest sm:inline-flex"
@@ -105,9 +108,10 @@ export default function DocsShell({
             </Link>
             <Link
               href={LOGIN_URL}
-              className="inline-flex items-center rounded-full bg-forest px-4 py-2 font-massilia text-fine font-bold text-white shadow-[0_4px_14px_rgba(0,62,69,0.18)] transition-shadow hover:shadow-[0_6px_22px_rgba(0,62,69,0.3)]"
+              className="inline-flex items-center rounded-full bg-forest px-3.5 py-2 font-massilia text-fine font-bold whitespace-nowrap text-white shadow-[0_4px_14px_rgba(0,62,69,0.18)] transition-shadow hover:shadow-[0_6px_22px_rgba(0,62,69,0.3)] sm:px-4"
             >
-              Open the app
+              <span className="sm:hidden">Open app</span>
+              <span className="hidden sm:inline">Open the app</span>
             </Link>
           </div>
         </div>
@@ -131,8 +135,15 @@ export default function DocsShell({
               onClick={() => setOpen(false)}
               className="absolute inset-0 bg-forest-dark/40 backdrop-blur-sm"
             />
-            <div className="absolute top-16 bottom-0 left-0 w-[290px] max-w-[85vw] overflow-y-auto border-r border-teal-mid/60 bg-white p-5 shadow-2xl">
+            <div className="absolute top-16 bottom-0 left-0 flex w-[290px] max-w-[85vw] flex-col overflow-y-auto border-r border-teal-mid/60 bg-white p-5 shadow-2xl">
               {SidebarBody}
+              <Link
+                href="/"
+                onClick={() => setOpen(false)}
+                className="mt-5 border-t border-teal-mid/60 px-3 pt-4 text-meta font-medium text-ink-soft transition-colors hover:text-forest"
+              >
+                ← Back to main site
+              </Link>
             </div>
           </div>
         )}
