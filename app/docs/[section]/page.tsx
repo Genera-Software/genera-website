@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import {
   SECTIONS,
   getSection,
+  subAnchor,
   type DocSubsection,
 } from "../_data/sections";
 import SectionIcon from "../_components/SectionIcon";
@@ -126,7 +127,10 @@ export default async function SectionPage({
 
 function Subsection({ sub }: { sub: DocSubsection }) {
   return (
-    <section className="scroll-mt-20 rounded-2xl border border-teal-mid bg-white p-6 sm:p-7">
+    <section
+      id={subAnchor(sub.title)}
+      className="scroll-mt-24 rounded-2xl border border-teal-mid bg-white p-6 transition-shadow target:border-gold target:shadow-[0_0_0_3px_var(--color-gold-soft)] sm:p-7"
+    >
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
         <h2 className="!text-[1.45rem] text-ink">{sub.title}</h2>
         {sub.route && (

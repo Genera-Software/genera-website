@@ -606,3 +606,65 @@ export const NAV = SECTIONS.map(({ slug, num, title, tagline }) => ({
 export function getSection(slug: string): DocSection | undefined {
   return SECTIONS.find((s) => s.slug === slug);
 }
+
+/** Stable in-page anchor id for a subsection (e.g. "Change password" →
+    "change-password"). Used by both the section page and search. */
+export function subAnchor(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/** One searchable record per subsection, linking to /docs/[slug]#anchor. */
+export type SearchEntry = {
+  sectionSlug: string;
+  sectionTitle: string;
+  subTitle: string;
+  anchor: string;
+  route?: string;
+  snippet: string;
+  /** Lower-cased blob of every searchable field. */
+  haystack: string;
+};
+
+export const SEARCH_INDEX: SearchEntry[] = SECTIONS.flatMap((s) =>
+  s.subsections.map((sub) => {
+    const parts = [
+      sub.title,
+      sub.route ?? "",
+      sub.whatItDoes ?? "",
+      ...(sub.howToUse ?? []),
+      ...(sub.items ?? []).flatMap((it) => [it.label, it.desc]),
+      s.title,
+      s.tagline,
+    ];
+    return {
+      sectionSlug: s.slug,
+      sectionTitle: s.title,
+      subTitle: sub.title,
+      anchor: subAnchor(sub.title),
+      route: sub.route,
+      snippet: sub.whatItDoes ?? sub.items?.[0]?.desc ?? s.tagline,
+      haystack: parts.join(" · ").toLowerCase(),
+    };
+  }),
+);
+
+/** Ranked search over subsections. Title hits rank above body hits. */
+export function searchDocs(query: string, limit = 12): SearchEntry[] {
+  const term = query.trim().toLowerCase();
+  if (!term) return [];
+  const scored: { e: SearchEntry; score: number }[] = [];
+  for (const e of SEARCH_INDEX) {
+    const inTitle = e.subTitle.toLowerCase().includes(term);
+    const inRoute = (e.route ?? "").toLowerCase().includes(term);
+    const inBody = e.haystack.includes(term);
+    if (!inTitle && !inRoute && !inBody) continue;
+    // Lower score sorts first.
+    const score = inTitle ? 0 : inRoute ? 1 : 2;
+    scored.push({ e, score });
+  }
+  scored.sort((a, b) => a.score - b.score);
+  return scored.slice(0, limit).map((s) => s.e);
+}

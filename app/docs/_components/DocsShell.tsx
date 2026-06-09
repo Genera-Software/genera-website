@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { LOGIN_URL } from "@/lib/urls";
+import { searchDocs, type SearchEntry } from "../_data/sections";
 import SectionIcon from "./SectionIcon";
 
 type NavEntry = { slug: string; num: number; title: string; tagline: string };
@@ -25,74 +26,28 @@ export default function DocsShell({
     setOpen(false);
   }, [pathname]);
 
-  const filtered = useMemo(() => {
-    const term = q.trim().toLowerCase();
-    if (!term) return nav;
-    return nav.filter(
-      (s) =>
-        s.title.toLowerCase().includes(term) ||
-        s.tagline.toLowerCase().includes(term),
-    );
-  }, [nav, q]);
+  const results = useMemo(() => searchDocs(q), [q]);
+  const searching = q.trim().length > 0;
+
+  // After clicking a result, reset the box back to the nav and close drawer.
+  const handleResultClick = () => {
+    setQ("");
+    setOpen(false);
+  };
 
   const isActive = (slug: string) => pathname === `/docs/${slug}`;
 
-  const SidebarNav = (
-    <nav className="flex flex-col gap-1">
-      <Link
-        href="/docs"
-        className={`rounded-xl px-3 py-2 font-massilia text-[0.95rem] font-bold transition-colors ${
-          pathname === "/docs"
-            ? "bg-forest text-white"
-            : "text-forest hover:bg-teal-soft"
-        }`}
-      >
-        Overview
-      </Link>
-
-      <div className="mt-3 mb-1 px-3 text-eyebrow font-semibold tracking-[0.14em] text-ink-soft/70 uppercase">
-        Sections
+  const SidebarBody = (
+    <>
+      <SearchBox q={q} setQ={setQ} />
+      <div className="mt-4">
+        {searching ? (
+          <SearchResults results={results} onNavigate={handleResultClick} />
+        ) : (
+          <SectionNav nav={nav} isActive={isActive} pathname={pathname} />
+        )}
       </div>
-
-      {filtered.map((s) => {
-        const active = isActive(s.slug);
-        return (
-          <Link
-            key={s.slug}
-            href={`/docs/${s.slug}`}
-            className={`group flex items-center gap-3 rounded-xl px-3 py-2 transition-colors ${
-              active ? "bg-forest text-white" : "text-ink hover:bg-teal-soft"
-            }`}
-          >
-            <span
-              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors ${
-                active
-                  ? "bg-white/15 text-gold"
-                  : "bg-cream-dark text-forest group-hover:bg-white"
-              }`}
-            >
-              <SectionIcon slug={s.slug} className="h-[18px] w-[18px]" />
-            </span>
-            <span className="flex flex-col leading-tight">
-              <span className="font-massilia text-[0.95rem] font-bold">
-                {s.title}
-              </span>
-              <span
-                className={`text-[0.72rem] ${
-                  active ? "text-white/70" : "text-ink-soft"
-                }`}
-              >
-                {s.tagline}
-              </span>
-            </span>
-          </Link>
-        );
-      })}
-
-      {filtered.length === 0 && (
-        <p className="px-3 py-2 text-meta text-ink-soft">No sections match.</p>
-      )}
-    </nav>
+    </>
   );
 
   return (
@@ -163,8 +118,7 @@ export default function DocsShell({
         {/* Desktop sidebar */}
         <aside className="hidden w-[270px] shrink-0 lg:block">
           <div className="sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto py-7 pr-1">
-            <SearchBox q={q} setQ={setQ} />
-            <div className="mt-4">{SidebarNav}</div>
+            {SidebarBody}
           </div>
         </aside>
 
@@ -178,8 +132,7 @@ export default function DocsShell({
               className="absolute inset-0 bg-forest-dark/40 backdrop-blur-sm"
             />
             <div className="absolute top-16 bottom-0 left-0 w-[290px] max-w-[85vw] overflow-y-auto border-r border-teal-mid/60 bg-white p-5 shadow-2xl">
-              <SearchBox q={q} setQ={setQ} />
-              <div className="mt-4">{SidebarNav}</div>
+              {SidebarBody}
             </div>
           </div>
         )}
@@ -187,6 +140,123 @@ export default function DocsShell({
         {/* Content */}
         <main className="min-w-0 flex-1 py-8 sm:py-10">{children}</main>
       </div>
+    </div>
+  );
+}
+
+function SectionNav({
+  nav,
+  isActive,
+  pathname,
+}: {
+  nav: NavEntry[];
+  isActive: (slug: string) => boolean;
+  pathname: string;
+}) {
+  return (
+    <nav className="flex flex-col gap-1">
+      <Link
+        href="/docs"
+        className={`rounded-xl px-3 py-2 font-massilia text-[0.95rem] font-bold transition-colors ${
+          pathname === "/docs"
+            ? "bg-forest text-white"
+            : "text-forest hover:bg-teal-soft"
+        }`}
+      >
+        Overview
+      </Link>
+
+      <div className="mt-3 mb-1 px-3 text-eyebrow font-semibold tracking-[0.14em] text-ink-soft/70 uppercase">
+        Sections
+      </div>
+
+      {nav.map((s) => {
+        const active = isActive(s.slug);
+        return (
+          <Link
+            key={s.slug}
+            href={`/docs/${s.slug}`}
+            className={`group flex items-center gap-3 rounded-xl px-3 py-2 transition-colors ${
+              active ? "bg-forest text-white" : "text-ink hover:bg-teal-soft"
+            }`}
+          >
+            <span
+              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors ${
+                active
+                  ? "bg-white/15 text-gold"
+                  : "bg-cream-dark text-forest group-hover:bg-white"
+              }`}
+            >
+              <SectionIcon slug={s.slug} className="h-[18px] w-[18px]" />
+            </span>
+            <span className="flex flex-col leading-tight">
+              <span className="font-massilia text-[0.95rem] font-bold">
+                {s.title}
+              </span>
+              <span
+                className={`text-[0.72rem] ${
+                  active ? "text-white/70" : "text-ink-soft"
+                }`}
+              >
+                {s.tagline}
+              </span>
+            </span>
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+
+function SearchResults({
+  results,
+  onNavigate,
+}: {
+  results: SearchEntry[];
+  onNavigate: () => void;
+}) {
+  if (results.length === 0) {
+    return (
+      <p className="px-3 py-2 text-meta text-ink-soft">
+        No matches. Try another word, or{" "}
+        <a
+          href="mailto:info@generasoftware.com"
+          className="font-semibold text-forest underline decoration-gold underline-offset-2"
+        >
+          email us
+        </a>
+        .
+      </p>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-1">
+      <div className="mb-1 px-3 text-eyebrow font-semibold tracking-[0.14em] text-ink-soft/70 uppercase">
+        {results.length} result{results.length === 1 ? "" : "s"}
+      </div>
+      {results.map((r) => (
+        <Link
+          key={`${r.sectionSlug}-${r.anchor}`}
+          href={`/docs/${r.sectionSlug}#${r.anchor}`}
+          onClick={onNavigate}
+          className="group rounded-xl px-3 py-2 transition-colors hover:bg-teal-soft"
+        >
+          <span className="flex items-center gap-2">
+            <SectionIcon
+              slug={r.sectionSlug}
+              className="h-3.5 w-3.5 shrink-0 text-forest"
+            />
+            <span className="truncate font-massilia text-[0.9rem] font-bold text-ink group-hover:text-forest">
+              {r.subTitle}
+            </span>
+          </span>
+          <span className="mt-0.5 block pl-[1.375rem] text-[0.72rem] text-ink-soft">
+            <span className="font-semibold text-forest">{r.sectionTitle}</span>
+            {r.route ? <span className="text-ink-soft"> · {r.route}</span> : null}
+          </span>
+        </Link>
+      ))}
     </div>
   );
 }
@@ -215,9 +285,29 @@ function SearchBox({
         type="search"
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="Filter sections…"
-        className="w-full rounded-full border border-teal-mid bg-cream py-2 pr-3 pl-9 text-meta text-ink outline-none transition-colors focus:border-forest focus:bg-white"
+        placeholder="Search the docs…"
+        aria-label="Search the docs"
+        className="w-full rounded-full border border-teal-mid bg-cream py-2 pr-9 pl-9 text-meta text-ink outline-none transition-colors focus:border-forest focus:bg-white"
       />
+      {q && (
+        <button
+          type="button"
+          aria-label="Clear search"
+          onClick={() => setQ("")}
+          className="absolute top-1/2 right-2.5 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-cream-dark hover:text-forest"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.4}
+            strokeLinecap="round"
+            className="h-3 w-3"
+          >
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+      )}
     </div>
   );
 }
