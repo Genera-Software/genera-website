@@ -139,7 +139,7 @@ export default function CommunityClient({
 
         <div className="relative z-10 mx-auto max-w-[1160px]">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft">
-            <Paw className="h-[1.1em] w-[1.1em]" /> Founding 100 · Launching 2025
+            <Paw className="h-[1.1em] w-[1.1em]" /> Founding 100 · Launching 2026
           </div>
 
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center md:gap-16">
