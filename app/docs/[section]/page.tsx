@@ -191,6 +191,51 @@ function Subsection({ sub }: { sub: DocSubsection }) {
           </ul>
         </div>
       )}
+
+      {sub.images && sub.images.length > 0 && (
+        <div className="mt-6 grid gap-5 sm:grid-cols-2">
+          {sub.images.map((img, i) => (
+            <figure key={i} className="flex flex-col">
+              {img.placeholder ? (
+                <div className="flex aspect-[3/2] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-teal-mid bg-cream-dark/40 px-4 text-center">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.6}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-7 w-7 text-ink-soft/60"
+                  >
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <path d="M21 15l-5-5L5 21" />
+                  </svg>
+                  <span className="text-fine font-semibold text-ink-soft">
+                    Screenshot coming soon
+                  </span>
+                </div>
+              ) : (
+                <div className="overflow-hidden rounded-xl border border-teal-mid bg-cream">
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    width={1006}
+                    height={1856}
+                    className="h-auto w-full"
+                    sizes="(max-width: 640px) 100vw, 400px"
+                  />
+                </div>
+              )}
+              {img.caption && (
+                <figcaption className="mt-2 text-fine leading-relaxed text-ink-soft">
+                  {img.caption}
+                </figcaption>
+              )}
+            </figure>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

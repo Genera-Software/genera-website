@@ -11,6 +11,16 @@
 /** A labelled definition row (used for tab lists, sub-blocks, etc.). */
 export type DocItem = { label: string; desc: string };
 
+/** A captioned screenshot shown inside a subsection (e.g. a step in a flow).
+ *  Set `placeholder: true` to render a "screenshot coming soon" box instead of
+ *  loading `src` — handy for newly-documented features awaiting a real capture. */
+export type DocImage = {
+  src: string;
+  alt: string;
+  caption?: string;
+  placeholder?: boolean;
+};
+
 /** A single feature / page within a section. */
 export type DocSubsection = {
   title: string;
@@ -22,6 +32,8 @@ export type DocSubsection = {
   howToUse?: string[];
   /** Definition rows (e.g. the tabs on a profile). */
   items?: DocItem[];
+  /** Captioned step screenshots, shown as a gallery within the subsection. */
+  images?: DocImage[];
 };
 
 export type DocSection = {
@@ -56,7 +68,6 @@ export const SECTIONS: DocSection[] = [
           "Shows a monthly calendar of bookings with row and status icons. Each day surfaces who is booked in for daycare, sleepovers, and other services.",
         howToUse: [
           "Use the arrows to move between months; Go to today jumps back to the current date.",
-          "Use the sun button on a day for an instant daycare booking and the moon button for an instant sleepover booking — no need to open the full form.",
           "Click a day to expand its detail list (on mobile this opens below the calendar).",
           "Check the key for what each row and status icon means (confirmed, declined, pending, has notes, etc.).",
           "Use Fit calendar to screen / Expand calendar to fit content to control density.",
@@ -80,6 +91,117 @@ export const SECTIONS: DocSection[] = [
         howToUse: [
           "Use it during pickup/drop-off windows to watch progress in real time.",
           "The map updates live as driver locations come in.",
+        ],
+      },
+      {
+        title: "Adding a booking",
+        whatItDoes:
+          "The Add booking window is where a booking is created. It has two tabs — Book a pet for an existing customer (a one-off or recurring booking) and Meet & Greet for a pet that isn't a customer yet. You open it (or quick-book) from a pet's Bookings tab — see Pets › Bookings tab & quick-book.",
+        items: [
+          {
+            label: "Book a pet",
+            desc: "Create a one-off or recurring booking for a pet already in your system — choose the pet, service, transport, and notes.",
+          },
+          {
+            label: "Meet & Greet",
+            desc: "Log an introductory visit for a prospective customer by capturing their date, pet name, address, and owner details.",
+          },
+        ],
+        howToUse: [
+          "Choose a pet — search by pet or owner name, or tap one from the Most booked grid. Use Change to switch pets later.",
+          "Pick a service from the Service dropdown (daycare, sleepover, and so on). The booking can't be saved until a service is chosen — Add booking stays greyed out with a reminder — and the rate updates to match.",
+          "Set transport with the two toggles: collect from home and drop off at home. The collection and drop-off windows come from your Operating Times settings.",
+          "Add an optional note for the team, then press Add booking.",
+          "To repeat the booking, turn on Recurring: set a Start date, optionally turn on Set an end date, and Genera books the same weekday every week between the two dates (e.g. every Wednesday). Use Override price to charge a one-off rate instead of the service default.",
+          "For someone who isn't a customer yet, switch to the Meet & Greet tab and fill in the date, pet name, address (search to auto-fill or enter it manually) and owner name, then press Create meet & greet.",
+        ],
+        images: [
+          {
+            src: "/docs/images/01-dashboard-select-booking.png",
+            alt: "Choose a pet step showing a search box and a Most booked grid of pet avatars",
+            caption:
+              "Step 1 — Choose a pet: search by pet or owner, or tap one of your Most booked pets.",
+          },
+          {
+            src: "/docs/images/01-dashboard-add-booking.png",
+            alt: "Booking form with a Service dropdown, transport toggles and a notes field",
+            caption:
+              "Step 2 — Pick a service and set transport. Add booking stays disabled, with a reminder, until a service is chosen.",
+          },
+          {
+            src: "/docs/images/01-dashboard-add-booking-recurring.png",
+            alt: "Recurring booking with start date, end date, transport and an override price field",
+            caption:
+              "Recurring — repeat the booking weekly between a start and end date; the rate and an optional price override sit at the bottom.",
+          },
+          {
+            src: "/docs/images/01-dashboard-meet-greet.png",
+            alt: "Meet & Greet form with date, pet name, address search and owner name",
+            caption:
+              "Meet & Greet — log an intro visit for a not-yet-customer with their date, pet, address and owner.",
+          },
+        ],
+      },
+      {
+        title: "Search & notifications",
+        route: "Top bar (every page)",
+        whatItDoes:
+          "Two tools sit in the top bar on every admin page: a global search for jumping straight to a pet or owner, and a notification bell that surfaces everything needing your attention.",
+        items: [
+          {
+            label: "Global search",
+            desc: "Type a pet or owner name to see grouped Pets and Customers results, then open the record. On the Pets and Owners list pages the same box filters that list instead.",
+          },
+          {
+            label: "Notification bell",
+            desc: "Shows recent notifications with an unread badge; each one links to the related record, and approval items take you to the Notification Centre.",
+          },
+        ],
+        howToUse: [
+          "Use search to reach a record fast — arrows to move through results, Enter to open, Esc to close.",
+          "Open the bell for a quick look, or choose View all to open the full Notification Centre.",
+        ],
+        images: [
+          {
+            src: "",
+            placeholder: true,
+            alt: "Global search dropdown with grouped pet and customer results",
+            caption: "Global search — grouped Pets and Customers results from the top bar.",
+          },
+          {
+            src: "",
+            placeholder: true,
+            alt: "Notification bell dropdown with recent items and an unread badge",
+            caption: "The notification bell with its unread badge and recent items.",
+          },
+        ],
+      },
+      {
+        title: "Notification Centre",
+        route: "/admin/notifications",
+        whatItDoes:
+          "A full inbox of everything happening across your daycare — booking and membership requests, new customers and dogs, direct-debit events, cancellations, time-off and more. It updates live as things happen, separate from the Settings › Notifications preferences that control which alerts you get.",
+        items: [
+          {
+            label: "Filters",
+            desc: "All / Unread pills plus a type dropdown (Approvals, Memberships, Bookings, Customers, New dogs, Direct debit, Cancellations, Time-off and others).",
+          },
+          {
+            label: "Inline approvals",
+            desc: "Booking and membership requests can be Accepted or Declined right here — accepting a booking raises its charges; declining asks for a reason and emails the customer.",
+          },
+        ],
+        howToUse: [
+          "Filter to Unread or a specific type to focus, action approvals inline, and use Mark all as read to clear the count.",
+          "Disabled notification types (set in Settings › Notifications) are hidden automatically.",
+        ],
+        images: [
+          {
+            src: "",
+            placeholder: true,
+            alt: "Notification Centre inbox with filter pills, a type dropdown and accept/decline buttons",
+            caption: "The Notification Centre — filter, then accept or decline requests inline.",
+          },
         ],
       },
     ],
@@ -220,6 +342,35 @@ export const SECTIONS: DocSection[] = [
         ],
         howToUse: [
           "Open a pet from the Pets list, then move across the tabs to update details, check their booking and billing history, manage photos, or remove the record.",
+        ],
+      },
+      {
+        title: "Bookings tab & quick-book",
+        route: "/admin/pets/[petId] (Bookings tab)",
+        whatItDoes:
+          "A pet's Bookings tab shows a monthly calendar of just that pet's bookings. Each day carries a sun (daycare) and a moon (sleepover) quick-book button, and a + Add Booking button opens the full Add booking window (see Dashboard › Adding a booking).",
+        items: [
+          {
+            label: "Quick-book (sun / moon)",
+            desc: "The sun books an instant daycare day and the moon an instant sleepover for this pet — no form needed. Use the Hide Quick-book toggle to hide these icons.",
+          },
+          {
+            label: "+ Add Booking",
+            desc: "Opens the full Add booking window for a one-off or recurring booking, or a Meet & Greet — documented under Dashboard › Adding a booking.",
+          },
+        ],
+        howToUse: [
+          "Click the sun (daycare) or moon (sleepover) on a day to book it instantly for this pet, with no form.",
+          "Use the Hide Quick-book toggle to hide the sun/moon icons when you don't need them.",
+          "Press + Add Booking for the full window, where you choose a service, transport, recurring options and notes.",
+        ],
+        images: [
+          {
+            src: "/docs/images/04-pets-booking.png",
+            alt: "A pet's Bookings tab showing a monthly calendar with sun and moon quick-book icons and an Add Booking button",
+            caption:
+              "The pet's Bookings tab — sun (daycare) and moon (sleepover) quick-book on each day, a Hide Quick-book toggle, and + Add Booking for the full window.",
+          },
         ],
       },
     ],
@@ -388,55 +539,158 @@ export const SECTIONS: DocSection[] = [
     slug: "team",
     num: 7,
     title: "Team",
-    tagline: "Staff, access, holidays & pay",
-    intro: "The staff hub — your team members and their access.",
+    tagline: "Staff, rota, holidays & pay",
+    intro:
+      "The Team area is where you manage your staff — their working rota, time off, roles and pay. Every Team page shares three tabs in the top right: Calendar, Approve Holidays and Manage Staff. The Approve Holidays tab shows a badge when requests are waiting.",
+    image: "/docs/images/07-team.png",
+    imageAlt: "Team rota calendar showing who is working each day",
     subsections: [
       {
-        title: "Team",
+        title: "Team rota (calendar)",
         route: "/admin/team",
-        whatItDoes: "The staff hub — your team members and their access.",
+        whatItDoes:
+          "A monthly calendar showing who is working each day. Each day lists your staff as named chips — a green briefcase for full-time and a purple clock for part-time — alongside any time off (holiday, sick or in-lieu). A small People count sits in each day's corner.",
+        items: [
+          {
+            label: "Today Summary",
+            desc: "A strip at the top with today's pet counts (Total, Daycare, Sleepover, Extras, Meet & Greet) plus a chip per driver showing how many pets they're assigned today.",
+          },
+          {
+            label: "Pending entries",
+            desc: "Time off still awaiting approval shows with a dashed amber border and a 'pending' label until an admin decides.",
+          },
+        ],
+        howToUse: [
+          "Who appears as working comes from each person's working days (the Mon–Sun toggles on their profile) — there are no manual shifts to set.",
+          "Use the arrows to change month, or the centre button to jump back to today.",
+          "Click a day (desktop) to open a who's-working popup; on mobile, tap a day to reveal the list below the calendar.",
+          "Use Add Entry to log time off — see 'Logging time off' below. The legend at the bottom explains every icon.",
+        ],
+      },
+      {
+        title: "Logging time off (Add Entry)",
+        route: "/admin/team (Add Entry)",
+        whatItDoes:
+          "The Add Entry button on the rota opens a short form to record time off for a staff member. It only logs time off — it does not create working shifts (those come from working days).",
+        howToUse: [
+          "Pick the staff member, choose a Type (Holiday, Sick day or Day in lieu), set the start and end dates, and add an optional note.",
+          "Save once all fields are set. Holiday requests then appear under Approve Holidays for an admin to accept or decline.",
+        ],
       },
       {
         title: "Manage staff",
         route: "/admin/team/manage",
-        whatItDoes: "Add, edit, and remove staff members.",
-        howToUse: ["Create staff accounts and set their access here."],
+        whatItDoes:
+          "A table of everyone on your team. At a glance you see each person's role, working days and leave balances, and you add new staff from here.",
+        items: [
+          { label: "Name & Email", desc: "The staff member and their login email." },
+          {
+            label: "Role",
+            desc: "Admin, Manager, Staff, Auditor or Driver — this sets what they can see and do (see Staff profile).",
+          },
+          {
+            label: "Working Days",
+            desc: "The Mon–Sun chips with their working days highlighted.",
+          },
+          {
+            label: "Holiday Remaining",
+            desc: "Their annual holiday allowance minus the holiday days they've booked this year.",
+          },
+          { label: "Sick Days", desc: "Sick days taken this year." },
+          {
+            label: "Awaiting Approvals",
+            desc: "Flags whether they have time-off requests still pending.",
+          },
+        ],
+        howToUse: [
+          "Click any row (or card on mobile) to open that person's full Staff profile.",
+          "Use Add Staff to create a new team member — see 'Add new staff' below.",
+        ],
+        images: [
+          {
+            src: "/docs/images/07-team-manage.png",
+            alt: "Manage Staff table with name, email, role, working days, holiday remaining, sick days and approvals",
+            caption:
+              "Manage Staff — roles, working days and leave balances for everyone, with Add Staff top right.",
+          },
+        ],
       },
       {
-        title: "Holidays",
+        title: "Add new staff",
+        route: "/admin/team/manage (Add Staff)",
+        whatItDoes:
+          "Creates a new team member and provisions their account. They receive an email to set their own password, so you never handle it.",
+        items: [
+          {
+            label: "Part-time toggle",
+            desc: "Marks whether the person is part-time or full-time.",
+          },
+          {
+            label: "Name, Start Date, Email",
+            desc: "Email is required and is their login — it must be a valid address.",
+          },
+          {
+            label: "Address",
+            desc: "Search to auto-fill or enter it manually; it's geocoded for routing where possible.",
+          },
+          {
+            label: "Role, Salary, Allowances",
+            desc: "Set their role, annual salary, and annual holiday and sick-day allowances. Choosing the Driver role automatically makes them route-assignable.",
+          },
+        ],
+        howToUse: [
+          "Fill in the fields, pick a role, set salary and allowances, then save. The new member gets a password-setup email.",
+        ],
+        images: [
+          {
+            src: "/docs/images/07-team-add-staff.png",
+            alt: "Add New Staff modal with part-time toggle, name, start date, email and address fields",
+            caption:
+              "Add New Staff — the modal scrolls on to Role, Salary and the holiday and sick-day allowances.",
+          },
+        ],
+      },
+      {
+        title: "Approve holidays",
         route: "/admin/team/holidays",
-        whatItDoes: "Holiday bookings and approvals for staff.",
-        howToUse: ["Review Approve Holidays requests and manage allowances."],
+        whatItDoes:
+          "Where time-off requests (holiday, sick day, day in lieu) are accepted or declined. It has a Pending tab for outstanding requests and a History tab for everything already decided.",
+        howToUse: [
+          "On Pending, review each request (staff, type, dates, days, who requested it, notes) and press Accept or Decline.",
+          "A decided request moves straight to History, recording who approved it and when. Declining can capture a reason.",
+          "You can't approve your own request — another admin has to decide it.",
+        ],
       },
       {
         title: "Staff profile",
         route: "/admin/team/profile/[id]",
-        whatItDoes: "One staff member's full record, organised into sections:",
+        whatItDoes:
+          "One staff member's full record. A sticky side-nav jumps between sections, and each section saves on its own.",
         items: [
           {
             label: "Profile Information",
-            desc: "Name, address, working days, holiday and sick allowance.",
+            desc: "Avatar, name, address, working days, and holiday and sick allowances. The login email is read-only — contact support to change it.",
           },
           {
             label: "Role & Driver Access",
-            desc: "Role sets their default portal at login; Assign as Driver makes them eligible for route assignment even if their role is Admin.",
+            desc: "Set the role (each is explained inline), a delivery capacity, and the Assign as Driver toggle. Only Admins can edit this. Role sets the default portal at login and what the person can access.",
           },
           {
             label: "Salary",
-            desc: "Monthly pay (flows into Finance › Salaries; annual = monthly × 12).",
-          },
-          { label: "Commission", desc: "Commission records." },
-          {
-            label: "Holidays / Lieu Days / Sickness",
-            desc: "Leave earned and taken.",
+            desc: "Part-time toggle (reveals monthly hours), monthly pay, hourly rate and max daily pay. Annual pay is shown read-only as monthly × 12, and feeds Finance › Salaries.",
           },
           {
-            label: "Delete Staff Member",
-            desc: "Permanently remove them.",
+            label: "Holidays / Sickness / Lieu Days",
+            desc: "Leave booked against allowance, sick days recorded, and days in lieu earned or taken.",
+          },
+          { label: "Commission", desc: "Commission records for the staff member." },
+          {
+            label: "Delete",
+            desc: "Permanently remove the staff member (with a name confirmation).",
           },
         ],
         howToUse: [
-          "Open a staff member to update their details, set role and driver eligibility, manage pay, and track leave.",
+          "Open a staff member from Manage Staff, then move through the sections to update details, set role and driver eligibility, manage pay, and track leave. Each section's Save enables once you change something.",
         ],
       },
     ],
@@ -636,6 +890,7 @@ export const SEARCH_INDEX: SearchEntry[] = SECTIONS.flatMap((s) =>
       sub.whatItDoes ?? "",
       ...(sub.howToUse ?? []),
       ...(sub.items ?? []).flatMap((it) => [it.label, it.desc]),
+      ...(sub.images ?? []).map((img) => img.caption ?? ""),
       s.title,
       s.tagline,
     ];
