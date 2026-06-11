@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -9,6 +8,7 @@ import {
   type DocSubsection,
 } from "../_data/sections";
 import SectionIcon from "../_components/SectionIcon";
+import { LightboxProvider, ZoomableImage } from "../_components/Lightbox";
 
 export function generateStaticParams() {
   return SECTIONS.map((s) => ({ section: s.slug }));
@@ -42,6 +42,7 @@ export default async function SectionPage({
   const next = idx < SECTIONS.length - 1 ? SECTIONS[idx + 1] : null;
 
   return (
+    <LightboxProvider>
     <article className="mx-auto max-w-[820px]">
       {/* Breadcrumb */}
       <nav className="mb-5 flex items-center gap-1.5 text-fine text-ink-soft">
@@ -76,12 +77,12 @@ export default async function SectionPage({
       {/* Screenshot */}
       {s.image && (
         <figure className="mt-7 overflow-hidden rounded-2xl border border-teal-mid bg-white shadow-[0_14px_40px_rgba(0,62,69,0.12)]">
-          <Image
+          <ZoomableImage
             src={s.image}
             alt={s.imageAlt ?? `${s.title} screenshot`}
             width={1600}
             height={1000}
-            className="h-auto w-full"
+            imgClassName="h-auto w-full"
             sizes="(max-width: 820px) 100vw, 820px"
           />
         </figure>
@@ -122,6 +123,7 @@ export default async function SectionPage({
         )}
       </nav>
     </article>
+    </LightboxProvider>
   );
 }
 
@@ -216,16 +218,15 @@ function Subsection({ sub }: { sub: DocSubsection }) {
                   </span>
                 </div>
               ) : (
-                <div className="overflow-hidden rounded-xl border border-teal-mid bg-cream">
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    width={1006}
-                    height={1856}
-                    className="h-auto w-full"
-                    sizes="(max-width: 640px) 100vw, 400px"
-                  />
-                </div>
+                <ZoomableImage
+                  src={img.src}
+                  alt={img.alt}
+                  width={1006}
+                  height={1856}
+                  imgClassName="h-auto w-full"
+                  sizes="(max-width: 640px) 100vw, 400px"
+                  className="overflow-hidden rounded-xl border border-teal-mid bg-cream"
+                />
               )}
               {img.caption && (
                 <figcaption className="mt-2 text-fine leading-relaxed text-ink-soft">

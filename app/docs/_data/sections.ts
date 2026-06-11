@@ -197,10 +197,10 @@ export const SECTIONS: DocSection[] = [
         ],
         images: [
           {
-            src: "",
-            placeholder: true,
-            alt: "Notification Centre inbox with filter pills, a type dropdown and accept/decline buttons",
-            caption: "The Notification Centre — filter, then accept or decline requests inline.",
+            src: "/docs/images/01-dashboard-notifications.png",
+            alt: "Notification Centre inbox with All and Unread pills, a Filter by type dropdown, a Notification settings link and notification rows tagged Cancelled, Daycare and New dog",
+            caption:
+              "The Notification Centre — All / Unread pills and Filter by type across the top, with each event tagged (cancellations, new dogs, booking changes) and approvals actioned inline.",
           },
         ],
       },
@@ -389,10 +389,63 @@ export const SECTIONS: DocSection[] = [
         title: "Billings & Services",
         route: "/admin/finance",
         whatItDoes:
-          "The hub for invoicing and billing. From here you generate invoices for a date range from accumulated charges (membership charges are billed separately via Stripe subscription and excluded here).",
+          "The hub for invoicing and billing. From here you generate invoices for a date range from accumulated charges (membership charges are billed separately via Stripe subscription and excluded here). See 'Raising an invoice' below for the full Raise Invoice flow.",
         howToUse: [
           "Pick a date range and generate invoices — charges are grouped per owner, a reference number is assigned (e.g. INV-0042), and a Stripe invoice is raised for owners with a saved payment method.",
           "Open an invoice to view it, and use the Options menu on a paid invoice to issue a refund.",
+        ],
+      },
+      {
+        title: "Raising an invoice",
+        route: "/admin/finance (Invoices tab → Raise Invoice)",
+        whatItDoes:
+          "The Invoices tab lists every raised invoice, grouped into weeks by issue date, with a date-range filter and Unpaid / Paid / All pills. Pressing Raise Invoice opens a short window where you choose who to bill and for which period; Genera rolls each owner's outstanding charges into one invoice, assigns a reference (e.g. DIC-000382), generates the PDF, and — where a payment provider is connected — raises the matching Stripe or GoCardless invoice for collection.",
+        items: [
+          {
+            label: "Who do you want to invoice?",
+            desc: "All owners raises one invoice for every owner who has charges in the range; Single owner bills just one owner you pick. (Opened from a single pet's page, the owner is fixed and this choice is hidden.)",
+          },
+          {
+            label: "Owner",
+            desc: "Shown only for Single owner — search by owner or pet name. One invoice is raised covering all of that owner's pets with charges in range.",
+          },
+          {
+            label: "Date range",
+            desc: "Only charges whose service date falls inside this range (inclusive) are pulled onto the invoice. The end date must be on or after the start date. Submit stays disabled until a range — and, for Single owner, an owner — is chosen.",
+          },
+          {
+            label: "Status pills (list)",
+            desc: "Each row shows its state: Paid, Unpaid, Awaiting payment (owner has a pay link), Generating PDF, PDF failed or Payment failed — plus a small Refunded / Partially refunded tag and an Emailed / Reminded / Not emailed note.",
+          },
+          {
+            label: "Row actions (list)",
+            desc: "The eye icon previews the PDF; Options covers View / Download invoice, Open payment link, Email Invoice, Email Reminder, Mark Paid, Refund (paid Stripe/GoCardless invoices only) and Delete. Tick rows to bulk-delete; deleting frees the charges to be re-invoiced.",
+          },
+          {
+            label: "Invoicing system panel",
+            desc: "A status strip at the foot of the list shows which collection method is connected — only one online provider (Stripe or GoCardless) is required. Owners who opt out of online payment are sent a manual bank-transfer invoice instead.",
+          },
+        ],
+        howToUse: [
+          "Open Finance › Billings & Services and the Invoices tab, then set the date-range filter and the Unpaid / Paid / All pills to find what you need.",
+          "Press Raise Invoice.",
+          "Choose All owners to bill everyone with charges in the period, or Single owner and search for the one owner to invoice.",
+          "Pick the Date range — only charges dated inside it (inclusive) are included — then press Submit. Genera generates the PDFs and raises the payment-provider invoices; a toast confirms generation is underway.",
+          "Back on the list, use the eye icon to preview a PDF, or Options to email it, send a reminder, mark it paid, refund it, or delete it.",
+        ],
+        images: [
+          {
+            src: "/docs/images/05-finance-invoices.png",
+            alt: "Raised Invoices list grouped by week with a date-range filter, Unpaid/Paid/All pills, status badges, Options menus and a Raise Invoice button",
+            caption:
+              "The Invoices list — invoices grouped by week, filtered by date range and Unpaid / Paid / All, each row carrying a status badge, preview eye and Options menu. The Invoicing system strip shows your connected collection methods.",
+          },
+          {
+            src: "/docs/images/05-finance-invoices-add.png",
+            alt: "Raise Invoice modal asking who to invoice (All owners or Single owner), an owner search, and a date range picker",
+            caption:
+              "Raise Invoice — choose All owners or a Single owner, then a date range. Only charges whose service date falls in the range (inclusive) are billed.",
+          },
         ],
       },
       {
@@ -434,9 +487,53 @@ export const SECTIONS: DocSection[] = [
         title: "Membership Plans",
         route: "/admin/finance/memberships",
         whatItDoes:
-          "Define frequency-based membership plans with fixed monthly pricing. Pets on a plan are billed automatically via BACS Direct Debit through your Stripe account.",
+          "Define frequency-based membership plans with fixed monthly pricing. Pets on a plan are billed automatically via BACS Direct Debit through your Stripe account. Press Add Membership Plan to open the window below — see 'Adding a membership plan' for every field.",
         howToUse: [
           "Connect Stripe/GoCardless, create a plan (frequency + monthly price), then assign pets to it for automatic monthly billing.",
+        ],
+      },
+      {
+        title: "Adding a membership plan",
+        route: "/admin/finance/memberships (Add Membership Plan)",
+        whatItDoes:
+          "The Add Membership Plan window creates a recurring plan that bills a pet a fixed monthly price for a set number of days a week, collected automatically by BACS Direct Debit through your Stripe account. Create Plan stays greyed out until all four required fields (marked with *) are filled.",
+        items: [
+          {
+            label: "Plan Name *",
+            desc: "A label for the plan, e.g. '2-Day Weekly Daycare'. This is what you'll pick when assigning pets to a plan.",
+          },
+          {
+            label: "Days per Week *",
+            desc: "How many days a week the plan covers — choose 1 to 5 from the dropdown. This is the frequency the monthly price pays for.",
+          },
+          {
+            label: "Monthly Price *",
+            desc: "The fixed amount (GBP) collected every month by Direct Debit for the plan's days.",
+          },
+          {
+            label: "Ad-hoc Day Price *",
+            desc: "The per-day rate (GBP) charged for any extra days a pet attends beyond what the plan covers.",
+          },
+          {
+            label: "Linked Service",
+            desc: "Optional — associate the plan with an existing service (e.g. Daycare). Defaults to None; the dropdown lists the services you've created.",
+          },
+        ],
+        howToUse: [
+          "Make sure a payment provider is connected (Settings › Payments) — memberships bill via Stripe Direct Debit.",
+          "Open Finance › Membership Plans and press Add Membership Plan.",
+          "Give the plan a clear name, then choose its Days per Week from the dropdown.",
+          "Enter the Monthly Price (what's collected each month) and the Ad-hoc Day Price (charged for extra days outside the plan).",
+          "Optionally pick a Linked Service to tie the plan to one of your services, then press Create Plan — it stays disabled until the name, days, monthly price and ad-hoc price are all set.",
+          "Pricing fields are read-only for team members whose role can't edit pricing.",
+        ],
+        images: [
+          {
+            src: "/docs/images/05-finance-membership.png",
+            alt: "Add Membership Plan modal with plan name, days per week dropdown, monthly price, ad-hoc day price and a linked service dropdown",
+            caption:
+              "Add Membership Plan — name, days per week, the fixed monthly price and an ad-hoc day rate are required; Linked Service is optional.",
+          },
         ],
       },
       {
@@ -461,9 +558,76 @@ export const SECTIONS: DocSection[] = [
         title: "Services",
         route: "/admin/finance/services",
         whatItDoes:
-          "An overview of the services your daycare offers (daycare, walks, grooming, training, etc.) with pricing.",
+          "An overview of the services your daycare offers (daycare, sleepover, walks, grooming, training, etc.) with their pricing and booking rules.",
         howToUse: [
-          "Create and edit services and prices (requires a connected payment provider to enable some actions). These feed the booking flow and pricing.",
+          "Press Add Service to create a new one — see 'Adding a service' below for every field.",
+          "Open an existing service to edit its price and rules. These services feed the Add booking flow and your pricing throughout Genera.",
+        ],
+      },
+      {
+        title: "Adding a service (Add Service)",
+        route: "/admin/finance/services (Add Service)",
+        whatItDoes:
+          "The Add Service window defines a bookable service — its name, pricing, and the rules that govern how it can be booked and cancelled. Only the name and a Standard Daily Price are required; every rule below them is an optional toggle. Submit stays greyed out until both are set, and Genera blocks a service that already exists.",
+        items: [
+          {
+            label: "Name of Service",
+            desc: "Pick a common service (Daycare or Sleepover) or type your own. Custom services get an icon you can choose — or leave on the one auto-suggested from the name — while the two standard services keep their fixed icon.",
+          },
+          {
+            label: "Standard & Puppy Daily Price",
+            desc: "The per-day rate in GBP. The standard price is required; the puppy price is optional and falls back to the standard price when left blank. Both accept numbers only.",
+          },
+          {
+            label: "Tiered Pricing (Loyalty Discount)",
+            desc: "Optional, for daycare/sleepover only — charge a lower per-day rate the more times a pet is booked in a week. The lowest matching tier wins, and the puppy column on each tier is optional.",
+          },
+          {
+            label: "Requires Approval",
+            desc: "On (the default) means you review every booking of this service before it confirms; off means bookings confirm instantly.",
+          },
+          {
+            label: "Next-Day Booking Cutoff",
+            desc: "Set a time of day after which a booking won't auto-confirm for the next day. Optionally mark such late bookings as pending for approval instead of refusing them.",
+          },
+          {
+            label: "Cancellation Fee",
+            desc: "Charge for late cancellations — a fee amount, a free-cancellation window in days, and a cutoff time on the deadline day after which the fee applies.",
+          },
+          {
+            label: "Maximum daily bookings",
+            desc: "Cap how many of this service can be booked per day. Leave blank for no limit; once a day is full, extra bookings become waitlist requests for approval.",
+          },
+        ],
+        howToUse: [
+          "Open Finance › Services and press Add Service.",
+          "Name the service — choose Daycare or Sleepover from the list, or type a custom name and pick an icon for it.",
+          "Enter the Standard Daily Price (required), and a Puppy Daily Price if puppies are charged differently.",
+          "For daycare or sleepover, optionally turn on Tiered Pricing: Genera pre-fills example 2 / 3 / 5-bookings-a-week loyalty tiers (each step roughly 15% cheaper) that you can edit, add to (up to seven) or delete. The lowest tier a pet qualifies for that week sets their per-day rate.",
+          "Leave Requires Approval on to vet each booking, or turn it off for instant confirmation.",
+          "Optionally enable Next-Day Booking Cutoff and set the cutoff time; turn on Mark late bookings as pending to still accept after-cutoff bookings for approval.",
+          "Optionally enable a Cancellation Fee, then set the amount, the free-cancellation window (days before the booking date), and the cutoff time on that deadline day.",
+          "Set a Maximum daily bookings cap if you want one, then press Submit. Submit stays disabled until a name and standard price are entered.",
+        ],
+        images: [
+          {
+            src: "/docs/images/05-finance-service.png",
+            alt: "Add Service modal with name, standard and puppy daily price, and toggles for tiered pricing, approval, next-day cutoff and cancellation fee",
+            caption:
+              "The Add Service window — name and Standard Daily Price are the only required fields; every rule beneath them is an optional toggle.",
+          },
+          {
+            src: "/docs/images/05-finance-service-tiered.png",
+            alt: "Tiered Pricing enabled, showing Weekly Booking Tiers rows with min bookings per week, price and an optional puppy price",
+            caption:
+              "Tiered Pricing (Loyalty Discount) — a lower per-day rate as weekly bookings rise. Genera seeds example tiers; the lowest matching tier wins.",
+          },
+          {
+            src: "/docs/images/05-finance-service-cancellation.png",
+            alt: "Cancellation Fee enabled, showing fee amount, a cancellation window in days, and a cutoff time",
+            caption:
+              "Cancellation Fee — set the amount, how many days before the booking a free cancellation must be made, and the cutoff time on that deadline day.",
+          },
         ],
       },
       {
