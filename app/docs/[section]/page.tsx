@@ -9,6 +9,9 @@ import {
 } from "../_data/sections";
 import SectionIcon from "../_components/SectionIcon";
 import { LightboxProvider, ZoomableImage } from "../_components/Lightbox";
+import { Suspense } from "react";
+import SearchHighlighter from "../_components/SearchHighlighter";
+import { APP_BASE_URL } from "@/lib/urls";
 
 export function generateStaticParams() {
   return SECTIONS.map((s) => ({ section: s.slug }));
@@ -43,6 +46,9 @@ export default async function SectionPage({
 
   return (
     <LightboxProvider>
+    <Suspense fallback={null}>
+      <SearchHighlighter />
+    </Suspense>
     <article className="mx-auto max-w-[820px]">
       {/* Breadcrumb */}
       <nav className="mb-5 flex items-center gap-1.5 text-fine text-ink-soft">
@@ -135,11 +141,7 @@ function Subsection({ sub }: { sub: DocSubsection }) {
     >
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
         <h2 className="!text-[1.45rem] text-ink">{sub.title}</h2>
-        {sub.route && (
-          <code className="rounded-full bg-cream-dark px-2.5 py-1 font-mono text-[0.8rem] text-forest">
-            {sub.route}
-          </code>
-        )}
+        {sub.route && <RouteChip route={sub.route} />}
       </div>
 
       {sub.whatItDoes && (
@@ -228,15 +230,70 @@ function Subsection({ sub }: { sub: DocSubsection }) {
                   className="overflow-hidden rounded-xl border border-teal-mid bg-cream"
                 />
               )}
-              {img.caption && (
-                <figcaption className="mt-2 text-fine leading-relaxed text-ink-soft">
-                  {img.caption}
-                </figcaption>
-              )}
+              {img.caption && <Caption text={img.caption} />}
             </figure>
           ))}
         </div>
       )}
     </section>
+  );
+}
+
+/* Screenshot caption. Captions follow a "Title — description" pattern; we
+   lift the leading title onto its own prominent line and mute the rest.
+   Captions without the separator render as a single muted line. */
+function Caption({ text }: { text: string }) {
+  const sep = text.indexOf(" — ");
+  if (sep === -1) {
+    return (
+      <figcaption className="mt-2.5 text-fine leading-relaxed text-ink-soft">
+        {text}
+      </figcaption>
+    );
+  }
+  const title = text.slice(0, sep);
+  const rest = text.slice(sep + 3);
+  return (
+    <figcaption className="mt-2.5">
+      <span className="block font-massilia text-meta font-bold text-forest">
+        {title}
+      </span>
+      <span className="mt-1 block text-fine leading-relaxed text-ink-soft">
+        {rest}
+      </span>
+    </figcaption>
+  );
+}
+
+/* Route chip. When the route is a navigable absolute path (starts with "/",
+   no dynamic [param] or "…" placeholder), the leading path becomes a link to
+   the live app; any trailing note (e.g. " (Invoices tab → Raise Invoice)")
+   stays as plain text. Non-paths like "Top bar (every page)" render flat. */
+function RouteChip({ route }: { route: string }) {
+  const path = route.match(/^(\/\S*)/)?.[1];
+  const linkable =
+    !!path && !path.includes("[") && !path.includes("]") && !path.includes("…");
+
+  if (!linkable) {
+    return (
+      <code className="rounded-full bg-cream-dark px-2.5 py-1 font-mono text-[0.8rem] text-forest">
+        {route}
+      </code>
+    );
+  }
+
+  const rest = route.slice(path.length);
+  return (
+    <code className="rounded-full bg-cream-dark px-2.5 py-1 font-mono text-[0.8rem] text-forest">
+      <a
+        href={`${APP_BASE_URL}${path}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline decoration-gold decoration-from-font underline-offset-2 transition-colors hover:text-forest-dark hover:decoration-forest"
+      >
+        {path}
+      </a>
+      {rest}
+    </code>
   );
 }

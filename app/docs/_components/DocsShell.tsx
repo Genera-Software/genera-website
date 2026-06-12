@@ -42,7 +42,11 @@ export default function DocsShell({
       <SearchBox q={q} setQ={setQ} />
       <div className="mt-4">
         {searching ? (
-          <SearchResults results={results} onNavigate={handleResultClick} />
+          <SearchResults
+            results={results}
+            query={q}
+            onNavigate={handleResultClick}
+          />
         ) : (
           <SectionNav nav={nav} isActive={isActive} pathname={pathname} />
         )}
@@ -221,11 +225,14 @@ function SectionNav({
 
 function SearchResults({
   results,
+  query,
   onNavigate,
 }: {
   results: SearchEntry[];
+  query: string;
   onNavigate: () => void;
 }) {
+  const term = query.trim();
   if (results.length === 0) {
     return (
       <p className="px-3 py-2 text-meta text-ink-soft">
@@ -249,7 +256,7 @@ function SearchResults({
       {results.map((r) => (
         <Link
           key={`${r.sectionSlug}-${r.anchor}`}
-          href={`/docs/${r.sectionSlug}#${r.anchor}`}
+          href={`/docs/${r.sectionSlug}?q=${encodeURIComponent(term)}#${r.anchor}`}
           onClick={onNavigate}
           className="group rounded-xl px-3 py-2 transition-colors hover:bg-teal-soft"
         >
