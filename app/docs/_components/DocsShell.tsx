@@ -180,12 +180,24 @@ function SectionNav({
       >
         Overview
       </Link>
+      <Link
+        href="/docs/whats-new"
+        className={`rounded-xl px-3 py-2 font-massilia text-[0.95rem] font-bold transition-colors ${
+          pathname === "/docs/whats-new"
+            ? "bg-forest text-white"
+            : "text-forest hover:bg-teal-soft"
+        }`}
+      >
+        What&apos;s New
+      </Link>
 
       <div className="mt-3 mb-1 px-3 text-eyebrow font-semibold tracking-[0.14em] text-ink-soft/70 uppercase">
         Sections
       </div>
 
-      {nav.map((s) => {
+      {nav
+        .filter((s) => s.slug !== "whats-new")
+        .map((s) => {
         const active = isActive(s.slug);
         return (
           <Link

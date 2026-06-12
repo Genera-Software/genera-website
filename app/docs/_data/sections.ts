@@ -1011,6 +1011,143 @@ export const SECTIONS: DocSection[] = [
       },
     ],
   },
+  {
+    slug: "whats-new",
+    num: 10,
+    title: "What's New",
+    tagline: "Recent updates and improvements",
+    intro:
+      "A running list of the latest changes to Genera so you always know what's new. The most recent update is at the top — each entry explains what changed and where to find it.",
+    subsections: [
+      {
+        title: "June 2026 — Booking filters & inline editing",
+        route: "/admin/bookings",
+        whatItDoes:
+          "The Bookings page now has status filters and an Edit button, so you can find and change a booking without leaving the list.",
+        items: [
+          {
+            label: "Status filters",
+            desc: "Filter chips across the top — All, Pending, Approved and Cancelled — each show a live count, with Pending highlighted whenever requests are waiting on you.",
+          },
+          {
+            label: "Edit a booking",
+            desc: "Single bookings now have an Edit button that opens the Edit Booking window where you can change the date or add and remove extra services. Cancelled bookings can no longer be edited.",
+          },
+        ],
+        howToUse: [
+          "Open Bookings and use the filter chips to jump straight to Pending requests or Cancelled bookings.",
+          "Press Edit on a booking to change its date or extras; saving updates the list straight away.",
+        ],
+        images: [
+          {
+            src: "https://ysdwmefuimtryknpgmwc.supabase.co/storage/v1/object/public/website-images/docs/bookings-filter.png",
+            alt: "Bookings page showing status filter chips with counts",
+            caption: "Status filters — All, Pending, Approved and Cancelled, each with a live count.",
+          },
+          {
+            src: "https://ysdwmefuimtryknpgmwc.supabase.co/storage/v1/object/public/website-images/docs/booking-edit-bookings.png",
+            alt: "Edit Booking window with a date picker and extra-service options",
+            caption: "Edit a booking — change its date or add and remove extra services.",
+          },
+        ],
+      },
+      {
+        title: "June 2026 — Manage a recurring series",
+        route: "/admin/bookings/recurring",
+        whatItDoes:
+          "Recurring bookings can now be edited as a whole series from the Bookings page. Changes to the service, notes or extras carry across every future occurrence in one go.",
+        howToUse: [
+          "Open a recurring booking group to manage the series.",
+          "Edit the service, notes or extra services, and Genera applies the change to all future bookings in that series.",
+        ],
+        images: [
+          {
+            src: "https://ysdwmefuimtryknpgmwc.supabase.co/storage/v1/object/public/website-images/docs/edit-recurring.png",
+            alt: "Recurring booking series editor showing series-wide fields",
+            caption: "Manage a series — edit once and apply across all future occurrences.",
+          },
+        ],
+      },
+      {
+        title: "June 2026 — Waive a cancellation fee",
+        route: "/admin/bookings",
+        whatItDoes:
+          "When you cancel a booking that's past its cancellation deadline, staff can now tick a box to skip the cancellation fee — handy for fixing an admin error or a wrong date. Customers cancelling from their own portal can't waive it.",
+        howToUse: [
+          "Cancel a booking that's past the deadline; the cancellation window now offers a \"Don't charge the cancellation fee\" checkbox.",
+          "Tick it to cancel without adding the fee. A link in the same window takes you to the policy if you want to change it for everyone.",
+        ],
+        images: [
+          {
+            src: "https://ysdwmefuimtryknpgmwc.supabase.co/storage/v1/object/public/website-images/docs/wavier-cancellation.png",
+            alt: "Cancel Booking window with a waive cancellation fee checkbox",
+            caption: "Waive the fee — staff-only override for cancellations past the deadline.",
+          },
+        ],
+      },
+      {
+        title: "June 2026 — Choose your invoice date format",
+        route: "/admin/settings/payments",
+        whatItDoes:
+          "Settings › Payments has a new Date format option that controls how dates appear on your invoice PDFs — the invoice date, due date and service dates. Choose from UK, US, ISO, European or long-form styles; UK day/month/year is the default.",
+        howToUse: [
+          "Go to Settings › Payments and pick a Date format from the dropdown.",
+          "Every invoice you generate afterwards uses that format throughout the PDF.",
+        ],
+        images: [
+          {
+            src: "https://ysdwmefuimtryknpgmwc.supabase.co/storage/v1/object/public/website-images/docs/date-standard.png",
+            alt: "Date format dropdown in payment settings showing format presets",
+            caption: "Invoice date format — UK, US, ISO, European and long-form options.",
+          },
+        ],
+      },
+      {
+        title: "June 2026 — Invoice month navigation",
+        route: "/admin/finance",
+        whatItDoes:
+          "The Finance invoices filter now opens on the current month by default, with arrow buttons either side of the date range to step to the previous or next month. The label shows the full month name (e.g. \"June 2026\") whenever the range covers a whole calendar month.",
+        howToUse: [
+          "Open Finance — invoices already show for the current month.",
+          "Use the back and forward arrows to move a month at a time, or open the picker for a custom range.",
+        ],
+        images: [
+          {
+            src: "https://ysdwmefuimtryknpgmwc.supabase.co/storage/v1/object/public/website-images/docs/invoice-date-filter.png",
+            alt: "Finance invoices date filter with previous and next month arrows",
+            caption: "Month navigation — defaults to the current month with prev/next arrows.",
+          },
+        ],
+      },
+      {
+        title: "June 2026 — Navigation & interface polish",
+        whatItDoes:
+          "A round of smaller improvements across the admin portal.",
+        items: [
+          {
+            label: "Help Centre link",
+            desc: "A documentation link now sits in the admin header so this Help Centre is always one click away.",
+          },
+          {
+            label: "Refreshed notifications",
+            desc: "The notification dropdown has a cleaner, better-aligned design.",
+          },
+          {
+            label: "Mobile improvements",
+            desc: "Tidier layouts on smaller screens, including the Add owner & pet window and the invoices view.",
+          },
+        ],
+        images: [
+          {
+            src: "",
+            placeholder: true,
+            alt: "Admin header showing the new documentation link",
+            caption: "Help Centre — reach the docs from the admin header any time.",
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 /** Lightweight nav list (serialisable for client components). */

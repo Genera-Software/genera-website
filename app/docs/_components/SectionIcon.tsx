@@ -62,6 +62,11 @@ const PATHS: Record<string, React.ReactNode> = {
       <path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" />
     </>
   ),
+  "whats-new": (
+    <>
+      <path d="M12 3l2.1 4.6L19 9.2l-3.6 3.3.9 5L12 15.3 7.7 17.5l.9-5L5 9.2l4.9-1.6z" />
+    </>
+  ),
 };
 
 export default function SectionIcon({

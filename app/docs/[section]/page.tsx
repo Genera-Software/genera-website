@@ -65,9 +65,11 @@ export default async function SectionPage({
           <SectionIcon slug={s.slug} className="h-7 w-7" />
         </span>
         <div>
-          <p className="font-massilia text-fine font-bold tracking-wide text-gold">
-            SECTION {String(s.num).padStart(2, "0")}
-          </p>
+          {s.slug !== "whats-new" && (
+            <p className="font-massilia text-fine font-bold tracking-wide text-gold">
+              SECTION {String(s.num).padStart(2, "0")}
+            </p>
+          )}
           <h1 className="mt-0.5 text-[clamp(2rem,4.5vw,2.9rem)] text-ink">
             {s.title}
           </h1>
