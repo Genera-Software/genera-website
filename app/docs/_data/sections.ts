@@ -225,6 +225,7 @@ export const SECTIONS: DocSection[] = [
           "Review pending requests and approve or decline each one.",
           "Filter/scan by status: Confirmed, Pending Approval, Declined.",
           "Open a booking to edit dates, service, or notes.",
+          "Cancel a booking to keep it on record; permanently deleting a booking is restricted to admin users (managers and staff can create, edit and cancel, but not delete).",
         ],
       },
       {
@@ -419,7 +420,7 @@ export const SECTIONS: DocSection[] = [
           },
           {
             label: "Row actions (list)",
-            desc: "The eye icon previews the PDF; Options covers View / Download invoice, Open payment link, Email Invoice, Email Reminder, Mark Paid, Refund (paid Stripe/GoCardless invoices only) and Delete. Tick rows to bulk-delete; deleting frees the charges to be re-invoiced.",
+            desc: "The eye icon previews the PDF; Options covers View / Download invoice, Open payment link, Email Invoice, Email Reminder, Mark Paid, Refund (paid Stripe/GoCardless invoices only) and Delete. Email Invoice and Email Reminder now attach the invoice PDF and link the owner to their account (replies come back to your daycare), and PDFs open only for signed-in users rather than via a public link. Tick rows to bulk-delete; deleting frees the charges to be re-invoiced.",
           },
           {
             label: "Invoicing system panel",
@@ -1019,6 +1020,72 @@ export const SECTIONS: DocSection[] = [
     intro:
       "A running list of the latest changes to Genera so you always know what's new. The most recent update is at the top — each entry explains what changed and where to find it.",
     subsections: [
+      {
+        title: "June 2026 — Simpler invoice actions for owners",
+        route: "Owner account → Billing",
+        whatItDoes:
+          "On an owner's billing page, every invoice now has clear, single-tap actions in place of the old Options menu — a Download button for the PDF, and, for invoices collected online through Stripe or GoCardless, a Pay button. Once an invoice is settled the Pay button stays visible but greys out to a disabled 'Paid', so owners can see at a glance what's still outstanding.",
+        items: [
+          {
+            label: "One-tap Download",
+            desc: "Owners download any invoice PDF straight from the row, without opening a menu first.",
+          },
+          {
+            label: "Pay button on online invoices",
+            desc: "Invoices collected through Stripe or GoCardless show a Pay button with the amount due. Bank-transfer invoices, which are settled outside the app, don't show one.",
+          },
+          {
+            label: "Clear paid state",
+            desc: "Once an invoice is paid, its Pay button switches to a disabled 'Paid', making outstanding invoices easy to spot.",
+          },
+        ],
+        howToUse: [
+          "Owners open their account's Billing page to see each invoice with a Download button.",
+          "For Stripe/GoCardless invoices, tap Pay to settle the amount due; the button reads 'Paid' once collection completes.",
+        ],
+      },
+      {
+        title: "June 2026 — Invoice emails: attached PDF, private links & replies to you",
+        route: "/admin/finance",
+        whatItDoes:
+          "Invoice emails now carry the PDF as an attachment, so owners always keep a copy for their records — even if they never sign in. Invoice PDFs are also now private: instead of an open link anyone could share, every invoice opens through your secure, signed-in account. And when an owner replies to an invoice email, it now comes back to your daycare.",
+        items: [
+          {
+            label: "PDF attached to every invoice email",
+            desc: "When you email an invoice or a payment reminder, the invoice PDF is attached automatically — a permanent copy for the owner that doesn't depend on a login or link.",
+          },
+          {
+            label: "Private, secure invoice links",
+            desc: "Invoice PDFs are no longer served from a public web address. They now open only for signed-in owners and your team, so a forwarded link can't expose someone's invoice.",
+          },
+          {
+            label: "Email button goes to your account",
+            desc: "The button in invoice emails now takes owners to their billing page, where they can sign in to view or pay — rather than straight to the file.",
+          },
+          {
+            label: "Replies reach your daycare",
+            desc: "Invoice and reminder emails now set the reply-to address to your daycare's own email, so an owner's reply comes to you instead of Genera's mailbox.",
+          },
+          {
+            label: "Tidier invoice address",
+            desc: "Missing address lines no longer print as 'N/A, N/A' on the PDF — only the address parts you actually hold are shown.",
+          },
+        ],
+        howToUse: [
+          "Email an invoice or reminder as usual from Finance — the PDF is attached and the owner is linked to their account.",
+          "Owners open any invoice from the billing page in their account; staff continue to view and download PDFs from Finance › Options.",
+        ],
+      },
+      {
+        title: "June 2026 — Only admins can delete bookings",
+        route: "/admin/bookings",
+        whatItDoes:
+          "Permanently deleting a booking is now limited to admin users. Managers and staff can still create, edit and cancel bookings as before, but the permanent-delete option is hidden for them — so a booking can't be removed by mistake or without the right permission.",
+        howToUse: [
+          "Sign in as an admin to permanently delete a booking from the Edit Booking window.",
+          "Staff and managers can still cancel a booking, which keeps it on record in the activity log rather than removing it.",
+        ],
+      },
       {
         title: "June 2026 — Booking activity log",
         route: "/admin/bookings/log",
