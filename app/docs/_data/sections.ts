@@ -1020,6 +1020,37 @@ export const SECTIONS: DocSection[] = [
       "A running list of the latest changes to Genera so you always know what's new. The most recent update is at the top — each entry explains what changed and where to find it.",
     subsections: [
       {
+        title: "June 2026 — Booking activity log",
+        route: "/admin/bookings/log",
+        whatItDoes:
+          "The Log tab under Bookings is now a complete activity history. Every time a booking is created, edited, cancelled, accepted, declined or permanently deleted — by your team or by a customer — it's recorded with who did it, when, and exactly what changed. The list is newest-first, and you can expand any entry to see the detail.",
+        items: [
+          {
+            label: "Every change tracked",
+            desc: "Creations, edits, cancellations, accept/declines and permanent deletions each appear as their own entry, so nothing happens to a booking without a record.",
+          },
+          {
+            label: "Who made the change",
+            desc: "Each entry shows whether it was a staff member or a customer, along with their name — for staff actions you can see exactly which team member made the change.",
+          },
+          {
+            label: "See what changed",
+            desc: "Open an edit entry to see the before-and-after for the date, service, notes, transport and extra services.",
+          },
+        ],
+        howToUse: [
+          "Open Bookings and choose the Log tab to see the full history.",
+          "Click any entry to expand it and view the field-by-field changes.",
+        ],
+        images: [
+          {
+            src: "https://ysdwmefuimtryknpgmwc.supabase.co/storage/v1/object/public/website-images/docs/booking-logs.png",
+            alt: "Booking activity log showing create, edit and cancel events with who made each change",
+            caption: "Booking activity log — every create, edit, cancel, accept, decline and deletion, with who did it and what changed.",
+          },
+        ],
+      },
+      {
         title: "June 2026 — Booking filters & inline editing",
         route: "/admin/bookings",
         whatItDoes:
