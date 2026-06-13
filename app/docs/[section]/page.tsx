@@ -8,6 +8,7 @@ import {
   type DocSubsection,
 } from "../_data/sections";
 import SectionIcon from "../_components/SectionIcon";
+import CopyLinkButton from "../_components/CopyLinkButton";
 import { LightboxProvider, ZoomableImage } from "../_components/Lightbox";
 import { Suspense } from "react";
 import SearchHighlighter from "../_components/SearchHighlighter";
@@ -136,14 +137,16 @@ export default async function SectionPage({
 }
 
 function Subsection({ sub }: { sub: DocSubsection }) {
+  const anchor = subAnchor(sub.title);
   return (
     <section
-      id={subAnchor(sub.title)}
+      id={anchor}
       className="scroll-mt-24 rounded-2xl border border-teal-mid bg-white p-6 transition-shadow target:border-gold target:shadow-[0_0_0_3px_var(--color-gold-soft)] sm:p-7"
     >
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+      <div className="group/heading flex flex-wrap items-center gap-x-3 gap-y-2">
         <h2 className="!text-[1.45rem] text-ink">{sub.title}</h2>
         {sub.route && <RouteChip route={sub.route} />}
+        <CopyLinkButton anchor={anchor} title={sub.title} />
       </div>
 
       {sub.whatItDoes && (
