@@ -1021,6 +1021,35 @@ export const SECTIONS: DocSection[] = [
       "A running list of the latest changes to Genera so you always know what's new. The most recent update is at the top — each entry explains what changed and where to find it.",
     subsections: [
       {
+        title: "June 2026 — One login across multiple daycares",
+        route: "Owner login → any daycare portal",
+        whatItDoes:
+          "Pet owners can now use a single Genera login across every daycare they attend. An owner who already has an account can join another daycare straight from that daycare's portal — no second sign-up and no separate password. Once they belong to more than one, they choose which to open when they sign in, and can switch between them at any time without logging out. Each daycare still only ever sees its own bookings, invoices and pets.",
+        items: [
+          {
+            label: "Join another daycare in one tap",
+            desc: "An owner who's already registered signs in on a new daycare's portal and taps Join to become a customer there — their existing email and password carry over.",
+          },
+          {
+            label: "Pick which daycare to open",
+            desc: "Owners linked to more than one daycare see a “Choose a daycare” screen after signing in; owners with just one go straight through as before.",
+          },
+          {
+            label: "Switch daycares any time",
+            desc: "A daycare switcher in the owner menu lets them hop between their daycares without signing out. It only appears for owners linked to more than one.",
+          },
+          {
+            label: "Each daycare stays separate",
+            desc: "Bookings, billing and documents are kept per daycare, so an owner only sees the right information for the portal they're in.",
+          },
+        ],
+        howToUse: [
+          "An existing owner opens the new daycare's portal link, signs in, and taps Join to be added as a customer there.",
+          "Next time they sign in, owners with more than one daycare pick which to open; everyone else lands on their daycare as usual.",
+          "Inside the portal, use the daycare switcher in the sidebar to move between daycares.",
+        ],
+      },
+      {
         title: "June 2026 — Simpler invoice actions for owners",
         route: "Owner account → Billing",
         whatItDoes:
