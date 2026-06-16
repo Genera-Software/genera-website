@@ -1021,6 +1021,71 @@ export const SECTIONS: DocSection[] = [
       "A running list of the latest changes to Genera so you always know what's new. The most recent update is at the top — each entry explains what changed and where to find it.",
     subsections: [
       {
+        title: "June 2026 — Invite staff to their own login",
+        route: "/admin/team",
+        whatItDoes:
+          "You can now invite team members to set up their own Genera login by email, straight from Team management. Each staff member shows an account status — invited or linked — so you can see at a glance who has finished signing up and who still needs to.",
+        items: [
+          {
+            label: "Send an invite by email",
+            desc: "Invite a team member from Team management and Genera emails them a link to set up their own login — no shared passwords.",
+          },
+          {
+            label: "See who's linked",
+            desc: "Each staff member shows whether they've been invited and whether their account is linked yet, so you know who's finished setting up.",
+          },
+        ],
+        howToUse: [
+          "Open Team management and choose a staff member to send them an invitation.",
+          "Their status updates to show when the invite has been sent and when their account is linked.",
+        ],
+      },
+      {
+        title: "June 2026 — Recurring bookings: duplicate guard & pet search",
+        route: "/admin/bookings/recurring",
+        whatItDoes:
+          "Setting up and finding recurring bookings is now safer and quicker. Genera stops you creating a second recurring booking for the same pet, service and day of the week, so a pet can't be double-booked on repeat — and the recurring bookings list now has a search box to find a pet by name.",
+        items: [
+          {
+            label: "No accidental duplicates",
+            desc: "If an active recurring booking already exists for that pet, service and weekday, Genera warns you instead of creating a clashing one.",
+          },
+          {
+            label: "Search by pet name",
+            desc: "Filter the recurring bookings list by typing a pet's name to jump straight to their schedule.",
+          },
+        ],
+        howToUse: [
+          "Create recurring bookings as usual — if one already matches, you'll see an alert rather than a duplicate.",
+          "On the recurring bookings page, use the search box to find a pet by name.",
+        ],
+      },
+      {
+        title: "June 2026 — Off-today drivers hidden from route planning",
+        route: "/admin/routes",
+        whatItDoes:
+          "The route planner's driver list now leaves out anyone who's off today — whether they aren't rostered on or have approved time off — so you only pick from drivers who are actually available. Any driver already assigned to a route still shows, so existing plans stay intact.",
+        howToUse: [
+          "Open the route planner — the driver dropdown shows only today's available drivers.",
+          "Drivers already assigned to a route remain selectable even if they're off today.",
+        ],
+      },
+      {
+        title: "June 2026 — Clearer booking labels",
+        route: "/admin/bookings",
+        whatItDoes:
+          "Small wording changes on the Bookings list make each column easier to read at a glance: “Requested” is now “Booked”, “Booking Start Date” is “Service Date”, “Booking Request Date” is “Booked On”, and “Created By” is shortened to “By”.",
+      },
+      {
+        title: "June 2026 — Payment reference on GoCardless invoices",
+        route: "/admin/finance",
+        whatItDoes:
+          "Invoices collected through GoCardless now show the payment reference, captured as soon as the payment is submitted. That gives you a clear reference to match against bank statements while a payment is still being processed, not just once it's settled.",
+        howToUse: [
+          "Open an invoice paid by GoCardless to see its payment reference in the invoice details.",
+        ],
+      },
+      {
         title: "June 2026 — One login across multiple daycares",
         route: "Owner login → any daycare portal",
         whatItDoes:
