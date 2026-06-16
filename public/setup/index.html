@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Genera Setup Assistant — Interactive Onboarding & Help Map</title>
+<link rel="stylesheet" href="https://use.typekit.net/frg5tgd.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F8FAFB;
+  --paper-deep:#EEF4F5;
+  --ink:#111827;
+  --ink-soft:#4B5563;
+  --green:#003E45;
+  --green-deep:#002830;
+  --accent:#FFA800;
+  --accent-soft:#FFF3CC;
+  --sage:#C2E2E6;
+  --gold:#FFA800;
+  --card:#FFFFFF;
+  --line:#C2E2E6;
+  --ok:#007080;
+  --dim:#9CA3AF;
+  --radius:18px;
+  --shadow:0 8px 24px rgba(0,62,69,.07);
+  --font-d:"massilia","Karla",-apple-system,sans-serif;
+  --font-b:"niveau-grotesk","Karla",-apple-system,sans-serif;
+  --font-h:"Caveat",cursive;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-b);color:var(--ink);background:var(--paper);
+  background-image:linear-gradient(170deg,#ffffff 0%,#E0F0F2 100%);
+  background-attachment:fixed;
+  min-height:100vh;line-height:1.55;
+}
+::selection{background:var(--accent);color:#002830}
+
+/* ---------- header ---------- */
+header{
+  position:sticky;top:0;z-index:50;background:rgba(248,250,251,.88);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.hwrap{max-width:1180px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.logo .logomark{height:34px;width:auto;flex:none;display:block}
+.logo b{font-family:var(--font-d);font-weight:800;font-size:19px;letter-spacing:2px;text-transform:uppercase;color:var(--green)}
+.logo small{display:block;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);font-weight:700}
+nav.tabs{display:flex;gap:6px;background:var(--paper-deep);padding:5px;border-radius:999px;margin-left:6px}
+nav.tabs button{
+  border:0;background:transparent;font-family:var(--font-b);font-weight:700;font-size:13.5px;
+  color:var(--ink-soft);padding:8px 18px;border-radius:999px;cursor:pointer;transition:.18s;
+}
+nav.tabs button.on{background:var(--green);color:#fff;box-shadow:0 3px 10px rgba(0,62,69,.3)}
+nav.tabs button:not(.on):hover{color:var(--ink)}
+.searchbox{margin-left:auto;position:relative;flex:1;max-width:330px;min-width:200px}
+.searchbox input{
+  width:100%;padding:10px 14px 10px 38px;border-radius:999px;border:1.5px solid var(--line);
+  background:#fff;font-family:var(--font-b);font-size:14px;color:var(--ink);outline:none;transition:.18s;
+}
+.searchbox input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.searchbox .sicon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--ink-soft);pointer-events:none}
+.searchbox kbd{
+  position:absolute;right:11px;top:50%;transform:translateY(-50%);font-family:var(--font-b);
+  font-size:10.5px;font-weight:700;color:var(--ink-soft);background:var(--paper-deep);
+  border:1px solid var(--line);border-radius:6px;padding:2px 7px;pointer-events:none;
+}
+/* search dropdown */
+.sresults{
+  position:absolute;top:calc(100% + 10px);right:0;width:min(480px,92vw);max-height:62vh;overflow:auto;
+  background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);display:none;
+}
+.sresults.open{display:block;animation:pop .18s ease}
+@keyframes pop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.sgroup{padding:10px 14px 4px;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:flex;align-items:center;gap:8px}
+.sgroup .gdot{width:8px;height:8px;border-radius:3px;flex:none}
+.srow{display:block;width:100%;text-align:left;border:0;background:none;cursor:pointer;padding:10px 16px;border-bottom:1px solid #E8F2F4;font-family:var(--font-b)}
+.srow:hover,.srow.sel{background:var(--paper)}
+.srow .st{font-weight:700;font-size:14px;color:var(--ink)}
+.srow .st mark{background:var(--accent-soft);color:#B97800;border-radius:3px;padding:0 1px}
+.srow .sd{font-size:12.5px;color:var(--ink-soft);margin-top:1px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.srow .badge{margin-top:4px}
+.sempty{padding:26px;text-align:center;color:var(--ink-soft);font-size:14px}
+
+main{max-width:1180px;margin:0 auto;padding:34px 24px 90px}
+.view{display:none}
+.view.on{display:block;animation:fadeup .4s ease}
+@keyframes fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---------- shared bits ---------- */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 10px}
+.badge.yes{background:#E0F0F2;color:var(--ok)}
+.badge.no{background:#EEF4F5;color:var(--dim)}
+.badge.lock{background:#FBF0DC;color:#A87617}
+h1.display{font-family:var(--font-d);font-weight:800;font-size:clamp(2rem,3.8vw,3.4rem);line-height:1.05;color:var(--green)}
+h1.display em{font-style:italic;color:var(--accent)}
+.lede{color:var(--ink-soft);font-size:16.5px;max-width:560px;margin-top:14px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;font-family:var(--font-b);
+  font-weight:700;font-size:14.5px;padding:13px 26px;border-radius:999px;transition:.18s;text-decoration:none;
+}
+.btn.primary{background:var(--accent);color:#002830;box-shadow:0 6px 18px rgba(255,168,0,.35)}
+.btn.primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(255,168,0,.45)}
+.btn.ghost{background:transparent;color:var(--green);border:1.5px solid var(--sage)}
+.btn.ghost:hover{background:#fff}
+.btn.small{padding:8px 16px;font-size:13px}
+
+/* ---------- wizard ---------- */
+.wizshell{max-width:760px;margin:0 auto}
+.progress{display:flex;gap:8px;margin:30px 0 26px}
+.progress span{height:5px;flex:1;border-radius:99px;background:var(--line);transition:.3s}
+.progress span.done{background:var(--green)}
+.progress span.cur{background:var(--accent)}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:38px 40px;animation:fadeup .35s ease}
+.qnum{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#B97800}
+.qcard h2{font-family:var(--font-d);font-weight:800;font-size:clamp(22px,3vw,30px);margin:8px 0 6px;line-height:1.15;color:var(--green)}
+.qhint{color:var(--ink-soft);font-size:14.5px;margin-bottom:24px}
+.opts{display:grid;gap:12px}
+.opts.cols2{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.opt{
+  display:flex;gap:14px;align-items:flex-start;text-align:left;background:var(--paper);
+  border:2px solid var(--line);border-radius:16px;padding:17px 18px;cursor:pointer;
+  font-family:var(--font-b);transition:.16s;position:relative;
+}
+.opt:hover{border-color:var(--sage);transform:translateY(-2px)}
+.opt.picked{border-color:var(--accent);background:#fff;box-shadow:0 6px 18px rgba(255,168,0,.25)}
+.opt .ic{width:42px;height:42px;flex:none;border-radius:13px;display:grid;place-items:center;background:var(--green);color:#fff}
+.opt.picked .ic{background:var(--accent);color:#002830}
+.opt .ot{font-weight:700;font-size:15.5px}
+.opt .od{font-size:13px;color:var(--ink-soft);margin-top:2px}
+.opt .suggest{position:absolute;top:-12px;right:14px;background:var(--gold);color:#002830;font-family:var(--font-h);font-size:13px;font-weight:700;padding:2px 12px;border-radius:99px}
+.wizfoot{display:flex;justify-content:space-between;align-items:center;margin-top:26px}
+.wiznote{margin-top:18px;background:#FBF0DC;border:1px solid #EAD6A8;color:#7A5A14;border-radius:12px;padding:12px 16px;font-size:13.5px;display:none}
+.wiznote.show{display:block;animation:fadeup .3s ease}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding:30px 0 10px}
+.hero .art{position:relative;min-height:300px}
+.hero .art svg{width:100%;height:auto}
+.heropills{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.heropills .pill{background:#fff;border:1px solid var(--line);border-radius:99px;padding:4px 15px;font-family:var(--font-h);font-size:1.1rem;font-weight:700;color:var(--ink-soft)}
+.heropills .pill b{color:var(--green)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;border-radius:9999px;border:1px solid var(--sage);background:#fff;padding:4px 14px;font-family:var(--font-h);font-size:1.125rem;font-weight:700;color:var(--green);margin-bottom:18px}
+@media(max-width:860px){.hero{grid-template-columns:1fr}.hero .art{display:none}}
+
+/* ---------- journey / checklist ---------- */
+.profilebar{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--green-deep);color:#fff;
+  border-radius:18px;padding:16px 20px;margin-bottom:34px;
+}
+.profilebar .pchip{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:5px 14px;font-size:12.5px;font-weight:600}
+.profilebar .pchip b{color:#FFE099}
+.profilebar button{margin-left:auto;background:var(--accent);border:0;color:#002830;font-weight:700;font-size:12.5px;border-radius:99px;padding:8px 16px;cursor:pointer;font-family:var(--font-b)}
+.phase{display:grid;grid-template-columns:64px 1fr;gap:0 22px;position:relative;padding-bottom:34px}
+.phase:not(:last-child):before{content:"";position:absolute;left:31px;top:64px;bottom:0;width:2px;background:repeating-linear-gradient(to bottom,var(--sage) 0 6px,transparent 6px 12px)}
+.pnum{
+  width:64px;height:64px;border-radius:22px;background:var(--green);color:#fff;display:grid;place-items:center;
+  font-family:var(--font-d);font-weight:800;font-size:24px;box-shadow:0 6px 16px rgba(0,62,69,.3);
+}
+.phase h3{font-family:var(--font-d);font-weight:800;font-size:22px;padding-top:6px;color:var(--green)}
+.phase .pwhy{color:var(--ink-soft);font-size:14px;margin:4px 0 16px;max-width:640px}
+.steps{display:grid;gap:10px}
+.step{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;
+  display:flex;gap:14px;align-items:flex-start;transition:.16s;
+}
+.step:hover{box-shadow:var(--shadow);transform:translateX(3px)}
+.step input[type=checkbox]{
+  appearance:none;width:22px;height:22px;flex:none;margin-top:2px;border:2px solid var(--sage);border-radius:8px;cursor:pointer;position:relative;transition:.15s;
+}
+.step input[type=checkbox]:checked{background:var(--ok);border-color:var(--ok)}
+.step input[type=checkbox]:checked:after{content:"✓";color:#fff;font-size:13px;font-weight:900;position:absolute;inset:0;display:grid;place-items:center}
+.step .sbody{flex:1}
+.step .stitle{font-weight:700;font-size:15px}
+.step.donestep .stitle{text-decoration:line-through;color:var(--dim)}
+.step .sdesc{font-size:13px;color:var(--ink-soft);margin-top:2px}
+.step a.golink{flex:none;align-self:center;font-size:12.5px;font-weight:700;color:#946000;text-decoration:none;white-space:nowrap;border:1.5px solid var(--accent-soft);background:var(--accent-soft);padding:7px 13px;border-radius:99px;transition:.15s}
+.step a.golink:hover{background:var(--accent);color:#002830}
+.journeyhead{margin-bottom:30px}
+.journeyhead h1{font-family:var(--font-d);font-weight:800;font-size:clamp(26px,3.6vw,40px);color:var(--green)}
+.journeyhead p{color:var(--ink-soft);margin-top:6px;max-width:620px}
+.skipnote{margin-top:30px;background:var(--paper-deep);border-radius:14px;padding:16px 20px;font-size:13.5px;color:var(--ink-soft)}
+.skipnote b{color:var(--ink)}
+
+/* ---------- map ---------- */
+.maplayout{display:grid;grid-template-columns:1fr 360px;gap:26px;align-items:start}
+.mapcanvas{position:relative;background:var(--card);border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow);overflow:hidden;min-height:640px}
+.mapcanvas svg.wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.mapcanvas svg.wires path{fill:none;stroke:var(--sage);stroke-width:2;stroke-dasharray:5 7;opacity:.7}
+.mapcanvas svg.wires path.dimwire{opacity:.18}
+.hubnode{
+  position:absolute;width:148px;height:148px;border-radius:50%;background:linear-gradient(to bottom right,#003E45,#005060,#007080);color:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;
+  box-shadow:0 14px 36px rgba(0,40,48,.4);z-index:3;
+}
+.hubnode b{font-family:var(--font-d);font-weight:800;font-size:20px;letter-spacing:2px}
+.hubnode small{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#FFE099;font-weight:700}
+.mnode{
+  position:absolute;z-index:2;display:flex;flex-direction:column;align-items:center;gap:7px;
+  border:0;background:none;cursor:pointer;font-family:var(--font-b);width:118px;transition:.2s;
+}
+.mnode .bub{
+  width:64px;height:64px;border-radius:22px;display:grid;place-items:center;color:#fff;
+  box-shadow:0 8px 20px rgba(34,48,42,.22);transition:.2s;position:relative;
+}
+.mnode:hover .bub{transform:scale(1.12) rotate(-4deg)}
+.mnode.active .bub{outline:3px solid var(--accent);outline-offset:3px}
+.mnode .lbl{font-weight:700;font-size:13px;color:var(--ink);text-align:center;line-height:1.2}
+.mnode .sub{font-size:10.5px;color:var(--ink-soft);text-align:center;line-height:1.25}
+.mnode.dimmed{opacity:.32;filter:saturate(.2)}
+.mnode.dimmed:hover{opacity:.6}
+.mnode .offbadge{
+  position:absolute;top:-8px;right:-8px;background:var(--dim);color:#fff;font-size:9px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.05em;border-radius:99px;padding:2px 7px;
+}
+.maplegend{position:absolute;left:18px;bottom:16px;display:flex;gap:14px;font-size:11.5px;color:var(--ink-soft);background:rgba(255,255,255,.85);padding:7px 13px;border-radius:99px;border:1px solid var(--line)}
+.maplegend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
+/* drawer */
+.drawer{background:var(--card);border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow);padding:24px;min-height:640px;position:sticky;top:90px;max-height:calc(100vh - 110px);overflow:auto}
+.drawer .dhead{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.drawer .dhead .bub{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;color:#fff;flex:none}
+.drawer h3{font-family:var(--font-d);font-weight:800;font-size:21px;color:var(--green)}
+.drawer .dsub{font-size:13px;color:var(--ink-soft);margin-bottom:14px}
+.drawer .dopen{display:inline-flex;margin:2px 0 18px}
+.feat{border:1px solid var(--line);border-radius:13px;margin-bottom:9px;overflow:hidden;background:var(--paper)}
+.feat>button{
+  width:100%;display:flex;align-items:center;gap:10px;border:0;background:none;cursor:pointer;
+  padding:12px 14px;font-family:var(--font-b);text-align:left;
+}
+.feat>button .ft{font-weight:700;font-size:14px;color:var(--ink);flex:1}
+.feat>button .chev{color:var(--ink-soft);transition:.2s;flex:none}
+.feat.open>button .chev{transform:rotate(90deg)}
+.feat .fbody{display:none;padding:0 14px 14px;font-size:13.5px;color:var(--ink-soft)}
+.feat.open .fbody{display:block;animation:fadeup .25s ease}
+.feat .fpath{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:var(--green-deep);color:#FFE099;border-radius:7px;padding:3px 9px;display:inline-block;margin-bottom:8px}
+.feat.notrel{opacity:.55}
+.dempty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--ink-soft);padding:80px 20px;gap:14px}
+.dempty .paw{opacity:.4}
+@media(max-width:980px){
+  .maplayout{grid-template-columns:1fr}
+  .mapcanvas{min-height:0;padding:18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+  .mapcanvas svg.wires,.hubnode,.maplegend{display:none}
+  .mnode{position:static;width:auto;flex-direction:row;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px 12px;gap:11px;text-align:left}
+  .mnode .bub{width:40px;height:40px;border-radius:13px;flex:none}
+  .mnode .lbl{text-align:left}
+  .mnode .sub{display:none}
+  .drawer{position:static;min-height:0;max-height:none}
+}
+footer{max-width:1180px;margin:0 auto;padding:0 24px 50px;color:var(--ink-soft);font-size:13px;text-align:center}
+footer a{color:var(--green);font-weight:600}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hwrap">
+    <a class="logo" href="#" onclick="goView('home');return false">
+      <img class="logomark" src="https://generasoftware.com/images/genera-svg.svg" alt="Genera" onerror="this.style.display='none'">
+      <span><b>GENERA</b><small>Setup&nbsp;Assistant</small></span>
+    </a>
+    <nav class="tabs">
+      <button id="tab-home" class="on" onclick="goView('home')">Start</button>
+      <button id="tab-journey" onclick="goView('journey')">Your Journey</button>
+      <button id="tab-map" onclick="goView('map')">Feature Map</button>
+    </nav>
+    <div class="searchbox">
+      <span class="sicon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span>
+      <input id="search" type="text" placeholder="Search every feature…" autocomplete="off">
+      <kbd>/</kbd>
+      <div class="sresults" id="sresults"></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ HOME / WIZARD ============ -->
+<section class="view on" id="view-home">
+
+  <div class="hero" id="heroblock">
+    <div>
+      <div class="eyebrow">🐾 Built by pet business owners</div>
+      <h1 class="display">Set up Genera<br>around <em>your</em> business.</h1>
+      <p class="lede">Answer five quick questions and we'll build a personalised setup journey — only the features you actually need, in the order you should switch them on.</p>
+      <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn primary" onclick="startWizard()">Build my journey
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+        </button>
+        <button class="btn ghost" onclick="goView('map')">Explore the feature map</button>
+      </div>
+      <div class="heropills">
+        <div class="pill"><b>9</b> sections</div>
+        <div class="pill"><b>55+</b> features mapped</div>
+        <div class="pill">Daycares · Walkers · Hotels · Groomers</div>
+      </div>
+    </div>
+    <div class="art">
+      <svg viewBox="0 0 420 360" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="gh" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#003E45"/><stop offset=".55" stop-color="#005060"/><stop offset="1" stop-color="#007080"/>
+          </linearGradient>
+        </defs>
+        <circle cx="210" cy="180" r="58" fill="url(#gh)"/>
+        <text x="210" y="176" text-anchor="middle" fill="#fff" font-family="massilia,Karla,sans-serif" font-weight="800" font-size="18" letter-spacing="2">GENERA</text>
+        <text x="210" y="194" text-anchor="middle" fill="#FFE099" font-family="Karla,sans-serif" font-weight="700" font-size="9" letter-spacing="2">YOUR HUB</text>
+        <g stroke="#C2E2E6" stroke-width="2" stroke-dasharray="4 6" fill="none" opacity=".9">
+          <path d="M210 122 C 210 80 150 70 120 58"/>
+          <path d="M262 152 C 310 120 330 110 352 92"/>
+          <path d="M268 192 C 330 200 340 210 372 224"/>
+          <path d="M240 232 C 270 290 280 295 300 318"/>
+          <path d="M180 232 C 150 290 140 295 118 316"/>
+          <path d="M152 190 C 90 200 80 206 50 218"/>
+          <path d="M158 148 C 100 110 90 104 62 84"/>
+        </g>
+        <g font-family="Karla,sans-serif" font-weight="700" font-size="11.5" text-anchor="middle">
+          <g><rect x="78" y="36" rx="12" width="86" height="30" fill="#FFA800"/><text x="121" y="55" fill="#002830">Bookings</text></g>
+          <g><rect x="318" y="70" rx="12" width="74" height="30" fill="#D98E04"/><text x="355" y="89" fill="#fff">Routes</text></g>
+          <g><rect x="338" y="208" rx="12" width="76" height="30" fill="#003E45"/><text x="376" y="227" fill="#fff">Finance</text></g>
+          <g><rect x="266" y="304" rx="12" width="64" height="30" fill="#3E8989"/><text x="298" y="323" fill="#fff">Team</text></g>
+          <g><rect x="84" y="302" rx="12" width="58" height="30" fill="#C9694F"/><text x="113" y="321" fill="#fff">Pets</text></g>
+          <g><rect x="8" y="204" rx="12" width="78" height="30" fill="#2C8C99"/><text x="47" y="223" fill="#fff">Owners</text></g>
+          <g><rect x="20" y="58" rx="12" width="84" height="30" fill="#54648C"/><text x="62" y="77" fill="#fff">Reports</text></g>
+        </g>
+        <g fill="#FFA800" opacity=".95" transform="translate(196,18) scale(.8)">
+          <ellipse cx="7" cy="6" rx="3" ry="4"/><ellipse cx="21" cy="6" rx="3" ry="4"/>
+          <path d="M14 11c-4.4 0-8.4 3.8-8.4 7.8 0 2.5 1.9 4.1 4.4 4.1 1.5 0 2.6-.6 4-.6s2.5.6 4 .6c2.5 0 4.4-1.6 4.4-4.1 0-4-4-7.8-8.4-7.8z"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="wizshell" id="wizard" style="display:none">
+    <div class="progress" id="wprogress"></div>
+    <div id="wizbody"></div>
+  </div>
+
+</section>
+
+<!-- ============ JOURNEY ============ -->
+<section class="view" id="view-journey">
+  <div id="journeybody"></div>
+</section>
+
+<!-- ============ MAP ============ -->
+<section class="view" id="view-map">
+  <div class="journeyhead">
+    <h1>The feature map</h1>
+    <p>Every section of the Genera admin portal. Click a section to see what's inside — anything greyed out isn't needed for your setup (you can still open it).</p>
+  </div>
+  <div id="mapprofile"></div>
+  <div class="maplayout">
+    <div class="mapcanvas" id="mapcanvas">
+      <svg class="wires" id="wires"></svg>
+      <div class="hubnode" id="hubnode"><b>Genera</b><small>Admin Portal</small></div>
+      <div class="maplegend"><span><i style="background:var(--green)"></i>For you</span><span><i style="background:var(--dim)"></i>Not needed</span></div>
+    </div>
+    <aside class="drawer" id="drawer">
+      <div class="dempty">
+        <svg class="paw" width="54" height="54" viewBox="0 0 24 24" fill="var(--sage)"><ellipse cx="7.2" cy="8" rx="2" ry="2.7"/><ellipse cx="16.8" cy="8" rx="2" ry="2.7"/><ellipse cx="3.6" cy="12.6" rx="1.8" ry="2.3"/><ellipse cx="20.4" cy="12.6" rx="1.8" ry="2.3"/><path d="M12 11.4c-3 0-5.7 2.6-5.7 5.3 0 1.7 1.3 2.8 3 2.8 1 0 1.8-.4 2.7-.4s1.7.4 2.7.4c1.7 0 3-1.1 3-2.8 0-2.7-2.7-5.3-5.7-5.3z"/></svg>
+        <p><b>Pick a section</b><br>to see every page inside it,<br>what it does and how to use it.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Prototype — Genera Setup Assistant · All guides link to the live <a href="https://generasoftware.com/docs" target="_blank" rel="noopener">Genera Help Centre</a>
+</footer>
+
+<script>
+/* ================= DATA ================= */
+const DOCS = "https://generasoftware.com/docs/";
+const SECTIONS = [
+ {id:"dashboard", n:"Dashboard", tag:"Your daily operating picture", c:"#005060",
+  icon:"M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z",
+  items:[
+   {t:"Calendar", p:"/admin/home", d:"A monthly calendar of all bookings with row and status icons — who's in for daycare, sleepovers and other services each day. Click a day to expand its detail list.", k:"calendar monthly month today status icons"},
+   {t:"Daily view", p:"/admin/home/daily", d:"A single-day operational summary with stat cards per service type (daycare, sleepover, welcome/assessment, vet, unassigned). Use it as the team's run sheet each morning.", k:"daily run sheet headcount today summary"},
+   {t:"Live map", p:"/admin/home/map", d:"A live map of drivers and their latest locations, today's routes, and which staff are scheduled. Flags assigned drivers who are marked off.", k:"map live drivers tracking gps location", cond:"transport"},
+   {t:"Adding a booking", p:"Add booking window", d:"Create a one-off or recurring booking — search a pet (or tap one from the Most booked grid), pick a service, set collect/drop-off toggles and notes. Recurring books the same weekday between two dates, with an optional price override.", k:"add booking new create recurring weekly override price most booked service"},
+   {t:"Meet & Greet", p:"Add booking › Meet & Greet tab", d:"Log an introductory visit for a pet that isn't a customer yet — capture the date, pet name, address (search to auto-fill) and owner details.", k:"meet greet intro assessment trial visit prospective new customer"},
+   {t:"Global search", p:"Top bar (every page)", d:"Type a pet or owner name to see grouped Pets and Customers results, then open the record — arrows to move, Enter to open, Esc to close.", k:"global search find pet owner top bar quick jump"},
+   {t:"Notification bell", p:"Top bar (every page)", d:"Recent notifications with an unread badge; each links to the related record, and approval items take you to the Notification Centre.", k:"bell notifications unread badge alerts"},
+   {t:"Notification Centre", p:"/admin/notifications", d:"A full inbox of everything happening — booking and membership requests, new customers, direct-debit events, cancellations, time-off. Accept or decline requests inline.", k:"notifications inbox approvals accept decline requests centre"}
+  ]},
+ {id:"bookings", n:"Bookings", tag:"Reservations, approvals & recurring schedules", c:"#FFA800",
+  icon:"M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10z",
+  items:[
+   {t:"Bookings list", p:"/admin/bookings", d:"The central booking list. Pending requests are always shown so nothing slips past; approve or decline each one, and filter by Confirmed, Pending Approval or Declined.", k:"bookings list approve decline pending confirmed requests"},
+   {t:"Recurring", p:"/admin/bookings/recurring", d:"Manages repeating bookings. Approve pending recurring requests and pause, edit or end active schedules.", k:"recurring repeat weekly schedule pause"},
+   {t:"Frequency", p:"/admin/bookings/frequency", d:"Shows how often each pet/owner books — spot your most regular customers and gaps in attendance.", k:"frequency regulars attendance loyal"},
+   {t:"Heatmap", p:"/admin/bookings/heatmap", d:"A visual density view of bookings across days — spot peak days and quiet ones for capacity and staffing decisions.", k:"heatmap busy quiet capacity density"},
+   {t:"Log", p:"/admin/bookings/log", d:"A chronological audit trail of booking activity — created, accepted, declined, changed.", k:"log audit trail history"},
+   {t:"Notes", p:"/admin/bookings/notes", d:"Day notes and booking notes in one place — the 'has notes' icon on the calendar points back here.", k:"notes day comments"}
+  ]},
+ {id:"owners", n:"Owners", tag:"Your customer directory", c:"#2C8C99",
+  icon:"M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z",
+  items:[
+   {t:"Owners directory", p:"/admin/owners", d:"The directory of pet owners (your customers) with contact details and linked pets. Search, open and edit each record.", k:"owners customers directory clients contact"},
+   {t:"Owner detail", p:"/admin/owners/[ownerId]", d:"A single owner's full profile — their pets, bookings, charges and communication history. Manage one customer end-to-end.", k:"owner profile account history detail"}
+  ]},
+ {id:"pets", n:"Pets", tag:"Every pet, profile & care record", c:"#C9694F",
+  icon:"M4.5 9.5c1.38 0 2.5-1.34 2.5-3S5.88 3.5 4.5 3.5 2 4.84 2 6.5s1.12 3 2.5 3zm5-2c1.38 0 2.5-1.34 2.5-3S10.88 1.5 9.5 1.5 7 2.84 7 4.5s1.12 3 2.5 3zm5 0c1.38 0 2.5-1.34 2.5-3s-1.12-3-2.5-3-2.5 1.34-2.5 3 1.12 3 2.5 3zm5 2c1.38 0 2.5-1.34 2.5-3s-1.12-3-2.5-3-2.5 1.34-2.5 3 1.12 3 2.5 3zm-7.5 2c-3.5 0-7 3.2-7 6.5 0 2.1 1.6 3.5 3.7 3.5 1.2 0 2.1-.5 3.3-.5s2.1.5 3.3.5c2.1 0 3.7-1.4 3.7-3.5 0-3.3-3.5-6.5-7-6.5z",
+  items:[
+   {t:"Pets directory", p:"/admin/pets", d:"All pets at your business. Warning icons flag expiring or missing vaccinations, driven by the reminder window in Settings.", k:"pets dogs directory list vaccination warning"},
+   {t:"Pet profile", p:"/admin/pets/[petId]", d:"A pet's core details — name, breed, age, owner, medical notes, vaccinations, behaviour and photo.", k:"pet profile medical vaccination behaviour breed age photo"},
+   {t:"Pet history tabs", p:"/admin/pets/[petId]/…", d:"The rest of a pet's record: every booking, full charge history, invoices that include the pet, a photo gallery, activity and care logs, and delete.", k:"pet bookings charges invoices gallery photos logs history delete"},
+   {t:"Quick-book (sun & moon)", p:"Pet › Bookings tab", d:"A pet's bookings calendar with one-tap quick-book: sun books an instant daycare day, moon an instant sleepover — no form needed. + Add Booking opens the full window.", k:"quick book sun moon instant sleepover fast"}
+  ]},
+ {id:"finance", n:"Finance", tag:"Invoicing, billing, memberships & payroll", c:"#003E45",
+  icon:"M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1H6.32c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z",
+  items:[
+   {t:"Billings & Services", p:"/admin/finance", d:"The hub for invoicing and billing. Generate invoices for a date range from accumulated charges (membership charges are billed separately via Stripe subscription).", k:"invoices generate billing invoice date range hub"},
+   {t:"Raising an invoice", p:"/admin/finance (Invoices tab → Raise Invoice)", d:"The Invoices tab lists every raised invoice, grouped into weeks with Unpaid/Paid/All pills. Raise Invoice rolls each owner's outstanding charges into one invoice, assigns a reference, generates the PDF, and raises the matching Stripe/GoCardless invoice where a provider is connected.", k:"raise invoice unpaid paid pdf reference bill owner"},
+   {t:"Finance dashboard", p:"/admin/finance/dashboard", d:"A financial snapshot for the period — revenue invoiced, outstanding amounts, recurring memberships, compared against payroll for a Net figure.", k:"finance dashboard revenue profit net snapshot charts"},
+   {t:"Charges", p:"/admin/finance/charges", d:"Manages the charges that accumulate at booking time and roll up into invoices. Add ad-hoc charges and confirm what will be invoiced.", k:"charges ad-hoc accumulate"},
+   {t:"Charges log", p:"/admin/finance/charges-log", d:"Every charge across all pets in a period; click a pet's name for their full charges history.", k:"charges log history all"},
+   {t:"Direct Debits", p:"/admin/finance/direct-debits", d:"BACS Direct Debit mandates for automatic collection. Requires a connected payment provider (Stripe or GoCardless).", k:"direct debit bacs mandate automatic collection", cond:"provider"},
+   {t:"Membership Plans", p:"/admin/finance/memberships", d:"Frequency-based membership plans with fixed monthly pricing. Pets on a plan are billed automatically via Direct Debit through Stripe.", k:"membership plans subscription monthly recurring", cond:"memberships"},
+   {t:"Adding a membership plan", p:"/admin/finance/memberships (Add Membership Plan)", d:"The Add Membership Plan window creates a recurring plan that bills a pet a fixed monthly price.", k:"add membership plan create new recurring monthly", cond:"memberships"},
+   {t:"Refunds", p:"/admin/finance/refunds", d:"A record of every refund issued, with gateway status and reason. To create one, use the Options menu on a paid invoice.", k:"refunds refund money back"},
+   {t:"Salaries", p:"/admin/finance/salaries", d:"Summarises staff salaries and wages — monthly pay set on staff profiles flows in here; annual is monthly × 12.", k:"salaries payroll wages pay staff", cond:"staff"},
+   {t:"Services", p:"/admin/finance/services", d:"The services you offer (daycare, walks, grooming, training, etc.) with pricing. These feed the booking flow.", k:"services pricing rates daycare walks grooming training prices"},
+   {t:"Adding a service", p:"/admin/finance/services (Add Service)", d:"The Add Service window defines a bookable service — name, pricing and booking/cancellation rules. Only the name and a Standard Daily Price are required; puppy price is optional and falls back to standard. Custom services get a choosable icon.", k:"add service create new bookable price puppy rules cancellation icon"},
+   {t:"Balances", p:"/admin/finance/balances", d:"Outstanding balances per owner — drill into one account to see exactly what's owed.", k:"balances outstanding owed account debt"},
+   {t:"Daily finance", p:"/admin/finance/daily", d:"A daily finance view, including any per-pet or per-service custom pricing currently in effect.", k:"daily finance custom pricing per pet day"}
+  ]},
+ {id:"reports", n:"Reports", tag:"Health, contacts & compliance reporting", c:"#54648C",
+  icon:"M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z",
+  items:[
+   {t:"Health alerts", p:"/admin/reports/alerts", d:"All health alerts from the past 30 days — review recent health flags raised on pets and follow up.", k:"health alerts flags medical"},
+   {t:"Contacts", p:"/admin/reports/contacts", d:"Pets and their owners' contact details — a quick emergency/contact sheet or export source.", k:"contacts emergency sheet export phone"},
+   {t:"Late notice", p:"/admin/reports/late", d:"Pickups/drop-offs or payments flagged as late.", k:"late overdue notice payments"},
+   {t:"Records", p:"/admin/reports/records", d:"Dog records from the past 30 days — review recent care and activity records.", k:"records care activity"},
+   {t:"Sessions / Assessments", p:"/admin/reports/sessions", d:"Assessments for each pet over the last 30 days — track which pets have completed assessment sessions.", k:"assessments sessions trial welcome"},
+   {t:"Vaccinations", p:"/admin/reports/vaccinations", d:"Vaccination types and status — audit coverage and pair with the reminder window in Settings to stay ahead of expiries.", k:"vaccinations expiry jabs audit compliance"}
+  ]},
+ {id:"team", n:"Team", tag:"Staff, rota, holidays & pay", c:"#3E8989", cond:"staff",
+  icon:"M12 12.75c1.63 0 3.07.39 4.24.9 1.08.48 1.76 1.56 1.76 2.73V18H6v-1.61c0-1.18.68-2.26 1.76-2.73 1.17-.52 2.61-.91 4.24-.91zM4 13c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm1.13 1.1c-.37-.06-.74-.1-1.13-.1-.99 0-1.93.21-2.78.58A2.01 2.01 0 0 0 0 16.43V18h4.5v-1.61c0-.83.23-1.61.63-2.29zM20 13c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm4 3.43c0-.81-.48-1.53-1.22-1.85a6.95 6.95 0 0 0-2.78-.58c-.39 0-.76.04-1.13.1.4.68.63 1.46.63 2.29V18H24v-1.57zM12 6c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z",
+  items:[
+   {t:"Team rota (calendar)", p:"/admin/team", d:"A monthly calendar of who's working each day, driven by each person's working days — no manual shifts. Includes a Today Summary strip with pet counts and per-driver assignments.", k:"rota calendar working shifts who today"},
+   {t:"Logging time off", p:"/admin/team (Add Entry)", d:"Record holiday, sick days or days in lieu for a staff member. Holiday requests then go to Approve Holidays for a decision.", k:"time off holiday sick lieu absence add entry"},
+   {t:"Manage staff", p:"/admin/team/manage", d:"A table of everyone on the team — role, working days, leave balances. Add new staff from here.", k:"manage staff table employees roles"},
+   {t:"Add new staff", p:"/admin/team/manage (Add Staff)", d:"Create a team member — they get an email to set their own password. Set role, salary and allowances; choosing the Driver role makes them route-assignable.", k:"add staff new employee hire driver role salary"},
+   {t:"Approve holidays", p:"/admin/team/holidays", d:"Accept or decline time-off requests. Pending and History tabs; you can't approve your own request.", k:"approve holidays requests pending accept decline"},
+   {t:"Staff profile", p:"/admin/team/profile/[id]", d:"One staff member's full record — profile, role & driver access, salary, holidays, sickness, lieu days, commission.", k:"staff profile role driver pay salary commission"}
+  ]},
+ {id:"routes", n:"Routes", tag:"Pickup & drop-off route planning", c:"#D98E04", cond:"transport",
+  icon:"M21.41 10.59 13.42 2.6a1.98 1.98 0 0 0-2.83 0L2.6 10.59a1.98 1.98 0 0 0 0 2.83l7.99 7.98a1.98 1.98 0 0 0 2.83 0l7.99-7.98a1.98 1.98 0 0 0 0-2.83zM13.5 14.5V12H10v3H8v-4a1 1 0 0 1 1-1h4.5V7.5L17 11l-3.5 3.5z",
+  items:[
+   {t:"Default routes", p:"/admin/routes", d:"Your reusable, standing routes — the default order of stops for regular pickups and drop-offs. Build by drag-and-drop, save as default, colour-code on the map.", k:"default routes standing reusable stops drag drop colour"},
+   {t:"Daily routes", p:"Routes › Daily tab", d:"Today's actual routes, starting from your defaults and adjusted for who's actually booked in. Optimize stops (depot → pets → depot) and open map links to navigate.", k:"daily routes today optimize stops navigate waze google maps"},
+   {t:"Live tracking", p:"Routes › Tracking tab", d:"Live driver tracking on a map during the run — watch drivers progress through their stops in real time.", k:"live tracking drivers real time gps"}
+  ]},
+ {id:"settings", n:"Settings", tag:"Branding, billing, customers & integrations", c:"#647D8C",
+  icon:"M19.14 12.94a7.49 7.49 0 0 0 0-1.88l2.03-1.58a.49.49 0 0 0 .12-.62l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.05 7.05 0 0 0-1.63-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.56-1.63.94l-2.39-.96a.49.49 0 0 0-.59.22L2.71 8.86a.49.49 0 0 0 .12.62l2.03 1.58a7.49 7.49 0 0 0 0 1.88l-2.03 1.58a.49.49 0 0 0-.12.62l1.92 3.32c.13.23.39.32.59.22l2.39-.96c.5.38 1.04.7 1.63.94l.36 2.54c.04.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54a7.05 7.05 0 0 0 1.63-.94l2.39.96c.2.1.46.01.59-.22l1.92-3.32a.49.49 0 0 0-.12-.62l-2.03-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z",
+  items:[
+   {t:"Branding & business", p:"/admin/settings", d:"Your logo, customer-portal background and core business details — these appear to your customers.", k:"branding logo business details portal"},
+   {t:"Invoicing", p:"/admin/settings/billing", d:"Invoice numbering, payment terms, manual bank-transfer details and VAT. The bank block only prints on the PDF when no payment gateway is auto-collecting.", k:"invoicing numbering terms bank transfer vat manual"},
+   {t:"Operating Times", p:"/admin/settings/customers", d:"The collection and drop-off time windows shown to customers — these feed the transport toggles on every booking.", k:"operating times collection drop-off windows hours", cond:"transport"},
+   {t:"Owner add-pet form & terms", p:"/admin/settings/customers", d:"Terms owners must sign before adding a pet and before booking — typed text or a PDF (setting one locks the other). Publishing a new version forces owners to re-sign before booking again.", k:"terms conditions sign add pet form contract waiver re-sign"},
+   {t:"Service limits & waitlists", p:"/admin/settings/customers", d:"Set the maximum bookings each service can take per day. Once a service hits its daily limit, new bookings become waitlist requests for you to approve — cancellations free space automatically.", k:"service settings limits capacity maximum daily waitlist full"},
+   {t:"Vaccination reminders", p:"/admin/settings/customers", d:"How far in advance owners and staff are emailed about expiring vaccinations. Also drives the warning icons on the Pets list and the banner on each pet profile.", k:"vaccination reminders expiring emails advance warning"},
+   {t:"Membership billing day", p:"/admin/settings/customers", d:"When the first membership Direct Debit is collected — renewals afterwards fall on the owner's chosen day.", k:"membership billing day first collection renewal", cond:"memberships"},
+   {t:"Documents", p:"/admin/settings/documents", d:"Two buckets: customer-facing documents owners can view and download from their portal (first-aid certificates, public liability cover, packing lists), and internal staff-only paperwork (cleaning regimes, emergency plans, vet contracts) never shown to owners.", k:"documents certificates insurance liability internal upload packing"},
+   {t:"Integrations", p:"/admin/settings/integrations", d:"Third-party connections for your business — connect and manage external integrations.", k:"integrations third party connect"},
+   {t:"Notifications", p:"/admin/settings/notifications", d:"Controls which emails go out, split into Owner emails and Staff emails, by notification type.", k:"notifications emails toggle owner staff types"},
+   {t:"Payments", p:"/admin/settings/payments", d:"Connect Stripe or GoCardless so invoices, memberships and Direct Debits run through your own account. Several Finance features stay locked until you do.", k:"payments stripe gocardless connect provider gateway", cond:"provider"},
+   {t:"Change password", p:"/admin/settings (Change Password)", d:"Update your account password — you'll need your current one.", k:"password change account security"}
+  ]}
+];
+
+/* anchor IDs harvested from the live Help Centre pages — keyed by section id, then item title */
+const ANCHORS = {
+ dashboard:{"Calendar":"dashboard-calendar","Daily view":"daily-view","Live map":"map","Adding a booking":"adding-a-booking","Meet & Greet":"adding-a-booking","Global search":"search-notifications","Notification bell":"search-notifications","Notification Centre":"notification-centre"},
+ bookings:{"Bookings list":"bookings","Recurring":"recurring","Frequency":"frequency","Heatmap":"heatmap","Log":"log","Notes":"notes"},
+ owners:{"Owners directory":"owners","Owner detail":"owner-detail"},
+ pets:{"Pets directory":"pets","Pet profile":"pet-profile-and-tabs","Pet history tabs":"pet-profile-and-tabs","Quick-book (sun & moon)":"bookings-tab-quick-book"},
+ finance:{"Billings & Services":"billings-services","Raising an invoice":"raising-an-invoice","Finance dashboard":"daycare-finance-dashboard","Charges":"charges","Charges log":"charges-log","Direct Debits":"direct-debits","Membership Plans":"membership-plans","Adding a membership plan":"adding-a-membership-plan","Refunds":"refunds","Salaries":"salaries","Services":"services","Adding a service":"adding-a-service-add-service","Balances":"balances-daily","Daily finance":"balances-daily"},
+ reports:{"Health alerts":"health-alerts","Contacts":"contacts","Late notice":"late-notice","Records":"records","Sessions / Assessments":"sessions-assessments","Vaccinations":"vaccinations"},
+ team:{"Team rota (calendar)":"team-rota-calendar","Logging time off":"logging-time-off-add-entry","Manage staff":"manage-staff","Add new staff":"add-new-staff","Approve holidays":"approve-holidays","Staff profile":"staff-profile"},
+ routes:{"Default routes":"default-routes","Daily routes":"daily-routes","Live tracking":"live-tracking"},
+ settings:{"Branding & business":"branding-business","Invoicing":"invoicing","Operating Times":"customers","Owner add-pet form & terms":"customers","Service limits & waitlists":"customers","Vaccination reminders":"customers","Membership billing day":"customers","Documents":"documents","Integrations":"integrations","Notifications":"notifications","Payments":"payments","Change password":"change-password"}
+};
+function itemUrl(secId, title){
+  const a = ANCHORS[secId] && ANCHORS[secId][title];
+  return DOCS + secId + (a ? "#"+a : "");
+}
+
+/* ================= STATE ================= */
+let profile = null; // {biz, transport, staff, pay, memberships}
+const BIZ = {
+  daycare:{label:"Doggy daycare", icon:"sun"},
+  walker:{label:"Dog walking", icon:"walk"},
+  hotel:{label:"Dog hotel / boarding", icon:"moon"},
+  groomer:{label:"Grooming / training", icon:"scissors"},
+  mixed:{label:"Mixed services", icon:"all"}
+};
+const PAY = {stripe:"Stripe", gocardless:"GoCardless", manual:"Manual invoicing"};
+
+function relevant(cond){
+  if(!profile || !cond) return true;
+  if(cond==="transport") return profile.transport;
+  if(cond==="staff") return profile.staff;
+  if(cond==="provider") return profile.pay!=="manual";
+  if(cond==="memberships") return profile.memberships && profile.pay!=="manual";
+  return true;
+}
+
+/* ================= VIEWS ================= */
+function goView(v){
+  document.querySelectorAll(".view").forEach(x=>x.classList.remove("on"));
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.classList.remove("on"));
+  document.getElementById("view-"+v).classList.add("on");
+  document.getElementById("tab-"+v).classList.add("on");
+  closeSearch();
+  if(v==="map"){ renderMap(); }
+  if(v==="journey"){ renderJourney(); }
+  window.scrollTo({top:0});
+}
+
+/* ================= WIZARD ================= */
+const QUESTIONS = [
+ {key:"biz", num:"Question 1 of 5", q:"What kind of business do you run?", hint:"This shapes which parts of Genera we'll switch on for you.",
+  opts:[
+   {v:"daycare", t:"Doggy daycare", d:"Dogs come to you for the day", ic:"sun"},
+   {v:"walker", t:"Dog walking", d:"You collect dogs and walk them", ic:"walk"},
+   {v:"hotel", t:"Dog hotel / boarding", d:"Overnight stays & sleepovers", ic:"moon"},
+   {v:"groomer", t:"Grooming / training", d:"Appointment-based services", ic:"scissors"},
+   {v:"mixed", t:"Mixed / multiple services", d:"You offer a combination — daycare, boarding, walking or grooming", ic:"all"}
+  ]},
+ {key:"transport", num:"Question 2 of 5", q:"Do you collect dogs or drop them home?", hint:"This decides whether you need the Routes system — route planning, stop optimisation and live driver tracking.",
+  opts:[
+   {v:true, t:"Yes — we offer pickups / drop-offs", d:"You'll get Routes, the live driver map and transport toggles on bookings", ic:"van"},
+   {v:false, t:"No — owners come to us", d:"We'll hide route planning so it stays out of your way", ic:"home"}
+  ]},
+ {key:"staff", num:"Question 3 of 5", q:"Do you have staff besides yourself?", hint:"The Team area handles rotas, holidays, roles, pay and (if relevant) driver assignment.",
+  opts:[
+   {v:true, t:"Yes — we have a team", d:"You'll get the rota calendar, holiday approvals and payroll summary", ic:"team"},
+   {v:false, t:"No — it's just me", d:"We'll skip the Team section and staff payroll", ic:"solo"}
+  ]},
+ {key:"pay", num:"Question 4 of 5", q:"How do you want to take payments?", hint:"Stripe or GoCardless unlock automatic invoicing, Direct Debits and memberships. Manual works too — your bank details print on each invoice.",
+  opts:[
+   {v:"stripe", t:"Stripe", d:"Card payments, auto-collected invoices, memberships & Direct Debits", ic:"card"},
+   {v:"gocardless", t:"GoCardless", d:"BACS Direct Debit collection", ic:"bank"},
+   {v:"manual", t:"Manual invoicing", d:"Send invoices with your bank details; customers pay by transfer", ic:"pen"}
+  ]},
+ {key:"memberships", num:"Question 5 of 5", q:"Will you offer membership plans?", hint:"Fixed monthly plans (e.g. 3 days a week) billed automatically by Direct Debit. Requires Stripe/GoCardless.",
+  opts:[
+   {v:true, t:"Yes — recurring memberships", d:"We'll include Membership Plans and membership billing settings", ic:"star"},
+   {v:false, t:"No — pay as you go", d:"You can switch memberships on later at any time", ic:"calendar"}
+  ]}
+];
+const ICONS = {
+ sun:'<circle cx="12" cy="12" r="4.6"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M19.4 4.6l-2.1 2.1M6.7 17.3l-2.1 2.1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>',
+ walk:'<circle cx="13" cy="4.5" r="2.2"/><path d="M9.3 21l2-5.4-2.2-2.3.8-4.6c1.5-1.4 3.7-1.3 5 .2l1.4 1.6 2.7.9-.5 1.7-3.3-1-1.4-1.4-.8 3.5 2.3 2.4 1.2 4.4-1.9.5-1.1-3.9-2.4-2.1-1.8 5.6z"/>',
+ moon:'<path d="M20.6 14.9A8.8 8.8 0 0 1 9.1 3.4 9 9 0 1 0 20.6 14.9z"/>',
+ scissors:'<circle cx="6" cy="6" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="18" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.2 7.6 20 19M8.2 16.4 20 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+ all:'<rect x="3" y="3" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="3" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="13" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/>',
+ van:'<path d="M3 6h11v9H3zM14 9h4l3 3v3h-7z"/><circle cx="7" cy="17.5" r="1.9" fill="#fff"/><circle cx="17" cy="17.5" r="1.9" fill="#fff"/>',
+ home:'<path d="M12 3 2 11h3v9h6v-6h2v6h6v-9h3z"/>',
+ team:'<circle cx="8" cy="8.5" r="3"/><circle cx="16.5" cy="9.5" r="2.4"/><path d="M2.5 19c0-3 2.6-5 5.5-5s5.5 2 5.5 5zM14.6 19c.2-2.4 1.5-4.1 3.4-4.8 2 .5 3.5 2.3 3.5 4.8z"/>',
+ solo:'<circle cx="12" cy="7.5" r="3.4"/><path d="M5 20c0-3.6 3.2-6 7-6s7 2.4 7 6z"/>',
+ card:'<rect x="2.5" y="5" width="19" height="14" rx="2.5"/><rect x="2.5" y="8.4" width="19" height="3" fill="#fff" opacity=".85"/>',
+ bank:'<path d="M12 2 2 8h20zM4 10h3v8H4zM10.5 10h3v8h-3zM17 10h3v8h-3zM2 20h20v2H2z"/>',
+ pen:'<path d="M3 17.3 14.6 5.7l3.7 3.7L6.7 21H3zM16 4.3 18.3 2l3.7 3.7-2.3 2.3z"/>',
+ star:'<path d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 16.9l-6.1 3.5 1.5-6.8L2.2 9l6.9-.7z"/>',
+ calendar:'<path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10z"/>'
+};
+let wizStep = 0, answers = {};
+
+function startWizard(){
+  wizStep = 0; answers = {};
+  document.getElementById("heroblock").style.display="none";
+  document.getElementById("wizard").style.display="block";
+  renderWizStep();
+}
+function suggestFor(key){
+  if(key!=="transport") return null;
+  if(answers.biz==="walker") return true;
+  if(answers.biz==="daycare") return false;
+  return null;
+}
+function renderWizStep(){
+  const q = QUESTIONS[wizStep];
+  const prog = document.getElementById("wprogress");
+  prog.innerHTML = QUESTIONS.map((_,i)=>`<span class="${i<wizStep?'done':i===wizStep?'cur':''}"></span>`).join("");
+  const suggested = suggestFor(q.key);
+  const body = document.getElementById("wizbody");
+  body.innerHTML = `
+   <div class="qcard">
+    <div class="qnum">${q.num}</div>
+    <h2>${q.q}</h2>
+    <p class="qhint">${q.hint}</p>
+    <div class="opts ${q.opts.length>2?'cols2':''}">
+      ${q.opts.map((o,i)=>`
+        <button class="opt ${answers[q.key]===o.v?'picked':''}" onclick="pickOpt(${i})">
+          ${suggested!==null && o.v===suggested ? `<span class="suggest">Typical for ${BIZ[answers.biz].label.split(' ')[0].toLowerCase()}s</span>`:''}
+          <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">${ICONS[o.ic]}</svg></span>
+          <span><span class="ot">${o.t}</span><span class="od" style="display:block">${o.d}</span></span>
+        </button>`).join("")}
+    </div>
+    <div class="wiznote" id="wiznote"></div>
+    <div class="wizfoot">
+      <button class="btn ghost small" onclick="wizBack()" ${wizStep===0?'style="visibility:hidden"':''}>← Back</button>
+      <button class="btn primary small" id="wiznext" onclick="wizNext()" style="opacity:${answers[q.key]!==undefined?1:.4};pointer-events:${answers[q.key]!==undefined?'auto':'none'}">
+        ${wizStep===QUESTIONS.length-1?'Build my journey':'Next'} →
+      </button>
+    </div>
+   </div>`;
+}
+function pickOpt(i){
+  const q = QUESTIONS[wizStep];
+  answers[q.key] = q.opts[i].v;
+  // membership + manual payment warning
+  const note = ()=>document.getElementById("wiznote");
+  if(q.key==="memberships" && answers.memberships===true && answers.pay==="manual"){
+    note().textContent="Heads up: membership plans bill automatically by Direct Debit, which needs Stripe or GoCardless connected. We'll include the payments setup step in your journey so you can unlock this.";
+    note().classList.add("show");
+  } else if(note()) note().classList.remove("show");
+  renderWizStep();
+  if(q.key==="memberships" && answers.memberships===true && answers.pay==="manual"){
+    const n=document.getElementById("wiznote");
+    n.textContent="Heads up: membership plans bill automatically by Direct Debit, which needs Stripe or GoCardless connected. We'll include the payments setup step so you can unlock this.";
+    n.classList.add("show");
+  }
+}
+function wizBack(){ if(wizStep>0){wizStep--; renderWizStep();} }
+function wizNext(){
+  if(wizStep < QUESTIONS.length-1){ wizStep++; renderWizStep(); }
+  else {
+    profile = {...answers};
+    goView("journey");
+  }
+}
+
+/* ================= JOURNEY ================= */
+function profileBar(target){
+  if(!profile) return "";
+  return `<div class="profilebar">
+    <span class="pchip">Business: <b>${BIZ[profile.biz].label}</b></span>
+    <span class="pchip">Pickups: <b>${profile.transport?"Yes":"No"}</b></span>
+    <span class="pchip">Staff: <b>${profile.staff?"Yes":"Just me"}</b></span>
+    <span class="pchip">Payments: <b>${PAY[profile.pay]}</b></span>
+    <span class="pchip">Memberships: <b>${profile.memberships?"Yes":"No"}</b></span>
+    <button onclick="goView('home');startWizard()">Change answers</button>
+  </div>`;
+}
+function link(sec){ return DOCS + sec; }
+function renderJourney(){
+  const el = document.getElementById("journeybody");
+  if(!profile){
+    el.innerHTML = `<div class="dempty" style="padding:90px 20px">
+      <svg width="54" height="54" viewBox="0 0 24 24" fill="var(--sage)"><ellipse cx="7.2" cy="8" rx="2" ry="2.7"/><ellipse cx="16.8" cy="8" rx="2" ry="2.7"/><ellipse cx="3.6" cy="12.6" rx="1.8" ry="2.3"/><ellipse cx="20.4" cy="12.6" rx="1.8" ry="2.3"/><path d="M12 11.4c-3 0-5.7 2.6-5.7 5.3 0 1.7 1.3 2.8 3 2.8 1 0 1.8-.4 2.7-.4s1.7.4 2.7.4c1.7 0 3-1.1 3-2.8 0-2.7-2.7-5.3-5.7-5.3z"/></svg>
+      <p><b>No journey yet.</b><br>Answer five quick questions and we'll build<br>a setup checklist tailored to your business.</p>
+      <button class="btn primary" onclick="goView('home');startWizard()">Start the questions</button>
+    </div>`;
+    return;
+  }
+  const p = profile;
+  const bizName = BIZ[p.biz].label.toLowerCase();
+  const phases = [];
+
+  phases.push({t:"Make it yours", why:`First impressions for your customers — your branding, your services and your ${p.transport?"collection windows":"opening setup"}.`, steps:[
+    {t:"Add your logo & business details", d:"Branding appears across your customer portal and invoices.", sec:"settings", a:"branding-business", path:"/admin/settings"},
+    {t:"Create your services & prices", d:`Set up all the services you offer — these feed the booking flow and pricing. Only a name and Standard Daily Price are required.`, sec:"finance", a:"adding-a-service-add-service", path:"/admin/finance/services"},
+    {t:"Set customer-facing rules", d:`Operating times${p.transport?" (your collection & drop-off windows)":""}, daily booking limits with auto-waitlists, terms owners sign, and vaccination reminders.`, sec:"settings", a:"customers", path:"/admin/settings/customers"},
+    {t:"Upload your documents", d:"First-aid certificates and insurance for owners to see; internal paperwork for staff only.", sec:"settings", a:"documents", path:"/admin/settings/documents"}
+  ]});
+
+  const paySteps = [];
+  if(p.pay!=="manual"){
+    paySteps.push({t:`Connect ${PAY[p.pay]}`, d:"Invoices, memberships and Direct Debits run through your own account. Several Finance features stay locked until this is done.", sec:"settings", a:"payments", path:"/admin/settings/payments"});
+  } else {
+    paySteps.push({t:"Add your bank details & payment terms", d:"With manual invoicing, your bank-transfer details print on every invoice PDF.", sec:"settings", a:"invoicing", path:"/admin/settings/billing"});
+  }
+  paySteps.push({t:"Configure invoice numbering & VAT", d:"Set your invoice prefix, payment terms and VAT before your first invoice goes out.", sec:"settings", a:"invoicing", path:"/admin/settings/billing"});
+  if(p.memberships){
+    paySteps.push({t:"Create your membership plans", d:`Fixed monthly plans billed automatically by Direct Debit${p.pay==="manual"?" — you'll need to connect Stripe/GoCardless first (step above)":""}.`, sec:"finance", a:"adding-a-membership-plan", path:"/admin/finance/memberships"});
+    paySteps.push({t:"Set the membership billing day", d:"Choose when the first Direct Debit is collected; renewals fall on the owner's chosen day.", sec:"settings", a:"customers", path:"/admin/settings/customers"});
+  }
+  phases.push({t:"Get paid", why:p.pay==="manual"?"You've chosen manual invoicing — simple and gateway-free.":"Connecting your payment provider early unlocks the rest of Finance.", steps:paySteps});
+
+  if(p.staff){
+    const teamSteps = [
+      {t:"Add your team members", d:`Each person gets an email to set their own password. Set roles, salaries and holiday allowances${p.transport?" — choose the Driver role for anyone doing pickups, which makes them route-assignable":""}.`, sec:"team", a:"add-new-staff", path:"/admin/team/manage"},
+      {t:"Set working days", d:"The rota calendar is driven by each person's Mon–Sun working days — no manual shifts to set.", sec:"team", a:"staff-profile", path:"/admin/team/profile/[id]"},
+      {t:"Learn the holiday approval flow", d:"Staff time-off requests land in Approve Holidays; another admin must decide your own requests.", sec:"team", a:"approve-holidays", path:"/admin/team/holidays"}
+    ];
+    phases.push({t:"Add your team", why:"Rotas, roles and pay — set up once, then it runs itself.", steps:teamSteps});
+  }
+
+  phases.push({t:"Add customers & pets", why:"Your owner directory and pet records power everything else — bookings, charges, invoices and health alerts.", steps:[
+    {t:"Add your owners", d:"Your customer directory with contact details and linked pets.", sec:"owners", a:"owners", path:"/admin/owners"},
+    {t:"Add their pets", d:"Profiles with breed, medical notes, vaccinations, behaviour and photos. Warning icons flag expiring vaccinations automatically.", sec:"pets", a:"pets", path:"/admin/pets"},
+    {t:"Check vaccination reminders", d:"Set how far in advance owners and staff are emailed about expiring vaccinations.", sec:"settings", a:"customers", path:"/admin/settings/customers"}
+  ]});
+
+  const bookSteps = [
+    {t:"Make your first booking", d:`Choose a pet, pick a service${p.transport?", set the collect/drop-off toggles":""} and add notes. Turn on Recurring to repeat weekly.`, sec:"dashboard", a:"adding-a-booking", path:"Add booking window"},
+    {t:"Master quick-book", d:"On any pet's Bookings tab, the sun books an instant daycare day and the moon an instant sleepover — no form.", sec:"pets", a:"bookings-tab-quick-book", path:"Pet › Bookings tab"},
+    {t:"Handle booking requests", d:"Customer requests land in the Bookings list and Notification Centre — approve or decline inline.", sec:"bookings", a:"bookings", path:"/admin/bookings"}
+  ];
+  if(p.biz==="hotel"||p.biz==="mixed") bookSteps.push({t:"Use sleepovers for overnight stays", d:"Sleepover is a service type throughout — on the calendar, daily view and quick-book moon icon.", sec:"dashboard", a:"daily-view", path:"/admin/home/daily"});
+  phases.push({t:"Take bookings", why:"The day-to-day heart of Genera.", steps:bookSteps});
+
+  if(p.transport){
+    phases.push({t:"Plan your routes", why:p.biz==="walker"?"As a dog walker this is your engine room — build your standing routes once, then each day adjusts automatically.":"Only pets booked with transport appear on routes, so this stays accurate by itself.", steps:[
+      {t:"Build your default routes", d:"Reusable standing routes — drag-and-drop the stop order, save as default, colour-code routes on the map.", sec:"routes", a:"default-routes", path:"/admin/routes"},
+      {t:"Run daily routes", d:"Each day starts from your defaults, adjusted for who's booked in. Optimize stops for the most efficient order and open map links to navigate.", sec:"routes", a:"daily-routes", path:"Routes › Daily tab"},
+      {t:"Watch live tracking", d:"Follow drivers through their stops in real time, on the Routes tracking tab and the Dashboard live map.", sec:"routes", a:"live-tracking", path:"Routes › Tracking tab"}
+    ]});
+  }
+
+  const runSteps = [
+    {t:"Start each day on the Daily view", d:"Headcounts and stat cards per service — your morning run sheet.", sec:"dashboard", a:"daily-view", path:"/admin/home/daily"},
+    {t:"Generate invoices", d:"Pick a date range and generate — charges group per owner and get a reference number" + (p.pay!=="manual"?"; invoices auto-raise for owners with a saved payment method":"") + ".", sec:"finance", a:"raising-an-invoice", path:"/admin/finance"},
+    {t:"Watch the Finance dashboard", d:"Revenue, outstanding amounts" + (p.staff?", payroll comparison":"") + " and the health of the business at a glance.", sec:"finance", a:"daycare-finance-dashboard", path:"/admin/finance/dashboard"},
+    {t:"Keep an eye on Reports", d:"Health alerts, vaccination coverage, late notices and an emergency contact sheet.", sec:"reports", a:"reports", path:"/admin/reports"}
+  ];
+  phases.push({t:"Run the day-to-day", why:"Once you're set up, these are the pages you'll live in.", steps:runSteps});
+
+  el.innerHTML = `
+    <div class="journeyhead">
+      <h1>Your setup journey</h1>
+      <p>Built for ${p.biz==="mixed"?"a mixed-services pet business":("a "+bizName)}${p.transport?" with pickups & drop-offs":""}${p.staff?", with a team":" run solo"}. ${phases.length} phases, in the order that avoids dead-ends. Tick things off as you go.</p>
+    </div>
+    ${profileBar()}
+    ${phases.map((ph,pi)=>`
+      <div class="phase">
+        <div class="pnum">${pi+1}</div>
+        <div>
+          <h3>${ph.t}</h3>
+          <p class="pwhy">${ph.why}</p>
+          <div class="steps">
+            ${ph.steps.map((s)=>`
+              <label class="step">
+                <input type="checkbox" onchange="this.closest('.step').classList.toggle('donestep',this.checked)">
+                <span class="sbody">
+                  <span class="stitle">${s.t}</span>
+                  <span class="sdesc" style="display:block">${s.d}</span>
+                </span>
+                <a class="golink" href="${DOCS+s.sec}${s.a?'#'+s.a:''}" target="_blank" rel="noopener">Open guide ↗</a>
+              </label>`).join("")}
+          </div>
+        </div>
+      </div>`).join("")}
+    <div class="skipnote"><b>What we've left out for now:</b> ${skippedSummary()} Everything stays available — open the <a href="#" onclick="goView('map');return false" style="color:#B97800;font-weight:700">Feature Map</a> to explore the full system.</div>
+  `;
+}
+function skippedSummary(){
+  const out=[];
+  if(!profile.transport) out.push("the Routes system and live driver map (no pickups)");
+  if(!profile.staff) out.push("the Team area and staff payroll (you're solo)");
+  if(profile.pay==="manual") out.push("Direct Debits and gateway payments (manual invoicing)");
+  if(!profile.memberships) out.push("membership plans");
+  return out.length? out.join("; ") + "." : "nothing — you're using the full system!";
+}
+
+/* ================= MAP ================= */
+let activeSection = null;
+function renderMap(){
+  document.getElementById("mapprofile").innerHTML = profile? profileBar() :
+    `<div class="profilebar" style="background:var(--green)">
+       <span style="font-size:13.5px">Answer the five setup questions and this map will highlight what's relevant to <b>your</b> business.</span>
+       <button onclick="goView('home');startWizard()">Take the questions</button>
+     </div>`;
+  layoutMap();
+  if(activeSection) openDrawer(activeSection, false);
+}
+function layoutMap(){
+  const cv = document.getElementById("mapcanvas");
+  cv.querySelectorAll(".mnode").forEach(n=>n.remove());
+  const isMobile = window.matchMedia("(max-width:980px)").matches;
+  const W = cv.clientWidth, H = Math.max(cv.clientHeight, 640);
+  const cx = W/2, cy = H/2;
+  const hub = document.getElementById("hubnode");
+  if(!isMobile){ hub.style.left=(cx-74)+"px"; hub.style.top=(cy-74)+"px"; }
+  const wires = document.getElementById("wires");
+  wires.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  wires.innerHTML="";
+  const R = Math.min(W,H)/2 - 95;
+  SECTIONS.forEach((s,i)=>{
+    const isRel = relevant(s.cond);
+    const node = document.createElement("button");
+    node.className="mnode"+(profile&&!isRel?" dimmed":"")+(activeSection===s.id?" active":"");
+    node.onclick=()=>openDrawer(s.id,true);
+    const iconFill = s.c==="#FFA800" ? "#002830" : "#fff";
+    node.innerHTML=`<span class="bub" style="background:${s.c}">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="${iconFill}"><path d="${s.icon}"/></svg>
+        ${profile&&!isRel?'<span class="offbadge">skip</span>':''}
+      </span>
+      <span class="lbl">${s.n}</span><span class="sub">${s.tag}</span>`;
+    cv.appendChild(node);
+    if(!isMobile){
+      const ang = -Math.PI/2 + (i/SECTIONS.length)*Math.PI*2;
+      const nx = cx + Math.cos(ang)*R, ny = cy + Math.sin(ang)*R;
+      node.style.left=(nx-59)+"px"; node.style.top=(ny-52)+"px";
+      const sx = cx + Math.cos(ang)*80, sy = cy + Math.sin(ang)*80;
+      const ex = cx + Math.cos(ang)*(R-48), ey = cy + Math.sin(ang)*(R-48);
+      const mx = cx + Math.cos(ang)*(R/2)*1.06, my = cy + Math.sin(ang)*(R/2)*1.06;
+      const path = document.createElementNS("http://www.w3.org/2000/svg","path");
+      path.setAttribute("d",`M ${sx} ${sy} Q ${mx} ${my} ${ex} ${ey}`);
+      if(profile&&!isRel) path.classList.add("dimwire");
+      wires.appendChild(path);
+    }
+  });
+}
+function openDrawer(id, scroll){
+  activeSection = id;
+  document.querySelectorAll(".mnode").forEach(n=>n.classList.remove("active"));
+  const s = SECTIONS.find(x=>x.id===id);
+  const secRel = relevant(s.cond);
+  const d = document.getElementById("drawer");
+  d.innerHTML = `
+    <div class="dhead">
+      <span class="bub" style="background:${s.c}"><svg width="22" height="22" viewBox="0 0 24 24" fill="${s.c==="#FFA800"?"#002830":"#fff"}"><path d="${s.icon}"/></svg></span>
+      <div><h3>${s.n}</h3></div>
+    </div>
+    <p class="dsub">${s.tag}</p>
+    ${profile? (secRel? `<span class="badge yes">✓ Part of your setup</span>` : `<span class="badge no">Not needed for your setup</span>`) : ""}
+    <div style="height:10px"></div>
+    <a class="btn ghost small dopen" href="${DOCS+s.id}" target="_blank" rel="noopener">Open the full ${s.n} guide ↗</a>
+    ${s.items.map((it,idx)=>{
+      const rel = secRel && relevant(it.cond);
+      return `<div class="feat ${profile&&!rel?'notrel':''}" id="feat-${s.id}-${idx}">
+        <button onclick="toggleFeat('${s.id}',${idx})">
+          <span class="ft">${it.t}</span>
+          ${profile? (rel?'':`<span class="badge ${it.cond==='provider'||it.cond==='memberships'?'lock':'no'}">${it.cond==='provider'?'needs Stripe/GC':it.cond==='memberships'?'needs memberships':'skip'}</span>`):''}
+          <span class="chev"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m9 5 7 7-7 7"/></svg></span>
+        </button>
+        <div class="fbody">
+          <span class="fpath">${it.p}</span>
+          <p>${it.d}</p>
+          <a class="golink" style="display:inline-block;margin-top:10px;text-decoration:none;font-weight:700;font-size:12.5px;color:#B97800" href="${itemUrl(s.id,it.t)}" target="_blank" rel="noopener">Read in the Help Centre ↗</a>
+        </div>
+      </div>`;}).join("")}
+  `;
+  layoutMap();
+  if(scroll && window.matchMedia("(max-width:980px)").matches) d.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function toggleFeat(sid,idx){
+  document.getElementById(`feat-${sid}-${idx}`).classList.toggle("open");
+}
+
+/* ================= SEARCH ================= */
+const sInput = document.getElementById("search");
+const sBox = document.getElementById("sresults");
+function buildIndex(){
+  const ix=[];
+  SECTIONS.forEach(s=>s.items.forEach((it,idx)=>ix.push({s,it,idx,hay:(it.t+" "+it.d+" "+it.k+" "+s.n).toLowerCase()})));
+  return ix;
+}
+const INDEX = buildIndex();
+function hl(text,q){
+  const i=text.toLowerCase().indexOf(q.toLowerCase());
+  if(i<0) return text;
+  return text.slice(0,i)+"<mark>"+text.slice(i,i+q.length)+"</mark>"+text.slice(i+q.length);
+}
+sInput.addEventListener("input",()=>{
+  const q=sInput.value.trim();
+  if(q.length<2){ closeSearch(); return; }
+  const terms=q.toLowerCase().split(/\s+/);
+  const hits=INDEX.filter(e=>terms.every(t=>e.hay.includes(t))).slice(0,14);
+  if(!hits.length){ sBox.innerHTML=`<div class="sempty">No features match “${q}”.<br>Try “invoice”, “rota”, “routes”, “vaccination”…</div>`; sBox.classList.add("open"); return; }
+  let html="", lastSec="";
+  hits.forEach(h=>{
+    if(h.s.n!==lastSec){ html+=`<div class="sgroup"><span class="gdot" style="background:${h.s.c}"></span>${h.s.n}</div>`; lastSec=h.s.n; }
+    const rel = relevant(h.s.cond)&&relevant(h.it.cond);
+    html+=`<button class="srow" onclick="searchGo('${h.s.id}',${h.idx})">
+      <span class="st">${hl(h.it.t,q)}</span>
+      <span class="sd">${h.it.d}</span>
+      ${profile?`<span class="badge ${rel?'yes':'no'}">${rel?'for you':'not in your setup'}</span>`:''}
+    </button>`;
+  });
+  sBox.innerHTML=html; sBox.classList.add("open");
+});
+function searchGo(sid,idx){
+  closeSearch(); sInput.value="";
+  goView("map");
+  openDrawer(sid,false);
+  setTimeout(()=>{
+    const f=document.getElementById(`feat-${sid}-${idx}`);
+    if(f){ f.classList.add("open"); f.scrollIntoView({behavior:"smooth",block:"center"}); }
+  },80);
+}
+function closeSearch(){ sBox.classList.remove("open"); }
+document.addEventListener("click",e=>{ if(!e.target.closest(".searchbox")) closeSearch(); });
+document.addEventListener("keydown",e=>{
+  if(e.key==="/" && document.activeElement!==sInput){ e.preventDefault(); sInput.focus(); }
+  if(e.key==="Escape"){ closeSearch(); sInput.blur(); }
+});
+window.addEventListener("resize",()=>{ if(document.getElementById("view-map").classList.contains("on")) layoutMap(); });
+</script>
+</body>
+</html>
