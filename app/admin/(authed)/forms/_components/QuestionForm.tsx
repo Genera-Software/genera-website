@@ -8,7 +8,7 @@ type Initial = {
   label?: string;
   eyebrow?: string;
   hint?: string;
-  type?: "text" | "email" | "textarea" | "choice";
+  type?: "text" | "email" | "tel" | "textarea" | "choice";
   placeholder?: string;
   choices?: string[];
   is_optional?: boolean;
@@ -66,6 +66,7 @@ export default function QuestionForm({
           >
             <option value="text">Short text</option>
             <option value="email">Email</option>
+            <option value="tel">Phone number</option>
             <option value="textarea">Long text</option>
             <option value="choice">Multiple choice</option>
           </select>

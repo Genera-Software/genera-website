@@ -146,7 +146,7 @@ const QuestionSchema = z
     label: z.string().trim().min(1).max(300),
     eyebrow: z.string().trim().max(120).default(""),
     hint: z.string().trim().max(300).default(""),
-    type: z.enum(["text", "email", "textarea", "choice"]),
+    type: z.enum(["text", "email", "tel", "textarea", "choice"]),
     placeholder: z.string().trim().max(200).default(""),
     choices_text: z.string().default(""),
     is_optional: z.coerce.boolean().default(false),
