@@ -315,7 +315,7 @@ function StepView({
     if (current.type === "email" && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
       return "That email doesn't look right.";
     }
-    if (current.type === "tel" && v && !/^[+\d][\d\s\-().]{6,}$/.test(v)) {
+    if ((current.type === "tel" || current.key === "phone") && v && !/^[+\d][\d\s\-().]{6,}$/.test(v)) {
       return "Please enter a valid phone number.";
     }
     return null;
@@ -437,7 +437,7 @@ function StepView({
             ref={(el) => {
               inputRef.current = el;
             }}
-            type={current.type === "email" ? "email" : current.type === "tel" ? "tel" : "text"}
+            type={current.type === "email" ? "email" : (current.type === "tel" || current.key === "phone") ? "tel" : "text"}
             value={value}
             onChange={(e) => {
               setForm({ ...form, [current.key]: e.target.value });
@@ -448,7 +448,7 @@ function StepView({
             autoComplete={
               current.type === "email"
                 ? "email"
-                : current.type === "tel"
+                : (current.type === "tel" || current.key === "phone")
                   ? "tel"
                   : current.key.toLowerCase().includes("name")
                     ? "name"
