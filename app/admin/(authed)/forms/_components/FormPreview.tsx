@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-type QuestionType = "text" | "email" | "textarea" | "choice";
+type QuestionType = "text" | "email" | "tel" | "textarea" | "choice";
 
 type PreviewQuestion = {
   key: string;
@@ -76,6 +76,9 @@ export default function FormPreview({
     if (!v && !current.is_optional) return "Please fill this in to continue.";
     if (current.type === "email" && v && !EMAIL_RE.test(v)) {
       return "That email doesn't look right.";
+    }
+    if (current.type === "tel" && v && !/^[+\d][\d\s\-().]{6,}$/.test(v)) {
+      return "Please enter a valid phone number.";
     }
     return null;
   }
@@ -213,7 +216,7 @@ export default function FormPreview({
                   ref={(el) => {
                     inputRef.current = el;
                   }}
-                  type={current.type === "email" ? "email" : "text"}
+                  type={current.type === "email" ? "email" : current.type === "tel" ? "tel" : "text"}
                   value={value}
                   onChange={(e) => {
                     setValues({ ...values, [current.key]: e.target.value });

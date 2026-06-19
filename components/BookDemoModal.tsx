@@ -5,7 +5,7 @@ import { FOUNDING_100_FORM_SLUG } from "@/lib/cta";
 
 type Status = "idle" | "loading" | "submitting" | "sent" | "error";
 
-type QuestionType = "text" | "email" | "textarea" | "choice";
+type QuestionType = "text" | "email" | "tel" | "textarea" | "choice";
 
 type Question = {
   key: string;
@@ -315,6 +315,9 @@ function StepView({
     if (current.type === "email" && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
       return "That email doesn't look right.";
     }
+    if ((current.type === "tel" || current.key === "phone") && v && !/^[+\d][\d\s\-().]{6,}$/.test(v)) {
+      return "Please enter a valid phone number.";
+    }
     return null;
   }
 
@@ -434,7 +437,7 @@ function StepView({
             ref={(el) => {
               inputRef.current = el;
             }}
-            type={current.type === "email" ? "email" : "text"}
+            type={current.type === "email" ? "email" : (current.type === "tel" || current.key === "phone") ? "tel" : "text"}
             value={value}
             onChange={(e) => {
               setForm({ ...form, [current.key]: e.target.value });
@@ -445,9 +448,11 @@ function StepView({
             autoComplete={
               current.type === "email"
                 ? "email"
-                : current.key.toLowerCase().includes("name")
-                  ? "name"
-                  : "off"
+                : (current.type === "tel" || current.key === "phone")
+                  ? "tel"
+                  : current.key.toLowerCase().includes("name")
+                    ? "name"
+                    : "off"
             }
             className="w-full border-0 border-b-2 border-white/30 bg-transparent pb-3 font-massilia text-section-h text-white placeholder-white/30 outline-none transition focus:border-gold"
           />
