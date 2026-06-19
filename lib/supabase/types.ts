@@ -438,6 +438,104 @@ export type Database = {
         };
         Relationships: [];
       };
+      help_centre_sections: {
+        Row: {
+          id: string;
+          slug: string;
+          num: number;
+          title: string;
+          tagline: string;
+          intro: string | null;
+          image_url: string | null;
+          image_alt: string | null;
+          is_published: boolean;
+          sort_order: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          num?: number;
+          title: string;
+          tagline?: string;
+          intro?: string | null;
+          image_url?: string | null;
+          image_alt?: string | null;
+          is_published?: boolean;
+          sort_order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          num?: number;
+          title?: string;
+          tagline?: string;
+          intro?: string | null;
+          image_url?: string | null;
+          image_alt?: string | null;
+          is_published?: boolean;
+          sort_order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      help_centre_subsections: {
+        Row: {
+          id: string;
+          section_id: string;
+          title: string;
+          route: string | null;
+          what_it_does: string | null;
+          how_to_use: string[];
+          items: Json;
+          images: Json;
+          sort_order: number;
+          is_published: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          section_id: string;
+          title: string;
+          route?: string | null;
+          what_it_does?: string | null;
+          how_to_use?: string[];
+          items?: Json;
+          images?: Json;
+          sort_order?: number;
+          is_published?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          section_id?: string;
+          title?: string;
+          route?: string | null;
+          what_it_does?: string | null;
+          how_to_use?: string[];
+          items?: Json;
+          images?: Json;
+          sort_order?: number;
+          is_published?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "help_centre_subsections_section_id_fkey";
+            columns: ["section_id"];
+            isOneToOne: false;
+            referencedRelation: "help_centre_sections";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -458,3 +556,5 @@ export type SupportTicket = Database["public"]["Tables"]["support_tickets"]["Row
 export type SupportTicketStatus = SupportTicket["status"];
 export type StoryTimelineEntry = Database["public"]["Tables"]["story_timeline"]["Row"];
 export type SupportTicketCategory = SupportTicket["category"];
+export type HelpCentreSection = Database["public"]["Tables"]["help_centre_sections"]["Row"];
+export type HelpCentreSubsection = Database["public"]["Tables"]["help_centre_subsections"]["Row"];

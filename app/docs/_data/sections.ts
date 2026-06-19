@@ -57,7 +57,7 @@ export const SECTIONS: DocSection[] = [
     title: "Dashboard",
     tagline: "Your daily operating picture",
     intro:
-      "The home of the admin portal — a monthly calendar plus daily and map views that show, at a glance, who is in and what is happening today.",
+      "The home of the admin portal — a monthly calendar plus daily, schedule (week timeline) and map views that show, at a glance, who is in and what is happening today.",
     image: "/docs/images/01-dashboard.png",
     imageAlt: "Admin dashboard showing the monthly booking calendar",
     subsections: [
@@ -81,6 +81,16 @@ export const SECTIONS: DocSection[] = [
         howToUse: [
           "Open it at the start of the day to see headcounts and who is in for what.",
           "Use it as the run sheet for the team.",
+        ],
+      },
+      {
+        title: "Schedule (week view)",
+        route: "/admin/home (Schedule tab)",
+        whatItDoes:
+          "A Google-Calendar-style weekly timeline of your bookings. Services booked to a set time of day (timeslot services and Meet & Greets) sit in the time grid at their real start time; all-day services — daycare, walks and sleepovers — show as service-grouped chips in an all-day band across the top. Same-service bookings at the same time cluster into one colour-coded block with a count.",
+        howToUse: [
+          "Switch to the Schedule tab on the dashboard, then use the week arrows or Today to move through the calendar.",
+          "Click any block to open a side drawer listing every pet in that group, each with an Edit action.",
         ],
       },
       {
@@ -110,10 +120,11 @@ export const SECTIONS: DocSection[] = [
         howToUse: [
           "Choose a pet — search by pet or owner name, or tap one from the Most booked grid. Use Change to switch pets later.",
           "Pick a service from the Service dropdown (daycare, sleepover, and so on). The booking can't be saved until a service is chosen — Add booking stays greyed out with a reminder — and the rate updates to match.",
+          "If the service runs at a set time (a timeslot service), pick an available time from the slot grid that appears — slots already taken are greyed out, since each slot only takes one pet. All-day services like daycare skip this step.",
           "Set transport with the two toggles: collect from home and drop off at home. The collection and drop-off windows come from your Operating Times settings.",
           "Add an optional note for the team, then press Add booking.",
           "To repeat the booking, turn on Recurring: set a Start date, optionally turn on Set an end date, and Genera books the same weekday every week between the two dates (e.g. every Wednesday). Use Override price to charge a one-off rate instead of the service default.",
-          "For someone who isn't a customer yet, switch to the Meet & Greet tab and fill in the date, pet name, address (search to auto-fill or enter it manually) and owner name, then press Create meet & greet.",
+          "For someone who isn't a customer yet, switch to the Meet & Greet tab and fill in the date and time slot, pet name, address (search to auto-fill or enter it manually) and owner name, then press Create meet & greet.",
         ],
         images: [
           {
@@ -584,6 +595,10 @@ export const SECTIONS: DocSection[] = [
             desc: "Optional, for daycare/sleepover only — charge a lower per-day rate the more times a pet is booked in a week. The lowest matching tier wins, and the puppy column on each tier is optional.",
           },
           {
+            label: "Requires a Timeslot",
+            desc: "Optional — for services that happen at a set time of day (grooming, training, a vet visit). Turn it on and set a Duration in minutes; bookings then pick a free time from a slot grid within your operating hours, and Genera blocks two bookings of this service in the same slot.",
+          },
+          {
             label: "Requires Approval",
             desc: "On (the default) means you review every booking of this service before it confirms; off means bookings confirm instantly.",
           },
@@ -605,6 +620,7 @@ export const SECTIONS: DocSection[] = [
           "Name the service — choose Daycare or Sleepover from the list, or type a custom name and pick an icon for it.",
           "Enter the Standard Daily Price (required), and a Puppy Daily Price if puppies are charged differently.",
           "For daycare or sleepover, optionally turn on Tiered Pricing: Genera pre-fills example 2 / 3 / 5-bookings-a-week loyalty tiers (each step roughly 15% cheaper) that you can edit, add to (up to seven) or delete. The lowest tier a pet qualifies for that week sets their per-day rate.",
+          "For a service that runs at a set time, turn on Requires a Timeslot and set its Duration in minutes — bookings of it then pick a free time slot rather than the whole day.",
           "Leave Requires Approval on to vet each booking, or turn it off for instant confirmation.",
           "Optionally enable Next-Day Booking Cutoff and set the cutoff time; turn on Mark late bookings as pending to still accept after-cutoff bookings for approval.",
           "Optionally enable a Cancellation Fee, then set the amount, the free-cancellation window (days before the booking date), and the cutoff time on that deadline day.",
@@ -751,7 +767,7 @@ export const SECTIONS: DocSection[] = [
           { label: "Name & Email", desc: "The staff member and their login email." },
           {
             label: "Role",
-            desc: "Admin, Manager, Staff, Auditor or Driver — this sets what they can see and do (see Staff profile).",
+            desc: "Admin, Manager, Staff, Auditor, Driver or Service Provider — this sets what they can see and do (see Staff profile). Drivers and Service Providers land on their own portal instead of the admin dashboard.",
           },
           {
             label: "Working Days",
@@ -838,7 +854,7 @@ export const SECTIONS: DocSection[] = [
           },
           {
             label: "Role & Driver Access",
-            desc: "Set the role (each is explained inline), a delivery capacity, and the Assign as Driver toggle. Only Admins can edit this. Role sets the default portal at login and what the person can access.",
+            desc: "Set the role (each is explained inline), a delivery capacity, and the Assign as Driver toggle. Only Admins can edit this. Role sets the default portal at login and what the person can access — Admin (full), Manager (no pricing edits), Staff (no Finance), Auditor (read-only), Driver and Service Provider (their own portals). Choosing Service Provider also asks which single service they're scoped to.",
           },
           {
             label: "Salary",
@@ -1020,6 +1036,134 @@ export const SECTIONS: DocSection[] = [
     intro:
       "A running list of the latest changes to Genera so you always know what's new. The most recent update is at the top — each entry explains what changed and where to find it.",
     subsections: [
+      {
+        title: "June 2026 — Schedule (week timeline) view",
+        route: "/admin/home (Schedule tab)",
+        whatItDoes:
+          "The dashboard has a new Schedule tab — a Google-Calendar-style weekly timeline showing exactly when each booking happens. Services booked to a time of day sit in the time grid at their real start time, while all-day services (daycare, walks, sleepovers) appear as chips in an all-day band across the top. Same-service bookings at the same time are grouped into a single colour-coded block.",
+        items: [
+          {
+            label: "Weekly time grid",
+            desc: "A Monday-to-Sunday grid from early morning to evening. Timeslot bookings are positioned at their actual time; click the arrows to move week to week or Today to jump back.",
+          },
+          {
+            label: "All-day band",
+            desc: "Daycare, walks and sleepovers (which run all day rather than at a set time) show as service-grouped chips along the top instead of being pinned to a meaningless hour.",
+          },
+          {
+            label: "Grouped blocks & pet drawer",
+            desc: "Bookings of the same service at the same time cluster into one block with a count badge and a per-service colour. Click a block to open a side drawer listing every pet in the group, each with an Edit action.",
+          },
+        ],
+        howToUse: [
+          "Open the dashboard and choose the Schedule tab.",
+          "Use the week arrows (or Today) to move through the calendar, and click any block to see the pets booked and edit a booking.",
+        ],
+        images: [
+          {
+            src: "",
+            placeholder: true,
+            alt: "Weekly schedule timeline with timed bookings in a grid and all-day services in a top band",
+            caption:
+              "The Schedule tab — a weekly timeline with timed bookings in the grid and all-day services in a band across the top.",
+          },
+        ],
+      },
+      {
+        title: "June 2026 — Service timeslots & available-slot picker",
+        route: "/admin/finance/services",
+        whatItDoes:
+          "Services that happen at a set time of day — grooming, training, a vet visit — can now require a timeslot. Turn on Requires a Timeslot when adding or editing a service and give it a duration; when that service is booked, you pick an available time from a grid of slots within your operating hours instead of booking the whole day. Slots already taken are greyed out, because each timeslot only takes one pet across the whole daycare. Meet & Greets pick a time the same way.",
+        items: [
+          {
+            label: "Requires a Timeslot",
+            desc: "A per-service toggle (with a Duration in minutes) on the Add/Edit Service window. On means the service occupies a set slot rather than the whole day, and Genera blocks two bookings of that service in the same slot.",
+          },
+          {
+            label: "Pick an available slot",
+            desc: "When booking a timeslot service, a chip grid of times appears across your operating hours; taken slots are disabled so you can only pick one that's free.",
+          },
+          {
+            label: "Meet & Greet times",
+            desc: "Meet & Greets now choose a time from the same slot grid, so introductory visits no longer clash with each other.",
+          },
+        ],
+        howToUse: [
+          "In Finance › Services, add or edit a service and turn on Requires a Timeslot, then set its duration in minutes.",
+          "When you book that service (or a Meet & Greet), pick a free time from the slot grid — taken slots are greyed out.",
+        ],
+        images: [
+          {
+            src: "",
+            placeholder: true,
+            alt: "Add Service window with a Requires a Timeslot toggle and a duration in minutes field",
+            caption:
+              "Requires a Timeslot — turn it on and set a duration; bookings then pick a free slot from a grid.",
+          },
+        ],
+      },
+      {
+        title: "June 2026 — Roles & permissions",
+        route: "/admin/team/profile/[id]",
+        whatItDoes:
+          "Team roles now control exactly what each person can see and do. As well as Admin, Manager and Staff, there are Auditor (read-only), Driver and a new Service Provider role. Read-only and limited roles still see the pages they're allowed, but buttons they can't use are disabled with a tooltip — and portal-only roles (Driver, Service Provider) are kept out of the admin dashboard entirely and sent to their own portal at login.",
+        items: [
+          {
+            label: "Admin",
+            desc: "Full access — can change pricing, finance and team settings.",
+          },
+          {
+            label: "Manager",
+            desc: "Same as admin, except cannot change pricing for services or memberships.",
+          },
+          {
+            label: "Staff",
+            desc: "Same as manager, and cannot open the Finance section.",
+          },
+          {
+            label: "Auditor",
+            desc: "Read-only — can view everything in admin but cannot add, edit or delete.",
+          },
+          {
+            label: "Driver / Service Provider",
+            desc: "Portal-only roles that land on their own portal at login and can't reach the admin dashboard.",
+          },
+        ],
+        howToUse: [
+          "Open a staff member's profile and set their Role under Role & Driver Access (admins only).",
+          "Pricing fields, edit and delete buttons are automatically disabled for roles that can't use them.",
+        ],
+      },
+      {
+        title: "June 2026 — Service Provider portal",
+        route: "/provider/schedule",
+        whatItDoes:
+          "A new Service Provider role gives someone — a groomer, trainer or visiting vet — their own simple portal that shows only the one service they're assigned to. They sign in and land on a weekly schedule of just their bookings, with none of the rest of the admin portal. It mirrors the Driver portal, but scoped to a single service instead of routes.",
+        items: [
+          {
+            label: "Scoped to one service",
+            desc: "When you give a team member the Service Provider role, you pick which service they cover. They only ever see bookings for that service.",
+          },
+          {
+            label: "Their own weekly schedule",
+            desc: "Service providers land on a weekly calendar of their bookings at /provider/schedule and have a profile page — but no access to the admin dashboard.",
+          },
+        ],
+        howToUse: [
+          "In a staff member's profile, set their role to Service Provider and choose the service they're scoped to (it's required).",
+          "They'll sign in to the Service Provider portal and see only that service's bookings.",
+        ],
+      },
+      {
+        title: "June 2026 — Recurring bookings appear ahead of time",
+        route: "/admin/bookings/recurring",
+        whatItDoes:
+          "Recurring schedules now materialise their future bookings, so each upcoming occurrence shows up on the calendars and schedule views in advance rather than only appearing on the day. The recurring bookings list also groups occurrences by date with clearer formatting and messaging, so a repeating schedule is easier to read at a glance.",
+        howToUse: [
+          "Set up a recurring booking as usual — its future dates now appear across the calendar, daily and schedule views ahead of time.",
+          "Open Bookings › Recurring to see each schedule's occurrences grouped and dated.",
+        ],
+      },
       {
         title: "June 2026 — Invite staff to their own login",
         route: "/admin/team",
@@ -1375,36 +1519,46 @@ export type SearchEntry = {
   haystack: string;
 };
 
-export const SEARCH_INDEX: SearchEntry[] = SECTIONS.flatMap((s) =>
-  s.subsections.map((sub) => {
-    const parts = [
-      sub.title,
-      sub.route ?? "",
-      sub.whatItDoes ?? "",
-      ...(sub.howToUse ?? []),
-      ...(sub.items ?? []).flatMap((it) => [it.label, it.desc]),
-      ...(sub.images ?? []).map((img) => img.caption ?? ""),
-      s.title,
-      s.tagline,
-    ];
-    return {
-      sectionSlug: s.slug,
-      sectionTitle: s.title,
-      subTitle: sub.title,
-      anchor: subAnchor(sub.title),
-      route: sub.route,
-      snippet: sub.whatItDoes ?? sub.items?.[0]?.desc ?? s.tagline,
-      haystack: parts.join(" · ").toLowerCase(),
-    };
-  }),
-);
+/** Build the search index from any DocSection[] (static or DB-loaded). */
+export function buildSearchIndex(sections: DocSection[]): SearchEntry[] {
+  return sections.flatMap((s) =>
+    s.subsections.map((sub) => {
+      const parts = [
+        sub.title,
+        sub.route ?? "",
+        sub.whatItDoes ?? "",
+        ...(sub.howToUse ?? []),
+        ...(sub.items ?? []).flatMap((it) => [it.label, it.desc]),
+        ...(sub.images ?? []).map((img) => img.caption ?? ""),
+        s.title,
+        s.tagline,
+      ];
+      return {
+        sectionSlug: s.slug,
+        sectionTitle: s.title,
+        subTitle: sub.title,
+        anchor: subAnchor(sub.title),
+        route: sub.route,
+        snippet: sub.whatItDoes ?? sub.items?.[0]?.desc ?? s.tagline,
+        haystack: parts.join(" · ").toLowerCase(),
+      };
+    }),
+  );
+}
 
-/** Ranked search over subsections. Title hits rank above body hits. */
-export function searchDocs(query: string, limit = 12): SearchEntry[] {
+/** Static index built from the code-defined SECTIONS (fallback). */
+export const SEARCH_INDEX: SearchEntry[] = buildSearchIndex(SECTIONS);
+
+/** Ranked search over a search index. Title hits rank above body hits. */
+export function rankSearch(
+  index: SearchEntry[],
+  query: string,
+  limit = 12,
+): SearchEntry[] {
   const term = query.trim().toLowerCase();
   if (!term) return [];
   const scored: { e: SearchEntry; score: number }[] = [];
-  for (const e of SEARCH_INDEX) {
+  for (const e of index) {
     const inTitle = e.subTitle.toLowerCase().includes(term);
     const inRoute = (e.route ?? "").toLowerCase().includes(term);
     const inBody = e.haystack.includes(term);
@@ -1415,4 +1569,9 @@ export function searchDocs(query: string, limit = 12): SearchEntry[] {
   }
   scored.sort((a, b) => a.score - b.score);
   return scored.slice(0, limit).map((s) => s.e);
+}
+
+/** Ranked search over the static index (back-compat convenience). */
+export function searchDocs(query: string, limit = 12): SearchEntry[] {
+  return rankSearch(SEARCH_INDEX, query, limit);
 }

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { SECTIONS } from "./_data/sections";
+import { getDocSections } from "./_data/load";
 import SectionIcon from "./_components/SectionIcon";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Help Centre",
@@ -9,7 +11,8 @@ export const metadata: Metadata = {
     "Everything you need to run your daycare in Genera — a page-by-page guide to the admin portal.",
 };
 
-export default function DocsHome() {
+export default async function DocsHome() {
+  const SECTIONS = await getDocSections();
   return (
     <div className="mx-auto max-w-[860px]">
       {/* Hero */}

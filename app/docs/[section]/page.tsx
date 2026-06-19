@@ -1,12 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  SECTIONS,
-  getSection,
-  subAnchor,
-  type DocSubsection,
-} from "../_data/sections";
+import { subAnchor, type DocSubsection } from "../_data/sections";
+import { getDocSections } from "../_data/load";
 import SectionIcon from "../_components/SectionIcon";
 import CopyLinkButton from "../_components/CopyLinkButton";
 import { LightboxProvider, ZoomableImage } from "../_components/Lightbox";
@@ -14,8 +10,11 @@ import { Suspense } from "react";
 import SearchHighlighter from "../_components/SearchHighlighter";
 import { APP_BASE_URL } from "@/lib/urls";
 
-export function generateStaticParams() {
-  return SECTIONS.map((s) => ({ section: s.slug }));
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const sections = await getDocSections();
+  return sections.map((s) => ({ section: s.slug }));
 }
 
 export async function generateMetadata({
@@ -24,7 +23,8 @@ export async function generateMetadata({
   params: Promise<{ section: string }>;
 }): Promise<Metadata> {
   const { section } = await params;
-  const s = getSection(section);
+  const sections = await getDocSections();
+  const s = sections.find((x) => x.slug === section);
   if (!s) return { title: "Not found" };
   return {
     title: s.title,
@@ -38,7 +38,8 @@ export default async function SectionPage({
   params: Promise<{ section: string }>;
 }) {
   const { section } = await params;
-  const s = getSection(section);
+  const SECTIONS = await getDocSections();
+  const s = SECTIONS.find((x) => x.slug === section);
   if (!s) notFound();
 
   const idx = SECTIONS.findIndex((x) => x.slug === s.slug);

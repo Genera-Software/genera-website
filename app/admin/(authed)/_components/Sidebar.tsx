@@ -135,6 +135,17 @@ const NAV: NavEntry[] = [
       </>
     ),
   },
+  {
+    kind: "item",
+    href: "/admin/help-centre",
+    label: "Help Centre",
+    icon: (
+      <>
+        <path d="M2 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2Z" />
+        <path d="M22 4h-6a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22Z" />
+      </>
+    ),
+  },
 ];
 
 export default function Sidebar({

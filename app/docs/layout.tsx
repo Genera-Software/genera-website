@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import DocsShell from "./_components/DocsShell";
-import { NAV } from "./_data/sections";
+import { getDocNav, getDocSearchIndex } from "./_data/load";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: {
@@ -12,10 +14,18 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function DocsLayout({
+export default async function DocsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <DocsShell nav={NAV}>{children}</DocsShell>;
+  const [nav, searchIndex] = await Promise.all([
+    getDocNav(),
+    getDocSearchIndex(),
+  ]);
+  return (
+    <DocsShell nav={nav} searchIndex={searchIndex}>
+      {children}
+    </DocsShell>
+  );
 }

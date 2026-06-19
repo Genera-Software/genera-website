@@ -35,7 +35,8 @@ function randomId(): string {
 
 export async function uploadToBucket(
   file: File,
-  bucket: "logos" | "blog-images" | "story-images",
+  bucket: "logos" | "blog-images" | "story-images" | "website-images",
+  folder?: string,
 ): Promise<string> {
   if (!ALLOWED_MIME.has(file.type)) {
     throw new Error(
@@ -50,7 +51,8 @@ export async function uploadToBucket(
 
   const supabase = getAdminSupabase();
   const ext = extFromMime(file.type);
-  const path = `${Date.now()}-${randomId()}.${ext}`;
+  const prefix = folder ? `${folder.replace(/\/+$/, "")}/` : "";
+  const path = `${prefix}${Date.now()}-${randomId()}.${ext}`;
 
   const { error } = await supabase.storage.from(bucket).upload(path, file, {
     contentType: file.type,
@@ -68,7 +70,7 @@ export async function uploadToBucket(
 
 export function pathFromPublicUrl(
   url: string,
-  bucket: "logos" | "blog-images" | "story-images",
+  bucket: "logos" | "blog-images" | "story-images" | "website-images",
 ): string | null {
   const marker = `/storage/v1/object/public/${bucket}/`;
   const idx = url.indexOf(marker);
@@ -78,7 +80,7 @@ export function pathFromPublicUrl(
 
 export async function deleteFromBucket(
   url: string,
-  bucket: "logos" | "blog-images" | "story-images",
+  bucket: "logos" | "blog-images" | "story-images" | "website-images",
 ): Promise<void> {
   const path = pathFromPublicUrl(url, bucket);
   if (!path) return;

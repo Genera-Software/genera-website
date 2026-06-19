@@ -5,16 +5,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { LOGIN_URL } from "@/lib/urls";
-import { searchDocs, type SearchEntry } from "../_data/sections";
+import { rankSearch, type SearchEntry } from "../_data/sections";
 import SectionIcon from "./SectionIcon";
 
 type NavEntry = { slug: string; num: number; title: string; tagline: string };
 
 export default function DocsShell({
   nav,
+  searchIndex,
   children,
 }: {
   nav: NavEntry[];
+  searchIndex: SearchEntry[];
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -26,7 +28,7 @@ export default function DocsShell({
     setOpen(false);
   }, [pathname]);
 
-  const results = useMemo(() => searchDocs(q), [q]);
+  const results = useMemo(() => rankSearch(searchIndex, q), [searchIndex, q]);
   const searching = q.trim().length > 0;
 
   // After clicking a result, reset the box back to the nav and close drawer.
