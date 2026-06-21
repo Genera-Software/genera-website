@@ -1,5 +1,9 @@
 import { getAdminSupabase } from "@/lib/supabase/admin";
-import { BADGES_BY_ID } from "@/lib/badges";
+import {
+  BADGES_BY_ID,
+  isIgnoredBadgeHost,
+  BADGE_IGNORED_HOST_OR_FILTER,
+} from "@/lib/badges";
 import PageHeader from "../_components/PageHeader";
 
 export const dynamic = "force-dynamic";
@@ -41,10 +45,16 @@ export default async function BadgeTrackingPage() {
     const supabase = getAdminSupabase();
     const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 
-    const [countRes, eventsRes] = await Promise.all([
+    const [countRes, ignoredCountRes, eventsRes] = await Promise.all([
       supabase
         .from("badge_events")
         .select("id", { count: "exact", head: true }),
+      // All-time count of impressions from Genera's own domains / local dev,
+      // so we can subtract them from the all-time total.
+      supabase
+        .from("badge_events")
+        .select("id", { count: "exact", head: true })
+        .or(BADGE_IGNORED_HOST_OR_FILTER),
       supabase
         .from("badge_events")
         .select("badge_id, kind, referer_host, created_at")
@@ -56,8 +66,10 @@ export default async function BadgeTrackingPage() {
     if (countRes.error || eventsRes.error) {
       tableMissing = true;
     } else {
-      totalAll = countRes.count ?? 0;
-      events = (eventsRes.data ?? []) as EventRow[];
+      totalAll = Math.max(0, (countRes.count ?? 0) - (ignoredCountRes.count ?? 0));
+      events = ((eventsRes.data ?? []) as EventRow[]).filter(
+        (e) => !isIgnoredBadgeHost(e.referer_host),
+      );
     }
   } catch {
     tableMissing = true;
@@ -83,7 +95,7 @@ export default async function BadgeTrackingPage() {
     <div>
       <PageHeader
         title="Badge tracking"
-        description="Cookie-free impressions for the “Powered by Genera” and “Book with Genera” badges customers embed on their own sites. Counts every badge load over the last 30 days."
+        description="Cookie-free impressions for the “Powered by Genera” and “Book with Genera” badges customers embed on their own sites. Counts every badge load over the last 30 days. Genera’s own domains and local development are excluded."
       />
 
       {tableMissing ? (

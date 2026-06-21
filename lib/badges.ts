@@ -48,3 +48,24 @@ export const BADGES: BadgeMeta[] = [
 export const BADGES_BY_ID: Record<string, BadgeMeta> = Object.fromEntries(
   BADGES.map((b) => [b.id, b]),
 );
+
+// Hosts that should not be counted as real customer badge impressions:
+// Genera's own domains (the apex + any *.generasoftware.com subdomain) and
+// local development. Null/empty hosts (direct loads) are kept.
+export function isIgnoredBadgeHost(host: string | null | undefined): boolean {
+  if (!host) return false;
+  const h = host.toLowerCase().replace(/:\d+$/, ""); // strip any :port
+  if (h === "localhost" || h === "127.0.0.1" || h === "::1") return true;
+  return h === "generasoftware.com" || h.endsWith(".generasoftware.com");
+}
+
+// PostgREST `.or()` filter matching the hosts isIgnoredBadgeHost() rejects,
+// used to count ignored rows at the DB level for the all-time stat.
+export const BADGE_IGNORED_HOST_OR_FILTER = [
+  "referer_host.ilike.generasoftware.com",
+  "referer_host.ilike.*.generasoftware.com",
+  "referer_host.ilike.localhost",
+  "referer_host.ilike.localhost:*",
+  "referer_host.ilike.127.0.0.1",
+  "referer_host.ilike.127.0.0.1:*",
+].join(",");
