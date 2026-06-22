@@ -59,46 +59,46 @@ export default async function BlogPage() {
         </div>
       </section>
 
-      {/* Blog grid */}
+      {/* Blog list */}
       <section className="bg-cream px-8 py-22">
         {posts && posts.length > 0 ? (
-          <div className="mx-auto grid max-w-[1160px] gap-7 md:grid-cols-2">
+          <div className="mx-auto max-w-[860px] flex flex-col gap-5">
             {posts.map((p, i) => (
               <Link
                 key={p.id}
                 href={`/blog/${p.slug}`}
-                className={`rev d${(i % 6) + 1} group flex flex-col overflow-hidden rounded-2xl border border-cream-dark bg-white shadow-[0_8px_24px_rgba(0,62,69,0.05)] transition-all hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,62,69,0.12)]`}
+                className={`rev d${(i % 6) + 1} group flex flex-col sm:flex-row overflow-hidden rounded-2xl border border-cream-dark bg-white shadow-[0_8px_24px_rgba(0,62,69,0.05)] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(0,62,69,0.12)]`}
               >
+                {/* Thumbnail */}
                 {p.cover_image_url ? (
-                  <div className="relative h-64 w-full overflow-hidden bg-cream-dark">
+                  <div className="relative w-full sm:w-48 sm:flex-none h-52 sm:h-auto overflow-hidden bg-cream-dark">
                     <Image
                       src={p.cover_image_url}
                       alt={p.title}
                       fill
-                      sizes="(max-width: 768px) 100vw, 580px"
-                      className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                      sizes="(max-width: 640px) 100vw, 192px"
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                     />
-                    <span className="absolute left-4 top-4 rounded-full bg-gold-light px-3 py-1 text-xs font-bold uppercase tracking-wider text-forest">
-                      {p.category}
-                    </span>
                   </div>
                 ) : (
-                  <div className="flex h-32 items-end bg-gradient-to-br from-forest-mid to-forest-dark p-7">
+                  <div className="w-full sm:w-48 sm:flex-none h-20 sm:h-auto bg-gradient-to-br from-forest-mid to-forest-dark" />
+                )}
+
+                {/* Content */}
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="mb-2">
                     <span className="rounded-full bg-gold-light px-3 py-1 text-xs font-bold uppercase tracking-wider text-forest">
                       {p.category}
                     </span>
                   </div>
-                )}
-
-                <div className="flex flex-1 flex-col p-7">
-                  <h2 className="mb-3 font-massilia text-xl font-bold leading-none text-forest md:text-mini-h">
+                  <h2 className="mb-2 font-massilia text-lg font-bold leading-snug text-forest group-hover:text-forest-mid transition-colors">
                     {p.title}
                   </h2>
-                  <p className="mb-5 text-ink-soft">{p.excerpt}</p>
+                  <p className="mb-4 text-sm text-ink-soft line-clamp-2">{p.excerpt}</p>
 
-                  <div className="mt-auto flex items-center justify-between border-t border-cream-dark pt-4 text-sm">
+                  <div className="mt-auto flex items-center justify-between text-sm">
                     <div className="flex flex-wrap items-center gap-2 text-ink-soft">
-                      <span className="grid h-7 w-7 place-items-center rounded-full bg-forest font-bold text-white">
+                      <span className="grid h-6 w-6 place-items-center rounded-full bg-forest text-xs font-bold text-white">
                         {p.author_name.charAt(0)}
                       </span>
                       <span className="font-medium text-forest">
@@ -109,7 +109,7 @@ export default async function BlogPage() {
                       <span className="h-3 w-px bg-cream-dark" />
                       <span>{p.read_time_minutes} min read</span>
                     </div>
-                    <span className="text-forest transition-transform group-hover:translate-x-1">
+                    <span className="text-forest transition-transform group-hover:translate-x-1 hidden sm:block">
                       <svg
                         viewBox="0 0 24 24"
                         fill="none"
