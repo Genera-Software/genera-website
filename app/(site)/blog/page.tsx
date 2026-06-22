@@ -70,13 +70,13 @@ export default async function BlogPage() {
                 className={`rev d${(i % 6) + 1} group flex flex-col overflow-hidden rounded-2xl border border-cream-dark bg-white shadow-[0_8px_24px_rgba(0,62,69,0.05)] transition-all hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,62,69,0.12)]`}
               >
                 {p.cover_image_url ? (
-                  <div className="relative h-52 w-full overflow-hidden bg-cream-dark">
+                  <div className="relative h-64 w-full overflow-hidden bg-cream-dark">
                     <Image
                       src={p.cover_image_url}
                       alt={p.title}
                       fill
                       sizes="(max-width: 768px) 100vw, 580px"
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
                     />
                     <span className="absolute left-4 top-4 rounded-full bg-gold-light px-3 py-1 text-xs font-bold uppercase tracking-wider text-forest">
                       {p.category}
