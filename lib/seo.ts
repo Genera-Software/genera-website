@@ -4,6 +4,16 @@ export const SITE_URL = "https://www.generasoftware.com";
 export const SITE_NAME = "Genera Software";
 export const DEFAULT_OG_IMAGE = "/images/hero-background-fun.png";
 
+// Author / E-E-A-T. Genera is built by Duncan, who has run Duncan's Doggy
+// Daycare for 15 years. Surfacing that real operator experience is a trust
+// signal that pure-software competitors cannot match, for both Google and
+// AI answer engines.
+export const AUTHOR_NAME = "Duncan";
+export const AUTHOR_TITLE =
+  "Founder of Genera and owner of Duncan's Doggy Daycare";
+export const AUTHOR_BIO =
+  "Duncan has run Duncan's Doggy Daycare for 15 years. Genera is the software he built to run his own pet business, shaped by what actually works day to day, not theory.";
+
 type SeoConfig = {
   title: string;
   description: string;
