@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Genera Community CRM</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --teal:#0f766e; --teal-dark:#0b5951; --teal-light:#ccfbf1;
+    --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --bg:#f1f5f9;
+    --card:#ffffff; --amber:#b45309; --amber-bg:#fef3c7; --green:#15803d; --green-bg:#dcfce7;
+    --red:#b91c1c; --red-bg:#fee2e2; --wa:#25d366; --wa-dark:#128c7e;
+    --shadow:0 1px 3px rgba(15,23,42,.08),0 1px 2px rgba(15,23,42,.04);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);font-size:15px;line-height:1.45}
+  header{background:var(--teal);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;
+    position:sticky;top:0;z-index:20;box-shadow:var(--shadow);padding-top:max(14px,env(safe-area-inset-top))}
+  header h1{font-size:18px;margin:0;font-weight:700;letter-spacing:.2px}
+  header .sub{font-size:12px;opacity:.85;font-weight:400}
+  header .spacer{flex:1}
+  .btn{border:0;border-radius:8px;padding:9px 14px;font-size:14px;font-weight:600;cursor:pointer;
+    background:var(--teal);color:#fff;transition:filter .15s;min-height:40px}
+  .btn:hover{filter:brightness(1.08)}
+  .btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4)}
+  .btn.sm{padding:6px 11px;font-size:13px;min-height:34px}
+  .btn.light{background:#fff;color:var(--teal)}
+  .btn.subtle{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+  .btn.danger{background:var(--red-bg);color:var(--red)}
+  .btn.wa{background:var(--wa);color:#053d26}
+  .btn.wa:hover{background:var(--wa-dark);color:#fff}
+  nav{display:flex;gap:4px;padding:12px 20px 0;background:transparent;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  nav button{background:transparent;border:0;padding:11px 16px;font-size:14px;font-weight:600;color:var(--muted);
+    cursor:pointer;border-radius:8px 8px 0 0;position:relative;white-space:nowrap}
+  nav button.active{color:var(--teal);background:var(--card)}
+  nav button .badge{display:inline-block;min-width:18px;padding:0 5px;margin-left:6px;font-size:11px;
+    background:var(--amber-bg);color:var(--amber);border-radius:9px;font-weight:700}
+  main{padding:0 20px 80px;max-width:1100px;margin:0 auto}
+  .panel{background:var(--card);border-radius:0 10px 10px 10px;box-shadow:var(--shadow);padding:18px;min-height:400px}
+  .toolbar{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+  .toolbar input[type=search]{flex:1;min-width:160px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px}
+  .toolbar select{padding:9px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px;background:#fff}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .company{border:1px solid var(--line);border-radius:10px;padding:14px;transition:box-shadow .15s,border-color .15s;background:#fff}
+  .company:hover{box-shadow:var(--shadow);border-color:var(--teal)}
+  .company .clk{cursor:pointer}
+  .company .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .company h3{margin:0 0 2px;font-size:16px}
+  .company .contact{font-size:13px;color:var(--muted)}
+  .company .grp{font-size:12px;color:var(--teal);font-weight:600;margin-top:4px}
+  .pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+  .pill.Lead{background:var(--amber-bg);color:var(--amber)}
+  .pill.Active{background:var(--teal-light);color:var(--teal-dark)}
+  .pill.Member{background:var(--green-bg);color:var(--green)}
+  .pill.Dormant{background:#f1f5f9;color:var(--muted)}
+  .company .meta{margin-top:10px;display:flex;gap:12px;font-size:12px;color:var(--muted);align-items:center;flex-wrap:wrap}
+  .company .owe{color:var(--amber);font-weight:700}
+  .company .chase{color:var(--red);font-weight:700}
+  .company.flagged{border-left:4px solid var(--red)}
+  .company .actions{margin-top:12px;display:flex;gap:8px}
+  .empty{text-align:center;color:var(--muted);padding:50px 20px}
+  .empty h2{color:var(--ink);font-weight:700;font-size:18px;margin:0 0 6px}
+  .fu{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-left:4px solid var(--amber);
+    border-radius:8px;padding:12px 14px;margin-bottom:10px;background:#fff;flex-wrap:wrap}
+  .fu.overdue{border-left-color:var(--red)}
+  .fu .body{flex:1;min-width:180px}
+  .fu .co{font-weight:700;font-size:14px}
+  .fu .txt{font-size:14px;margin:2px 0}
+  .fu .due{font-size:12px;color:var(--muted)}
+  .fu .due.overdue{color:var(--red);font-weight:700}
+  .overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);display:none;align-items:flex-start;justify-content:center;
+    z-index:50;padding:40px 16px;overflow-y:auto}
+  .overlay.show{display:flex}
+  .modal{background:#fff;border-radius:12px;width:100%;max-width:580px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+  .modal .head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .modal .head h2{margin:0;font-size:18px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .modal .close{background:none;border:0;font-size:26px;cursor:pointer;color:var(--muted);line-height:1;padding:0 4px}
+  .modal .content{padding:20px}
+  label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin:12px 0 4px;text-transform:uppercase;letter-spacing:.4px}
+  input[type=text],input[type=tel],input[type=date],input[type=email],input[type=password],select,textarea{width:100%;padding:11px;border:1px solid var(--line);
+    border-radius:8px;font-size:15px;font-family:inherit}
+  textarea{resize:vertical;min-height:70px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .modal .foot{padding:14px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;align-items:center;flex-wrap:wrap}
+  .sechead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .sechead h3{margin:0;font-size:15px}
+  .sechead .acts{display:flex;gap:6px;flex-wrap:wrap}
+  /* requests checklist */
+  .req{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--line);border-radius:8px;margin-bottom:6px;background:#fff}
+  .req input[type=checkbox]{width:auto;transform:scale(1.25);margin-top:2px;flex:none}
+  .req .rbody{flex:1}
+  .req .rtext{font-size:14px}
+  .req.done .rtext{text-decoration:line-through;color:var(--muted)}
+  .req .rdue{font-size:12px;color:var(--amber);font-weight:600;margin-top:2px}
+  .req .rdue.overdue{color:var(--red)}
+  .req.done .rdue{display:none}
+  .req .del{background:none;border:0;color:var(--muted);font-size:18px;cursor:pointer;line-height:1;flex:none}
+  .subform{background:var(--bg);padding:12px;border-radius:8px;margin:8px 0}
+  /* timeline */
+  .timeline{margin-top:6px}
+  .log{border-left:2px solid var(--line);padding:0 0 12px 16px;position:relative}
+  .log::before{content:"";position:absolute;left:-6px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--teal)}
+  .log .when{font-size:12px;color:var(--muted)}
+  .log .text{margin:2px 0}
+  .checkline{display:flex;align-items:center;gap:8px;padding:10px;border:1px solid var(--line);border-radius:8px;margin-bottom:6px}
+  .checkline input{width:auto;transform:scale(1.2)}
+  .checkline .nm{flex:1}
+  .checkline .nophone{font-size:11px;color:var(--muted)}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px}
+  .count{font-size:13px;color:var(--muted);margin-left:auto}
+  .copybox{background:var(--bg);border:1px dashed var(--line);border-radius:8px;padding:12px;font-size:14px;white-space:pre-wrap;margin-top:10px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;
+    border-radius:8px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:100;max-width:90vw;text-align:center}
+  .toast.show{opacity:1}
+  a.link{color:var(--teal);cursor:pointer}
+  @media (max-width:600px){
+    header{flex-wrap:wrap;padding:12px 14px;padding-top:max(12px,env(safe-area-inset-top));gap:8px}
+    header h1{font-size:16px}
+    header .sub{display:none}
+    header .spacer{display:none}
+    header>div:first-child{flex:1}
+    header .btn.sm{padding:7px 9px;font-size:12px}
+    nav{padding:10px 12px 0}
+    main{padding:0 12px 90px}
+    .panel{border-radius:10px;padding:14px}
+    .row2{grid-template-columns:1fr}
+    .grid{grid-template-columns:1fr}
+    .overlay{padding:14px 8px}
+    .modal .foot{justify-content:stretch}
+    .modal .foot .btn{flex:1}
+    .modal .foot #deleteBtn{flex:0 0 auto}
+  }
+</style>
+</head>
+<body>
+<div id="loginOverlay" style="position:fixed;inset:0;z-index:200;background:var(--teal);display:flex;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:14px;max-width:360px;width:100%;padding:26px;box-shadow:0 20px 50px rgba(0,0,0,.3)">
+    <h1 style="margin:0 0 4px;font-size:20px;color:var(--ink)">Genera Community CRM</h1>
+    <p style="margin:0 0 16px;color:var(--muted);font-size:14px">Team sign in</p>
+    <label>Email</label>
+    <input type="email" id="loginEmail" autocomplete="username" placeholder="you@duncansdogco.com">
+    <label>Password</label>
+    <input type="password" id="loginPw" autocomplete="current-password" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()">
+    <div id="loginErr" style="color:var(--red);font-size:13px;margin-top:8px;min-height:16px"></div>
+    <button id="loginBtn" class="btn" style="width:100%;margin-top:6px" onclick="doLogin()">Sign in</button>
+  </div>
+</div>
+
+<header>
+  <div>
+    <h1>Genera Community CRM</h1>
+    <div class="sub">Your WhatsApp companies, in one place</div>
+  </div>
+  <div class="spacer"></div>
+  <span id="userBadge" style="font-size:12px;opacity:.85"></span>
+  <button class="btn ghost sm" onclick="exportData()">Backup</button>
+  <button class="btn ghost sm" onclick="document.getElementById('importFile').click()">Import</button>
+  <input type="file" id="importFile" accept="application/json" style="display:none" onchange="importData(event)">
+  <button class="btn ghost sm" onclick="signOut()">Sign out</button>
+  <button class="btn light sm" onclick="openCompany()">+ Company</button>
+</header>
+
+<nav>
+  <button id="tab-companies" class="active" onclick="showTab('companies')">Companies <span class="badge" id="badge-co">0</span></button>
+  <button id="tab-followups" onclick="showTab('followups')">Follow-ups <span class="badge" id="badge-fu">0</span></button>
+  <button id="tab-broadcast" onclick="showTab('broadcast')">Broadcast</button>
+</nav>
+
+<main>
+  <div class="panel" id="view-companies">
+    <div class="toolbar">
+      <input type="search" id="search" placeholder="Search company or contact..." oninput="renderCompanies()">
+      <select id="filterGroup" onchange="renderCompanies()"><option value="">All groups</option></select>
+      <select id="filterStatus" onchange="renderCompanies()">
+        <option value="">All statuses</option>
+        <option>Lead</option><option>Active</option><option>Member</option><option>Dormant</option>
+      </select>
+    </div>
+    <div class="grid" id="companyGrid"></div>
+  </div>
+
+  <div class="panel" id="view-followups" style="display:none">
+    <div id="chaseSection"></div>
+    <div class="toolbar"><strong>Open requests, across all customers</strong>
+      <span class="count" id="fuCount"></span>
+      <button class="btn subtle sm" onclick="copyAllOpenNotion()">Copy all for dev (Notion)</button>
+    </div>
+    <div id="fuList"></div>
+  </div>
+
+  <div class="panel" id="view-broadcast" style="display:none">
+    <div class="toolbar"><strong>Compose a broadcast</strong></div>
+    <label>Message</label>
+    <textarea id="bcMsg" placeholder="Write the update you want to send to the group companies..." oninput="renderBroadcastPreview()"></textarea>
+    <div class="toolbar" style="margin-top:14px">
+      <label style="margin:0">Send to group</label>
+      <select id="bcGroup" onchange="renderBroadcast()" style="width:auto"><option value="">All groups</option></select>
+      <button class="btn subtle sm" onclick="toggleAllRecipients(true)">Select all</button>
+      <button class="btn subtle sm" onclick="toggleAllRecipients(false)">Clear</button>
+    </div>
+    <div id="bcRecipients"></div>
+    <div class="copybox" id="bcPreview" style="display:none"></div>
+    <div id="bcOpenList" style="margin-top:12px"></div>
+    <div class="toolbar" style="margin-top:14px">
+      <button class="btn" onclick="copyBroadcast()">Copy message</button>
+      <button class="btn subtle" onclick="logBroadcast()">Log send to timelines</button>
+    </div>
+    <p class="hint">Each selected company with a phone number gets an <b>Open chat</b> button that launches WhatsApp with your message ready. No number saved? Copy the message and post once in the group instead.</p>
+  </div>
+</main>
+
+<div class="overlay" id="companyOverlay">
+  <div class="modal">
+    <div class="head">
+      <h2 id="companyModalTitle">New company</h2>
+      <button class="btn wa sm" id="headMsgBtn" style="display:none" onclick="messageCompany()">Message</button>
+      <button class="close" onclick="closeOverlay('companyOverlay')">&times;</button>
+    </div>
+    <div class="content">
+      <div class="row2">
+        <div><label>Company</label><input type="text" id="fName" placeholder="e.g. Charlie's Dog Lodge"></div>
+        <div><label>Status</label><select id="fStatus"><option>Lead</option><option>Active</option><option>Member</option><option>Dormant</option></select></div>
+      </div>
+      <div class="row2">
+        <div><label>Contact person</label><input type="text" id="fContact" placeholder="e.g. Emma"></div>
+        <div><label>Phone</label><input type="tel" id="fPhone" placeholder="+44 7... for the Message button"></div>
+      </div>
+      <label>Group</label>
+      <input type="text" id="fGroup" list="groupList" placeholder="Which WhatsApp group">
+      <datalist id="groupList"></datalist>
+      <label>Notes</label>
+      <textarea id="fNotes" placeholder="What they do, how you met, anything to remember..."></textarea>
+
+      <label style="display:flex;align-items:center;gap:8px;text-transform:none;font-size:14px;margin-top:14px;cursor:pointer;letter-spacing:0">
+        <input type="checkbox" id="fFollowUp" style="width:auto;transform:scale(1.2)" onchange="document.getElementById('chaseNoteWrap').style.display=this.checked?'block':'none'">
+        Flag this customer to follow up / chase
+      </label>
+      <div id="chaseNoteWrap" style="display:none">
+        <input type="text" id="fChaseNote" placeholder="What to chase, e.g. Not logged in yet, nudge to get started">
+      </div>
+
+      <div id="detailSection" style="display:none">
+        <hr style="border:none;border-top:1px solid var(--line);margin:20px 0">
+        <div class="sechead">
+          <h3>Requests / dev checklist</h3>
+          <div class="acts">
+            <button class="btn subtle sm" onclick="copyRequestsNotion()">Copy for Notion</button>
+            <button class="btn subtle sm" onclick="toggleAddReq()">+ Add</button>
+          </div>
+        </div>
+        <div id="addReqForm" class="subform" style="display:none">
+          <label>What they asked for</label>
+          <textarea id="rText" placeholder="e.g. Bulk-edit dog vaccination dates"></textarea>
+          <label>Chase by (optional)</label>
+          <input type="date" id="rDue">
+          <button class="btn sm" style="margin-top:8px" onclick="addRequest()">Add to checklist</button>
+        </div>
+        <div id="reqList"></div>
+
+        <hr style="border:none;border-top:1px solid var(--line);margin:20px 0">
+        <div class="sechead">
+          <h3>Notes / history</h3>
+          <button class="btn subtle sm" onclick="toggleAddNote()">+ Note</button>
+        </div>
+        <div id="addNoteForm" class="subform" style="display:none">
+          <textarea id="nText" placeholder="Dated note, e.g. Call with Emma about pricing"></textarea>
+          <button class="btn sm" style="margin-top:8px" onclick="addNote()">Add note</button>
+        </div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn danger sm" id="deleteBtn" onclick="deleteCompany()" style="display:none">Delete</button>
+      <div style="flex:1"></div>
+      <button class="btn subtle" onclick="closeOverlay('companyOverlay')">Cancel</button>
+      <button class="btn" onclick="saveCompany()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ---- Supabase config (filled in from your project: Settings > API) ----
+const SUPABASE_URL='https://jnirlltcupvsxtfopsaq.supabase.co';
+const SUPABASE_ANON_KEY='sb_publishable_trnEteuU_5XImiNI5bD6Tw_Hr9ugBEu';
+// -----------------------------------------------------------------------
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+let db={companies:[]};
+let editingId=null;
+
+async function loadData(){
+  const {data,error}=await sb.from('crm_companies').select('id,data');
+  if(error){toast('Load error: '+error.message);return}
+  db.companies=(data||[]).map(r=>r.data);
+  refreshBadges();renderCompanies();
+}
+function save(){
+  refreshBadges();
+  const rows=db.companies.map(c=>({id:c.id,data:c,updated_at:new Date().toISOString()}));
+  sb.from('crm_companies').upsert(rows).then(({error})=>{if(error)toast('Save error: '+error.message)});
+}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1900)}
+function todayISO(){return new Date().toISOString().slice(0,10)}
+function fmt(iso){if(!iso)return'';const d=new Date(iso+'T00:00:00');return d.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}
+function esc(s){return (s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function closeOverlay(id){document.getElementById(id).classList.remove('show')}
+function co(id){return db.companies.find(x=>x.id===id)}
+function cur(){return co(editingId)}
+
+function waLink(phone,text){
+  const d=(phone||'').replace(/\D/g,'');
+  if(!d)return null;
+  return 'https://wa.me/'+d+(text?'?text='+encodeURIComponent(text):'');
+}
+function groups(){return [...new Set(db.companies.map(c=>c.group).filter(Boolean))].sort()}
+function openReqs(c){return (c.requests||[]).filter(r=>!r.done)}
+function allOpenReqs(){
+  const out=[];
+  db.companies.forEach(c=>openReqs(c).forEach(r=>out.push({co:c,req:r})));
+  return out.sort((a,b)=>{
+    const ad=a.req.due||'9999',bd=b.req.due||'9999';
+    return ad!==bd?ad.localeCompare(bd):(a.req.date||'').localeCompare(b.req.date||'');
+  });
+}
+
+function showTab(t){
+  ['companies','followups','broadcast'].forEach(x=>{
+    document.getElementById('view-'+x).style.display=x===t?'block':'none';
+    document.getElementById('tab-'+x).classList.toggle('active',x===t);
+  });
+  if(t==='companies')renderCompanies();
+  if(t==='followups')renderFollowups();
+  if(t==='broadcast')renderBroadcast();
+}
+
+/* ---- companies ---- */
+function fillGroupSelect(sel,keep){
+  const c=keep?sel.value:'';
+  sel.innerHTML='<option value="">All groups</option>'+groups().map(g=>`<option>${esc(g)}</option>`).join('');
+  if(keep)sel.value=c;
+}
+function fillDatalist(){document.getElementById('groupList').innerHTML=groups().map(g=>`<option value="${esc(g)}">`).join('')}
+function renderCompanies(){
+  fillGroupSelect(document.getElementById('filterGroup'),true);fillDatalist();
+  const q=(document.getElementById('search').value||'').toLowerCase();
+  const fs=document.getElementById('filterStatus').value;
+  const fg=document.getElementById('filterGroup').value;
+  const grid=document.getElementById('companyGrid');
+  let list=db.companies.filter(c=>{
+    const hay=(c.name+' '+(c.contact||'')).toLowerCase();
+    return hay.includes(q)&&(!fs||c.status===fs)&&(!fg||c.group===fg);
+  }).sort((a,b)=>a.name.localeCompare(b.name));
+  if(!db.companies.length){
+    grid.innerHTML='<div class="empty" style="grid-column:1/-1"><h2>No companies yet</h2><p>Tap <b>+ Company</b>, or <b>Import</b> a backup file.</p></div>';
+    return;
+  }
+  if(!list.length){grid.innerHTML='<div class="empty" style="grid-column:1/-1">No matches.</div>';return}
+  grid.innerHTML=list.map(c=>{
+    const open=openReqs(c).length;const wa=waLink(c.phone);
+    return `<div class="company${c.followUp?' flagged':''}">
+      <div class="clk" onclick="openCompany('${c.id}')">
+        <div class="top"><div><h3>${esc(c.name)}</h3><div class="contact">${esc(c.contact||'No contact set')}</div></div>
+        <span class="pill ${c.status}">${c.status}</span></div>
+        ${c.group?`<div class="grp">${esc(c.group)}</div>`:''}
+        <div class="meta">
+          ${c.followUp?`<span class="chase">&#9873; Follow up</span>`:''}
+          ${open?`<span class="owe">${open} open request${open===1?'':'s'}</span>`:'<span>All requests done</span>'}
+        </div>
+      </div>
+      <div class="actions">
+        ${wa?`<a class="btn wa sm" href="${wa}" target="_blank" rel="noopener">Message</a>`:''}
+        <button class="btn subtle sm" onclick="openCompany('${c.id}')">Open</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ---- open requests tab ---- */
+function lastActivity(c){
+  const ds=[...(c.logs||[]).map(l=>l.date),...(c.requests||[]).map(r=>r.date)].filter(Boolean).sort();
+  return ds.length?ds[ds.length-1]:'';
+}
+function renderChase(){
+  const el=document.getElementById('chaseSection');
+  const list=db.companies.filter(c=>c.followUp).sort((a,b)=>(lastActivity(a)||'').localeCompare(lastActivity(b)||''));
+  if(!list.length){el.innerHTML='';return}
+  el.innerHTML='<div class="toolbar"><strong>Customers to chase</strong><span class="count">'+list.length+' waiting</span></div>'+
+    list.map(c=>{
+      const wa=waLink(c.phone);const la=lastActivity(c);
+      return `<div class="fu overdue">
+        <div class="body">
+          <div class="co">${esc(c.name)}</div>
+          <div class="txt">${esc(c.chaseNote||'Needs a follow-up')}</div>
+          ${la?`<div class="due">Last activity ${fmt(la)}</div>`:''}
+        </div>
+        ${wa?`<a class="btn wa sm" href="${wa}" target="_blank" rel="noopener">Message</a>`:''}
+        <button class="btn subtle sm" onclick="clearChase('${c.id}')">Chased</button>
+        <button class="btn light sm" onclick="openCompany('${c.id}')">Open</button>
+      </div>`;
+    }).join('')+'<hr style="border:none;border-top:1px solid var(--line);margin:18px 0">';
+}
+function clearChase(cid){const c=co(cid);if(c){c.followUp=false;save();renderFollowups()}toast('Cleared')}
+function renderFollowups(){
+  renderChase();
+  const list=allOpenReqs();
+  document.getElementById('fuCount').textContent=list.length+' open';
+  const el=document.getElementById('fuList');
+  if(!list.length){el.innerHTML='<div class="empty"><h2>All clear</h2><p>Every request is ticked off. New ones you add to a customer show here.</p></div>';return}
+  const today=todayISO();
+  el.innerHTML=list.map(({co,req})=>{
+    const over=req.due&&req.due<today;const wa=waLink(co.phone);
+    return `<div class="fu ${over?'overdue':''}">
+      <div class="body">
+        <div class="co">${esc(co.name)}</div>
+        <div class="txt">${esc(req.text)}</div>
+        ${req.due?`<div class="due ${over?'overdue':''}">Chase by ${fmt(req.due)}${over?' (overdue)':''}</div>`:''}
+      </div>
+      ${wa?`<a class="btn wa sm" href="${wa}" target="_blank" rel="noopener">Message</a>`:''}
+      <button class="btn subtle sm" onclick="markReqDone('${co.id}','${req.id}')">Mark done</button>
+      <button class="btn light sm" onclick="openCompany('${co.id}')">Open</button>
+    </div>`;
+  }).join('');
+}
+function markReqDone(cid,rid){
+  const c=co(cid);if(!c)return;const r=c.requests.find(x=>x.id===rid);
+  if(r){r.done=true;r.doneDate=todayISO();save();renderFollowups()}
+  toast('Marked done');
+}
+
+/* ---- company modal ---- */
+function openCompany(id){
+  editingId=id||null;
+  const c=id?co(id):null;
+  fillDatalist();
+  document.getElementById('companyModalTitle').textContent=c?c.name:'New company';
+  document.getElementById('fName').value=c?c.name:'';
+  document.getElementById('fStatus').value=c?c.status:'Lead';
+  document.getElementById('fContact').value=c?(c.contact||''):'';
+  document.getElementById('fPhone').value=c?(c.phone||''):'';
+  document.getElementById('fGroup').value=c?(c.group||''):'';
+  document.getElementById('fNotes').value=c?(c.notes||''):'';
+  document.getElementById('fFollowUp').checked=c?!!c.followUp:false;
+  document.getElementById('fChaseNote').value=c?(c.chaseNote||''):'';
+  document.getElementById('chaseNoteWrap').style.display=(c&&c.followUp)?'block':'none';
+  document.getElementById('detailSection').style.display=c?'block':'none';
+  document.getElementById('deleteBtn').style.display=c?'inline-block':'none';
+  document.getElementById('headMsgBtn').style.display=(c&&waLink(c.phone))?'inline-block':'none';
+  document.getElementById('addReqForm').style.display='none';
+  document.getElementById('addNoteForm').style.display='none';
+  if(c){renderRequests(c);renderTimeline(c)}
+  document.getElementById('companyOverlay').classList.add('show');
+}
+function messageCompany(){
+  const c=cur();if(!c)return;const wa=waLink(c.phone);
+  if(!wa){toast('No phone number saved');return}
+  window.open(wa,'_blank');
+}
+function saveCompany(){
+  const name=document.getElementById('fName').value.trim();
+  if(!name){toast('Company name is required');return}
+  const data={
+    name, status:document.getElementById('fStatus').value,
+    contact:document.getElementById('fContact').value.trim(),
+    phone:document.getElementById('fPhone').value.trim(),
+    group:document.getElementById('fGroup').value.trim(),
+    notes:document.getElementById('fNotes').value.trim(),
+    followUp:document.getElementById('fFollowUp').checked,
+    chaseNote:document.getElementById('fChaseNote').value.trim()
+  };
+  if(editingId){Object.assign(cur(),data)}
+  else{const nc={id:uid(),...data,requests:[],logs:[]};db.companies.push(nc);editingId=nc.id;
+    document.getElementById('detailSection').style.display='block';
+    document.getElementById('deleteBtn').style.display='inline-block';
+    document.getElementById('companyModalTitle').textContent=name;
+    renderRequests(nc);renderTimeline(nc);}
+  save();renderCompanies();toast('Saved');
+}
+function deleteCompany(){
+  if(!editingId)return;
+  if(!confirm('Delete this company and everything logged against it?'))return;
+  const delId=editingId;
+  db.companies=db.companies.filter(x=>x.id!==delId);
+  sb.from('crm_companies').delete().eq('id',delId).then(({error})=>{if(error)toast('Delete error: '+error.message)});
+  save();closeOverlay('companyOverlay');renderCompanies();toast('Deleted');
+}
+
+/* ---- requests ---- */
+function toggleAddReq(){const f=document.getElementById('addReqForm');f.style.display=f.style.display==='none'?'block':'none'}
+function addRequest(){
+  const text=document.getElementById('rText').value.trim();
+  if(!text){toast('Write the request first');return}
+  const c=cur();if(!c)return;c.requests=c.requests||[];
+  c.requests.unshift({id:uid(),date:todayISO(),text,due:document.getElementById('rDue').value||'',done:false});
+  save();document.getElementById('rText').value='';document.getElementById('rDue').value='';
+  document.getElementById('addReqForm').style.display='none';
+  renderRequests(c);toast('Added');
+}
+function toggleReq(cid,rid){
+  const c=co(cid);const r=c.requests.find(x=>x.id===rid);
+  if(r){r.done=!r.done;r.doneDate=r.done?todayISO():'';save();renderRequests(c)}
+}
+function delReq(cid,rid){
+  const c=co(cid);c.requests=c.requests.filter(x=>x.id!==rid);save();renderRequests(c);
+}
+function renderRequests(c){
+  const el=document.getElementById('reqList');
+  const rs=c.requests||[];
+  if(!rs.length){el.innerHTML='<p class="hint">No requests logged yet.</p>';return}
+  const today=todayISO();
+  const sorted=rs.slice().sort((a,b)=>(a.done-b.done)||((a.due||'9999').localeCompare(b.due||'9999')));
+  el.innerHTML=sorted.map(r=>{
+    const over=!r.done&&r.due&&r.due<today;
+    return `<div class="req ${r.done?'done':''}">
+      <input type="checkbox" ${r.done?'checked':''} onchange="toggleReq('${c.id}','${r.id}')">
+      <div class="rbody">
+        <div class="rtext">${esc(r.text)}</div>
+        ${r.due?`<div class="rdue ${over?'overdue':''}">Chase by ${fmt(r.due)}${over?' (overdue)':''}</div>`:''}
+      </div>
+      <button class="del" title="Delete" onclick="delReq('${c.id}','${r.id}')">&times;</button>
+    </div>`;
+  }).join('');
+}
+function requestsMarkdown(c){
+  const open=(c.requests||[]).filter(r=>!r.done);
+  const done=(c.requests||[]).filter(r=>r.done);
+  let md=`# ${c.name} ‚Äî requests\n`;
+  if(open.length){md+='\n## Open\n'+open.map(r=>`- [ ] ${r.text}${r.due?` (chase by ${fmt(r.due)})`:''}`).join('\n')+'\n';}
+  if(done.length){md+='\n## Shipped\n'+done.map(r=>`- [x] ${r.text}`).join('\n')+'\n';}
+  if(!open.length&&!done.length)md+='\n_No requests logged._\n';
+  return md;
+}
+function copyRequestsNotion(){
+  const c=cur();if(!c)return;
+  navigator.clipboard.writeText(requestsMarkdown(c)).then(()=>toast('Copied. Paste into Notion.'));
+}
+function copyAllOpenNotion(){
+  const parts=db.companies.filter(c=>openReqs(c).length).map(c=>{
+    return `## ${c.name}\n`+openReqs(c).map(r=>`- [ ] ${r.text}${r.due?` (chase by ${fmt(r.due)})`:''}`).join('\n');
+  });
+  if(!parts.length){toast('No open requests');return}
+  const md='# Genera ‚Äî open dev requests\n\n'+parts.join('\n\n')+'\n';
+  navigator.clipboard.writeText(md).then(()=>toast('All open requests copied for Notion.'));
+}
+
+/* ---- notes / timeline ---- */
+function toggleAddNote(){const f=document.getElementById('addNoteForm');f.style.display=f.style.display==='none'?'block':'none'}
+function addNote(){
+  const text=document.getElementById('nText').value.trim();
+  if(!text){toast('Write the note first');return}
+  const c=cur();if(!c)return;c.logs=c.logs||[];
+  c.logs.unshift({id:uid(),date:todayISO(),text});
+  save();document.getElementById('nText').value='';
+  document.getElementById('addNoteForm').style.display='none';
+  renderTimeline(c);toast('Note added');
+}
+function renderTimeline(c){
+  const el=document.getElementById('timeline');const logs=(c.logs||[]);
+  if(!logs.length){el.innerHTML='<p class="hint">No notes yet.</p>';return}
+  el.innerHTML=logs.map(l=>`<div class="log"><div class="when">${fmt(l.date)}</div><div class="text">${esc(l.text)}</div></div>`).join('');
+}
+
+/* ---- broadcast ---- */
+function renderBroadcast(){
+  const gsel=document.getElementById('bcGroup');fillGroupSelect(gsel,true);
+  const fg=gsel.value;const el=document.getElementById('bcRecipients');
+  const list=db.companies.filter(c=>!fg||c.group===fg).sort((a,b)=>a.name.localeCompare(b.name));
+  if(!db.companies.length){el.innerHTML='<p class="hint">Add companies first.</p>';document.getElementById('bcOpenList').innerHTML='';return}
+  if(!list.length){el.innerHTML='<p class="hint">No companies in this group.</p>';document.getElementById('bcOpenList').innerHTML='';return}
+  el.innerHTML=list.map(c=>{
+    const has=!!waLink(c.phone);
+    return `<label class="checkline"><input type="checkbox" class="bcChk" value="${c.id}" onchange="renderBroadcastPreview()">
+      <span class="nm">${esc(c.name)} <span style="color:var(--muted);font-size:12px">${esc(c.contact||'')}</span></span>
+      ${has?'':'<span class="nophone">no number</span>'}</label>`;
+  }).join('');
+  renderBroadcastPreview();
+}
+function toggleAllRecipients(v){document.querySelectorAll('.bcChk').forEach(c=>c.checked=v);renderBroadcastPreview()}
+function selectedRecipients(){return [...document.querySelectorAll('.bcChk:checked')].map(c=>c.value)}
+function renderBroadcastPreview(){
+  const msg=document.getElementById('bcMsg').value.trim();
+  const ids=selectedRecipients();
+  const p=document.getElementById('bcPreview');const ol=document.getElementById('bcOpenList');
+  if(!msg){p.style.display='none'}else{p.style.display='block';p.textContent=msg+'\n\n'+`(Ready for ${ids.length} compan${ids.length===1?'y':'ies'})`;}
+  if(!ids.length){ol.innerHTML='';return}
+  ol.innerHTML='<div class="hint" style="margin-bottom:6px">Open each chat with the message ready:</div>'+
+    ids.map(id=>{const c=co(id);const wa=waLink(c.phone,msg);
+      return wa?`<a class="btn wa sm" style="margin:0 6px 6px 0;display:inline-block" href="${wa}" target="_blank" rel="noopener">Open ${esc(c.name)}</a>`
+      :`<span class="btn subtle sm" style="margin:0 6px 6px 0;display:inline-block;opacity:.6">${esc(c.name)} (no number)</span>`;}).join('');
+}
+function copyBroadcast(){
+  const msg=document.getElementById('bcMsg').value.trim();
+  if(!msg){toast('Write a message first');return}
+  navigator.clipboard.writeText(msg).then(()=>toast('Message copied. Paste into WhatsApp.'));
+}
+function logBroadcast(){
+  const msg=document.getElementById('bcMsg').value.trim();const ids=selectedRecipients();
+  if(!msg){toast('Write a message first');return}
+  if(!ids.length){toast('Pick who it went to');return}
+  ids.forEach(id=>{const c=co(id);c.logs=c.logs||[];c.logs.unshift({id:uid(),date:todayISO(),text:'Broadcast sent: '+msg})});
+  save();toast('Logged to '+ids.length+' timeline'+(ids.length===1?'':'s'));
+}
+
+/* ---- import / export ---- */
+function exportData(){
+  const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='genera-crm-'+todayISO()+'.json';a.click();toast('Backup downloaded');
+}
+function importData(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.companies)throw 0;
+    if(confirm('Replace current data with the imported file?')){db=d;save();showTab('companies');toast('Imported')}
+  }catch(x){toast('That file was not a valid backup')}};
+  r.readAsText(f);e.target.value='';
+}
+
+function refreshBadges(){
+  document.getElementById('badge-co').textContent=db.companies.length;
+  document.getElementById('badge-fu').textContent=allOpenReqs().length+db.companies.filter(c=>c.followUp).length;
+}
+document.getElementById('companyOverlay').addEventListener('click',e=>{if(e.target.id==='companyOverlay')closeOverlay('companyOverlay')});
+
+// ---- auth ----
+let synced=false;
+function showLogin(){document.getElementById('loginOverlay').style.display='flex'}
+async function showApp(session){
+  document.getElementById('loginOverlay').style.display='none';
+  document.getElementById('userBadge').textContent=session.user.email;
+  await loadData();
+  if(!synced){synced=true;
+    sb.channel('crm').on('postgres_changes',{event:'*',schema:'public',table:'crm_companies'},()=>loadData()).subscribe();
+  }
+}
+async function doLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const pw=document.getElementById('loginPw').value;
+  const btn=document.getElementById('loginBtn');const err=document.getElementById('loginErr');
+  err.textContent='';btn.disabled=true;btn.textContent='Signing in...';
+  const {error}=await sb.auth.signInWithPassword({email,password:pw});
+  btn.disabled=false;btn.textContent='Sign in';
+  if(error)err.textContent=error.message;
+}
+async function signOut(){await sb.auth.signOut();location.reload()}
+async function initAuth(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(session)showApp(session);else showLogin();
+  sb.auth.onAuthStateChange((_e,s)=>{if(s)showApp(s);else showLogin()});
+}
+initAuth();
+</script>
+</body>
+</html>
