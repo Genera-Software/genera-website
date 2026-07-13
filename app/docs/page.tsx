@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { getDocSections } from "./_data/load";
 import SectionIcon from "./_components/SectionIcon";
+import SupportTicketButton from "./_components/SupportTicketButton";
 
 export const revalidate = 60;
 
@@ -70,16 +71,33 @@ export default async function DocsHome() {
         ))}
       </div>
 
-      <p className="mt-10 text-meta text-ink-soft">
-        Can&apos;t find what you need?{" "}
-        <a
-          href="mailto:info@generasoftware.com"
-          className="font-semibold text-forest underline decoration-gold underline-offset-2"
-        >
-          Email our team
-        </a>{" "}
-        and we&apos;ll help.
-      </p>
+      <section className="mt-12 overflow-hidden rounded-3xl bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-7 py-10 text-white sm:px-10">
+        <p className="font-caveat text-xl text-gold-soft">Still stuck?</p>
+        <h2 className="!text-white mt-1 text-[clamp(1.5rem,3vw,2rem)]">
+          Submit a support ticket
+        </h2>
+        <p className="mt-3 max-w-[480px] text-white/80">
+          A few quick questions and we&apos;ll get a ticket to the Genera team —
+          typically within a day.
+        </p>
+        <SupportTicketButton className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-full bg-gold px-6 py-3 font-massilia text-[0.95rem] font-bold text-ink shadow-[0_4px_18px_rgba(255,168,0,0.35)] transition hover:shadow-[0_8px_28px_rgba(255,168,0,0.45)]">
+          Get help
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <path d="M5 12h14" />
+            <path d="M13 5l7 7-7 7" />
+          </svg>
+        </SupportTicketButton>
+      </section>
     </div>
   );
 }

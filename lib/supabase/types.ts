@@ -375,6 +375,27 @@ export type Database = {
         };
         Relationships: [];
       };
+      support_notify_emails: {
+        Row: {
+          id: string;
+          email: string;
+          label: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          email: string;
+          label?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          email?: string;
+          label?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       trust_logos: {
         Row: {
           created_at: string;
@@ -556,5 +577,7 @@ export type SupportTicket = Database["public"]["Tables"]["support_tickets"]["Row
 export type SupportTicketStatus = SupportTicket["status"];
 export type StoryTimelineEntry = Database["public"]["Tables"]["story_timeline"]["Row"];
 export type SupportTicketCategory = SupportTicket["category"];
+export type SupportNotifyEmail =
+  Database["public"]["Tables"]["support_notify_emails"]["Row"];
 export type HelpCentreSection = Database["public"]["Tables"]["help_centre_sections"]["Row"];
 export type HelpCentreSubsection = Database["public"]["Tables"]["help_centre_subsections"]["Row"];

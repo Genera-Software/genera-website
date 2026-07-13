@@ -2,7 +2,12 @@ import Link from "next/link";
 import { getAdminSupabase } from "@/lib/supabase/admin";
 import PageHeader from "../_components/PageHeader";
 import NewTicketModalButton from "./_components/NewTicketModalButton";
-import { createTicket } from "./actions";
+import NotifyEmailsSection from "./_components/NotifyEmailsSection";
+import {
+  addNotifyEmail,
+  createTicket,
+  removeNotifyEmail,
+} from "./actions";
 import type {
   SupportTicketCategory,
   SupportTicketStatus,
@@ -84,6 +89,16 @@ export default async function SupportTicketsPage({
     .select("*", { count: "exact", head: true })
     .eq("status", "new");
 
+  const { data: notifyEmails } = await supabase
+    .from("support_notify_emails")
+    .select("id, email, label")
+    .order("created_at", { ascending: true });
+
+  const envFallback = (process.env.SUPPORT_NOTIFY_EMAIL ?? "")
+    .split(/[,;]+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
   function hrefFor(next: { status?: string; category?: string }) {
     const params = new URLSearchParams();
     const s = next.status ?? status;
@@ -111,6 +126,19 @@ export default async function SupportTicketsPage({
             }}
           />
         }
+      />
+
+      <NotifyEmailsSection
+        emails={notifyEmails ?? []}
+        envFallback={envFallback}
+        addAction={async (fd) => {
+          "use server";
+          await addNotifyEmail(fd);
+        }}
+        removeAction={async (id) => {
+          "use server";
+          await removeNotifyEmail(id);
+        }}
       />
 
       <div className="mb-5 flex flex-wrap items-center gap-4">

@@ -15,61 +15,20 @@ const CATEGORIES = [
   "other",
 ] as const;
 
-const TicketSchema = z.object({
-  category: z.enum(CATEGORIES).default("other"),
+const PublicTicketSchema = z.object({
+  category: z.enum(CATEGORIES),
   subject: z.string().trim().min(1).max(200),
   description: z.string().trim().min(1).max(5000),
-
-  account_id: z.string().trim().max(120).optional().nullable(),
-  account_email: z
-    .string()
-    .trim()
-    .email()
-    .max(200)
-    .optional()
-    .nullable()
-    .or(z.literal("").transform(() => null)),
-  account_name: z.string().trim().max(200).optional().nullable(),
-  account_metadata: z.record(z.string(), z.unknown()).optional(),
-
+  account_email: z.string().trim().email().max(200),
+  account_name: z.string().trim().min(1).max(200),
   page_url: z.string().trim().max(2000).optional().nullable(),
-  app_version: z.string().trim().max(120).optional().nullable(),
   user_agent: z.string().trim().max(500).optional().nullable(),
   browser: z.string().trim().max(120).optional().nullable(),
   os: z.string().trim().max(120).optional().nullable(),
   viewport: z.string().trim().max(40).optional().nullable(),
-  console_errors: z
-    .array(
-      z.object({
-        message: z.string().max(2000),
-        source: z.string().max(500).optional(),
-        line: z.number().optional(),
-        column: z.number().optional(),
-        stack: z.string().max(4000).optional(),
-        timestamp: z.string().optional(),
-      }),
-    )
-    .max(20)
-    .optional(),
-
-  source: z.string().trim().max(40).optional(),
 });
 
 export async function POST(req: NextRequest) {
-  // Auth: shared secret bearer token
-  const expected = process.env.SUPPORT_INGEST_TOKEN;
-  if (!expected) {
-    return NextResponse.json(
-      { error: "Server not configured" },
-      { status: 500 },
-    );
-  }
-  const auth = req.headers.get("authorization") ?? "";
-  const token = auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
-  if (!token || token !== expected) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   let raw: unknown;
   try {
     raw = await req.json();
@@ -77,7 +36,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const parsed = TicketSchema.safeParse(raw);
+  const parsed = PublicTicketSchema.safeParse(raw);
   if (!parsed.success) {
     return NextResponse.json(
       { error: "Invalid payload", details: parsed.error.flatten() },
@@ -93,18 +52,16 @@ export async function POST(req: NextRequest) {
       category: t.category,
       subject: t.subject,
       description: t.description,
-      account_id: t.account_id ?? null,
-      account_email: t.account_email ?? null,
-      account_name: t.account_name ?? null,
-      account_metadata: (t.account_metadata ?? {}) as Json,
+      account_email: t.account_email,
+      account_name: t.account_name,
+      account_metadata: {} as Json,
       page_url: t.page_url ?? null,
-      app_version: t.app_version ?? null,
       user_agent: t.user_agent ?? null,
       browser: t.browser ?? null,
       os: t.os ?? null,
       viewport: t.viewport ?? null,
-      console_errors: t.console_errors ?? [],
-      source: t.source ?? "app",
+      console_errors: [],
+      source: "docs",
     })
     .select("id")
     .single();
@@ -122,14 +79,11 @@ export async function POST(req: NextRequest) {
     description: t.description,
     account_email: t.account_email,
     account_name: t.account_name,
-    account_id: t.account_id,
     page_url: t.page_url,
-    app_version: t.app_version,
     browser: t.browser,
     os: t.os,
     viewport: t.viewport,
-    source: t.source ?? "app",
-    console_errors: t.console_errors,
+    source: "docs",
   });
 
   return NextResponse.json({ ok: true, id: row.id });

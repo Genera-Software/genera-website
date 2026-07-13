@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getAdminSupabase } from "@/lib/supabase/admin";
+import { notifySupportTicket } from "@/lib/support/notify";
 
 const STATUSES = ["new", "in_progress", "completed"] as const;
 const CATEGORIES = [
@@ -47,6 +48,21 @@ const NewTicketSchema = z.object({
   status: z.enum(STATUSES).default("new"),
 });
 
+const NotifyEmailSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .email()
+    .max(200)
+    .transform((v) => v.toLowerCase()),
+  label: z
+    .string()
+    .trim()
+    .max(120)
+    .or(z.literal(""))
+    .transform((v) => v),
+});
+
 export async function createTicket(formData: FormData) {
   const data = NewTicketSchema.parse({
     category: formData.get("category") ?? "other",
@@ -74,8 +90,49 @@ export async function createTicket(formData: FormData) {
     .select("id")
     .single();
   if (error || !row) throw new Error(error?.message ?? "Could not create ticket");
+
+  await notifySupportTicket({
+    category: data.category,
+    subject: data.subject,
+    description: data.description,
+    account_email: data.account_email,
+    account_name: data.account_name,
+    page_url: data.page_url,
+    source: "manual",
+  });
+
   revalidatePath("/admin/support");
   redirect(`/admin/support/${row.id}`);
+}
+
+export async function addNotifyEmail(formData: FormData) {
+  const data = NotifyEmailSchema.parse({
+    email: formData.get("email") ?? "",
+    label: formData.get("label") ?? "",
+  });
+
+  const supabase = getAdminSupabase();
+  const { error } = await supabase.from("support_notify_emails").insert({
+    email: data.email,
+    label: data.label,
+  });
+  if (error) {
+    if (error.code === "23505") {
+      throw new Error("That email is already on the list.");
+    }
+    throw new Error(error.message);
+  }
+  revalidatePath("/admin/support");
+}
+
+export async function removeNotifyEmail(id: string) {
+  const supabase = getAdminSupabase();
+  const { error } = await supabase
+    .from("support_notify_emails")
+    .delete()
+    .eq("id", id);
+  if (error) throw new Error(error.message);
+  revalidatePath("/admin/support");
 }
 
 export async function setTicketStatus(id: string, status: string) {

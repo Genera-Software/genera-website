@@ -7,6 +7,9 @@ import { useEffect, useMemo, useState } from "react";
 import { LOGIN_URL } from "@/lib/urls";
 import { rankSearch, type SearchEntry } from "../_data/sections";
 import SectionIcon from "./SectionIcon";
+import SupportTicketForm, {
+  openSupportTicketForm,
+} from "./SupportTicketForm";
 
 type NavEntry = { slug: string; num: number; title: string; tagline: string };
 
@@ -112,6 +115,13 @@ export default function DocsShell({
             >
               ← Main site
             </Link>
+            <button
+              type="button"
+              onClick={() => openSupportTicketForm()}
+              className="inline-flex items-center rounded-full border-2 border-gold bg-gold-light px-3 py-1.5 font-massilia text-fine font-bold whitespace-nowrap text-forest transition hover:bg-gold sm:px-3.5 sm:py-2"
+            >
+              Get support
+            </button>
             <Link
               href={LOGIN_URL}
               className="inline-flex items-center rounded-full bg-forest px-3.5 py-2 font-massilia text-fine font-bold whitespace-nowrap text-white shadow-[0_4px_14px_rgba(0,62,69,0.18)] transition-shadow hover:shadow-[0_6px_22px_rgba(0,62,69,0.3)] sm:px-4"
@@ -157,6 +167,8 @@ export default function DocsShell({
         {/* Content */}
         <main className="min-w-0 flex-1 py-8 sm:py-10">{children}</main>
       </div>
+
+      <SupportTicketForm />
     </div>
   );
 }
@@ -251,12 +263,13 @@ function SearchResults({
     return (
       <p className="px-3 py-2 text-meta text-ink-soft">
         No matches. Try another word, or{" "}
-        <a
-          href="mailto:info@generasoftware.com"
+        <button
+          type="button"
+          onClick={() => openSupportTicketForm()}
           className="font-semibold text-forest underline decoration-gold underline-offset-2"
         >
-          email us
-        </a>
+          submit a ticket
+        </button>
         .
       </p>
     );
