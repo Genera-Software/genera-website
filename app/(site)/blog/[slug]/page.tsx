@@ -4,7 +4,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
-import { createMetadata } from "@/lib/seo";
+import {
+  createMetadata,
+  AUTHOR_NAME,
+  AUTHOR_TITLE,
+  AUTHOR_BIO,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/seo";
 import { FOUNDING_100_CTA_LABEL } from "@/lib/cta";
 import { getPublicSupabase } from "@/lib/supabase/server";
 
@@ -83,8 +90,42 @@ export default async function BlogPostPage({
 
   if (!post) notFound();
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    image: post.cover_image_url ? [post.cover_image_url] : undefined,
+    datePublished: post.published_at ?? undefined,
+    dateModified: post.published_at ?? undefined,
+    articleSection: post.category,
+    inLanguage: "en-GB",
+    author: {
+      "@type": "Person",
+      name: AUTHOR_NAME,
+      description: AUTHOR_BIO,
+      jobTitle: AUTHOR_TITLE,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/images/genera-svg.svg`,
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${SITE_URL}/blog/${slug}`,
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <Reveal />
 
       {/* Hero */}
@@ -153,6 +194,28 @@ export default async function BlogPostPage({
           className="rev mx-auto max-w-[720px] font-niveau text-body-lg leading-[1.75] text-ink-soft [&_a]:font-semibold [&_a]:text-forest [&_a]:underline [&_a]:decoration-gold [&_a]:underline-offset-2 hover:[&_a]:text-forest-mid [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-gold [&_blockquote]:pl-5 [&_blockquote]:italic [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:font-massilia [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:leading-[var(--leading-title)] [&_h2]:text-forest [&_h3]:mt-8 [&_h3]:mb-2 [&_h3]:font-massilia [&_h3]:text-xl [&_h3]:font-bold [&_h3]:leading-[var(--leading-title)] [&_h3]:text-forest [&_img]:my-6 [&_img]:rounded-2xl [&_li]:my-1 [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-5 [&_strong]:font-bold [&_strong]:text-forest [&_ul]:my-4 [&_ul]:list-disc [&_ul]:pl-6"
           dangerouslySetInnerHTML={{ __html: post.body_html }}
         />
+      </section>
+
+      {/* Author / E-E-A-T */}
+      <section className="bg-cream px-6 pb-16 md:px-8 md:pb-24">
+        <div className="rev mx-auto max-w-[720px] rounded-2xl border border-cream-dark bg-white p-6 shadow-[0_8px_24px_rgba(0,62,69,0.05)] md:p-8">
+          <div className="flex items-start gap-4">
+            <span className="grid h-12 w-12 flex-none place-items-center rounded-full bg-forest text-lg font-bold text-white">
+              {AUTHOR_NAME.charAt(0)}
+            </span>
+            <div>
+              <p className="font-massilia text-lg font-bold text-forest">
+                {AUTHOR_NAME}
+              </p>
+              <p className="mb-2 text-sm font-semibold text-forest-mid">
+                {AUTHOR_TITLE}
+              </p>
+              <p className="text-sm leading-relaxed text-ink-soft">
+                {AUTHOR_BIO}
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* CTA */}
