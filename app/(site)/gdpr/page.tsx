@@ -21,7 +21,7 @@ const BODY = `
   <li><strong>Company No.:</strong> 15009675</li>
   <li><strong>Registered address:</strong> C/O Mjf Accountancy, 47 Booker Avenue, Liverpool, England, L18 4QZ</li>
   <li><strong>Contact:</strong> <a href="mailto:hello@generasoftware.com">hello@generasoftware.com</a></li>
-  <li><strong>ICO Registration No.:</strong> [Add when registered]</li>
+  <li><strong>ICO Registration No.:</strong> ZC196623</li>
 </ul>
 
 <h2>Data Processor obligations</h2>
