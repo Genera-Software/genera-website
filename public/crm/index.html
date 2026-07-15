@@ -165,6 +165,7 @@
 
 <nav>
   <button id="tab-companies" class="active" onclick="showTab('companies')">Companies <span class="badge" id="badge-co">0</span></button>
+  <button id="tab-leads" onclick="showTab('leads')">Leads <span class="badge" id="badge-leads">0</span></button>
   <button id="tab-followups" onclick="showTab('followups')">Follow-ups <span class="badge" id="badge-fu">0</span></button>
   <button id="tab-broadcast" onclick="showTab('broadcast')">Broadcast</button>
 </nav>
@@ -176,10 +177,18 @@
       <select id="filterGroup" onchange="renderCompanies()"><option value="">All groups</option></select>
       <select id="filterStatus" onchange="renderCompanies()">
         <option value="">All statuses</option>
-        <option>Lead</option><option>Active</option><option>Member</option><option>Dormant</option>
+        <option>Active</option><option>Member</option><option>Dormant</option>
       </select>
     </div>
     <div class="grid" id="companyGrid"></div>
+  </div>
+
+  <div class="panel" id="view-leads" style="display:none">
+    <div class="toolbar">
+      <input type="search" id="leadSearch" placeholder="Search lead or contact..." oninput="renderLeads()">
+      <select id="filterLeadGroup" onchange="renderLeads()"><option value="">All groups</option></select>
+    </div>
+    <div class="grid" id="leadGrid"></div>
   </div>
 
   <div class="panel" id="view-followups" style="display:none">
@@ -217,6 +226,7 @@
     <div class="head">
       <h2 id="companyModalTitle">New company</h2>
       <button class="btn wa sm" id="headMsgBtn" style="display:none" onclick="messageCompany()">Message</button>
+      <button class="btn subtle sm" id="headWebBtn" style="display:none" onclick="openCompanyWebsite()">Website &#8599;</button>
       <button class="close" onclick="closeOverlay('companyOverlay')">&times;</button>
     </div>
     <div class="content">
@@ -228,6 +238,8 @@
         <div><label>Contact person</label><input type="text" id="fContact" placeholder="e.g. Emma"></div>
         <div><label>Phone</label><input type="tel" id="fPhone" placeholder="+44 7... for the Message button"></div>
       </div>
+      <label>Website</label>
+      <input type="text" id="fWebsite" placeholder="e.g. theircompany.com — for research before/during the call">
       <label>Group</label>
       <input type="text" id="fGroup" list="groupList" placeholder="Which WhatsApp group">
       <datalist id="groupList"></datalist>
@@ -296,7 +308,7 @@ async function loadData(){
   const {data,error}=await sb.from('crm_companies').select('id,data');
   if(error){toast('Load error: '+error.message);return}
   db.companies=(data||[]).map(r=>r.data);
-  refreshBadges();renderCompanies();
+  refreshBadges();renderCompanies();renderLeads();
 }
 function save(){
   refreshBadges();
@@ -317,7 +329,7 @@ function waLink(phone,text){
   if(!d)return null;
   return 'https://wa.me/'+d+(text?'?text='+encodeURIComponent(text):'');
 }
-function groups(){return [...new Set(db.companies.map(c=>c.group).filter(Boolean))].sort()}
+function groups(src){return [...new Set((src||db.companies).map(c=>c.group).filter(Boolean))].sort()}
 function openReqs(c){return (c.requests||[]).filter(r=>!r.done)}
 function allOpenReqs(){
   const out=[];
@@ -329,55 +341,82 @@ function allOpenReqs(){
 }
 
 function showTab(t){
-  ['companies','followups','broadcast'].forEach(x=>{
+  ['companies','leads','followups','broadcast'].forEach(x=>{
     document.getElementById('view-'+x).style.display=x===t?'block':'none';
     document.getElementById('tab-'+x).classList.toggle('active',x===t);
   });
   if(t==='companies')renderCompanies();
+  if(t==='leads')renderLeads();
   if(t==='followups')renderFollowups();
   if(t==='broadcast')renderBroadcast();
 }
 
 /* ---- companies ---- */
-function fillGroupSelect(sel,keep){
+function fillGroupSelect(sel,keep,src){
   const c=keep?sel.value:'';
-  sel.innerHTML='<option value="">All groups</option>'+groups().map(g=>`<option>${esc(g)}</option>`).join('');
+  sel.innerHTML='<option value="">All groups</option>'+groups(src).map(g=>`<option>${esc(g)}</option>`).join('');
   if(keep)sel.value=c;
 }
 function fillDatalist(){document.getElementById('groupList').innerHTML=groups().map(g=>`<option value="${esc(g)}">`).join('')}
+function siteLink(w){
+  if(!w)return null;
+  return /^https?:\/\//i.test(w)?w:'https://'+w;
+}
+function companyCardHtml(c){
+  const open=openReqs(c).length;const wa=waLink(c.phone);const site=siteLink(c.website);
+  return `<div class="company${c.followUp?' flagged':''}">
+    <div class="clk" onclick="openCompany('${c.id}')">
+      <div class="top"><div><h3>${esc(c.name)}</h3><div class="contact">${esc(c.contact||'No contact set')}</div></div>
+      <span class="pill ${c.status}">${c.status}</span></div>
+      ${c.group?`<div class="grp">${esc(c.group)}</div>`:''}
+      <div class="meta">
+        ${c.followUp?`<span class="chase">&#9873; Follow up</span>`:''}
+        ${open?`<span class="owe">${open} open request${open===1?'':'s'}</span>`:'<span>All requests done</span>'}
+      </div>
+    </div>
+    <div class="actions">
+      ${wa?`<a class="btn wa sm" href="${wa}" target="_blank" rel="noopener">Message</a>`:''}
+      ${site?`<a class="btn subtle sm" href="${esc(site)}" target="_blank" rel="noopener">Website &#8599;</a>`:''}
+      <button class="btn subtle sm" onclick="openCompany('${c.id}')">Open</button>
+    </div>
+  </div>`;
+}
 function renderCompanies(){
-  fillGroupSelect(document.getElementById('filterGroup'),true);fillDatalist();
+  const base=db.companies.filter(c=>c.status!=='Lead');
+  fillGroupSelect(document.getElementById('filterGroup'),true,base);fillDatalist();
   const q=(document.getElementById('search').value||'').toLowerCase();
   const fs=document.getElementById('filterStatus').value;
   const fg=document.getElementById('filterGroup').value;
   const grid=document.getElementById('companyGrid');
-  let list=db.companies.filter(c=>{
+  let list=base.filter(c=>{
     const hay=(c.name+' '+(c.contact||'')).toLowerCase();
     return hay.includes(q)&&(!fs||c.status===fs)&&(!fg||c.group===fg);
   }).sort((a,b)=>a.name.localeCompare(b.name));
-  if(!db.companies.length){
-    grid.innerHTML='<div class="empty" style="grid-column:1/-1"><h2>No companies yet</h2><p>Tap <b>+ Company</b>, or <b>Import</b> a backup file.</p></div>';
+  if(!base.length){
+    grid.innerHTML='<div class="empty" style="grid-column:1/-1"><h2>No companies yet</h2><p>Tap <b>+ Company</b>, or <b>Import</b> a backup file. New prospects live in the <b>Leads</b> tab until you mark them Active.</p></div>';
     return;
   }
   if(!list.length){grid.innerHTML='<div class="empty" style="grid-column:1/-1">No matches.</div>';return}
-  grid.innerHTML=list.map(c=>{
-    const open=openReqs(c).length;const wa=waLink(c.phone);
-    return `<div class="company${c.followUp?' flagged':''}">
-      <div class="clk" onclick="openCompany('${c.id}')">
-        <div class="top"><div><h3>${esc(c.name)}</h3><div class="contact">${esc(c.contact||'No contact set')}</div></div>
-        <span class="pill ${c.status}">${c.status}</span></div>
-        ${c.group?`<div class="grp">${esc(c.group)}</div>`:''}
-        <div class="meta">
-          ${c.followUp?`<span class="chase">&#9873; Follow up</span>`:''}
-          ${open?`<span class="owe">${open} open request${open===1?'':'s'}</span>`:'<span>All requests done</span>'}
-        </div>
-      </div>
-      <div class="actions">
-        ${wa?`<a class="btn wa sm" href="${wa}" target="_blank" rel="noopener">Message</a>`:''}
-        <button class="btn subtle sm" onclick="openCompany('${c.id}')">Open</button>
-      </div>
-    </div>`;
-  }).join('');
+  grid.innerHTML=list.map(companyCardHtml).join('');
+}
+
+/* ---- leads ---- */
+function renderLeads(){
+  const base=db.companies.filter(c=>c.status==='Lead');
+  fillGroupSelect(document.getElementById('filterLeadGroup'),true,base);
+  const q=(document.getElementById('leadSearch').value||'').toLowerCase();
+  const fg=document.getElementById('filterLeadGroup').value;
+  const grid=document.getElementById('leadGrid');
+  let list=base.filter(c=>{
+    const hay=(c.name+' '+(c.contact||'')).toLowerCase();
+    return hay.includes(q)&&(!fg||c.group===fg);
+  }).sort((a,b)=>a.name.localeCompare(b.name));
+  if(!base.length){
+    grid.innerHTML='<div class="empty" style="grid-column:1/-1"><h2>No leads yet</h2><p>Tap <b>+ Company</b> (status Lead), or <b>Import</b> a leads file.</p></div>';
+    return;
+  }
+  if(!list.length){grid.innerHTML='<div class="empty" style="grid-column:1/-1">No matches.</div>';return}
+  grid.innerHTML=list.map(companyCardHtml).join('');
 }
 
 /* ---- open requests tab ---- */
@@ -442,6 +481,7 @@ function openCompany(id){
   document.getElementById('fStatus').value=c?c.status:'Lead';
   document.getElementById('fContact').value=c?(c.contact||''):'';
   document.getElementById('fPhone').value=c?(c.phone||''):'';
+  document.getElementById('fWebsite').value=c?(c.website||''):'';
   document.getElementById('fGroup').value=c?(c.group||''):'';
   document.getElementById('fNotes').value=c?(c.notes||''):'';
   document.getElementById('fFollowUp').checked=c?!!c.followUp:false;
@@ -450,6 +490,7 @@ function openCompany(id){
   document.getElementById('detailSection').style.display=c?'block':'none';
   document.getElementById('deleteBtn').style.display=c?'inline-block':'none';
   document.getElementById('headMsgBtn').style.display=(c&&waLink(c.phone))?'inline-block':'none';
+  document.getElementById('headWebBtn').style.display=(c&&siteLink(c.website))?'inline-block':'none';
   document.getElementById('addReqForm').style.display='none';
   document.getElementById('addNoteForm').style.display='none';
   if(c){renderRequests(c);renderTimeline(c)}
@@ -460,6 +501,11 @@ function messageCompany(){
   if(!wa){toast('No phone number saved');return}
   window.open(wa,'_blank');
 }
+function openCompanyWebsite(){
+  const c=cur();if(!c)return;const site=siteLink(c.website);
+  if(!site){toast('No website saved');return}
+  window.open(site,'_blank');
+}
 function saveCompany(){
   const name=document.getElementById('fName').value.trim();
   if(!name){toast('Company name is required');return}
@@ -467,6 +513,7 @@ function saveCompany(){
     name, status:document.getElementById('fStatus').value,
     contact:document.getElementById('fContact').value.trim(),
     phone:document.getElementById('fPhone').value.trim(),
+    website:document.getElementById('fWebsite').value.trim(),
     group:document.getElementById('fGroup').value.trim(),
     notes:document.getElementById('fNotes').value.trim(),
     followUp:document.getElementById('fFollowUp').checked,
@@ -478,7 +525,7 @@ function saveCompany(){
     document.getElementById('deleteBtn').style.display='inline-block';
     document.getElementById('companyModalTitle').textContent=name;
     renderRequests(nc);renderTimeline(nc);}
-  save();renderCompanies();toast('Saved');
+  save();renderCompanies();renderLeads();toast('Saved');
 }
 function deleteCompany(){
   if(!editingId)return;
@@ -486,7 +533,7 @@ function deleteCompany(){
   const delId=editingId;
   db.companies=db.companies.filter(x=>x.id!==delId);
   sb.from('crm_companies').delete().eq('id',delId).then(({error})=>{if(error)toast('Delete error: '+error.message)});
-  save();closeOverlay('companyOverlay');renderCompanies();toast('Deleted');
+  save();closeOverlay('companyOverlay');renderCompanies();renderLeads();toast('Deleted');
 }
 
 /* ---- requests ---- */
@@ -621,7 +668,8 @@ function importData(e){
 }
 
 function refreshBadges(){
-  document.getElementById('badge-co').textContent=db.companies.length;
+  document.getElementById('badge-co').textContent=db.companies.filter(c=>c.status!=='Lead').length;
+  document.getElementById('badge-leads').textContent=db.companies.filter(c=>c.status==='Lead').length;
   document.getElementById('badge-fu').textContent=allOpenReqs().length+db.companies.filter(c=>c.followUp).length;
 }
 document.getElementById('companyOverlay').addEventListener('click',e=>{if(e.target.id==='companyOverlay')closeOverlay('companyOverlay')});
