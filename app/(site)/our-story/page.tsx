@@ -85,39 +85,35 @@ export default async function OurStoryPage() {
     <>
       <Reveal />
 
-      {/* Split hero — wrapping section carries the same gradient as the homepage hero
-           so the nav (bg-forest) transitions seamlessly into the page */}
-      <section className="grid grid-cols-1 bg-gradient-to-br from-forest via-forest-mid to-[#007080] md:grid-cols-2">
-        <div className="relative overflow-hidden px-8 pt-28 pb-20 text-white md:px-14 md:pt-36">
-          <p className="font-caveat text-section-h font-semibold leading-snug text-gold-soft">
+      {/* Split hero — text left, video right with soft blended edge */}
+      <section className="grid grid-cols-1 overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] md:grid-cols-2">
+        {/* Left: text */}
+        <div className="relative z-10 overflow-hidden px-8 pt-28 pb-20 text-white md:px-14 md:pt-36">
+          <span aria-hidden className="pointer-events-none absolute -top-20 -right-24 h-[320px] w-[320px] rounded-[63%_37%_54%_46%/55%_48%_52%_45%] bg-gold/8" />
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft md:px-4 md:py-1.5">
             Our Story · Built from the ground up
-          </p>
-          <h1 className="mt-3 text-white">
+          </div>
+          <h1 className="mt-2 text-white [font-size:clamp(2rem,3.8vw,3.4rem)] leading-[1.05]">
             We didn&apos;t set out to build software.
             <br />
             <em className="text-gold">We set out to walk dogs.</em>
           </h1>
-          <p className="mt-5 max-w-[480px] text-body-lg text-white/80">
+          <p className="mt-5 max-w-[480px] text-white/80">
             From a dog walking round in South West London in 2011 to software
             used by pet businesses across the UK. Here&apos;s how it happened.
           </p>
-
-          <div className="mt-9 grid grid-cols-2 gap-6 md:grid-cols-4">
+          <div className="mt-9 flex flex-wrap gap-3">
             {STATS.map((s) => (
-              <div key={s.num}>
-                <div className="font-massilia text-figure-md font-bold leading-none text-gold">
-                  {s.num}
-                </div>
-                <div className="mt-1 whitespace-pre-line text-xs uppercase tracking-widest text-white/60">
-                  {s.label}
-                </div>
+              <div key={s.num} className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-white/10 px-4 py-2 backdrop-blur-sm">
+                <span className="font-massilia text-lg font-bold leading-none text-gold">{s.num}</span>
+                <span className="text-xs uppercase tracking-wider text-white/60">{s.label.replace("\n", " ")}</span>
               </div>
             ))}
           </div>
-
         </div>
 
-        <div className="relative min-h-[320px] overflow-hidden bg-transparent md:min-h-0">
+        {/* Right: video with soft left-edge blend into text panel */}
+        <div className="relative min-h-[300px] overflow-hidden md:min-h-0">
           <video
             autoPlay
             muted
@@ -131,132 +127,65 @@ export default async function OurStoryPage() {
               type="video/mp4"
             />
           </video>
-          {/* Strong left-edge blend — solid forest fading into video, matching the text panel */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-[55%] bg-gradient-to-r from-forest via-forest/60 to-transparent" />
-          {/* Subtle overall dark warm tint to take the edge off the brightness */}
-          <div className="pointer-events-none absolute inset-0 bg-[rgba(0,15,18,0.22)]" />
+          {/* Soft left-edge blend matching the text panel gradient */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-2/3 bg-gradient-to-r from-forest via-forest/55 to-transparent" />
+          {/* Top tint to tie into the section gradient */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#007080]/30 via-transparent to-transparent" />
         </div>
       </section>
 
-      {/* Story prose */}
-      <section className="bg-white px-8 py-22">
-        <div className="mx-auto flex max-w-[760px] flex-col gap-10">
-          <article className="rev flex flex-col gap-4">
-            <h2>It started with a handful of leads and a lot of heart</h2>
-            <p className="text-ink-soft">
-              In 2011, Duncan and Jess started Duncan&apos;s Dog Co as a dog
-              walking service in South West London. It was just the two of them
-              and a growing list of dogs who needed looking after during the
-              day.
-            </p>
-            <p className="text-ink-soft">
-              The business grew quickly. What started as a handful of walks
-              turned into a full schedule. Then clients started asking about
-              daycare. Then boarding. Before long, Duncan and Jess were running
-              one of the busiest independent pet care businesses in the area.
-            </p>
+      {/* Story prose — short paragraphs broken up by photos */}
+      <section className="px-8 py-16 md:py-20" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
+        <div className="mx-auto flex max-w-[760px] flex-col gap-8">
+
+          <article className="rev flex flex-col gap-3">
+            <h2 className="text-xl font-bold text-forest md:text-2xl">It started with a handful of leads and a lot of heart</h2>
+            <p className="text-ink-soft">In 2011, Duncan and Jess started Duncan&apos;s Dog Co as a dog walking service in South West London — just the two of them and a growing list of dogs who needed looking after.</p>
+            <p className="text-ink-soft">The business grew quickly. Walks turned into daycare, then boarding. Before long they were running one of the busiest independent pet businesses in the area.</p>
           </article>
 
-          <blockquote className="rev rounded-2xl border-l-4 border-gold bg-cream px-7 py-6 font-massilia text-xl font-bold leading-none italic text-forest md:text-2xl">
-            &ldquo;We were running everything on spreadsheets and manual
-            invoices. It worked until it did not.&rdquo;
-          </blockquote>
-
-          <article className="rev flex flex-col gap-4">
-            <h2>Growing pains</h2>
-            <p className="text-ink-soft">
-              Over the years, Duncan&apos;s Dog Co grew into one of the
-              longest-standing, five-star licensed doggy daycares in the UK.
-              They moved to a beautiful woodland facility in Surrey. The team
-              grew. The client list grew. And the admin grew with it.
-            </p>
-            <p className="text-ink-soft">
-              Bookings came in by text, email, phone, and Facebook. Invoices
-              were raised manually, one by one, every week. Routes were planned
-              on paper. Staff schedules lived in WhatsApp groups. It all sort
-              of worked. Until it did not.
-            </p>
-          </article>
-
-          <div className="rev overflow-hidden rounded-3xl shadow-[0_24px_60px_rgba(0,62,69,0.16)]">
-            <Image
-              src="/images/team-certificates.png"
-              alt="The Duncan's Dog Co team holding their certificates"
-              width={1600}
-              height={1200}
-              className="block h-auto w-full"
-              loading="lazy"
-            />
+          {/* Photo break 1 */}
+          <div className="rev grid grid-cols-2 gap-4">
+            <div className="overflow-hidden rounded-2xl shadow-[0_12px_32px_rgba(0,62,69,0.14)]">
+              <Image src="/images/duncan-jess.jpg" alt="Duncan and Jess, founders of Duncan's Dog Co" width={600} height={500} className="block h-full w-full object-cover" loading="lazy" />
+            </div>
+            <div className="overflow-hidden rounded-2xl shadow-[0_12px_32px_rgba(0,62,69,0.14)]">
+              <Image src="/images/ddc-woodland.jpg" alt="The Duncan's Dog Co woodland facility" width={600} height={500} className="block h-full w-full object-cover" loading="lazy" />
+            </div>
           </div>
 
-          <article className="rev flex flex-col gap-4">
-            <h2>The missed booking</h2>
-            <p className="text-ink-soft">
-              One day, a loyal customer&apos;s pickup was missed. A booking had
-              slipped through the cracks. It was the kind of thing that happens
-              when you are juggling too many systems and not enough hours. It
-              was embarrassing. It was avoidable. And it was the moment
-              everything changed.
-            </p>
-            <p className="text-ink-soft">
-              That customer happened to be a developer. Instead of leaving a
-              bad review, he said something unexpected: &ldquo;I will build you
-              something.&rdquo;
-            </p>
-            <p className="text-ink-soft">And he did.</p>
-          </article>
-
-          <blockquote className="rev rounded-2xl bg-forest px-7 py-6 font-massilia text-xl font-bold leading-none italic text-white md:text-2xl">
-            &ldquo;Instead of leaving a bad review, he said: I will build you
-            something.&rdquo;
+          <blockquote className="rev rounded-2xl border-l-4 border-gold bg-white px-7 py-5 font-massilia text-lg font-bold italic text-forest shadow-[0_4px_18px_rgba(0,62,69,0.07)]">
+            &ldquo;We were running everything on spreadsheets and manual invoices. It worked until it did not.&rdquo;
           </blockquote>
 
-          <article className="rev flex flex-col gap-4">
-            <h2>From prototype to platform</h2>
-            <p className="text-ink-soft">
-              That first version was rough. But it worked. Bookings stopped
-              falling through. Invoices went out on time. Routes made sense.
-              Over the following years, the software was refined, rebuilt, and
-              improved. Every feature was tested in a real business, every day,
-              by real people.
-            </p>
-            <p className="text-ink-soft">
-              It was not built in a lab by people guessing what pet businesses
-              need. It was built in the mud, in the woods, at the front desk,
-              and on those late Sunday evenings that used to be spent on
-              invoices.
-            </p>
+          <article className="rev flex flex-col gap-3">
+            <h2 className="text-xl font-bold text-forest md:text-2xl">Growing pains</h2>
+            <p className="text-ink-soft">They moved to a beautiful woodland facility in Surrey. The team grew. The client list grew. And the admin grew with it — bookings by text, email, phone and Facebook, invoices raised one by one every week, routes planned on paper.</p>
           </article>
 
-          <article className="rev flex flex-col gap-4">
-            <h2>Sharing it with the industry</h2>
-            <p className="text-ink-soft">
-              After years of running Genera internally, Duncan and Jess
-              realised something. Every small pet business they spoke to was
-              fighting the same battles. The same spreadsheets. The same missed
-              messages. The same Sunday evening dread.
-            </p>
-            <p className="text-ink-soft">
-              They decided to share it. Not as some corporate product launch,
-              but as one small business helping others. That is why Genera
-              exists. It is software built by people who have been up at 7am
-              with muddy boots, chased late invoices, and stayed up planning
-              the next day&apos;s schedule.
-            </p>
-            <p className="text-ink-soft">
-              We have been where you are. And we built the thing we wish we had
-              from the start.
-            </p>
+          {/* Photo break 2 — full width */}
+          <div className="rev overflow-hidden rounded-2xl shadow-[0_12px_32px_rgba(0,62,69,0.14)]">
+            <Image src="/images/team-certificates.png" alt="The Duncan's Dog Co team" width={1600} height={900} className="block h-auto w-full" loading="lazy" />
+          </div>
+
+          <article className="rev flex flex-col gap-3">
+            <h2 className="text-xl font-bold text-forest md:text-2xl">The missed booking</h2>
+            <p className="text-ink-soft">One day a loyal customer&apos;s pickup was missed. It was embarrassing. It was avoidable. It was the moment everything changed. That customer happened to be a developer — and instead of leaving a bad review, he said something unexpected.</p>
           </article>
+
+          <blockquote className="rev rounded-2xl bg-forest px-7 py-5 font-massilia text-lg font-bold italic text-white shadow-[0_4px_18px_rgba(0,62,69,0.14)]">
+            &ldquo;Instead of leaving a bad review, he said: I will build you something.&rdquo;
+          </blockquote>
+
         </div>
       </section>
 
       {/* Timeline */}
-      <section className="bg-cream px-8 py-22">
+      <section className="px-8 py-22" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
         <div className="mx-auto max-w-[860px]">
-          <h2 className="rev mb-14 text-center">The journey so far</h2>
+          <h2 className="rev mb-10 text-center text-2xl font-bold text-forest md:text-3xl">The journey so far</h2>
 
-          <ol className="relative flex flex-col gap-8 before:absolute before:left-1/2 before:top-0 before:h-full before:w-px before:-translate-x-1/2 before:bg-teal-mid">
+          <ol className="relative flex flex-col gap-5 before:absolute before:left-1/2 before:top-0 before:h-full before:w-px before:-translate-x-1/2 before:bg-forest/20">
             {timeline.map((t, i) => {
               const isLast = i === timeline.length - 1;
               const left = i % 2 === 0;
@@ -277,7 +206,7 @@ export default async function OurStoryPage() {
                     )}
                   </div>
                   <span
-                    className={`relative z-10 block h-4 w-4 rounded-full ring-4 ring-cream ${
+                    className={`relative z-10 block h-4 w-4 rounded-full ring-4 ring-[#E0F0F2] ${
                       isLast ? "bg-forest" : "bg-gold"
                     }`}
                   />
@@ -300,7 +229,7 @@ export default async function OurStoryPage() {
       </section>
 
       {/* Team card */}
-      <section className="bg-white px-8 py-22">
+      <section className="px-8 py-22" style={{ background: "linear-gradient(170deg,#fff 0%,#E0F0F2 100%)" }}>
         <div className="mx-auto max-w-[1000px]">
           <div className="rev mb-12 text-center">
             <p className="eyebrow">The people behind Genera</p>

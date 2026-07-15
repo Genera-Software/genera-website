@@ -60,9 +60,17 @@ export default async function FaqsPage() {
       {/* Page hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 pt-32 pb-24 text-white">
         <div className="mx-auto max-w-[860px] text-center">
-          <p className="eyebrow !text-gold-soft">Frequently Asked Questions</p>
-          <h1 className="mt-2 text-white">
-            Everything you need to know about <em className="text-gold">Genera</em>
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft md:px-4 md:py-1.5">
+            🐾 Frequently Asked Questions
+          </div>
+          <h1 className="mt-2 text-[clamp(1.75rem,3.2vw,2.4rem)] font-bold leading-tight text-white">
+            Everything you need to know about{" "}
+            <span className="squig">
+              Genera
+              <svg viewBox="0 0 180 12" preserveAspectRatio="none">
+                <path d="M2,9 Q22,2 45,8 Q68,14 90,7 Q112,0 135,8 Q157,14 178,7" />
+              </svg>
+            </span>
           </h1>
           <p className="mx-auto mt-5 max-w-[600px] text-white/80">
             Got questions? We have got answers. If you cannot find what you are
@@ -95,7 +103,7 @@ export default async function FaqsPage() {
       {/* CTA */}
       <section className="bg-forest-dark px-8 py-22 text-center text-white">
         <div className="rev mx-auto max-w-[760px]">
-          <h2 className="!text-white">Still have questions?</h2>
+          <h2 className="text-heading-mid !text-white">Still have questions?</h2>
           <p className="mx-auto mt-4 max-w-[560px] text-white/80">
             We are a small team and we read every message. Get in touch and we
             will help you figure out if Genera is right for your business.
