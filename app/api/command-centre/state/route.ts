@@ -28,15 +28,7 @@ function getSupabase() {
   });
 }
 
-export async function GET(request: Request) {
-  if (new URL(request.url).searchParams.has("__debug")) {
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
-    return NextResponse.json({
-      url: process.env.NEXT_PUBLIC_SUPABASE_URL || null,
-      keyLen: key.length,
-      keyStart: key.slice(0, 20),
-    });
-  }
+export async function GET() {
   const supabase = getSupabase();
   const { data, error } = await supabase
     .from("command_centre_state")
