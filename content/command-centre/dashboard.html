@@ -603,6 +603,11 @@
 <script>
 const KEY='ccc_state_v2';
 const BRIEF_VERSION=5;
+// Declared here (not near the other Content Command Centre sync functions
+// below) because save() runs during initial seed/load, before the bottom
+// of the script would otherwise execute — a `let` there is in the temporal
+// dead zone at that point and throws.
+let cccSyncTimer=null, cccSyncing=false, cccUserEdited=false;
 const STATUS={
   idea:{label:'Idea',c:'--muted',s:'--grey-soft'},
   scripted:{label:'Script ready',c:'--blue',s:'--blue-soft'},
@@ -2231,8 +2236,9 @@ function mergePosts(d){
    instantly; the server (Supabase, via /api/command-centre/state) is the
    source of truth across devices. On load: pull the server copy and use it
    if the user has not already started editing locally. On save: push the
-   local copy to the server, debounced so typing doesn't spam the network. */
-let cccSyncTimer=null, cccSyncing=false, cccUserEdited=false;
+   local copy to the server, debounced so typing doesn't spam the network.
+   (cccSyncTimer/cccSyncing/cccUserEdited are declared up near KEY, not
+   here — see the comment there.) */
 function cccQueueSync(){
   if(cccSyncTimer)clearTimeout(cccSyncTimer);
   cccSyncTimer=setTimeout(cccPushState,800);
