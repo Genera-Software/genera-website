@@ -10,6 +10,7 @@ import { createClient } from "@supabase/supabase-js";
 // to lib/supabase/types.ts rather than via `supabase gen types`, so keeping
 // this route's client separate avoids drift risk with the generated type.
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 const MAX_BODY_BYTES = 5 * 1024 * 1024; // 5MB, generous headroom over real usage
 const ROW_ID = "default";
