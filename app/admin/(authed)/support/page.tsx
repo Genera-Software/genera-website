@@ -55,11 +55,19 @@ const CATEGORY_LABEL: Record<SupportTicketCategory, string> = {
   other: "Other",
 };
 
+/** Compact enough to stay on one line: "20 Jul 2026, 4:24 pm". */
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleString("en-AU", {
-    dateStyle: "medium",
-    timeStyle: "short",
+  const d = new Date(iso);
+  const date = d.toLocaleDateString("en-AU", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
   });
+  const time = d.toLocaleTimeString("en-AU", {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+  return `${date}, ${time}`;
 }
 
 export default async function SupportTicketsPage({
@@ -120,7 +128,7 @@ export default async function SupportTicketsPage({
   }
 
   return (
-    <div>
+    <div data-full-width>
       <PageHeader
         title="Support tickets"
         description={
@@ -190,8 +198,10 @@ export default async function SupportTicketsPage({
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-teal-mid bg-white">
-        <table className="w-full text-left text-sm">
+      {/* overflow-x-auto, not overflow-hidden — narrow windows must scroll the
+          table rather than silently clipping the Status column. */}
+      <div className="overflow-x-auto rounded-2xl border border-teal-mid bg-white">
+        <table className="w-full min-w-[64rem] text-left text-sm">
           <thead className="bg-cream text-xs uppercase tracking-wider text-ink-soft">
             <tr>
               <th className="px-5 py-3">Ref</th>
@@ -215,7 +225,7 @@ export default async function SupportTicketsPage({
                 }
               >
                 <td
-                  className="px-5 py-3 align-middle font-mono text-xs text-ink-soft"
+                  className="whitespace-nowrap px-5 py-3 align-middle font-mono text-xs text-ink-soft"
                   title={t.id}
                 >
                   #{ticketRef(t.id)}
@@ -265,12 +275,12 @@ export default async function SupportTicketsPage({
                 <td className="px-5 py-3 align-middle font-mono text-xs text-ink-soft">
                   {t.app_version ?? "—"}
                 </td>
-                <td className="px-5 py-3 align-middle text-ink-soft">
+                <td className="whitespace-nowrap px-5 py-3 align-middle text-ink-soft">
                   {formatDate(t.created_at)}
                 </td>
                 <td className="px-5 py-3 align-middle">
                   <span
-                    className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_BADGE[t.status]}`}
+                    className={`inline-block whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_BADGE[t.status]}`}
                   >
                     {STATUS_LABEL[t.status]}
                   </span>

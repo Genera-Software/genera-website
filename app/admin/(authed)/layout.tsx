@@ -50,7 +50,10 @@ export default async function AuthedAdminLayout({
       <Sidebar badges={badges} />
       <div className="lg:pl-64">
         <main className="px-4 pb-12 pt-20 lg:px-8 lg:pt-8">
-          <div className="mx-auto max-w-6xl">{children}</div>
+          {/* Pages opt out of the reading-width cap with data-full-width. */}
+          <div className="mx-auto max-w-6xl has-[[data-full-width]]:max-w-none">
+            {children}
+          </div>
         </main>
       </div>
     </div>
