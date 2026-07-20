@@ -60,7 +60,7 @@ function PawTrail() {
    Static data
    ───────────────────────────────────────────────────────────── */
 const FOUNDING_PERKS = [
-  { icon: "🎁", text: "3 months completely free — no credit card required" },
+  { icon: "🎁", text: "1 month completely free, then £50 a month. No credit card required" },
   { icon: "📞", text: "One-on-one onboarding call with the Genera team" },
   { icon: "🚀", text: "Priority access to every new feature as it launches" },
   { icon: "🗺️", text: "Your feedback directly shapes our product roadmap" },
@@ -339,7 +339,7 @@ export default function CommunityClient({
             <h2 className="mt-2 text-heading-mid !text-white">The Founding One Hundred.</h2>
             <p className="mt-4 max-w-[680px] text-[1.1rem] text-white/80 leading-relaxed md:mx-0 mx-auto">
               We&apos;re selecting 100 pet businesses to join Genera before we
-              open to the public. You&apos;ll get three months completely free,
+              open to the public. You&apos;ll get your first month completely free,
               priority onboarding, and a direct line to our team — plus
               founding member access to the Genera Business Network when it
               launches.

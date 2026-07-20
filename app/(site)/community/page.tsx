@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   ...createMetadata({
     title: "Founding 100 & Genera Business Network — Community for Pet Professionals",
     description:
-      "Join the Genera Founding 100 — 3 months free, founding member pricing, and access to a private network of verified pet care professionals across the UK.",
+      "Join the Genera Founding 100. One month free, then £50 a month, founding member pricing, and access to a private network of verified pet care professionals across the UK.",
     path: "/community",
   }),
 };

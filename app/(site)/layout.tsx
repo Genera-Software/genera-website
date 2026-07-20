@@ -27,9 +27,9 @@ const softwareSchema = {
     "Dog daycare and pet business management software for bookings, payments, transport, staff scheduling and pet records.",
   offers: {
     "@type": "Offer",
-    price: "0",
+    price: "50",
     priceCurrency: "GBP",
-    description: "Founding 100 onboarding available for new customers.",
+    description: "£50 per month. One month free for new customers, with Founding 100 onboarding available.",
   },
 };
 

@@ -107,7 +107,7 @@ const FEATURES = [
 ];
 
 const FOUNDING_PERKS = [
-  "3 months free — no credit card required",
+  "1 month free, then £50 a month. No credit card required",
   "One-on-one onboarding call with the Genera team",
   "Priority access to new features as they launch",
   "Your feedback shapes the product roadmap",
@@ -526,7 +526,7 @@ export default async function Home() {
             </h2>
             <p className="mt-2.5 text-meta text-white/80 md:mt-4 md:text-base">
               We&apos;re selecting 100 pet businesses to join Genera before we
-              open to the public. You&apos;ll get three months completely free,
+              open to the public. You&apos;ll get your first month completely free,
               priority onboarding and a direct line to our team.
             </p>
             <ul className="mt-4 flex flex-col gap-2 md:mt-5 md:gap-2.5">
