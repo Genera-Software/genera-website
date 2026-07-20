@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getAdminSupabase } from "@/lib/supabase/admin";
 import { notifySupportTicket } from "@/lib/support/notify";
+import { sendTicketReply } from "@/lib/support/thread";
 
 const STATUSES = ["new", "in_progress", "completed"] as const;
 const CATEGORIES = [
@@ -133,6 +134,45 @@ export async function removeNotifyEmail(id: string) {
     .eq("id", id);
   if (error) throw new Error(error.message);
   revalidatePath("/admin/support");
+}
+
+export async function replyToTicket(id: string, formData: FormData) {
+  const body = String(formData.get("body") ?? "").trim();
+  if (!body) throw new Error("Reply cannot be empty.");
+  if (body.length > 10_000) throw new Error("Reply is too long.");
+
+  const supabase = getAdminSupabase();
+  const { data: ticket } = await supabase
+    .from("support_tickets")
+    .select("id, subject, status, account_email")
+    .eq("id", id)
+    .maybeSingle();
+  if (!ticket) throw new Error("Ticket not found.");
+  if (!ticket.account_email) {
+    throw new Error("This ticket has no customer email to reply to.");
+  }
+
+  const result = await sendTicketReply({
+    ticketId: ticket.id,
+    ticketSubject: ticket.subject,
+    to: ticket.account_email,
+    body,
+  });
+
+  // Replying implies we're on it — but never walk back a completed ticket.
+  if (ticket.status === "new") {
+    await supabase
+      .from("support_tickets")
+      .update({ status: "in_progress" })
+      .eq("id", id);
+  }
+
+  revalidatePath("/admin/support");
+  revalidatePath(`/admin/support/${id}`);
+
+  if (!result.ok) {
+    throw new Error(`Reply could not be sent: ${result.error ?? "unknown error"}`);
+  }
 }
 
 export async function setTicketStatus(id: string, status: string) {

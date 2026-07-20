@@ -396,6 +396,65 @@ export type Database = {
         };
         Relationships: [];
       };
+      support_ticket_messages: {
+        Row: {
+          id: string;
+          ticket_id: string;
+          direction: "outbound" | "inbound";
+          author_name: string | null;
+          from_email: string | null;
+          to_email: string | null;
+          subject: string | null;
+          body: string;
+          body_html: string | null;
+          attachments: Json;
+          provider_message_id: string | null;
+          delivery_status: "sent" | "failed" | "received";
+          delivery_error: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          ticket_id: string;
+          direction: "outbound" | "inbound";
+          author_name?: string | null;
+          from_email?: string | null;
+          to_email?: string | null;
+          subject?: string | null;
+          body?: string;
+          body_html?: string | null;
+          attachments?: Json;
+          provider_message_id?: string | null;
+          delivery_status?: "sent" | "failed" | "received";
+          delivery_error?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          ticket_id?: string;
+          direction?: "outbound" | "inbound";
+          author_name?: string | null;
+          from_email?: string | null;
+          to_email?: string | null;
+          subject?: string | null;
+          body?: string;
+          body_html?: string | null;
+          attachments?: Json;
+          provider_message_id?: string | null;
+          delivery_status?: "sent" | "failed" | "received";
+          delivery_error?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "support_ticket_messages_ticket_id_fkey";
+            columns: ["ticket_id"];
+            isOneToOne: false;
+            referencedRelation: "support_tickets";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       trust_logos: {
         Row: {
           created_at: string;
@@ -579,5 +638,7 @@ export type StoryTimelineEntry = Database["public"]["Tables"]["story_timeline"][
 export type SupportTicketCategory = SupportTicket["category"];
 export type SupportNotifyEmail =
   Database["public"]["Tables"]["support_notify_emails"]["Row"];
+export type SupportTicketMessage =
+  Database["public"]["Tables"]["support_ticket_messages"]["Row"];
 export type HelpCentreSection = Database["public"]["Tables"]["help_centre_sections"]["Row"];
 export type HelpCentreSubsection = Database["public"]["Tables"]["help_centre_subsections"]["Row"];

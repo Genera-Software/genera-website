@@ -83,6 +83,75 @@ function escapeHtml(s: string) {
     .replace(/'/g, "&#39;");
 }
 
+export type PostmarkSendResult = {
+  ok: boolean;
+  messageId: string | null;
+  error: string | null;
+};
+
+/**
+ * Low-level Postmark send. Callers own the body markup; `deliverEmail` and the
+ * support ticket thread both build on this.
+ */
+export async function sendPostmarkEmail(opts: {
+  to: string;
+  subject: string;
+  htmlBody: string;
+  textBody: string;
+  from?: string | null;
+  replyTo?: string | null;
+  headers?: Record<string, string>;
+}): Promise<PostmarkSendResult> {
+  const apiKey = process.env.POSTMARK_API_KEY;
+  if (!apiKey) {
+    return { ok: false, messageId: null, error: "POSTMARK_API_KEY not set" };
+  }
+
+  try {
+    const res = await fetch("https://api.postmarkapp.com/email", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "X-Postmark-Server-Token": apiKey,
+      },
+      body: JSON.stringify({
+        From: opts.from || process.env.POSTMARK_FROM_EMAIL || "info@generasoftware.com",
+        To: opts.to,
+        ReplyTo: opts.replyTo || undefined,
+        Subject: opts.subject,
+        HtmlBody: opts.htmlBody,
+        TextBody: opts.textBody,
+        MessageStream: process.env.POSTMARK_MESSAGE_STREAM ?? "outbound",
+        Headers: opts.headers
+          ? Object.entries(opts.headers).map(([Name, Value]) => ({
+              Name,
+              Value,
+            }))
+          : undefined,
+      }),
+    });
+    const json = (await res.json().catch(() => null)) as {
+      MessageID?: string;
+      Message?: string;
+    } | null;
+    if (!res.ok) {
+      return {
+        ok: false,
+        messageId: null,
+        error: (json?.Message ?? `Postmark returned ${res.status}`).slice(0, 2000),
+      };
+    }
+    return { ok: true, messageId: json?.MessageID ?? null, error: null };
+  } catch (err) {
+    return {
+      ok: false,
+      messageId: null,
+      error: err instanceof Error ? err.message : "Network error",
+    };
+  }
+}
+
 export async function deliverEmail(opts: {
   to: string | null | undefined;
   subject: string | null | undefined;
@@ -94,13 +163,10 @@ export async function deliverEmail(opts: {
     return { status: "skipped", response: null };
   }
 
-  const apiKey = process.env.POSTMARK_API_KEY;
-  if (!apiKey) {
+  if (!process.env.POSTMARK_API_KEY) {
     return { status: "skipped", response: "POSTMARK_API_KEY not set" };
   }
 
-  const fromEmail = process.env.POSTMARK_FROM_EMAIL ?? "info@generasoftware.com";
-  const messageStream = process.env.POSTMARK_MESSAGE_STREAM ?? "outbound";
   const subject = opts.subject?.trim() || `New ${opts.formName} submission`;
 
   const htmlBody = `<!doctype html>
@@ -124,33 +190,15 @@ export async function deliverEmail(opts: {
 
   const textBody = opts.rows.map(([k, v]) => `${k}: ${v}`).join("\n");
 
-  try {
-    const res = await fetch("https://api.postmarkapp.com/email", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-Postmark-Server-Token": apiKey,
-      },
-      body: JSON.stringify({
-        From: fromEmail,
-        To: opts.to,
-        ReplyTo: opts.replyTo || undefined,
-        Subject: subject,
-        HtmlBody: htmlBody,
-        TextBody: textBody,
-        MessageStream: messageStream,
-      }),
-    });
-    if (!res.ok) {
-      const errText = await res.text().catch(() => "");
-      return { status: "failed", response: errText.slice(0, 2000) };
-    }
-    return { status: "sent", response: null };
-  } catch (err) {
-    return {
-      status: "failed",
-      response: err instanceof Error ? err.message : "Network error",
-    };
-  }
+  const result = await sendPostmarkEmail({
+    to: opts.to,
+    subject,
+    htmlBody,
+    textBody,
+    replyTo: opts.replyTo,
+  });
+
+  return result.ok
+    ? { status: "sent", response: null }
+    : { status: "failed", response: result.error };
 }

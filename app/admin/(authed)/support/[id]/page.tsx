@@ -4,9 +4,11 @@ import { AdminFormStatusButton } from "../../_components/AdminBusyButton";
 import PageHeader from "../../_components/PageHeader";
 import {
   deleteTicket,
+  replyToTicket,
   setTicketStatus,
   updateInternalNotes,
 } from "../actions";
+import { ticketRef } from "@/lib/support/thread";
 import type { SupportTicketStatus } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -86,6 +88,14 @@ export default async function SupportTicketDetailPage({
 
   if (!ticket) notFound();
 
+  const { data: messages } = await supabase
+    .from("support_ticket_messages")
+    .select("*")
+    .eq("ticket_id", id)
+    .order("created_at", { ascending: true });
+
+  const thread = messages ?? [];
+
   const errors: ConsoleError[] = Array.isArray(ticket.console_errors)
     ? (ticket.console_errors as ConsoleError[])
     : [];
@@ -162,6 +172,96 @@ export default async function SupportTicketDetailPage({
               </ul>
             </section>
           )}
+
+          {/* Email conversation */}
+          <section className="rounded-2xl border border-teal-mid bg-white p-6">
+            <div className="mb-4 flex items-baseline justify-between gap-3">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-soft">
+                Conversation
+              </h2>
+              <span className="font-mono text-xs text-ink-soft">
+                #{ticketRef(ticket.id)}
+              </span>
+            </div>
+
+            {thread.length > 0 && (
+              <ul className="mb-6 space-y-4">
+                {thread.map((m) => {
+                  const outbound = m.direction === "outbound";
+                  return (
+                    <li
+                      key={m.id}
+                      className={`rounded-xl border p-4 ${
+                        outbound
+                          ? "ml-6 border-forest/20 bg-forest/5"
+                          : "mr-6 border-cream-dark bg-cream/40"
+                      }`}
+                    >
+                      <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2 text-xs">
+                        <span className="font-semibold text-ink">
+                          {outbound
+                            ? `${m.author_name ?? "Support"} → ${m.to_email ?? "customer"}`
+                            : (m.author_name ?? m.from_email ?? "Customer")}
+                        </span>
+                        <span className="text-ink-soft">
+                          {formatDate(m.created_at)}
+                        </span>
+                      </div>
+                      <p className="whitespace-pre-wrap text-sm text-ink">
+                        {m.body}
+                      </p>
+                      {m.delivery_status === "failed" && (
+                        <p className="mt-2 text-xs font-semibold text-red-700">
+                          Failed to send{m.delivery_error ? `: ${m.delivery_error}` : ""}
+                        </p>
+                      )}
+                      {Array.isArray(m.attachments) &&
+                        m.attachments.length > 0 && (
+                          <p className="mt-2 text-xs text-ink-soft">
+                            {m.attachments.length} attachment
+                            {m.attachments.length === 1 ? "" : "s"} (not stored)
+                          </p>
+                        )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+
+            {ticket.account_email ? (
+              <form
+                action={async (fd: FormData) => {
+                  "use server";
+                  await replyToTicket(ticket.id, fd);
+                }}
+              >
+                <textarea
+                  name="body"
+                  rows={5}
+                  required
+                  placeholder={`Reply to ${ticket.account_email}…`}
+                  className="w-full rounded-lg border border-teal-mid bg-white px-3 py-2 text-sm text-ink focus:border-forest focus:outline-none"
+                />
+                <div className="mt-3 flex items-center justify-between gap-3">
+                  <p className="text-xs text-ink-soft">
+                    Sent from help@generasoftware.com — their reply lands back
+                    here.
+                  </p>
+                  <AdminFormStatusButton
+                    type="submit"
+                    variant="forestSm"
+                    pendingLabel="Sending…"
+                  >
+                    Send reply
+                  </AdminFormStatusButton>
+                </div>
+              </form>
+            ) : (
+              <p className="text-sm text-ink-soft">
+                No customer email on this ticket, so there is nobody to reply to.
+              </p>
+            )}
+          </section>
 
           {/* Internal notes */}
           <section className="rounded-2xl border border-teal-mid bg-white p-6">
