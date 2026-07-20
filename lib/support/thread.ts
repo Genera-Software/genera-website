@@ -136,24 +136,33 @@ export async function findTicketForInbound(opts: {
   const ref = parseTicketRef(opts.subject);
 
   if (ref) {
-    // Refs are a UUID prefix with the dashes removed; restore the dash at 8.
-    const { data } = await supabase
+    // A ref is the first 8 hex chars of the UUID. Postgres has no LIKE operator
+    // for the uuid type, so match the prefix as a range instead — this also
+    // uses the primary key index rather than scanning.
+    const { data, error } = await supabase
       .from("support_tickets")
       .select("id, subject, status, account_email")
-      .like("id", `${ref}-%`)
+      .gte("id", `${ref}-0000-0000-0000-000000000000`)
+      .lte("id", `${ref}-ffff-ffff-ffff-ffffffffffff`)
       .order("created_at", { ascending: false })
       .limit(1);
+    if (error) {
+      console.error("[support/thread] ref lookup failed", error.message);
+    }
     if (data?.[0]) return data[0];
   }
 
   if (opts.fromEmail) {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("support_tickets")
       .select("id, subject, status, account_email")
       .ilike("account_email", opts.fromEmail)
       .neq("status", "completed")
       .order("created_at", { ascending: false })
       .limit(1);
+    if (error) {
+      console.error("[support/thread] sender lookup failed", error.message);
+    }
     if (data?.[0]) return data[0];
   }
 
