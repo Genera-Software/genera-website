@@ -11,18 +11,27 @@ export const dynamic = "force-dynamic";
 async function loadBadges(): Promise<Record<string, number>> {
   try {
     const supabase = getAdminSupabase();
-    const [ticketsRes, submissionsRes] = await Promise.all([
+    const [ticketsRes, repliesRes, submissionsRes] = await Promise.all([
+      supabase.from("support_tickets").select("id").eq("status", "new"),
       supabase
-        .from("support_tickets")
-        .select("id", { count: "exact", head: true })
-        .eq("status", "new"),
+        .from("support_ticket_messages")
+        .select("ticket_id")
+        .eq("direction", "inbound")
+        .is("read_at", null),
       supabase
         .from("form_submissions")
         .select("id", { count: "exact", head: true })
         .is("read_at", null),
     ]);
+
+    // A ticket that is both new and has an unread reply should still count once,
+    // so the badge reads as "tickets needing attention".
+    const needsAttention = new Set<string>();
+    for (const t of ticketsRes.data ?? []) needsAttention.add(t.id);
+    for (const m of repliesRes.data ?? []) needsAttention.add(m.ticket_id);
+
     return {
-      "/admin/support": ticketsRes.count ?? 0,
+      "/admin/support": needsAttention.size,
       "/admin/forms": submissionsRes.count ?? 0,
     };
   } catch {

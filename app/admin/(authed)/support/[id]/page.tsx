@@ -96,6 +96,20 @@ export default async function SupportTicketDetailPage({
 
   const thread = messages ?? [];
 
+  // Opening the ticket counts as reading it — clears this ticket from the
+  // sidebar badge. Only writes when something is actually unread.
+  const hasUnread = thread.some(
+    (m) => m.direction === "inbound" && !m.read_at,
+  );
+  if (hasUnread) {
+    await supabase
+      .from("support_ticket_messages")
+      .update({ read_at: new Date().toISOString() })
+      .eq("ticket_id", id)
+      .eq("direction", "inbound")
+      .is("read_at", null);
+  }
+
   const errors: ConsoleError[] = Array.isArray(ticket.console_errors)
     ? (ticket.console_errors as ConsoleError[])
     : [];
@@ -356,6 +370,8 @@ export default async function SupportTicketDetailPage({
               Diagnostics
             </h2>
             <dl className="space-y-3">
+              <Field label="Ticket ID" value={ticket.id} mono />
+              <Field label="Reference" value={`#${ticketRef(ticket.id)}`} mono />
               <Field label="Page URL" value={ticket.page_url} mono />
               <Field label="App version" value={ticket.app_version} mono />
               <Field

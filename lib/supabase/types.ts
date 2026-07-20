@@ -411,6 +411,7 @@ export type Database = {
           provider_message_id: string | null;
           delivery_status: "sent" | "failed" | "received";
           delivery_error: string | null;
+          read_at: string | null;
           created_at: string;
         };
         Insert: {
@@ -427,6 +428,7 @@ export type Database = {
           provider_message_id?: string | null;
           delivery_status?: "sent" | "failed" | "received";
           delivery_error?: string | null;
+          read_at?: string | null;
           created_at?: string;
         };
         Update: {
@@ -443,6 +445,7 @@ export type Database = {
           provider_message_id?: string | null;
           delivery_status?: "sent" | "failed" | "received";
           delivery_error?: string | null;
+          read_at?: string | null;
           created_at?: string;
         };
         Relationships: [
