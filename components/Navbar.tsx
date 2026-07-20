@@ -10,6 +10,7 @@ import { LOGIN_URL } from "@/lib/urls";
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/features", label: "Features" },
+  { href: "/founding100", label: "Founding 100" },
   { href: "/our-story", label: "Our Story" },
   { href: "/blog", label: "Blog" },
   { href: "/faqs", label: "FAQs" },
@@ -124,12 +125,12 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <div className="mx-auto hidden items-center gap-1 md:flex">
+        <div className="mx-auto hidden items-center gap-0 lg:flex">
           {NAV_LINKS.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className="rounded-full px-3 py-1.5 text-meta font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+              className="rounded-full px-2 py-1.5 text-[0.72rem] font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white whitespace-nowrap"
             >
               {l.label}
             </Link>
@@ -137,12 +138,6 @@ export default function Navbar() {
         </div>
 
         <div className="hidden items-center gap-2 md:flex">
-          <Link
-            href={LOGIN_URL}
-            className="rounded-full px-3 py-1.5 text-fine font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
-          >
-            Login
-          </Link>
           <BookDemoButton
             className="inline-flex items-center rounded-full bg-gold px-5 py-2 font-massilia text-fine font-bold text-ink shadow-[0_4px_14px_rgba(255,168,0,0.35)] transition-shadow hover:shadow-[0_6px_22px_rgba(255,168,0,0.5)]"
           >
@@ -205,13 +200,6 @@ export default function Navbar() {
             className="btn btn-gold btn-lg"
             onClick={() => setOpen(false)}
           />
-          <Link
-            href={LOGIN_URL}
-            className="btn btn-outline-w btn-lg"
-            onClick={() => setOpen(false)}
-          >
-            Login
-          </Link>
         </div>
       </div>
     </>

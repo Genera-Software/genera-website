@@ -47,10 +47,18 @@ export default async function BlogPage() {
       {/* Page hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 pt-32 pb-24 text-white">
         <div className="mx-auto max-w-[860px] text-center">
-          <p className="eyebrow !text-gold-soft">Blog</p>
-          <h1 className="mt-2 text-white">
-            Insights from the <em className="text-gold">front line</em> of pet
-            care
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft md:px-4 md:py-1.5">
+            🐾 The Genera Blog
+          </div>
+          <h1 className="mt-2 text-[clamp(1.75rem,3.2vw,2.4rem)] font-bold leading-tight text-white">
+            Insights from the{" "}
+            <span className="squig">
+              front line
+              <svg viewBox="0 0 180 12" preserveAspectRatio="none">
+                <path d="M2,9 Q22,2 45,8 Q68,14 90,7 Q112,0 135,8 Q157,14 178,7" />
+              </svg>
+            </span>
+            {" "}of pet care
           </h1>
           <p className="mx-auto mt-5 max-w-[600px] text-white/80">
             Practical advice, industry commentary, and lessons learned from 15
@@ -91,7 +99,7 @@ export default async function BlogPage() {
                       {p.category}
                     </span>
                   </div>
-                  <h2 className="mb-2 font-massilia text-lg font-bold leading-snug text-forest group-hover:text-forest-mid transition-colors">
+                  <h2 className="mb-2 font-massilia text-xl font-bold leading-tight text-forest group-hover:text-forest-mid transition-colors md:text-mini-h">
                     {p.title}
                   </h2>
                   <p className="mb-4 text-sm text-ink-soft line-clamp-2">{p.excerpt}</p>
@@ -99,14 +107,13 @@ export default async function BlogPage() {
                   <div className="mt-auto flex items-center justify-between text-sm">
                     <div className="flex flex-wrap items-center gap-2 text-ink-soft">
                       <span className="grid h-6 w-6 place-items-center rounded-full bg-forest text-xs font-bold text-white">
+
                         {p.author_name.charAt(0)}
                       </span>
-                      <span className="font-medium text-forest">
-                        {p.author_name}
-                      </span>
-                      <span className="h-3 w-px bg-cream-dark" />
+                      <span className="font-medium text-forest">{p.author_name}</span>
+                      <span className="h-3 w-px bg-teal-mid/30" />
                       <span>{formatDate(p.published_at)}</span>
-                      <span className="h-3 w-px bg-cream-dark" />
+                      <span className="h-3 w-px bg-teal-mid/30" />
                       <span>{p.read_time_minutes} min read</span>
                     </div>
                     <span className="text-forest transition-transform group-hover:translate-x-1 hidden sm:block">
@@ -129,16 +136,18 @@ export default async function BlogPage() {
             ))}
           </div>
         ) : (
-          <p className="mx-auto max-w-[860px] text-center text-ink-soft">
-            New posts are on the way. Subscribe via email to be notified.
-          </p>
+          <div className="mx-auto max-w-[560px] rounded-3xl border border-teal-mid/20 bg-white p-14 text-center shadow-[0_8px_32px_rgba(0,62,69,0.07)]">
+            <p className="mb-2 text-4xl">🐾</p>
+            <h3 className="font-massilia text-xl font-bold text-forest">Posts coming soon</h3>
+            <p className="mt-3 text-ink-soft">We&apos;re writing up 15 years of pet business experience. Check back soon.</p>
+          </div>
         )}
       </section>
 
       {/* CTA */}
       <section className="bg-forest-dark px-8 py-22 text-center text-white">
         <div className="rev mx-auto max-w-[760px]">
-          <h2 className="!text-white">Want to see Genera in action?</h2>
+          <h2 className="text-heading-mid !text-white">Want to see Genera in action?</h2>
           <p className="mx-auto mt-4 max-w-[560px] text-white/80">
             Apply for the Founding 100 today and see how Genera can transform
             the way you run your pet business.

@@ -616,6 +616,24 @@ export type Database = {
           },
         ];
       };
+      command_centre_state: {
+        Row: {
+          id: string;
+          data: Json;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          data?: Json;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          data?: Json;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
