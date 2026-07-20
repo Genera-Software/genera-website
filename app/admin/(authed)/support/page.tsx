@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getAdminSupabase } from "@/lib/supabase/admin";
 import PageHeader from "../_components/PageHeader";
+import { ticketRef } from "@/lib/support/thread";
 import NewTicketModalButton from "./_components/NewTicketModalButton";
 import NotifyEmailsSection from "./_components/NotifyEmailsSection";
 import {
@@ -88,6 +89,15 @@ export default async function SupportTicketsPage({
     .from("support_tickets")
     .select("*", { count: "exact", head: true })
     .eq("status", "new");
+
+  // Tickets where the customer has replied since we last opened them. Same
+  // source of truth as the sidebar badge.
+  const { data: unreadRows } = await supabase
+    .from("support_ticket_messages")
+    .select("ticket_id")
+    .eq("direction", "inbound")
+    .is("read_at", null);
+  const unreadTickets = new Set((unreadRows ?? []).map((r) => r.ticket_id));
 
   const { data: notifyEmails } = await supabase
     .from("support_notify_emails")
@@ -184,6 +194,7 @@ export default async function SupportTicketsPage({
         <table className="w-full text-left text-sm">
           <thead className="bg-cream text-xs uppercase tracking-wider text-ink-soft">
             <tr>
+              <th className="px-5 py-3">Ref</th>
               <th className="px-5 py-3">Subject</th>
               <th className="px-5 py-3">Category</th>
               <th className="px-5 py-3">Account</th>
@@ -194,15 +205,41 @@ export default async function SupportTicketsPage({
             </tr>
           </thead>
           <tbody className="divide-y divide-cream-dark">
-            {(tickets ?? []).map((t) => (
-              <tr key={t.id} className="hover:bg-cream">
+            {(tickets ?? []).map((t) => {
+              const hasUnread = unreadTickets.has(t.id);
+              return (
+              <tr
+                key={t.id}
+                className={
+                  hasUnread ? "bg-gold/10 hover:bg-gold/20" : "hover:bg-cream"
+                }
+              >
+                <td
+                  className="px-5 py-3 align-middle font-mono text-xs text-ink-soft"
+                  title={t.id}
+                >
+                  #{ticketRef(t.id)}
+                </td>
                 <td className="px-5 py-3 align-middle">
-                  <Link
-                    href={`/admin/support/${t.id}`}
-                    className="font-semibold text-ink hover:text-forest"
-                  >
-                    {t.subject}
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    {hasUnread && (
+                      <span
+                        aria-hidden
+                        className="h-2 w-2 shrink-0 rounded-full bg-gold"
+                      />
+                    )}
+                    <Link
+                      href={`/admin/support/${t.id}`}
+                      className="font-semibold text-ink hover:text-forest"
+                    >
+                      {t.subject}
+                    </Link>
+                    {hasUnread && (
+                      <span className="shrink-0 rounded-full bg-gold px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-ink">
+                        New reply
+                      </span>
+                    )}
+                  </div>
                 </td>
                 <td className="px-5 py-3 align-middle text-ink-soft">
                   {CATEGORY_LABEL[t.category]}
@@ -239,11 +276,12 @@ export default async function SupportTicketsPage({
                   </span>
                 </td>
               </tr>
-            ))}
+              );
+            })}
             {(tickets ?? []).length === 0 && (
               <tr>
                 <td
-                  colSpan={7}
+                  colSpan={8}
                   className="px-5 py-10 text-center text-sm text-ink-soft"
                 >
                   No tickets match the current filters.
