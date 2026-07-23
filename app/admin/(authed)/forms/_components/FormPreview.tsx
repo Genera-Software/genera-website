@@ -2,7 +2,20 @@
 
 import { useEffect, useRef, useState } from "react";
 
-type QuestionType = "text" | "email" | "tel" | "textarea" | "choice";
+type QuestionType =
+  | "text"
+  | "email"
+  | "tel"
+  | "textarea"
+  | "choice"
+  | "multi";
+
+// Mirrors BookDemoModal: multi answers are stored comma-separated.
+const splitMulti = (v: string) =>
+  v
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
 
 type PreviewQuestion = {
   key: string;
@@ -164,16 +177,28 @@ export default function FormPreview({
             )}
 
             <div className="mt-6">
-              {current.type === "choice" ? (
+              {current.type === "choice" || current.type === "multi" ? (
                 <div className="flex flex-wrap gap-2.5">
                   {current.choices.map((c, i) => {
-                    const selected = value === c;
+                    const picked =
+                      current.type === "multi" ? splitMulti(value) : [value];
+                    const selected = picked.includes(c);
                     return (
                       <button
                         key={c}
                         type="button"
+                        aria-pressed={selected}
                         onClick={() => {
-                          setValues({ ...values, [current.key]: c });
+                          let nextValue = c;
+                          if (current.type === "multi") {
+                            const toggled = selected
+                              ? picked.filter((p) => p !== c)
+                              : [...picked, c];
+                            nextValue = current.choices
+                              .filter((ch) => toggled.includes(ch))
+                              .join(", ");
+                          }
+                          setValues({ ...values, [current.key]: nextValue });
                           setStepError(null);
                         }}
                         className={`flex items-center gap-3 rounded-2xl border px-4 py-2.5 text-left font-massilia text-sm font-semibold transition ${
@@ -189,7 +214,11 @@ export default function FormPreview({
                               : "bg-white/15 text-white"
                           }`}
                         >
-                          {String.fromCharCode(65 + i)}
+                          {current.type === "multi"
+                            ? selected
+                              ? "✓"
+                              : ""
+                            : String.fromCharCode(65 + i)}
                         </span>
                         {c}
                       </button>

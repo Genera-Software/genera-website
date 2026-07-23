@@ -120,7 +120,7 @@ export type Database = {
           eyebrow: string;
           label: string;
           hint: string;
-          type: "text" | "email" | "textarea" | "choice";
+          type: "text" | "email" | "tel" | "textarea" | "choice" | "multi";
           placeholder: string;
           choices: Json;
           is_optional: boolean;
@@ -135,7 +135,7 @@ export type Database = {
           eyebrow?: string;
           label: string;
           hint?: string;
-          type?: "text" | "email" | "textarea" | "choice";
+          type?: "text" | "email" | "tel" | "textarea" | "choice" | "multi";
           placeholder?: string;
           choices?: Json;
           is_optional?: boolean;
@@ -150,7 +150,7 @@ export type Database = {
           eyebrow?: string;
           label?: string;
           hint?: string;
-          type?: "text" | "email" | "textarea" | "choice";
+          type?: "text" | "email" | "tel" | "textarea" | "choice" | "multi";
           placeholder?: string;
           choices?: Json;
           is_optional?: boolean;

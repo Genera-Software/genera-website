@@ -146,7 +146,7 @@ const QuestionSchema = z
     label: z.string().trim().min(1).max(300),
     eyebrow: z.string().trim().max(120).default(""),
     hint: z.string().trim().max(300).default(""),
-    type: z.enum(["text", "email", "tel", "textarea", "choice"]),
+    type: z.enum(["text", "email", "tel", "textarea", "choice", "multi"]),
     placeholder: z.string().trim().max(200).default(""),
     choices_text: z.string().default(""),
     is_optional: z.coerce.boolean().default(false),
@@ -157,8 +157,15 @@ const QuestionSchema = z
       .split(/\r?\n/)
       .map((s) => s.trim())
       .filter(Boolean);
-    if (v.type === "choice" && choices.length === 0) {
+    if ((v.type === "choice" || v.type === "multi") && choices.length === 0) {
       throw new Error("Choice questions need at least one option.");
+    }
+    // Multi-select answers travel as a comma-separated string, so an option
+    // containing a comma would be impossible to split back apart.
+    if (v.type === "multi" && choices.some((c) => c.includes(","))) {
+      throw new Error(
+        "Options for a checkbox question can't contain commas — answers are stored comma-separated.",
+      );
     }
     return {
       key: v.key,
@@ -210,7 +217,7 @@ export async function createQuestion(formId: string, formData: FormData) {
     label: data.label,
     eyebrow: data.eyebrow,
     hint: data.hint,
-    type: data.type as "text" | "email" | "textarea" | "choice",
+    type: data.type,
     placeholder: data.placeholder,
     choices: data.choices,
     is_optional: data.is_optional,
@@ -234,7 +241,7 @@ export async function updateQuestion(
       label: data.label,
       eyebrow: data.eyebrow,
       hint: data.hint,
-      type: data.type as "text" | "email" | "textarea" | "choice",
+      type: data.type,
       placeholder: data.placeholder,
       choices: data.choices,
       is_optional: data.is_optional,

@@ -5,7 +5,23 @@ import { FOUNDING_100_FORM_SLUG } from "@/lib/cta";
 
 type Status = "idle" | "loading" | "submitting" | "sent" | "error";
 
-type QuestionType = "text" | "email" | "tel" | "textarea" | "choice";
+type QuestionType =
+  | "text"
+  | "email"
+  | "tel"
+  | "textarea"
+  | "choice"
+  | "multi";
+
+// Multi-select answers live in the same Record<string, string> as every other
+// answer, stored comma-separated. Options are barred from containing commas in
+// the admin, so this round-trips cleanly.
+const splitMulti = (v: string) =>
+  v
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+const joinMulti = (list: string[]) => list.join(", ");
 
 type Question = {
   key: string;
@@ -387,16 +403,29 @@ function StepView({
       {current.hint && <p className="mt-3 text-white/70">{current.hint}</p>}
 
       <div className="mt-7">
-        {current.type === "choice" ? (
+        {current.type === "choice" || current.type === "multi" ? (
           <div className="flex flex-wrap gap-2.5">
             {current.choices.map((c, i) => {
-              const selected = value === c;
+              const picked =
+                current.type === "multi" ? splitMulti(value) : [value];
+              const selected = picked.includes(c);
               return (
                 <button
                   key={c}
                   type="button"
+                  aria-pressed={selected}
                   onClick={() => {
-                    setForm({ ...form, [current.key]: c });
+                    let nextValue = c;
+                    if (current.type === "multi") {
+                      const toggled = selected
+                        ? picked.filter((p) => p !== c)
+                        : [...picked, c];
+                      // Keep the admin's option order so the payload is stable.
+                      nextValue = joinMulti(
+                        current.choices.filter((ch) => toggled.includes(ch)),
+                      );
+                    }
+                    setForm({ ...form, [current.key]: nextValue });
                     setStepError(null);
                   }}
                   className={`flex items-center gap-3 rounded-2xl border px-5 py-3 text-left font-massilia font-semibold transition ${
@@ -410,7 +439,11 @@ function StepView({
                       selected ? "bg-ink/15 text-ink" : "bg-white/15 text-white"
                     }`}
                   >
-                    {String.fromCharCode(65 + i)}
+                    {current.type === "multi"
+                      ? selected
+                        ? "✓"
+                        : ""
+                      : String.fromCharCode(65 + i)}
                   </span>
                   {c}
                 </button>

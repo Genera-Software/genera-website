@@ -51,7 +51,12 @@ export async function POST(
   let replyTo: string | null = null;
 
   for (const q of qs) {
-    const v = String(body[q.key] ?? "").trim();
+    const rawValue = body[q.key];
+    // Multi-select can arrive as an array or as a comma-separated string;
+    // it is always stored comma-separated.
+    const v = Array.isArray(rawValue)
+      ? rawValue.map((x) => String(x).trim()).filter(Boolean).join(", ")
+      : String(rawValue ?? "").trim();
 
     if (!v) {
       if (!q.is_optional) {
@@ -72,6 +77,19 @@ export async function POST(
         if (choices.length && !choices.includes(v)) {
           return NextResponse.json(
             { error: `${q.label}: pick one of the listed options.` },
+            { status: 400 },
+          );
+        }
+      }
+      if (q.type === "multi") {
+        const choices = Array.isArray(q.choices) ? (q.choices as unknown[]) : [];
+        const picked = v
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
+        if (choices.length && picked.some((p) => !choices.includes(p))) {
+          return NextResponse.json(
+            { error: `${q.label}: pick from the listed options.` },
             { status: 400 },
           );
         }

@@ -8,7 +8,7 @@ type Initial = {
   label?: string;
   eyebrow?: string;
   hint?: string;
-  type?: "text" | "email" | "tel" | "textarea" | "choice";
+  type?: "text" | "email" | "tel" | "textarea" | "choice" | "multi";
   placeholder?: string;
   choices?: string[];
   is_optional?: boolean;
@@ -27,6 +27,8 @@ export default function QuestionForm({
   const [type, setType] = useState<Initial["type"]>(initial?.type ?? "text");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const hasChoices = type === "choice" || type === "multi";
 
   return (
     <form
@@ -68,7 +70,8 @@ export default function QuestionForm({
             <option value="email">Email</option>
             <option value="tel">Phone number</option>
             <option value="textarea">Long text</option>
-            <option value="choice">Multiple choice</option>
+            <option value="choice">Multiple choice — pick one</option>
+            <option value="multi">Multiple choice — pick several</option>
           </select>
         </Field>
       </div>
@@ -107,7 +110,7 @@ export default function QuestionForm({
         />
       </Field>
 
-      {type !== "choice" && (
+      {!hasChoices && (
         <Field label="Placeholder">
           <input
             type="text"
@@ -119,23 +122,32 @@ export default function QuestionForm({
         </Field>
       )}
 
-      {type === "choice" && (
-        <Field label="Choices (one per line)">
+      {hasChoices && (
+        <Field
+          label="Choices (one per line)"
+          hint={
+            type === "multi"
+              ? "People can tick as many as they like. Answers arrive comma-separated, so options can't contain commas."
+              : undefined
+          }
+        >
           <textarea
             name="choices_text"
             rows={5}
             defaultValue={(initial?.choices ?? []).join("\n")}
             className={inputCls}
-            placeholder={"1–10\n11–25\n26–50\n51–100\n100+"}
+            placeholder={
+              type === "multi"
+                ? "Dog daycare\nDog walking\nBoarding\nGrooming\nOther"
+                : "1–10\n11–25\n26–50\n51–100\n100+"
+            }
           />
         </Field>
       )}
 
       {/* Always include placeholder + choices_text fields so server schema doesn't NPE */}
-      {type === "choice" && (
-        <input type="hidden" name="placeholder" value="" />
-      )}
-      {type !== "choice" && <input type="hidden" name="choices_text" value="" />}
+      {hasChoices && <input type="hidden" name="placeholder" value="" />}
+      {!hasChoices && <input type="hidden" name="choices_text" value="" />}
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Sort order" hint="0 = auto-place at the end.">
