@@ -11,6 +11,7 @@
     "badges": "node scripts/generate-badges.mjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0",
     "@c15t/nextjs": "^2.0.4",
     "@google-analytics/data": "^5.2.2",
     "@supabase/ssr": "^0.10.3",

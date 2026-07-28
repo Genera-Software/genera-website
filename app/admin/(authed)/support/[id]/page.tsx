@@ -8,7 +8,12 @@ import {
   setTicketStatus,
   updateInternalNotes,
 } from "../actions";
+import AiAnalysisSection from "../_components/AiAnalysisSection";
 import { ticketRef } from "@/lib/support/thread";
+import {
+  isAiAnalysisConfigured,
+  reconcileTicketAnalysis,
+} from "@/lib/support/ai-analysis";
 import type { SupportTicketStatus } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -110,6 +115,10 @@ export default async function SupportTicketDetailPage({
       .is("read_at", null);
   }
 
+  // A pending Ask Claude run finishes on Anthropic's side, so collect the result
+  // whenever someone opens the ticket. No-op unless a run is in flight.
+  const analysis = await reconcileTicketAnalysis(ticket);
+
   const errors: ConsoleError[] = Array.isArray(ticket.console_errors)
     ? (ticket.console_errors as ConsoleError[])
     : [];
@@ -186,6 +195,13 @@ export default async function SupportTicketDetailPage({
               </ul>
             </section>
           )}
+
+          {/* Claude repo analysis */}
+          <AiAnalysisSection
+            ticketId={ticket.id}
+            analysis={analysis}
+            configured={isAiAnalysisConfigured()}
+          />
 
           {/* Email conversation */}
           <section className="rounded-2xl border border-teal-mid bg-white p-6">

@@ -6,7 +6,7 @@ import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
 import FoundingSpotsStats from "@/components/FoundingSpotsStats";
 import AdminMiniAnimation from "@/components/AdminMiniAnimation";
-import { FOUNDING_100_CTA_LABEL } from "@/lib/cta";
+import { FOUNDING_100_CTA_LABEL, FOUNDING_100_SECTION_URL } from "@/lib/cta";
 import { getPublicSupabase } from "@/lib/supabase/server";
 
 export const revalidate = 60;
@@ -558,11 +558,17 @@ export default async function Home() {
               Applications close once we reach 100. Be part of shaping the
               product from the start.
             </p>
-            <BookDemoButton
-              className="btn btn-gold btn-lg relative z-10 mt-4 md:mt-5"
-            >
-              {FOUNDING_100_CTA_LABEL}
-            </BookDemoButton>
+            <div className="relative z-10 mt-4 flex flex-col gap-2.5 md:mt-5 md:flex-row md:flex-wrap md:items-center md:gap-3.5">
+              <BookDemoButton className="btn btn-gold btn-lg justify-center">
+                {FOUNDING_100_CTA_LABEL}
+              </BookDemoButton>
+              <Link
+                href={FOUNDING_100_SECTION_URL}
+                className="btn btn-outline-w btn-lg justify-center"
+              >
+                About the Founding 100
+              </Link>
+            </div>
           </div>
 
         </div>
@@ -633,6 +639,12 @@ export default async function Home() {
             >
               {FOUNDING_100_CTA_LABEL}
             </BookDemoButton>
+            <Link
+              href={FOUNDING_100_SECTION_URL}
+              className="btn btn-outline-w btn-lg w-full justify-center md:w-auto"
+            >
+              About the Founding 100
+            </Link>
           </div>
           <p className="mt-3.5 font-caveat text-base text-white/70 md:mt-5 md:text-lg">
             No credit card &nbsp;·&nbsp; No commitment &nbsp;·&nbsp; Cancel

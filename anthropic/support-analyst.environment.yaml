@@ -1,0 +1,19 @@
+name: genera-support-analyst
+description: >-
+  Sandbox for read-only support-ticket analysis of the Genera app repo.
+
+config:
+  type: cloud
+  # Deny-by-default egress. The repo is cloned in by Anthropic before the agent
+  # starts, and the agent only reads it — so the container never needs to reach
+  # the internet, and private source has nowhere to go if a ticket ever carries
+  # a prompt-injection attempt.
+  #
+  # If a session ever fails to provision, relax this to
+  #   networking: { type: unrestricted }
+  # and re-apply, then narrow it back down once you know what it needed.
+  networking:
+    type: limited
+    allow_package_managers: false
+    allow_mcp_servers: false
+    allowed_hosts: []

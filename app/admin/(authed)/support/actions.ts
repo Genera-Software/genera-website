@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getAdminSupabase } from "@/lib/supabase/admin";
 import { notifySupportTicket } from "@/lib/support/notify";
+import { startTicketAnalysis } from "@/lib/support/ai-analysis";
 import { sendTicketReply } from "@/lib/support/thread";
 
 const STATUSES = ["new", "in_progress", "completed"] as const;
@@ -195,6 +196,16 @@ export async function updateInternalNotes(id: string, formData: FormData) {
     .update({ internal_notes: notes })
     .eq("id", id);
   if (error) throw new Error(error.message);
+  revalidatePath(`/admin/support/${id}`);
+}
+
+/**
+ * Ask Claude to diagnose this ticket against the app repo. Starts a Managed
+ * Agents session and returns — the result is collected on a later page view.
+ * Deliberately admin-triggered per ticket: each run costs real money.
+ */
+export async function askClaude(id: string) {
+  await startTicketAnalysis(id);
   revalidatePath(`/admin/support/${id}`);
 }
 

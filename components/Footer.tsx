@@ -1,13 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import ConsentPreferencesLink from "@/components/ConsentPreferencesLink";
-import { FOUNDING_100_CTA_LABEL, FOUNDING_100_SECTION_URL } from "@/lib/cta";
 
 const PAW_LOGO = "/images/genera-svg.svg";
 
 const PRODUCT_LINKS = [
   { href: "/features", label: "Features" },
-  { href: FOUNDING_100_SECTION_URL, label: FOUNDING_100_CTA_LABEL },
   { href: "/faqs", label: "FAQs" },
   { href: "/blog", label: "Blog" },
 ];
