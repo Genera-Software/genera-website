@@ -5,30 +5,33 @@ import PageHeader from "../../_components/PageHeader";
 import {
   deleteTicket,
   replyToTicket,
+  setTicketPriority,
   setTicketStatus,
   updateInternalNotes,
 } from "../actions";
+import {
+  PRIORITIES,
+  PRIORITY_BADGE,
+  PRIORITY_DOT,
+  PRIORITY_LABEL,
+  PRIORITY_OPTION_ACTIVE,
+  PRIORITY_OPTION_IDLE,
+} from "@/lib/support/priority";
+import {
+  STATUSES,
+  STATUS_BADGE,
+  STATUS_DOT,
+  STATUS_LABEL,
+  STATUS_OPTION_ACTIVE,
+  STATUS_OPTION_IDLE,
+} from "@/lib/support/status";
 import AiAnalysisSection from "../_components/AiAnalysisSection";
 import { ticketRef } from "@/lib/support/thread";
 import {
   isAiAnalysisConfigured,
   reconcileTicketAnalysis,
 } from "@/lib/support/ai-analysis";
-import type { SupportTicketStatus } from "@/lib/supabase/types";
-
 export const dynamic = "force-dynamic";
-
-const STATUS_LABEL: Record<SupportTicketStatus, string> = {
-  new: "New",
-  in_progress: "In progress",
-  completed: "Completed",
-};
-
-const STATUS_BADGE: Record<SupportTicketStatus, string> = {
-  new: "bg-amber-50 text-amber-700",
-  in_progress: "bg-sky-50 text-sky-700",
-  completed: "bg-emerald-50 text-emerald-700",
-};
 
 const CATEGORY_LABEL: Record<string, string> = {
   technical: "Technical",
@@ -138,10 +141,17 @@ export default async function SupportTicketDetailPage({
         description={`Submitted ${formatDate(ticket.created_at)}`}
         back={{ href: "/admin/support", label: "All tickets" }}
         action={
-          <span
-            className={`rounded-full px-3 py-1 text-xs font-semibold ${STATUS_BADGE[ticket.status]}`}
-          >
-            {STATUS_LABEL[ticket.status]}
+          <span className="flex items-center gap-2">
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-semibold ${PRIORITY_BADGE[ticket.priority]}`}
+            >
+              {PRIORITY_LABEL[ticket.priority]}
+            </span>
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-semibold ${STATUS_BADGE[ticket.status]}`}
+            >
+              {STATUS_LABEL[ticket.status]}
+            </span>
           </span>
         }
       />
@@ -331,7 +341,7 @@ export default async function SupportTicketDetailPage({
               Status
             </h2>
             <div className="flex flex-col gap-2">
-              {(["new", "in_progress", "completed"] as const).map((s) => {
+              {STATUSES.map((s) => {
                 const active = ticket.status === s;
                 return (
                   <form
@@ -343,12 +353,19 @@ export default async function SupportTicketDetailPage({
                   >
                     <AdminFormStatusButton
                       type="submit"
-                      variant={active ? "ticketStatusActive" : "ticketStatus"}
+                      variant="ticketOption"
+                      className={
+                        active ? STATUS_OPTION_ACTIVE[s] : STATUS_OPTION_IDLE[s]
+                      }
                       disabled={active}
                       pendingLabel="Updating…"
                     >
-                      {active ? "✓ " : ""}
+                      <span
+                        aria-hidden
+                        className={`h-2.5 w-2.5 shrink-0 rounded-full ${STATUS_DOT[s]}`}
+                      />
                       {STATUS_LABEL[s]}
+                      {active && <span className="ml-auto">✓</span>}
                     </AdminFormStatusButton>
                   </form>
                 );
@@ -359,6 +376,46 @@ export default async function SupportTicketDetailPage({
                 Resolved {formatDate(ticket.resolved_at)}
               </p>
             )}
+          </section>
+
+          {/* Priority */}
+          <section className="rounded-2xl border border-teal-mid bg-white p-6">
+            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-ink-soft">
+              Priority
+            </h2>
+            <div className="flex flex-col gap-2">
+              {PRIORITIES.map((p) => {
+                const active = ticket.priority === p;
+                return (
+                  <form
+                    key={p}
+                    action={async () => {
+                      "use server";
+                      await setTicketPriority(ticket.id, p);
+                    }}
+                  >
+                    <AdminFormStatusButton
+                      type="submit"
+                      variant="ticketOption"
+                      className={
+                        active
+                          ? PRIORITY_OPTION_ACTIVE[p]
+                          : PRIORITY_OPTION_IDLE[p]
+                      }
+                      disabled={active}
+                      pendingLabel="Updating…"
+                    >
+                      <span
+                        aria-hidden
+                        className={`h-2.5 w-2.5 shrink-0 rounded-full ${PRIORITY_DOT[p]}`}
+                      />
+                      {PRIORITY_LABEL[p]}
+                      {active && <span className="ml-auto">✓</span>}
+                    </AdminFormStatusButton>
+                  </form>
+                );
+              })}
+            </div>
           </section>
 
           {/* Account */}

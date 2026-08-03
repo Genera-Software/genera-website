@@ -11,8 +11,12 @@ import {
 } from "./actions";
 import type {
   SupportTicketCategory,
+  SupportTicketPriority,
   SupportTicketStatus,
 } from "@/lib/supabase/types";
+import { PRIORITY_BADGE, PRIORITY_LABEL } from "@/lib/support/priority";
+import { STATUS_BADGE, STATUS_LABEL } from "@/lib/support/status";
+import ViewToggle from "./_components/ViewToggle";
 
 export const dynamic = "force-dynamic";
 
@@ -35,17 +39,16 @@ const CATEGORY_FILTERS: Array<{
   { value: "other", label: "Other" },
 ];
 
-const STATUS_BADGE: Record<SupportTicketStatus, string> = {
-  new: "bg-amber-50 text-amber-700",
-  in_progress: "bg-sky-50 text-sky-700",
-  completed: "bg-emerald-50 text-emerald-700",
-};
-
-const STATUS_LABEL: Record<SupportTicketStatus, string> = {
-  new: "New",
-  in_progress: "In progress",
-  completed: "Completed",
-};
+const PRIORITY_FILTERS: Array<{
+  value: SupportTicketPriority | "all";
+  label: string;
+}> = [
+  { value: "all", label: "All priorities" },
+  { value: "urgent", label: "Urgent" },
+  { value: "high", label: "High" },
+  { value: "medium", label: "Medium" },
+  { value: "low", label: "Low" },
+];
 
 const CATEGORY_LABEL: Record<SupportTicketCategory, string> = {
   technical: "Technical",
@@ -54,6 +57,32 @@ const CATEGORY_LABEL: Record<SupportTicketCategory, string> = {
   account: "Account",
   other: "Other",
 };
+
+/** Hover text for the notes icon — first line or so, not the whole note. */
+function notePreview(notes: string) {
+  const flat = notes.trim().replace(/\s+/g, " ");
+  return flat.length > 140 ? `${flat.slice(0, 140)}…` : flat;
+}
+
+function NoteIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M4 4.5A1.5 1.5 0 0 1 5.5 3h9L20 8.5v11a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19.5z" />
+      <path d="M14 3v6h6" />
+      <path d="M8.5 13h7M8.5 16.5h4.5" />
+    </svg>
+  );
+}
 
 /** Compact enough to stay on one line: "20 Jul 2026, 4:24 pm". */
 function formatDate(iso: string) {
@@ -73,23 +102,25 @@ function formatDate(iso: string) {
 export default async function SupportTicketsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; category?: string }>;
+  searchParams: Promise<{ status?: string; category?: string; priority?: string }>;
 }) {
   const sp = await searchParams;
   const status = (sp.status ?? "all") as SupportTicketStatus | "all";
   const category = (sp.category ?? "all") as SupportTicketCategory | "all";
+  const priority = (sp.priority ?? "all") as SupportTicketPriority | "all";
 
   const supabase = getAdminSupabase();
   let q = supabase
     .from("support_tickets")
     .select(
-      "id, status, category, subject, account_email, page_url, app_version, created_at",
+      "id, status, priority, category, subject, account_email, page_url, internal_notes, created_at",
     )
     .order("created_at", { ascending: false })
     .limit(200);
 
   if (status !== "all") q = q.eq("status", status);
   if (category !== "all") q = q.eq("category", category);
+  if (priority !== "all") q = q.eq("priority", priority);
 
   const { data: tickets } = await q;
 
@@ -117,12 +148,18 @@ export default async function SupportTicketsPage({
     .map((s) => s.trim())
     .filter(Boolean);
 
-  function hrefFor(next: { status?: string; category?: string }) {
+  function hrefFor(next: {
+    status?: string;
+    category?: string;
+    priority?: string;
+  }) {
     const params = new URLSearchParams();
     const s = next.status ?? status;
     const c = next.category ?? category;
+    const p = next.priority ?? priority;
     if (s !== "all") params.set("status", s);
     if (c !== "all") params.set("category", c);
+    if (p !== "all") params.set("priority", p);
     const qs = params.toString();
     return qs ? `/admin/support?${qs}` : "/admin/support";
   }
@@ -160,6 +197,7 @@ export default async function SupportTicketsPage({
       />
 
       <div className="mb-5 flex flex-wrap items-center gap-4">
+        <ViewToggle active="list" />
         <div className="flex flex-wrap gap-1.5">
           {STATUS_FILTERS.map((f) => {
             const active = status === f.value;
@@ -170,6 +208,24 @@ export default async function SupportTicketsPage({
                 className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
                   active
                     ? "bg-forest text-white"
+                    : "bg-cream text-ink-soft hover:bg-cream-dark"
+                }`}
+              >
+                {f.label}
+              </Link>
+            );
+          })}
+        </div>
+        <div className="flex flex-wrap gap-1.5">
+          {PRIORITY_FILTERS.map((f) => {
+            const active = priority === f.value;
+            return (
+              <Link
+                key={f.value}
+                href={hrefFor({ priority: f.value })}
+                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
+                  active
+                    ? "bg-ink text-white"
                     : "bg-cream text-ink-soft hover:bg-cream-dark"
                 }`}
               >
@@ -201,15 +257,16 @@ export default async function SupportTicketsPage({
       {/* overflow-x-auto, not overflow-hidden — narrow windows must scroll the
           table rather than silently clipping the Status column. */}
       <div className="overflow-x-auto rounded-2xl border border-teal-mid bg-white">
-        <table className="w-full min-w-[64rem] text-left text-sm">
+        <table className="w-full min-w-[72rem] text-left text-sm">
           <thead className="bg-cream text-xs uppercase tracking-wider text-ink-soft">
             <tr>
               <th className="px-5 py-3">Ref</th>
               <th className="px-5 py-3">Subject</th>
+              <th className="px-5 py-3">Priority</th>
               <th className="px-5 py-3">Category</th>
               <th className="px-5 py-3">Account</th>
               <th className="px-5 py-3">Page</th>
-              <th className="px-5 py-3">Version</th>
+              <th className="px-5 py-3">Notes</th>
               <th className="px-5 py-3">Submitted</th>
               <th className="px-5 py-3">Status</th>
             </tr>
@@ -251,6 +308,13 @@ export default async function SupportTicketsPage({
                     )}
                   </div>
                 </td>
+                <td className="px-5 py-3 align-middle">
+                  <span
+                    className={`inline-block whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-semibold ${PRIORITY_BADGE[t.priority]}`}
+                  >
+                    {PRIORITY_LABEL[t.priority]}
+                  </span>
+                </td>
                 <td className="px-5 py-3 align-middle text-ink-soft">
                   {CATEGORY_LABEL[t.category]}
                 </td>
@@ -272,8 +336,18 @@ export default async function SupportTicketsPage({
                     "—"
                   )}
                 </td>
-                <td className="px-5 py-3 align-middle font-mono text-xs text-ink-soft">
-                  {t.app_version ?? "—"}
+                <td className="px-5 py-3 align-middle text-ink-soft">
+                  {t.internal_notes?.trim() ? (
+                    <span
+                      className="inline-flex items-center text-forest"
+                      title={notePreview(t.internal_notes)}
+                    >
+                      <NoteIcon />
+                      <span className="sr-only">Has internal notes</span>
+                    </span>
+                  ) : (
+                    <span aria-hidden>—</span>
+                  )}
                 </td>
                 <td className="whitespace-nowrap px-5 py-3 align-middle text-ink-soft">
                   {formatDate(t.created_at)}
@@ -291,7 +365,7 @@ export default async function SupportTicketsPage({
             {(tickets ?? []).length === 0 && (
               <tr>
                 <td
-                  colSpan={8}
+                  colSpan={9}
                   className="px-5 py-10 text-center text-sm text-ink-soft"
                 >
                   No tickets match the current filters.

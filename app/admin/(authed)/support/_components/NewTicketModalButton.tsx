@@ -17,6 +17,13 @@ const STATUSES: Array<{ value: string; label: string }> = [
   { value: "completed", label: "Completed" },
 ];
 
+const PRIORITIES: Array<{ value: string; label: string }> = [
+  { value: "urgent", label: "Urgent" },
+  { value: "high", label: "High" },
+  { value: "medium", label: "Medium" },
+  { value: "low", label: "Low" },
+];
+
 export default function NewTicketModalButton({
   action,
 }: {
@@ -93,7 +100,7 @@ export default function NewTicketModalButton({
               }}
               className="space-y-4"
             >
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <Field label="Category" htmlFor="category">
                   <select
                     id="category"
@@ -118,6 +125,20 @@ export default function NewTicketModalButton({
                     {STATUSES.map((s) => (
                       <option key={s.value} value={s.value}>
                         {s.label}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+                <Field label="Priority" htmlFor="priority">
+                  <select
+                    id="priority"
+                    name="priority"
+                    defaultValue="medium"
+                    className={selectStyle}
+                  >
+                    {PRIORITIES.map((p) => (
+                      <option key={p.value} value={p.value}>
+                        {p.label}
                       </option>
                     ))}
                   </select>

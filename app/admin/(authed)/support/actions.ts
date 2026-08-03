@@ -16,7 +16,9 @@ const CATEGORIES = [
   "account",
   "other",
 ] as const;
+const PRIORITIES = ["low", "medium", "high", "urgent"] as const;
 const StatusSchema = z.enum(STATUSES);
+const PrioritySchema = z.enum(PRIORITIES);
 
 const NewTicketSchema = z.object({
   category: z.enum(CATEGORIES).default("other"),
@@ -48,6 +50,7 @@ const NewTicketSchema = z.object({
     .transform((v) => (v === "" ? null : v))
     .nullable(),
   status: z.enum(STATUSES).default("new"),
+  priority: z.enum(PRIORITIES).default("medium"),
 });
 
 const NotifyEmailSchema = z.object({
@@ -74,6 +77,7 @@ export async function createTicket(formData: FormData) {
     account_name: formData.get("account_name") ?? "",
     page_url: formData.get("page_url") ?? "",
     status: formData.get("status") ?? "new",
+    priority: formData.get("priority") ?? "medium",
   });
 
   const supabase = getAdminSupabase();
@@ -87,6 +91,7 @@ export async function createTicket(formData: FormData) {
       account_name: data.account_name,
       page_url: data.page_url,
       status: data.status,
+      priority: data.priority,
       source: "manual",
     })
     .select("id")
@@ -185,6 +190,20 @@ export async function setTicketStatus(id: string, status: string) {
     .eq("id", id);
   if (error) throw new Error(error.message);
   revalidatePath("/admin/support");
+  revalidatePath("/admin/support/board");
+  revalidatePath(`/admin/support/${id}`);
+}
+
+export async function setTicketPriority(id: string, priority: string) {
+  const parsed = PrioritySchema.parse(priority);
+  const supabase = getAdminSupabase();
+  const { error } = await supabase
+    .from("support_tickets")
+    .update({ priority: parsed })
+    .eq("id", id);
+  if (error) throw new Error(error.message);
+  revalidatePath("/admin/support");
+  revalidatePath("/admin/support/board");
   revalidatePath(`/admin/support/${id}`);
 }
 

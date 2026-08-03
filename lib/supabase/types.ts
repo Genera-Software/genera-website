@@ -295,6 +295,7 @@ export type Database = {
             | "feature_request"
             | "account"
             | "other";
+          priority: "low" | "medium" | "high" | "urgent";
           subject: string;
           description: string;
           account_id: string | null;
@@ -330,6 +331,7 @@ export type Database = {
             | "feature_request"
             | "account"
             | "other";
+          priority?: "low" | "medium" | "high" | "urgent";
           subject: string;
           description: string;
           account_id?: string | null;
@@ -365,6 +367,7 @@ export type Database = {
             | "feature_request"
             | "account"
             | "other";
+          priority?: "low" | "medium" | "high" | "urgent";
           subject?: string;
           description?: string;
           account_id?: string | null;
@@ -673,6 +676,7 @@ export type FormSubmission = Database["public"]["Tables"]["form_submissions"]["R
 export type QuestionType = FormQuestion["type"];
 export type SupportTicket = Database["public"]["Tables"]["support_tickets"]["Row"];
 export type SupportTicketStatus = SupportTicket["status"];
+export type SupportTicketPriority = SupportTicket["priority"];
 export type SupportTicketAiStatus = SupportTicket["ai_status"];
 export type StoryTimelineEntry = Database["public"]["Tables"]["story_timeline"]["Row"];
 export type SupportTicketCategory = SupportTicket["category"];

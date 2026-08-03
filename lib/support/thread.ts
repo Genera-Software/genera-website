@@ -9,13 +9,10 @@ export const SUPPORT_FROM_EMAIL =
 export const SUPPORT_FROM_NAME =
   process.env.SUPPORT_FROM_NAME ?? "Genera Support";
 
-/**
- * Short public reference for a ticket, derived from the first 8 hex characters
- * of its UUID. Stateless — no extra column, and reversible via a prefix match.
- */
-export function ticketRef(ticketId: string): string {
-  return ticketId.replace(/-/g, "").slice(0, 8).toUpperCase();
-}
+// Re-exported so existing server-side imports keep working; the implementation
+// lives in ref.ts, which client components can also import.
+export { ticketRef } from "./ref";
+import { ticketRef } from "./ref";
 
 const REF_IN_SUBJECT = /\[#([0-9A-F]{8})\]/i;
 

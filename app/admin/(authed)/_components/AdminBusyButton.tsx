@@ -16,7 +16,8 @@ export type AdminBusyButtonVariant =
   | "ghostWide"
   | "icon"
   | "ticketStatus"
-  | "ticketStatusActive";
+  | "ticketStatusActive"
+  | "ticketOption";
 
 const VARIANT_STYLES: Record<
   AdminBusyButtonVariant,
@@ -85,6 +86,14 @@ const VARIANT_STYLES: Record<
   ticketStatusActive: {
     button:
       "w-full cursor-default rounded-lg bg-cream px-3 py-2 text-sm font-semibold text-ink-soft",
+    spinner: "h-4 w-4 border-2 border-ink-soft/20 border-t-ink-soft",
+  },
+  // Colour-coded status/priority picker. Deliberately carries no bg/border/text
+  // colour of its own — the caller supplies those per option via className.
+  // The child-span rule stretches the label row so a trailing tick can sit right.
+  ticketOption: {
+    button:
+      "flex w-full items-center rounded-lg border px-3 py-2 text-sm font-semibold transition-colors disabled:cursor-default [&>span]:w-full [&>span]:justify-start",
     spinner: "h-4 w-4 border-2 border-ink-soft/20 border-t-ink-soft",
   },
 };
