@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { createMetadata } from "@/lib/seo";
+import { BOOK_DEMO_FORM_SLUG } from "@/lib/cta";
+import { isFormActive } from "@/lib/forms";
 import FeaturesClient from "./FeaturesClient";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   ...createMetadata({
@@ -11,6 +15,7 @@ export const metadata: Metadata = {
   }),
 };
 
-export default function FeaturesPage() {
-  return <FeaturesClient />;
+export default async function FeaturesPage() {
+  const showBookDemo = await isFormActive(BOOK_DEMO_FORM_SLUG);
+  return <FeaturesClient showBookDemo={showBookDemo} />;
 }

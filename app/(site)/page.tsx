@@ -6,8 +6,13 @@ import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
 import FoundingSpotsStats from "@/components/FoundingSpotsStats";
 import AdminMiniAnimation from "@/components/AdminMiniAnimation";
-import { FOUNDING_100_CTA_LABEL, FOUNDING_100_SECTION_URL } from "@/lib/cta";
+import {
+  BOOK_DEMO_FORM_SLUG,
+  FOUNDING_100_CTA_LABEL,
+  FOUNDING_100_SECTION_URL,
+} from "@/lib/cta";
 import { getPublicSupabase } from "@/lib/supabase/server";
+import { isFormActive } from "@/lib/forms";
 
 export const revalidate = 60;
 
@@ -117,7 +122,7 @@ const FOUNDING_PERKS = [
 export default async function Home() {
   const supabase = getPublicSupabase();
 
-  const [logosRes, spotsRes] = await Promise.all([
+  const [logosRes, spotsRes, showBookDemo] = await Promise.all([
     supabase
       .from("trust_logos")
       .select("id, name, logo_url")
@@ -128,6 +133,7 @@ export default async function Home() {
       .select("total_spots, claimed_spots")
       .eq("id", 1)
       .maybeSingle(),
+    isFormActive(BOOK_DEMO_FORM_SLUG),
   ]);
 
   const trustLogos = logosRes.data ?? [];
@@ -193,12 +199,14 @@ export default async function Home() {
             >
               {FOUNDING_100_CTA_LABEL}
             </BookDemoButton>
-            <BookDemoButton
-              slug="book-demo"
-              className="btn btn-outline-w btn-lg w-full justify-center md:w-auto"
-            >
-              Book a Demo
-            </BookDemoButton>
+            {showBookDemo && (
+              <BookDemoButton
+                slug={BOOK_DEMO_FORM_SLUG}
+                className="btn btn-outline-w btn-lg w-full justify-center md:w-auto"
+              >
+                Book a Demo
+              </BookDemoButton>
+            )}
           </div>
 
           {/* Mobile-only artwork panel — sits inside the hero, full-width below CTAs */}

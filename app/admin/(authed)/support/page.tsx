@@ -14,8 +14,18 @@ import type {
   SupportTicketPriority,
   SupportTicketStatus,
 } from "@/lib/supabase/types";
-import { PRIORITY_BADGE, PRIORITY_LABEL } from "@/lib/support/priority";
-import { STATUS_BADGE, STATUS_LABEL } from "@/lib/support/status";
+import {
+  PRIORITY_BADGE,
+  PRIORITY_DOT,
+  PRIORITY_LABEL,
+  PRIORITY_OPTION_ACTIVE,
+} from "@/lib/support/priority";
+import {
+  STATUS_BADGE,
+  STATUS_DOT,
+  STATUS_LABEL,
+  STATUS_OPTION_ACTIVE,
+} from "@/lib/support/status";
 import ViewToggle from "./_components/ViewToggle";
 import AssigneeAvatar from "./_components/AssigneeAvatar";
 import { listAdminUsers } from "@/lib/admin/allowlist";
@@ -89,6 +99,66 @@ function NoteIcon() {
   );
 }
 
+/** One labelled row of the filter panel — the label says which dimension the
+    pills belong to, which the old single wrapping row never did. */
+function FilterRow({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+      <span className="w-20 shrink-0 text-[11px] font-semibold uppercase tracking-wider text-ink-soft">
+        {label}
+      </span>
+      <div className="flex flex-wrap items-center gap-1.5">{children}</div>
+    </div>
+  );
+}
+
+/** Outlined style for a selected "All …" pill — visibly chosen, but quieter
+    than a real filter and without the click-to-clear ✕. */
+const FILTER_ALL_ACTIVE = "border-forest bg-white text-forest";
+
+/** Filter pill. Clicking an active clearable pill clears that filter (the
+    href points back to "all"), signalled by the small ✕. */
+function FilterPill({
+  href,
+  active,
+  activeClass,
+  clearable = true,
+  title,
+  children,
+}: {
+  href: string;
+  active: boolean;
+  activeClass: string;
+  clearable?: boolean;
+  title?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      title={active && clearable ? "Clear this filter" : title}
+      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+        active
+          ? activeClass
+          : "border-transparent bg-cream text-ink-soft hover:bg-cream-dark hover:text-ink"
+      }`}
+    >
+      {children}
+      {active && clearable && (
+        <span aria-hidden className="text-[10px] leading-none opacity-60">
+          ✕
+        </span>
+      )}
+    </Link>
+  );
+}
+
 /** Compact enough to stay on one line: "20 Jul 2026, 4:24 pm". */
 function formatDate(iso: string) {
   const d = new Date(iso);
@@ -145,10 +215,37 @@ export default async function SupportTicketsPage({
 
   const { data: tickets } = await q;
 
-  const { count: newCount } = await supabase
-    .from("support_tickets")
-    .select("*", { count: "exact", head: true })
-    .eq("status", "new");
+  // Global per-status counts (unaffected by the active filters) — shown on the
+  // status pills so you can see where the tickets are before narrowing down.
+  const [newRes, inProgressRes, completedRes] = await Promise.all([
+    supabase
+      .from("support_tickets")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "new"),
+    supabase
+      .from("support_tickets")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "in_progress"),
+    supabase
+      .from("support_tickets")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "completed"),
+  ]);
+  const statusCounts: Record<SupportTicketStatus, number> = {
+    new: newRes.count ?? 0,
+    in_progress: inProgressRes.count ?? 0,
+    completed: completedRes.count ?? 0,
+  };
+  const newCount = statusCounts.new;
+  const totalCount =
+    statusCounts.new + statusCounts.in_progress + statusCounts.completed;
+
+  const filtersActive = [
+    status !== "all",
+    priority !== "all",
+    category !== "all",
+    assignee !== "all",
+  ].filter(Boolean).length;
 
   // Tickets where the customer has replied since we last opened them. Same
   // source of truth as the sidebar badge.
@@ -220,104 +317,167 @@ export default async function SupportTicketsPage({
         }}
       />
 
-      <div className="mb-5 flex flex-wrap items-center gap-4">
-        <ViewToggle active="list" />
-        <div className="flex flex-wrap gap-1.5">
-          {STATUS_FILTERS.map((f) => {
-            const active = status === f.value;
-            return (
-              <Link
-                key={f.value}
-                href={hrefFor({ status: f.value })}
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
-                  active
-                    ? "bg-forest text-white"
-                    : "bg-cream text-ink-soft hover:bg-cream-dark"
-                }`}
-              >
-                {f.label}
-              </Link>
-            );
-          })}
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          {PRIORITY_FILTERS.map((f) => {
-            const active = priority === f.value;
-            return (
-              <Link
-                key={f.value}
-                href={hrefFor({ priority: f.value })}
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
-                  active
-                    ? "bg-ink text-white"
-                    : "bg-cream text-ink-soft hover:bg-cream-dark"
-                }`}
-              >
-                {f.label}
-              </Link>
-            );
-          })}
-        </div>
-        <div className="flex flex-wrap items-center gap-1.5">
-          {[
-            { value: "all", label: "Anyone" },
-            { value: "me", label: "My tickets" },
-            { value: "unassigned", label: "Unassigned" },
-          ].map((f) => {
-            const active = assignee === f.value;
-            return (
-              <Link
-                key={f.value}
-                href={hrefFor({ assignee: f.value })}
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
-                  active
-                    ? "bg-forest text-white"
-                    : "bg-cream text-ink-soft hover:bg-cream-dark"
-                }`}
-              >
-                {f.label}
-              </Link>
-            );
-          })}
-          {admins
-            .filter((a) => a.email !== currentUser.email)
-            .map((a) => {
-              const active = assignee === a.email;
-              return (
-                <Link
-                  key={a.id}
-                  href={hrefFor({ assignee: a.email })}
-                  title={a.email}
-                  className={`inline-flex items-center gap-1.5 rounded-full py-1 pl-1 pr-3 text-xs font-semibold transition-colors ${
-                    active
-                      ? "bg-forest text-white"
-                      : "bg-cream text-ink-soft hover:bg-cream-dark"
-                  }`}
-                >
-                  <AssigneeAvatar email={a.email} />
-                  {assigneeName(a.email)}
-                </Link>
-              );
-            })}
+      {/* Filter panel — one labelled row per dimension. Active pills take the
+          same colours as the badges in the table below, carry a ✕, and link
+          back to "all" so clicking again clears just that filter. */}
+      <div className="mb-6 overflow-hidden rounded-2xl border border-teal-mid bg-white">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-cream-dark bg-cream/40 px-5 py-3">
+          <div className="flex flex-wrap items-center gap-4">
+            <ViewToggle active="list" />
+            <span className="text-sm text-ink-soft">
+              Showing{" "}
+              <strong className="font-semibold text-ink">
+                {(tickets ?? []).length}
+              </strong>{" "}
+              of {totalCount} ticket{totalCount === 1 ? "" : "s"}
+            </span>
+          </div>
+          {filtersActive > 0 && (
+            <Link
+              href="/admin/support"
+              className="inline-flex items-center gap-1.5 rounded-full border border-teal-mid bg-white px-3 py-1.5 text-xs font-semibold text-ink-soft transition-colors hover:border-forest hover:text-forest"
+            >
+              Clear {filtersActive} filter{filtersActive === 1 ? "" : "s"}
+              <span aria-hidden className="text-[10px] leading-none">
+                ✕
+              </span>
+            </Link>
+          )}
         </div>
 
-        <div className="ml-auto flex flex-wrap gap-1.5">
-          {CATEGORY_FILTERS.map((f) => {
-            const active = category === f.value;
-            return (
-              <Link
-                key={f.value}
-                href={hrefFor({ category: f.value })}
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
-                  active
-                    ? "bg-gold text-ink"
-                    : "bg-cream text-ink-soft hover:bg-cream-dark"
-                }`}
-              >
-                {f.label}
-              </Link>
-            );
-          })}
+        <div className="flex flex-col gap-3 px-5 py-4">
+          <FilterRow label="Status">
+            {STATUS_FILTERS.map((f) => {
+              const active = status === f.value;
+              return (
+                <FilterPill
+                  key={f.value}
+                  href={hrefFor({ status: active ? "all" : f.value })}
+                  active={active}
+                  clearable={f.value !== "all"}
+                  activeClass={
+                    f.value === "all"
+                      ? FILTER_ALL_ACTIVE
+                      : STATUS_OPTION_ACTIVE[f.value as SupportTicketStatus]
+                  }
+                >
+                  {f.value !== "all" && (
+                    <span
+                      aria-hidden
+                      className={`h-2 w-2 rounded-full ${STATUS_DOT[f.value as SupportTicketStatus]}`}
+                    />
+                  )}
+                  {f.label}
+                  <span className="rounded-full bg-white/70 px-1.5 text-[10px] tabular-nums text-ink-soft">
+                    {f.value === "all"
+                      ? totalCount
+                      : statusCounts[f.value as SupportTicketStatus]}
+                  </span>
+                </FilterPill>
+              );
+            })}
+          </FilterRow>
+
+          <FilterRow label="Priority">
+            {PRIORITY_FILTERS.map((f) => {
+              const active = priority === f.value;
+              return (
+                <FilterPill
+                  key={f.value}
+                  href={hrefFor({ priority: active ? "all" : f.value })}
+                  active={active}
+                  clearable={f.value !== "all"}
+                  activeClass={
+                    f.value === "all"
+                      ? FILTER_ALL_ACTIVE
+                      : PRIORITY_OPTION_ACTIVE[f.value as SupportTicketPriority]
+                  }
+                >
+                  {f.value !== "all" && (
+                    <span
+                      aria-hidden
+                      className={`h-2 w-2 rounded-full ${PRIORITY_DOT[f.value as SupportTicketPriority]}`}
+                    />
+                  )}
+                  {f.label}
+                </FilterPill>
+              );
+            })}
+          </FilterRow>
+
+          <FilterRow label="Assignee">
+            {[
+              { value: "all", label: "Anyone" },
+              { value: "me", label: "My tickets" },
+              { value: "unassigned", label: "Unassigned" },
+            ].map((f) => {
+              const active = assignee === f.value;
+              return (
+                <FilterPill
+                  key={f.value}
+                  href={hrefFor({ assignee: active ? "all" : f.value })}
+                  active={active}
+                  clearable={f.value !== "all"}
+                  activeClass={
+                    f.value === "all"
+                      ? FILTER_ALL_ACTIVE
+                      : "border-forest bg-forest text-white"
+                  }
+                >
+                  {f.label}
+                </FilterPill>
+              );
+            })}
+            {admins
+              .filter((a) => a.email !== currentUser.email)
+              .map((a) => {
+                const active = assignee === a.email;
+                return (
+                  <Link
+                    key={a.id}
+                    href={hrefFor({ assignee: active ? "all" : a.email })}
+                    title={active ? "Clear this filter" : a.email}
+                    className={`inline-flex items-center gap-1.5 rounded-full border py-1 pl-1 pr-3 text-xs font-semibold transition-colors ${
+                      active
+                        ? "border-forest bg-forest text-white"
+                        : "border-transparent bg-cream text-ink-soft hover:bg-cream-dark hover:text-ink"
+                    }`}
+                  >
+                    <AssigneeAvatar email={a.email} />
+                    {assigneeName(a.email)}
+                    {active && (
+                      <span
+                        aria-hidden
+                        className="text-[10px] leading-none opacity-60"
+                      >
+                        ✕
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
+          </FilterRow>
+
+          <FilterRow label="Category">
+            {CATEGORY_FILTERS.map((f) => {
+              const active = category === f.value;
+              return (
+                <FilterPill
+                  key={f.value}
+                  href={hrefFor({ category: active ? "all" : f.value })}
+                  active={active}
+                  clearable={f.value !== "all"}
+                  activeClass={
+                    f.value === "all"
+                      ? FILTER_ALL_ACTIVE
+                      : "border-gold bg-gold text-ink"
+                  }
+                >
+                  {f.label}
+                </FilterPill>
+              );
+            })}
+          </FilterRow>
         </div>
       </div>
 

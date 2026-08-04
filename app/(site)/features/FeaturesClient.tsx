@@ -1008,7 +1008,11 @@ function CategoryHeader({ title, desc }: { title: string; desc: string }) {
   );
 }
 
-export default function FeaturesClient() {
+export default function FeaturesClient({
+  showBookDemo,
+}: {
+  showBookDemo: boolean;
+}) {
   return (
     <>
       <Reveal />
@@ -1037,7 +1041,9 @@ export default function FeaturesClient() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <BookDemoButton slug={FOUNDING_100_FORM_SLUG} className="btn btn-gold btn-lg">{FOUNDING_100_CTA_LABEL}</BookDemoButton>
-              <BookDemoButton slug={BOOK_DEMO_FORM_SLUG} className="btn btn-outline-w btn-lg">Book a Demo</BookDemoButton>
+              {showBookDemo && (
+                <BookDemoButton slug={BOOK_DEMO_FORM_SLUG} className="btn btn-outline-w btn-lg">Book a Demo</BookDemoButton>
+              )}
             </div>
           </div>
 
@@ -1350,7 +1356,9 @@ export default function FeaturesClient() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <BookDemoButton slug={FOUNDING_100_FORM_SLUG} className="btn btn-gold btn-lg">{FOUNDING_100_CTA_LABEL}</BookDemoButton>
-            <BookDemoButton slug={BOOK_DEMO_FORM_SLUG} className="btn btn-outline-w btn-lg">Book a Demo</BookDemoButton>
+            {showBookDemo && (
+              <BookDemoButton slug={BOOK_DEMO_FORM_SLUG} className="btn btn-outline-w btn-lg">Book a Demo</BookDemoButton>
+            )}
           </div>
         </div>
       </section>

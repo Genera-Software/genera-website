@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
 import { createMetadata } from "@/lib/seo";
-import { FOUNDING_100_CTA_LABEL } from "@/lib/cta";
+import { BOOK_DEMO_FORM_SLUG, FOUNDING_100_CTA_LABEL } from "@/lib/cta";
+import { isFormActive } from "@/lib/forms";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   ...createMetadata({
@@ -13,7 +16,8 @@ export const metadata: Metadata = {
   }),
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const showBookDemo = await isFormActive(BOOK_DEMO_FORM_SLUG);
   return (
     <>
       <Reveal />
@@ -75,12 +79,14 @@ export default function ContactPage() {
               <BookDemoButton className="btn btn-gold btn-lg">
                 {FOUNDING_100_CTA_LABEL}
               </BookDemoButton>
-              <BookDemoButton
-                slug="book-demo"
-                className="btn btn-outline-d btn-lg"
-              >
-                Book a Demo
-              </BookDemoButton>
+              {showBookDemo && (
+                <BookDemoButton
+                  slug={BOOK_DEMO_FORM_SLUG}
+                  className="btn btn-outline-d btn-lg"
+                >
+                  Book a Demo
+                </BookDemoButton>
+              )}
             </div>
           </div>
 
