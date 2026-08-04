@@ -336,6 +336,7 @@ export type Database = {
           source: string;
           internal_notes: string;
           assigned_to: string | null;
+          created_by: string | null;
           ai_status: "idle" | "running" | "ready" | "failed";
           ai_session_id: string | null;
           ai_suggestion: string | null;
@@ -372,6 +373,7 @@ export type Database = {
           source?: string;
           internal_notes?: string;
           assigned_to?: string | null;
+          created_by?: string | null;
           ai_status?: "idle" | "running" | "ready" | "failed";
           ai_session_id?: string | null;
           ai_suggestion?: string | null;
@@ -408,6 +410,7 @@ export type Database = {
           source?: string;
           internal_notes?: string;
           assigned_to?: string | null;
+          created_by?: string | null;
           ai_status?: "idle" | "running" | "ready" | "failed";
           ai_session_id?: string | null;
           ai_suggestion?: string | null;

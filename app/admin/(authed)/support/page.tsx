@@ -21,6 +21,7 @@ import AssigneeAvatar from "./_components/AssigneeAvatar";
 import { listAdminUsers } from "@/lib/admin/allowlist";
 import { requireAdminUser } from "@/lib/admin/auth";
 import { assigneeName } from "@/lib/support/assignee";
+import { isManualPage } from "@/lib/support/manual";
 
 export const dynamic = "force-dynamic";
 
@@ -130,7 +131,7 @@ export default async function SupportTicketsPage({
   let q = supabase
     .from("support_tickets")
     .select(
-      "id, status, priority, category, subject, account_email, page_url, internal_notes, assigned_to, created_at",
+      "id, status, priority, category, subject, account_email, account_name, page_url, internal_notes, assigned_to, created_by, created_at",
     )
     .order("created_at", { ascending: false })
     .limit(200);
@@ -395,10 +396,27 @@ export default async function SupportTicketsPage({
                   {CATEGORY_LABEL[t.category]}
                 </td>
                 <td className="px-5 py-3 align-middle text-ink-soft">
-                  {t.account_email ?? "—"}
+                  {t.account_email ?? t.account_name ?? (
+                    // Nothing about the customer was captured. Say who logged
+                    // it rather than leaving a bare dash that reads as data loss.
+                    t.created_by ? (
+                      <span className="text-xs italic">
+                        Logged by {assigneeName(t.created_by)}
+                      </span>
+                    ) : (
+                      "—"
+                    )
+                  )}
                 </td>
                 <td className="px-5 py-3 align-middle font-mono text-xs text-ink-soft">
-                  {t.page_url ? (
+                  {isManualPage(t.page_url) ? (
+                    <span
+                      className="rounded-full bg-cream px-2 py-0.5 font-sans text-[11px] font-semibold not-italic text-ink-soft"
+                      title="Logged by hand from the admin console — no browser session behind it"
+                    >
+                      Admin
+                    </span>
+                  ) : t.page_url ? (
                     <span title={t.page_url}>
                       {(() => {
                         try {

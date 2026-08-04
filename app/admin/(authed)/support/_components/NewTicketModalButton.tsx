@@ -86,7 +86,9 @@ export default function NewTicketModalButton({
             </h2>
             <p className="mb-5 text-sm text-ink-soft">
               Log a ticket that came in through phone, email, or any other
-              channel. Marked as source &ldquo;manual&rdquo;.
+              channel. Marked as source &ldquo;manual&rdquo; and stamped with
+              your name, so a blank Account column reads as &ldquo;we typed this
+              in&rdquo; rather than missing data.
             </p>
 
             <form
@@ -193,7 +195,7 @@ export default function NewTicketModalButton({
                   id="page_url"
                   name="page_url"
                   maxLength={2000}
-                  placeholder="optional, e.g. https://app.generasoftware.com/dashboard"
+                  placeholder="optional — defaults to “Admin”"
                   className={inputStyle}
                 />
               </Field>

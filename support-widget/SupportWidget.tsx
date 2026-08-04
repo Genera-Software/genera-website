@@ -129,6 +129,17 @@ export default function SupportWidget({
       setError("Please add a subject and description.");
       return;
     }
+    // Signed-out users type their own address. Without it the ticket lands in
+    // the admin with nobody to reply to, so don't let it through.
+    const contactEmail = (account?.email ?? email).trim();
+    if (!contactEmail) {
+      setError("Please add your email so we can reply.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+      setError("That email doesn't look right.");
+      return;
+    }
     setSubmitting(true);
     setError(null);
 
@@ -138,7 +149,7 @@ export default function SupportWidget({
       subject: subject.trim(),
       description: description.trim(),
       account_id: account?.id ?? null,
-      account_email: (account?.email ?? email).trim() || null,
+      account_email: contactEmail,
       account_name: account?.name ?? null,
       account_metadata: account?.metadata ?? {},
       page_url: window.location.href,
@@ -315,6 +326,7 @@ export default function SupportWidget({
                 {!account?.email && (
                   <input
                     type="email"
+                    required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Your email"

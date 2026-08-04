@@ -534,6 +534,12 @@ export default async function SupportTicketDetailPage({
               <Field label="Email" value={ticket.account_email} />
               <Field label="Name" value={ticket.account_name} />
               <Field label="ID" value={ticket.account_id} mono />
+              {ticket.created_by && (
+                <Field
+                  label="Logged by"
+                  value={`${assigneeName(ticket.created_by)} (${ticket.created_by})`}
+                />
+              )}
               {metaEntries.map(([k, v]) => (
                 <Field
                   key={k}

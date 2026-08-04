@@ -9,6 +9,7 @@ import { requireAdminUser } from "@/lib/admin/auth";
 import { notifySupportTicket } from "@/lib/support/notify";
 import { startTicketAnalysis } from "@/lib/support/ai-analysis";
 import { sendTicketReply } from "@/lib/support/thread";
+import { MANUAL_PAGE_URL } from "@/lib/support/manual";
 
 const STATUSES = ["new", "in_progress", "completed"] as const;
 const CATEGORIES = [
@@ -44,13 +45,15 @@ const NewTicketSchema = z.object({
     .or(z.literal(""))
     .transform((v) => (v === "" ? null : v))
     .nullable(),
+  // Manual tickets arrive by phone or email, so there is usually no page to
+  // record. "Admin" (rather than null) marks them as logged from this console —
+  // an empty Page cell used to read as a widget submission that lost its data.
   page_url: z
     .string()
     .trim()
     .max(2000)
     .or(z.literal(""))
-    .transform((v) => (v === "" ? null : v))
-    .nullable(),
+    .transform((v) => (v === "" ? MANUAL_PAGE_URL : v)),
   status: z.enum(STATUSES).default("new"),
   priority: z.enum(PRIORITIES).default("medium"),
 });
@@ -71,6 +74,11 @@ const NotifyEmailSchema = z.object({
 });
 
 export async function createTicket(formData: FormData) {
+  // Who logged it. Every route into this action is already behind the admin
+  // layout, so this is a lookup rather than a new gate — it just gives the
+  // ticket an owner instead of an anonymous blank row.
+  const currentUser = await requireAdminUser();
+
   const data = NewTicketSchema.parse({
     category: formData.get("category") ?? "other",
     subject: formData.get("subject") ?? "",
@@ -95,6 +103,7 @@ export async function createTicket(formData: FormData) {
       status: data.status,
       priority: data.priority,
       source: "manual",
+      created_by: currentUser.email,
     })
     .select("id")
     .single();
