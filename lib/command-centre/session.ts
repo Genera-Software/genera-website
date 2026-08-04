@@ -1,7 +1,7 @@
 // Web Crypto–based session helpers for the Content Command Centre login.
-// Deliberately separate from lib/admin/session.ts: this password is shared
-// with Duncan for content planning, and should not also unlock the website
-// CMS (blog/FAQ/logo editing).
+// Deliberately separate from the /admin login (Supabase Auth, per-user
+// accounts): this is a single shared password for content planning, and should
+// not also unlock the website CMS (blog/FAQ/logo editing).
 
 const COOKIE_NAME = "genera_ccc_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 24 * 30; // 30 days

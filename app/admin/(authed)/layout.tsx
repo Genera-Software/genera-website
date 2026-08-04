@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Sidebar from "./_components/Sidebar";
 import { getAdminSupabase } from "@/lib/supabase/admin";
+import { requireAdminUser } from "@/lib/admin/auth";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -44,10 +45,13 @@ export default async function AuthedAdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Authoritative check. The middleware redirects unauthenticated requests
+  // already, but this re-verifies the session server-side for every admin page.
+  const user = await requireAdminUser();
   const badges = await loadBadges();
   return (
     <div className="min-h-screen bg-cream text-ink">
-      <Sidebar badges={badges} />
+      <Sidebar badges={badges} userEmail={user.email} />
       <div className="lg:pl-64">
         <main className="px-4 pb-12 pt-20 lg:px-8 lg:pt-8">
           {/* Pages opt out of the reading-width cap with data-full-width. */}

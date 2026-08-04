@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifySessionToken, ADMIN_COOKIE_NAME } from "@/lib/admin/session";
+import { readAdminSession, withAuthCookies } from "@/lib/admin/middleware-auth";
 import {
   verifySessionToken as verifyCccSessionToken,
   CCC_COOKIE_NAME,
@@ -8,24 +8,32 @@ import {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Allow login page itself and the auth endpoints
-  if (
-    pathname === "/admin/login" ||
-    pathname === "/admin/logout" ||
-    pathname.startsWith("/admin/api/auth")
-  ) {
-    return NextResponse.next();
-  }
-
   if (pathname.startsWith("/admin")) {
-    const token = request.cookies.get(ADMIN_COOKIE_NAME)?.value;
-    const ok = await verifySessionToken(token);
-    if (!ok) {
+    // The Supabase client still has to run on the login/logout routes so token
+    // refresh and sign-out cookie writes land on the response.
+    const { allowed, mustChangePassword, response } =
+      await readAdminSession(request);
+    const isAuthRoute =
+      pathname === "/admin/login" || pathname === "/admin/logout";
+
+    if (isAuthRoute) return response;
+
+    if (!allowed) {
       const loginUrl = new URL("/admin/login", request.url);
       loginUrl.searchParams.set("from", pathname);
-      return NextResponse.redirect(loginUrl);
+      return withAuthCookies(NextResponse.redirect(loginUrl), response);
     }
-    return NextResponse.next();
+
+    // Someone still on the temporary password we emailed them can only reach
+    // the page that lets them replace it.
+    if (mustChangePassword && pathname !== "/admin/account") {
+      return withAuthCookies(
+        NextResponse.redirect(new URL("/admin/account", request.url)),
+        response,
+      );
+    }
+
+    return response;
   }
 
   // Content Command Centre: separate password from the CMS admin above,

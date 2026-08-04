@@ -17,6 +17,10 @@ import type {
 import { PRIORITY_BADGE, PRIORITY_LABEL } from "@/lib/support/priority";
 import { STATUS_BADGE, STATUS_LABEL } from "@/lib/support/status";
 import ViewToggle from "./_components/ViewToggle";
+import AssigneeAvatar from "./_components/AssigneeAvatar";
+import { listAdminUsers } from "@/lib/admin/allowlist";
+import { requireAdminUser } from "@/lib/admin/auth";
+import { assigneeName } from "@/lib/support/assignee";
 
 export const dynamic = "force-dynamic";
 
@@ -102,18 +106,31 @@ function formatDate(iso: string) {
 export default async function SupportTicketsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; category?: string; priority?: string }>;
+  searchParams: Promise<{
+    status?: string;
+    category?: string;
+    priority?: string;
+    assignee?: string;
+  }>;
 }) {
   const sp = await searchParams;
   const status = (sp.status ?? "all") as SupportTicketStatus | "all";
   const category = (sp.category ?? "all") as SupportTicketCategory | "all";
   const priority = (sp.priority ?? "all") as SupportTicketPriority | "all";
+  // "all" | "me" | "unassigned" | a specific admin email
+  const assignee = sp.assignee ?? "all";
+
+  const [currentUser, admins] = await Promise.all([
+    requireAdminUser(),
+    listAdminUsers(),
+  ]);
+  const adminEmails = new Set(admins.map((a) => a.email));
 
   const supabase = getAdminSupabase();
   let q = supabase
     .from("support_tickets")
     .select(
-      "id, status, priority, category, subject, account_email, page_url, internal_notes, created_at",
+      "id, status, priority, category, subject, account_email, page_url, internal_notes, assigned_to, created_at",
     )
     .order("created_at", { ascending: false })
     .limit(200);
@@ -121,6 +138,9 @@ export default async function SupportTicketsPage({
   if (status !== "all") q = q.eq("status", status);
   if (category !== "all") q = q.eq("category", category);
   if (priority !== "all") q = q.eq("priority", priority);
+  if (assignee === "me") q = q.eq("assigned_to", currentUser.email);
+  else if (assignee === "unassigned") q = q.is("assigned_to", null);
+  else if (assignee !== "all") q = q.eq("assigned_to", assignee);
 
   const { data: tickets } = await q;
 
@@ -152,14 +172,17 @@ export default async function SupportTicketsPage({
     status?: string;
     category?: string;
     priority?: string;
+    assignee?: string;
   }) {
     const params = new URLSearchParams();
     const s = next.status ?? status;
     const c = next.category ?? category;
     const p = next.priority ?? priority;
+    const a = next.assignee ?? assignee;
     if (s !== "all") params.set("status", s);
     if (c !== "all") params.set("category", c);
     if (p !== "all") params.set("priority", p);
+    if (a !== "all") params.set("assignee", a);
     const qs = params.toString();
     return qs ? `/admin/support?${qs}` : "/admin/support";
   }
@@ -234,6 +257,49 @@ export default async function SupportTicketsPage({
             );
           })}
         </div>
+        <div className="flex flex-wrap items-center gap-1.5">
+          {[
+            { value: "all", label: "Anyone" },
+            { value: "me", label: "My tickets" },
+            { value: "unassigned", label: "Unassigned" },
+          ].map((f) => {
+            const active = assignee === f.value;
+            return (
+              <Link
+                key={f.value}
+                href={hrefFor({ assignee: f.value })}
+                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
+                  active
+                    ? "bg-forest text-white"
+                    : "bg-cream text-ink-soft hover:bg-cream-dark"
+                }`}
+              >
+                {f.label}
+              </Link>
+            );
+          })}
+          {admins
+            .filter((a) => a.email !== currentUser.email)
+            .map((a) => {
+              const active = assignee === a.email;
+              return (
+                <Link
+                  key={a.id}
+                  href={hrefFor({ assignee: a.email })}
+                  title={a.email}
+                  className={`inline-flex items-center gap-1.5 rounded-full py-1 pl-1 pr-3 text-xs font-semibold transition-colors ${
+                    active
+                      ? "bg-forest text-white"
+                      : "bg-cream text-ink-soft hover:bg-cream-dark"
+                  }`}
+                >
+                  <AssigneeAvatar email={a.email} />
+                  {assigneeName(a.email)}
+                </Link>
+              );
+            })}
+        </div>
+
         <div className="ml-auto flex flex-wrap gap-1.5">
           {CATEGORY_FILTERS.map((f) => {
             const active = category === f.value;
@@ -262,6 +328,7 @@ export default async function SupportTicketsPage({
             <tr>
               <th className="px-5 py-3">Ref</th>
               <th className="px-5 py-3">Subject</th>
+              <th className="px-5 py-3">Assignee</th>
               <th className="px-5 py-3">Priority</th>
               <th className="px-5 py-3">Category</th>
               <th className="px-5 py-3">Account</th>
@@ -307,6 +374,15 @@ export default async function SupportTicketsPage({
                       </span>
                     )}
                   </div>
+                </td>
+                <td className="whitespace-nowrap px-5 py-3 align-middle">
+                  <AssigneeAvatar
+                    email={t.assigned_to}
+                    showName
+                    stale={Boolean(
+                      t.assigned_to && !adminEmails.has(t.assigned_to),
+                    )}
+                  />
                 </td>
                 <td className="px-5 py-3 align-middle">
                   <span
@@ -365,7 +441,7 @@ export default async function SupportTicketsPage({
             {(tickets ?? []).length === 0 && (
               <tr>
                 <td
-                  colSpan={9}
+                  colSpan={10}
                   className="px-5 py-10 text-center text-sm text-ink-soft"
                 >
                   No tickets match the current filters.

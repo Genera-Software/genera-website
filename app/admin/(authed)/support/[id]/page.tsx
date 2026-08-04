@@ -3,12 +3,18 @@ import { getAdminSupabase } from "@/lib/supabase/admin";
 import { AdminFormStatusButton } from "../../_components/AdminBusyButton";
 import PageHeader from "../../_components/PageHeader";
 import {
+  claimTicket,
   deleteTicket,
   replyToTicket,
+  setTicketAssignee,
   setTicketPriority,
   setTicketStatus,
   updateInternalNotes,
 } from "../actions";
+import { listAdminUsers } from "@/lib/admin/allowlist";
+import { requireAdminUser } from "@/lib/admin/auth";
+import { assigneeName } from "@/lib/support/assignee";
+import AssigneeAvatar from "../_components/AssigneeAvatar";
 import {
   PRIORITIES,
   PRIORITY_BADGE,
@@ -103,6 +109,17 @@ export default async function SupportTicketDetailPage({
     .order("created_at", { ascending: true });
 
   const thread = messages ?? [];
+
+  const [currentUser, admins] = await Promise.all([
+    requireAdminUser(),
+    listAdminUsers(),
+  ]);
+  const assignedTo = ticket.assigned_to;
+  // Someone could still hold the ticket after being removed if the row was
+  // edited outside the app — surface it rather than silently dropping them.
+  const assigneeIsStale = Boolean(
+    assignedTo && !admins.some((a) => a.email === assignedTo),
+  );
 
   // Opening the ticket counts as reading it — clears this ticket from the
   // sidebar badge. Only writes when something is actually unread.
@@ -376,6 +393,96 @@ export default async function SupportTicketDetailPage({
                 Resolved {formatDate(ticket.resolved_at)}
               </p>
             )}
+          </section>
+
+          {/* Assignee */}
+          <section className="rounded-2xl border border-teal-mid bg-white p-6">
+            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-ink-soft">
+              Assigned to
+            </h2>
+
+            <div className="mb-3">
+              <AssigneeAvatar
+                email={assignedTo}
+                showName
+                stale={assigneeIsStale}
+              />
+            </div>
+
+            {assignedTo !== currentUser.email && (
+              <form
+                className="mb-3"
+                action={async () => {
+                  "use server";
+                  await claimTicket(ticket.id);
+                }}
+              >
+                <AdminFormStatusButton
+                  type="submit"
+                  variant="forestSm"
+                  pendingLabel="Assigning…"
+                >
+                  Assign to me
+                </AdminFormStatusButton>
+              </form>
+            )}
+
+            <div className="flex flex-col gap-2">
+              {admins.map((admin) => {
+                const active = assignedTo === admin.email;
+                return (
+                  <form
+                    key={admin.id}
+                    action={async () => {
+                      "use server";
+                      await setTicketAssignee(ticket.id, admin.email);
+                    }}
+                  >
+                    <AdminFormStatusButton
+                      type="submit"
+                      variant="ticketOption"
+                      className={
+                        active
+                          ? "border-forest bg-forest/10 text-forest"
+                          : "border-teal-mid bg-white text-ink hover:border-forest/40 hover:bg-cream"
+                      }
+                      disabled={active}
+                      pendingLabel="Assigning…"
+                    >
+                      <AssigneeAvatar email={admin.email} />
+                      <span className="truncate">
+                        {assigneeName(admin.email)}
+                        {admin.email === currentUser.email && " (you)"}
+                      </span>
+                      {active && <span className="ml-auto">✓</span>}
+                    </AdminFormStatusButton>
+                  </form>
+                );
+              })}
+
+              <form
+                action={async () => {
+                  "use server";
+                  await setTicketAssignee(ticket.id, null);
+                }}
+              >
+                <AdminFormStatusButton
+                  type="submit"
+                  variant="ticketOption"
+                  className={
+                    assignedTo === null
+                      ? "border-slate-300 bg-slate-100 text-slate-700"
+                      : "border-teal-mid bg-white text-ink-soft hover:border-slate-300 hover:bg-slate-50"
+                  }
+                  disabled={assignedTo === null}
+                  pendingLabel="Clearing…"
+                >
+                  <AssigneeAvatar email={null} />
+                  Unassigned
+                  {assignedTo === null && <span className="ml-auto">✓</span>}
+                </AdminFormStatusButton>
+              </form>
+            </div>
           </section>
 
           {/* Priority */}

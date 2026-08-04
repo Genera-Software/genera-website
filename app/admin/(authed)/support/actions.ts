@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getAdminSupabase } from "@/lib/supabase/admin";
+import { isAllowedAdminEmail, normaliseEmail } from "@/lib/admin/allowlist";
+import { requireAdminUser } from "@/lib/admin/auth";
 import { notifySupportTicket } from "@/lib/support/notify";
 import { startTicketAnalysis } from "@/lib/support/ai-analysis";
 import { sendTicketReply } from "@/lib/support/thread";
@@ -205,6 +207,36 @@ export async function setTicketPriority(id: string, priority: string) {
   revalidatePath("/admin/support");
   revalidatePath("/admin/support/board");
   revalidatePath(`/admin/support/${id}`);
+}
+
+/**
+ * Assign a ticket to an admin, or pass null to unassign. The email is checked
+ * against the allowlist so a stale form can't park work on someone who no
+ * longer has access.
+ */
+export async function setTicketAssignee(id: string, email: string | null) {
+  const target = email ? normaliseEmail(email) : null;
+
+  if (target && !(await isAllowedAdminEmail(target))) {
+    throw new Error(`${target} is not an admin.`);
+  }
+
+  const supabase = getAdminSupabase();
+  const { error } = await supabase
+    .from("support_tickets")
+    .update({ assigned_to: target })
+    .eq("id", id);
+  if (error) throw new Error(error.message);
+
+  revalidatePath("/admin/support");
+  revalidatePath("/admin/support/board");
+  revalidatePath(`/admin/support/${id}`);
+}
+
+/** "Assign to me" — resolves the actor from the session rather than the form. */
+export async function claimTicket(id: string) {
+  const actor = await requireAdminUser();
+  await setTicketAssignee(id, actor.email);
 }
 
 export async function updateInternalNotes(id: string, formData: FormData) {

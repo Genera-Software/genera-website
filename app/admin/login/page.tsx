@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import Paw from "@/components/Paw";
+import { getAdminUser } from "@/lib/admin/auth";
 import LoginForm from "./LoginForm";
 
 export const metadata: Metadata = {
   title: "Admin sign in",
   robots: { index: false, follow: false },
 };
+
+export const dynamic = "force-dynamic";
 
 export default async function LoginPage({
   searchParams,
@@ -15,6 +19,9 @@ export default async function LoginPage({
   const params = await searchParams;
   const from =
     params.from && params.from.startsWith("/admin") ? params.from : "/admin";
+
+  const signedIn = await getAdminUser();
+  if (signedIn) redirect(signedIn.mustChangePassword ? "/admin/account" : from);
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-4 py-10">

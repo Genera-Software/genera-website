@@ -2,20 +2,24 @@ import { getAdminSupabase } from "@/lib/supabase/admin";
 import PageHeader from "../../_components/PageHeader";
 import ViewToggle from "../_components/ViewToggle";
 import KanbanBoard from "./_components/KanbanBoard";
-import { setTicketPriority, setTicketStatus } from "../actions";
+import { setTicketAssignee, setTicketPriority, setTicketStatus } from "../actions";
+import { listAdminUsers } from "@/lib/admin/allowlist";
 
 export const dynamic = "force-dynamic";
 
 export default async function SupportBoardPage() {
   const supabase = getAdminSupabase();
 
-  const { data: tickets } = await supabase
-    .from("support_tickets")
-    .select(
-      "id, status, priority, category, subject, account_email, created_at",
-    )
-    .order("created_at", { ascending: false })
-    .limit(300);
+  const [{ data: tickets }, admins] = await Promise.all([
+    supabase
+      .from("support_tickets")
+      .select(
+        "id, status, priority, category, subject, account_email, assigned_to, created_at",
+      )
+      .order("created_at", { ascending: false })
+      .limit(300),
+    listAdminUsers(),
+  ]);
 
   // Same source of truth as the list view and sidebar badge.
   const { data: unreadRows } = await supabase
@@ -39,8 +43,10 @@ export default async function SupportBoardPage() {
       <KanbanBoard
         tickets={tickets ?? []}
         unreadIds={unreadIds}
+        admins={admins.map((a) => a.email)}
         onMove={setTicketStatus}
         onPriority={setTicketPriority}
+        onAssign={setTicketAssignee}
       />
     </div>
   );

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "badges": "node scripts/generate-badges.mjs"
+    "badges": "node scripts/generate-badges.mjs",
+    "admin:user": "node scripts/admin-user.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",

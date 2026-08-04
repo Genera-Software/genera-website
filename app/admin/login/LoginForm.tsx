@@ -12,10 +12,27 @@ export default function LoginForm({ from }: { from: string }) {
       <input type="hidden" name="from" value={from} />
       <div>
         <label
+          htmlFor="email"
+          className="mb-1.5 block text-sm font-medium text-cream-dark"
+        >
+          Email
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autoComplete="username"
+          required
+          autoFocus
+          className="w-full rounded-lg border border-forest-mid bg-forest-dark px-4 py-3 text-base text-white placeholder-ink-soft outline-none ring-0 focus:border-gold focus:ring-2 focus:ring-gold-soft/40"
+        />
+      </div>
+      <div>
+        <label
           htmlFor="password"
           className="mb-1.5 block text-sm font-medium text-cream-dark"
         >
-          Admin password
+          Password
         </label>
         <input
           id="password"
@@ -23,7 +40,6 @@ export default function LoginForm({ from }: { from: string }) {
           type="password"
           autoComplete="current-password"
           required
-          autoFocus
           className="w-full rounded-lg border border-forest-mid bg-forest-dark px-4 py-3 text-base text-white placeholder-ink-soft outline-none ring-0 focus:border-gold focus:ring-2 focus:ring-gold-soft/40"
         />
       </div>

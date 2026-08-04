@@ -10,6 +10,8 @@ import {
   PRIORITY_RANK,
 } from "@/lib/support/priority";
 import { STATUS_DOT, STATUS_LABEL } from "@/lib/support/status";
+import { assigneeName } from "@/lib/support/assignee";
+import AssigneeAvatar from "../../_components/AssigneeAvatar";
 import type {
   SupportTicketCategory,
   SupportTicketPriority,
@@ -23,6 +25,7 @@ type BoardTicket = {
   category: SupportTicketCategory;
   subject: string;
   account_email: string | null;
+  assigned_to: string | null;
   created_at: string;
 };
 
@@ -46,13 +49,17 @@ function formatDate(iso: string) {
 export default function KanbanBoard({
   tickets,
   unreadIds,
+  admins,
   onMove,
   onPriority,
+  onAssign,
 }: {
   tickets: BoardTicket[];
   unreadIds: string[];
+  admins: string[];
   onMove: (id: string, status: string) => Promise<void>;
   onPriority: (id: string, priority: string) => Promise<void>;
+  onAssign: (id: string, email: string | null) => Promise<void>;
 }) {
   // Local copy so drags apply instantly; the server action revalidates and the
   // fresh props re-sync it afterwards.
@@ -82,6 +89,15 @@ export default function KanbanBoard({
     );
     startTransition(() => {
       onPriority(id, priority).catch(() => setItems(tickets));
+    });
+  }
+
+  function changeAssignee(id: string, email: string | null) {
+    setItems((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, assigned_to: email } : t)),
+    );
+    startTransition(() => {
+      onAssign(id, email).catch(() => setItems(tickets));
     });
   }
 
@@ -199,6 +215,28 @@ export default function KanbanBoard({
                       </select>
                       <span className="rounded-full bg-cream px-2.5 py-0.5 text-xs font-semibold text-ink-soft">
                         {CATEGORY_LABEL[t.category]}
+                      </span>
+
+                      {/* Assignee: avatar plus an invisible select over it, so
+                          the card stays compact but stays clickable. */}
+                      <span className="relative ml-auto inline-flex items-center">
+                        <AssigneeAvatar email={t.assigned_to} />
+                        <select
+                          value={t.assigned_to ?? ""}
+                          onChange={(e) =>
+                            changeAssignee(t.id, e.target.value || null)
+                          }
+                          aria-label="Assignee"
+                          title={t.assigned_to ?? "Unassigned"}
+                          className="absolute inset-0 cursor-pointer opacity-0"
+                        >
+                          <option value="">Unassigned</option>
+                          {admins.map((email) => (
+                            <option key={email} value={email}>
+                              {assigneeName(email)}
+                            </option>
+                          ))}
+                        </select>
                       </span>
                     </div>
                   </div>

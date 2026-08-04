@@ -12,6 +12,30 @@ export type Database = {
   };
   public: {
     Tables: {
+      admin_users: {
+        Row: {
+          created_at: string;
+          email: string;
+          id: string;
+          invited_by: string | null;
+          last_invited_at: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          email: string;
+          id?: string;
+          invited_by?: string | null;
+          last_invited_at?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          email?: string;
+          id?: string;
+          invited_by?: string | null;
+          last_invited_at?: string | null;
+        };
+        Relationships: [];
+      };
       blog_posts: {
         Row: {
           author_name: string;
@@ -660,7 +684,9 @@ export type Database = {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      is_current_user_admin: { Args: never; Returns: boolean };
+    };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
   };

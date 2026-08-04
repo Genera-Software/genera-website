@@ -146,12 +146,28 @@ const NAV: NavEntry[] = [
       </>
     ),
   },
+  { kind: "heading", label: "Settings" },
+  {
+    kind: "item",
+    href: "/admin/users",
+    label: "Admin users",
+    icon: (
+      <>
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <line x1="19" y1="8" x2="19" y2="14" />
+        <line x1="22" y1="11" x2="16" y2="11" />
+      </>
+    ),
+  },
 ];
 
 export default function Sidebar({
   badges = {},
+  userEmail,
 }: {
   badges?: Record<string, number>;
+  userEmail?: string;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -274,6 +290,15 @@ export default function Sidebar({
         </nav>
 
         <div className="absolute bottom-4 left-4 right-4">
+          {userEmail && (
+            <Link
+              href="/admin/account"
+              title={`${userEmail} — manage your account`}
+              className="mb-2 block truncate px-1 text-[11px] text-cream/60 hover:text-cream"
+            >
+              Signed in as <span className="underline">{userEmail}</span>
+            </Link>
+          )}
           <form action="/admin/logout" method="post">
             <AdminFormStatusButton
               type="submit"
