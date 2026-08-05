@@ -81,6 +81,13 @@ function detectOS(ua: string): string {
   return "Unknown";
 }
 
+type DocSuggestion = {
+  title: string;
+  section: string;
+  href: string;
+  snippet: string;
+};
+
 export type SupportWidgetProps = {
   appVersion: string;
   account?: {
@@ -91,12 +98,19 @@ export type SupportWidgetProps = {
   };
   /** Override the proxy endpoint if you mount it somewhere other than /api/support/proxy. */
   endpoint?: string;
+  /**
+   * Origin serving /docs and the suggestions API. Called directly (no proxy) —
+   * it is a public, CORS-open, read-only endpoint. Set to "" to turn docs
+   * suggestions off entirely.
+   */
+  docsOrigin?: string;
 };
 
 export default function SupportWidget({
   appVersion,
   account,
   endpoint = "/api/support/proxy",
+  docsOrigin = "https://www.generasoftware.com",
 }: SupportWidgetProps) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<"category" | "form" | "sent">("category");
@@ -106,6 +120,8 @@ export default function SupportWidget({
   const [email, setEmail] = useState(account?.email ?? "");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState<DocSuggestion[]>([]);
+  const [dismissedSuggestions, setDismissedSuggestions] = useState(false);
   const subjectRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -116,12 +132,48 @@ export default function SupportWidget({
     if (open && step === "form") subjectRef.current?.focus();
   }, [open, step]);
 
+  // Look for a docs page that already answers this, as they type. Debounced so
+  // it fires on a pause rather than per keystroke, and aborted on each change
+  // so a slow earlier response can't overwrite a newer one.
+  useEffect(() => {
+    if (!docsOrigin || dismissedSuggestions || step !== "form") return;
+
+    const query = `${subject} ${description}`.trim();
+    if (query.length < 12) {
+      setSuggestions([]);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `${docsOrigin}/api/support/suggest?q=${encodeURIComponent(query)}`,
+          { signal: controller.signal },
+        );
+        if (!res.ok) return;
+        const data = (await res.json()) as { suggestions?: DocSuggestion[] };
+        setSuggestions(data.suggestions ?? []);
+      } catch {
+        // Offline, blocked, or aborted — suggestions are a bonus, never a
+        // blocker. The ticket form carries on regardless.
+      }
+    }, 450);
+
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [subject, description, step, docsOrigin, dismissedSuggestions]);
+
   function reset() {
     setStep("category");
     setCategory("technical");
     setSubject("");
     setDescription("");
     setError(null);
+    setSuggestions([]);
+    setDismissedSuggestions(false);
   }
 
   async function submit() {
@@ -365,6 +417,95 @@ export default function SupportWidget({
                   </div>
                 )}
 
+                {suggestions.length > 0 && !dismissedSuggestions && (
+                  <div
+                    style={{
+                      border: "1px solid #D7CDBA",
+                      background: "#FBF8F1",
+                      borderRadius: 12,
+                      padding: 12,
+                      marginBottom: 12,
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: 12,
+                        fontWeight: 700,
+                        color: "#003E45",
+                        marginBottom: 8,
+                      }}
+                    >
+                      This might already answer it
+                    </div>
+
+                    <div style={{ display: "grid", gap: 6 }}>
+                      {suggestions.map((s) => (
+                        <a
+                          key={s.href}
+                          href={`${docsOrigin}${s.href}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: "block",
+                            padding: "8px 10px",
+                            borderRadius: 8,
+                            background: "white",
+                            border: "1px solid #E7E0D2",
+                            textDecoration: "none",
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontSize: 13,
+                              fontWeight: 600,
+                              color: "#003E45",
+                            }}
+                          >
+                            {s.title}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: 11,
+                              color: "#4B5563",
+                              marginTop: 2,
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              display: "-webkit-box",
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: "vertical",
+                            }}
+                          >
+                            {s.section} · {s.snippet}
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+
+                    {/* Dismissing keeps the panel closed for the rest of this
+                        ticket, so it can't reappear over the send button as
+                        they keep typing. */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDismissedSuggestions(true);
+                        setSuggestions([]);
+                      }}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#4B5563",
+                        fontSize: 11,
+                        textDecoration: "underline",
+                        cursor: "pointer",
+                        padding: 0,
+                        marginTop: 8,
+                      }}
+                    >
+                      None of these — carry on with my ticket
+                    </button>
+                  </div>
+                )}
+
                 {error && (
                   <div
                     style={{
@@ -394,7 +535,11 @@ export default function SupportWidget({
                     opacity: submitting ? 0.6 : 1,
                   }}
                 >
-                  {submitting ? "Sending…" : "Send ticket"}
+                  {submitting
+                    ? "Sending…"
+                    : suggestions.length > 0
+                      ? "Still need help — send ticket"
+                      : "Send ticket"}
                 </button>
               </>
             )}

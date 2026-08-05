@@ -54,12 +54,14 @@ planning tool at `/command-centre`.
 
 ## Scripts
 
-- `npm run dev` — dev server with Turbopack
-- `npm run build` — production build
+- `npm run dev` — dev server with Turbopack (builds into `.next-dev/`)
+- `npm run build` — production build (webpack, into `.next/`)
 - `npm run start` — start the production server
 - `npm run lint` — Next.js lint checks
 - `npm run typecheck` — `tsc --noEmit`
 - `npm run badges` — regenerate badge images (`scripts/generate-badges.mjs`, puppeteer-core)
+- `npm run check:suggestions` — regression check for the support widget's docs
+  suggestions (`scripts/check-doc-suggestions.mts`)
 - `npm run admin:user` — break-glass CLI for `/admin` accounts
   (`scripts/admin-user.mjs`) — **writes to the live Supabase project**. Normally
   use `/admin/users` instead; see
@@ -76,7 +78,15 @@ within a minute without a redeploy.
 
 ### Docs — `app/docs/`
 
-Product documentation rendered from `app/docs/_data/sections.ts`.
+Product documentation. Content comes from the `help_centre_*` tables (edited at
+`/admin/help-centre`), falling back to `app/docs/_data/sections.ts` if the DB is
+empty or unreachable — see `app/docs/_data/load.ts`.
+
+The **Get support** button opens a standard ticket form in a modal
+(`_components/SupportTicketForm.tsx`) — name, email, category, subject, message —
+posting to `/api/support/public`. Matching Help Centre pages appear inline above
+the Send button as the customer types; see
+[Docs suggestions](#docs-suggestions-ticket-deflection).
 
 ### Legacy static pages
 
@@ -94,6 +104,7 @@ pre-built HTML out of `public/`.
 | `GET /api/support/tickets` | Ticket lookup for the widget                                |
 | `POST /api/support/inbound`| Postmark inbound webhook — customer replies onto a ticket   |
 | `GET /api/badge/[id]`      | Serves badge images and records `badge_events`              |
+| `GET /api/support/suggest` | Docs matches for a support question — CORS-open, read-only  |
 | `/api/command-centre/state`| Content Command Centre state (auth-gated)                   |
 
 ## The `/admin` CMS
@@ -279,6 +290,73 @@ with its own cookie and secret; state persists in `command_centre_state`.
 `support-widget/` holds the embeddable widget that posts into
 `/api/support/public`. See [`support-widget/README.md`](support-widget/README.md).
 
+### Docs suggestions (ticket deflection)
+
+Two front doors use this, both backed by the same endpoint:
+
+| Where | Behaviour |
+| --- | --- |
+| **Support widget** (`support-widget/`, embedded in the app) | Up to three suggestions appear inline above the send button as they type |
+| **"Get support"** on `/docs` (`app/docs/_components/SupportTicketForm.tsx`) | Same inline panel, between the message field and the Send button |
+
+Most tickets are "how do I…", and the answer is usually already written.
+
+Both fetch on a 400 ms debounce while the customer types. The catch is that
+someone can finish their message and click Send inside that window, so the
+lookup would still be empty and they'd never see a suggestion. Submitting
+therefore **resolves the lookup first** if the text has changed since the last
+one ("Checking the docs…" on the button); if that turns up matches, the panel is
+revealed and scrolled to instead of sending. Clicking Send again submits, so it
+interrupts at most once and never blocks anyone from reaching support. Links open
+in a new tab so the draft survives.
+
+`GET /api/support/suggest?q=…` does the matching. It is public, read-only and
+CORS-open (`*`), because it only ever returns links to pages already published
+at `/docs`. It reads the same DB-backed index the docs search uses, so editing
+the Help Centre in the CMS changes the suggestions with no redeploy.
+
+The scoring lives in [`lib/support/suggest.ts`](lib/support/suggest.ts) and is
+deliberately **not** the `rankSearch` used by the docs search box: that one needs
+the whole query as a substring, which works for "booking" and never matches a
+sentence like "I can't work out how to add a second dog". Instead it:
+
+- tokenises the question, drops stopwords and support-desk noise ("issue",
+  "help", "bug" — present in every ticket, so they discriminate nothing),
+- expands domain synonyms, because customers write "dog" and "customer" where
+  the docs say "pet" and "owner",
+- matches on **whole words plus stems**, not substrings — otherwise "words"
+  matches inside "password",
+- weights by **IDF**, so a rare word like "recurring" outranks a common one like
+  "booking" and you get the specific page rather than the section overview,
+- weights title hits above body hits, and rewards covering more of the question,
+- skips **What's New**: a changelog name-checks every feature, so it out-matches
+  the real how-to page for almost any question and then answers none of them,
+- returns **nothing** below a score threshold. A wrong suggestion is worse than
+  none — it teaches people to ignore the panel.
+
+#### Testing it
+
+Three layers, in increasing fidelity:
+
+```bash
+# 1. The matcher, offline and deterministic — 13 real questions, each asserting
+#    the expected page or deliberate silence. Exits non-zero on failure.
+npm run check:suggestions
+
+# 2. The live endpoint, against whatever the CMS currently has published.
+curl -sG localhost:3000/api/support/suggest \
+  --data-urlencode "q=How do I raise an invoice for a customer?" | jq
+```
+
+3. **`/admin/support/preview`** — the real widget mounted in the CMS, plus a
+   probe box and one-click sample questions. Not in the sidebar (it is a testing
+   tool, not a CMS page) but behind the same admin gate as everything else.
+   Sending is stubbed to `/admin/api/widget-preview`, so you can click through to
+   the confirmation screen without creating a real ticket.
+
+The weights and threshold are empirical. Re-run the check after changing the
+scoring, the synonyms, or the Help Centre content.
+
 ## Environment Variables
 
 Set these in `.env.local` locally and in Netlify → Site configuration →
@@ -362,6 +440,13 @@ should not be public.
 Netlify, configured by `netlify.toml` — `npm run build`, Node 20,
 `@netlify/plugin-nextjs`. CDN caching is set to `no-store` so CMS edits are not
 served stale on top of the 60-second ISR revalidation.
+
+`next.config.ts` sets `distDir` to `.next-dev` in development and `.next` in
+production. `next dev` uses Turbopack and `next build` uses webpack, and their
+artifacts are incompatible — sharing one directory means running one after the
+other fails with `Cannot find module '../chunks/ssr/[turbopack]_runtime.js'`
+until you delete it. Netlify only ever runs `next build`, so deploys are
+unaffected and still output to `.next`.
 
 ## Project Structure
 

@@ -51,6 +51,38 @@ export default async function RootLayout({ children }) {
 }
 ```
 
+## Docs suggestions ("this might already answer it")
+
+As the customer types their subject and description, the widget looks for a
+Help Centre page that already answers the question and shows up to three above
+the send button. The aim is deflection: a lot of tickets are "how do I…", and
+the answer is usually already written down.
+
+- Fires on a 450 ms pause once there are 12+ characters, not per keystroke, and
+  aborts in-flight requests so a slow response can't overwrite a newer one.
+- Calls `GET {docsOrigin}/api/support/suggest?q=…` **directly**, not through the
+  proxy — it is public, read-only and CORS-open, and returns nothing but links
+  to pages already published at `/docs`. No token, no ticket data.
+- Suggestions never block submitting. If the request fails, is blocked, or the
+  customer is offline, the form behaves exactly as before.
+- "None of these — carry on with my ticket" hides the panel for the rest of that
+  ticket, so it can't keep reappearing over the send button.
+- The send button reads "Still need help — send ticket" while suggestions are
+  showing, which frames sending as the fallback rather than the default.
+
+Set `docsOrigin` if the marketing site is somewhere other than
+`https://www.generasoftware.com`, or pass `docsOrigin=""` to turn the feature
+off entirely:
+
+```tsx
+<SupportWidget appVersion={…} account={…} docsOrigin="https://www.generasoftware.com" />
+```
+
+To try it before copying anything into this repo, run the admin site and open
+**`/admin/support/preview`** — the same component, mounted with a stubbed submit
+endpoint and a set of sample questions. Matching quality is covered by
+`npm run check:suggestions` there too.
+
 ## What it captures automatically
 
 - Page URL at submission time

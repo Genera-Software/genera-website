@@ -3,6 +3,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // `next dev` uses Turbopack and `next build` uses webpack, and they write
+  // incompatible artifacts. Sharing one .next means running a build and then
+  // dev (or vice versa) fails with "Cannot find module
+  // '../chunks/ssr/[turbopack]_runtime.js'" until you delete the directory.
+  // Separate directories make the two safe to interleave. Netlify only ever
+  // runs `next build`, so production still uses plain .next.
+  distDir: process.env.NODE_ENV === "development" ? ".next-dev" : ".next",
   async headers() {
     return [
       {

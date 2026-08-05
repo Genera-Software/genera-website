@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-type Status = "idle" | "submitting" | "sent" | "error";
+type Status = "idle" | "submitting" | "sent";
 
 type Category =
   | "technical"
@@ -11,74 +11,29 @@ type Category =
   | "account"
   | "other";
 
-type StepKey = "category" | "name" | "email" | "subject" | "description";
-
-type StepDef =
-  | {
-      key: StepKey;
-      eyebrow: string;
-      label: string;
-      hint?: string;
-      type: "choice";
-      choices: Array<{ value: Category; label: string }>;
-    }
-  | {
-      key: StepKey;
-      eyebrow: string;
-      label: string;
-      hint?: string;
-      type: "text" | "email" | "textarea";
-      placeholder: string;
-    };
-
-const STEPS: StepDef[] = [
-  {
-    key: "category",
-    eyebrow: "Let's get you help",
-    label: "What is this about?",
-    hint: "Pick the closest match — you can fill in the details next.",
-    type: "choice",
-    choices: [
-      { value: "technical", label: "Technical issue" },
-      { value: "billing", label: "Billing" },
-      { value: "feature_request", label: "Feature request" },
-      { value: "account", label: "Account" },
-      { value: "other", label: "Something else" },
-    ],
-  },
-  {
-    key: "name",
-    eyebrow: "About you",
-    label: "What's your name?",
-    type: "text",
-    placeholder: "Jane Smith",
-  },
-  {
-    key: "email",
-    eyebrow: "About you",
-    label: "Where should we reply?",
-    hint: "We'll use this email to follow up on your ticket.",
-    type: "email",
-    placeholder: "you@daycare.com",
-  },
-  {
-    key: "subject",
-    eyebrow: "The issue",
-    label: "Give it a short subject",
-    type: "text",
-    placeholder: "e.g. Can't save a booking",
-  },
-  {
-    key: "description",
-    eyebrow: "The issue",
-    label: "Tell us what's going on",
-    hint: "Steps to reproduce, what you expected, and anything else that helps.",
-    type: "textarea",
-    placeholder: "Describe the problem…",
-  },
+const CATEGORIES: Array<{ value: Category; label: string }> = [
+  { value: "technical", label: "Technical issue" },
+  { value: "billing", label: "Billing" },
+  { value: "feature_request", label: "Feature request" },
+  { value: "account", label: "Account" },
+  { value: "other", label: "Something else" },
 ];
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** Below this there isn't enough to match on, so we don't bother asking. */
+const MIN_QUERY = 12;
+
+type DocSuggestion = {
+  title: string;
+  section: string;
+  href: string;
+  snippet: string;
+};
+
+type FieldErrors = Partial<
+  Record<"name" | "email" | "subject" | "description", string>
+>;
 
 function detectBrowser(ua: string): string {
   if (/Edg\//.test(ua)) return "Edge";
@@ -101,35 +56,92 @@ export function openSupportTicketForm() {
   window.dispatchEvent(new CustomEvent("support-ticket:open"));
 }
 
+const labelClass =
+  "mb-1.5 block font-massilia text-fine font-bold text-forest";
+const fieldClass =
+  "w-full rounded-xl border border-teal-mid bg-cream px-3.5 py-2.5 text-meta text-ink outline-none transition-colors placeholder:text-ink-soft/60 focus:border-forest focus:bg-white";
+
 export default function SupportTicketForm() {
   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState(0);
   const [status, setStatus] = useState<Status>("idle");
-  const [stepError, setStepError] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [category, setCategory] = useState<Category | "">("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+
+  const [category, setCategory] = useState<Category>("technical");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
-  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
+
+  const [suggestions, setSuggestions] = useState<DocSuggestion[]>([]);
+  // The exact text the current `suggestions` were fetched for. Used to tell
+  // "we've already looked this up" from "the customer has typed since".
+  const [suggestedFor, setSuggestedFor] = useState("");
+  const [checking, setChecking] = useState(false);
+
+  const nameRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
+
+  const query = `${subject} ${description}`.trim();
 
   useEffect(() => {
     const onOpen = () => {
       setOpen(true);
-      setStep(0);
       setStatus("idle");
-      setStepError(null);
       setErrorMsg(null);
-      setCategory("");
+      setFieldErrors({});
+      setCategory("technical");
       setName("");
       setEmail("");
       setSubject("");
       setDescription("");
+      setSuggestions([]);
+      setSuggestedFor("");
+      setChecking(false);
     };
     window.addEventListener("support-ticket:open", onOpen);
     return () => window.removeEventListener("support-ticket:open", onOpen);
   }, []);
+
+  const fetchSuggestions = useCallback(
+    async (text: string, signal?: AbortSignal): Promise<DocSuggestion[]> => {
+      const res = await fetch(
+        `/api/support/suggest?q=${encodeURIComponent(text)}`,
+        { signal },
+      );
+      if (!res.ok) return [];
+      const data = (await res.json()) as { suggestions?: DocSuggestion[] };
+      return data.suggestions ?? [];
+    },
+    [],
+  );
+
+  // Live lookup while they type, debounced so it fires on a pause.
+  useEffect(() => {
+    if (!open || status === "sent") return;
+    if (query.length < MIN_QUERY) {
+      setSuggestions([]);
+      setSuggestedFor("");
+      return;
+    }
+    if (query === suggestedFor) return;
+
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      try {
+        const hits = await fetchSuggestions(query, controller.signal);
+        setSuggestions(hits);
+        setSuggestedFor(query);
+      } catch {
+        // Suggestions are a bonus — never let a failed lookup block support.
+      }
+    }, 400);
+
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [open, status, query, suggestedFor, fetchSuggestions]);
 
   useEffect(() => {
     if (!open) return;
@@ -173,77 +185,59 @@ export default function SupportTicketForm() {
       if (e.key === "Escape") setOpen(false);
     };
     window.addEventListener("keydown", onKey);
-    const t = setTimeout(() => inputRef.current?.focus(), 80);
+    const t = setTimeout(() => nameRef.current?.focus(), 80);
     return () => {
       window.removeEventListener("keydown", onKey);
       clearTimeout(t);
     };
-  }, [open, step, status]);
+  }, [open]);
 
-  if (!open) return null;
-
-  const total = STEPS.length;
-  const current = STEPS[step];
-  const pct = status === "sent" ? 100 : Math.round((step / total) * 100);
-
-  function valueFor(key: StepKey): string {
-    switch (key) {
-      case "category":
-        return category;
-      case "name":
-        return name;
-      case "email":
-        return email;
-      case "subject":
-        return subject;
-      case "description":
-        return description;
+  function validate(): FieldErrors {
+    const errors: FieldErrors = {};
+    if (!name.trim()) errors.name = "Please tell us your name.";
+    if (!email.trim()) errors.email = "We need an email to reply to.";
+    else if (!EMAIL_RE.test(email.trim())) {
+      errors.email = "That email doesn't look right.";
     }
+    if (!subject.trim()) errors.subject = "Give your ticket a short subject.";
+    if (!description.trim()) {
+      errors.description = "Tell us a little about what's happening.";
+    }
+    return errors;
   }
 
-  function setValue(key: StepKey, v: string) {
-    switch (key) {
-      case "category":
-        setCategory(v as Category);
-        break;
-      case "name":
-        setName(v);
-        break;
-      case "email":
-        setEmail(v);
-        break;
-      case "subject":
-        setSubject(v);
-        break;
-      case "description":
-        setDescription(v);
-        break;
-    }
-  }
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const errors = validate();
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) return;
 
-  function validateCurrent(): string | null {
-    const v = valueFor(current.key).trim();
-    if (!v) return "Please fill this in to continue.";
-    if (current.key === "email" && !EMAIL_RE.test(v)) {
-      return "That email doesn't look right.";
+    // The live lookup is debounced, so someone who types their description and
+    // clicks Send within 400ms would otherwise never see a suggestion. Resolve
+    // it here before deciding, and give them one chance to read it.
+    if (query.length >= MIN_QUERY && query !== suggestedFor) {
+      setChecking(true);
+      try {
+        const hits = await fetchSuggestions(query);
+        setSuggestions(hits);
+        setSuggestedFor(query);
+        if (hits.length > 0) {
+          setChecking(false);
+          requestAnimationFrame(() =>
+            suggestionsRef.current?.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            }),
+          );
+          return;
+        }
+      } catch {
+        // Lookup failed — carry on and send the ticket.
+      }
+      setChecking(false);
     }
-    return null;
-  }
 
-  function next() {
-    const err = validateCurrent();
-    if (err) {
-      setStepError(err);
-      return;
-    }
-    setStepError(null);
-    if (step < total - 1) setStep(step + 1);
-    else void submit();
-  }
-
-  function back() {
-    setStepError(null);
-    if (step > 0) setStep(step - 1);
+    await submit();
   }
 
   async function submit() {
@@ -280,207 +274,201 @@ export default function SupportTicketForm() {
     }
   }
 
-  function onKeyDown(e: React.KeyboardEvent) {
-    if (e.key === "Enter" && !(current.type === "textarea" && e.shiftKey)) {
-      e.preventDefault();
-      next();
-    }
-  }
+  if (!open) return null;
 
-  const value = valueFor(current.key);
+  const showSuggestions = suggestions.length > 0 && status !== "sent";
 
   return (
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Submit a support ticket"
-      className="fixed inset-0 z-[200] flex items-stretch justify-center bg-forest-dark/80 backdrop-blur-sm animate-[fadeInUp_0.25s_ease_both]"
+      aria-labelledby="support-form-title"
+      className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto bg-forest-dark/70 p-4 backdrop-blur-sm sm:items-center sm:p-6"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) setOpen(false);
+      }}
     >
-      <div className="pointer-events-none absolute left-0 right-0 top-0 h-1 bg-white/10">
-        <div
-          className="h-full bg-gold transition-[width] duration-500 ease-out"
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-
-      <button
-        type="button"
-        onClick={() => setOpen(false)}
-        aria-label="Close"
-        className="absolute right-5 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full text-white/70 transition hover:bg-white/10 hover:text-white"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.4"
-          strokeLinecap="round"
-        >
-          <path d="M6 6l12 12M18 6l-12 12" />
-        </svg>
-      </button>
-
-      <div className="flex w-full items-center justify-center px-5 py-16">
-        <div className="w-full max-w-[640px]">
-          {status === "sent" ? (
-            <div className="animate-[fadeInUp_0.4s_ease_both] text-center text-white">
-              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gold text-ink shadow-[0_8px_28px_rgba(255,168,0,0.45)]">
-                <svg
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M5 12l5 5L20 7" />
-                </svg>
-              </div>
-              <h2 className="!text-white text-heading-mid">
-                Got it — we&apos;ll be in touch
-              </h2>
-              <p className="mx-auto mt-3 max-w-[460px] text-white/75">
-                Your ticket is with the Genera team. We typically reply within a
-                day.
-              </p>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="mt-7 inline-flex cursor-pointer items-center rounded-full border-2 border-white px-6 py-3 font-massilia text-[0.95rem] font-bold text-white transition hover:bg-white/10"
-              >
-                Close
-              </button>
-            </div>
-          ) : (
-            <div
-              key={step}
-              className="animate-[fadeInUp_0.35s_ease_both] text-white"
+      <div className="my-auto w-full max-w-[560px] animate-[fadeInUp_0.25s_ease_both] overflow-hidden rounded-2xl bg-white shadow-[0_24px_70px_rgba(0,0,0,0.35)]">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-4 border-b border-teal-mid/60 bg-cream px-5 py-4 sm:px-6">
+          <div>
+            <h2
+              id="support-form-title"
+              className="font-massilia text-body-lg font-extrabold text-forest"
             >
-              <div className="mb-3 font-caveat text-xl text-gold-soft">
-                {current.eyebrow}
-              </div>
-              <h2 className="!text-white text-heading-mid leading-none">
-                {current.label}
-              </h2>
-              {current.hint && (
-                <p className="mt-3 text-white/70">{current.hint}</p>
-              )}
+              Get support
+            </h2>
+            <p className="mt-0.5 text-meta text-ink-soft">
+              We usually reply by email within a day.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            aria-label="Close"
+            className="-mr-1.5 -mt-1 flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-cream-dark hover:text-forest"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+            >
+              <path d="M6 6l12 12M18 6l-12 12" />
+            </svg>
+          </button>
+        </div>
 
-              <div className="mt-7">
-                {current.type === "choice" ? (
-                  <div className="flex max-w-md flex-col gap-2.5">
-                    {current.choices.map((c, i) => {
-                      const selected = value === c.value;
-                      return (
-                        <button
-                          key={c.value}
-                          type="button"
-                          onClick={() => {
-                            setValue(current.key, c.value);
-                            setStepError(null);
-                          }}
-                          className={`flex w-full cursor-pointer items-center gap-3 rounded-2xl border-2 px-4 py-3.5 text-left font-massilia text-[0.95rem] font-semibold transition ${
-                            selected
-                              ? "border-gold bg-gold text-ink shadow-[0_6px_20px_rgba(255,168,0,0.35)]"
-                              : "border-white/30 bg-white/5 text-white hover:border-white/70 hover:bg-white/10"
-                          }`}
-                        >
-                          <span
-                            className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${
-                              selected
-                                ? "bg-ink/15 text-ink"
-                                : "bg-white/15 text-white"
-                            }`}
-                          >
-                            {String.fromCharCode(65 + i)}
-                          </span>
-                          <span className="min-w-0 flex-1">{c.label}</span>
-                          {selected && (
-                            <svg
-                              width="18"
-                              height="18"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="3"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="shrink-0 text-ink"
-                              aria-hidden
-                            >
-                              <path d="M5 12l5 5L20 7" />
-                            </svg>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                ) : current.type === "textarea" ? (
-                  <textarea
-                    ref={(el) => {
-                      inputRef.current = el;
-                    }}
-                    value={value}
-                    onChange={(e) => {
-                      setValue(current.key, e.target.value);
-                      setStepError(null);
-                    }}
-                    onKeyDown={onKeyDown}
-                    rows={4}
-                    maxLength={5000}
-                    placeholder={current.placeholder}
-                    className="w-full resize-none border-0 border-b-2 border-white/30 bg-transparent pb-3 font-massilia text-mini-h text-white placeholder-white/30 outline-none transition focus:border-gold"
-                  />
-                ) : (
-                  <input
-                    ref={(el) => {
-                      inputRef.current = el;
-                    }}
-                    type={current.type === "email" ? "email" : "text"}
-                    value={value}
-                    onChange={(e) => {
-                      setValue(current.key, e.target.value);
-                      setStepError(null);
-                    }}
-                    onKeyDown={onKeyDown}
-                    maxLength={current.key === "subject" ? 200 : 200}
-                    placeholder={current.placeholder}
-                    autoComplete={
-                      current.key === "email"
-                        ? "email"
-                        : current.key === "name"
-                          ? "name"
-                          : "off"
-                    }
-                    className="w-full border-0 border-b-2 border-white/30 bg-transparent pb-3 font-massilia text-section-h text-white placeholder-white/30 outline-none transition focus:border-gold"
-                  />
+        {status === "sent" ? (
+          <div className="px-5 py-10 text-center sm:px-6">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gold text-ink">
+              <svg
+                width="26"
+                height="26"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M5 12l5 5L20 7" />
+              </svg>
+            </div>
+            <h3 className="font-massilia text-body-lg font-extrabold text-forest">
+              Got it — we&apos;ll be in touch
+            </h3>
+            <p className="mx-auto mt-2 max-w-[380px] text-meta text-ink-soft">
+              Your ticket is with the Genera team. We typically reply within a
+              day.
+            </p>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="mt-6 inline-flex cursor-pointer items-center rounded-full bg-forest px-5 py-2.5 font-massilia text-fine font-bold text-white transition-shadow hover:shadow-[0_6px_22px_rgba(0,62,69,0.3)]"
+            >
+              Close
+            </button>
+          </div>
+        ) : (
+          <form
+            onSubmit={handleSubmit}
+            noValidate
+            className="max-h-[min(72vh,640px)] overflow-y-auto px-5 py-5 sm:px-6"
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="support-name" className={labelClass}>
+                  Your name
+                </label>
+                <input
+                  id="support-name"
+                  ref={nameRef}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  autoComplete="name"
+                  placeholder="Jane Smith"
+                  className={fieldClass}
+                />
+                {fieldErrors.name && (
+                  <p className="mt-1 text-fine text-red-700">
+                    {fieldErrors.name}
+                  </p>
                 )}
               </div>
 
-              {stepError && (
-                <p className="mt-3 text-sm text-gold-soft">{stepError}</p>
-              )}
+              <div>
+                <label htmlFor="support-email" className={labelClass}>
+                  Email
+                </label>
+                <input
+                  id="support-email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                  placeholder="you@daycare.com"
+                  className={fieldClass}
+                />
+                {fieldErrors.email && (
+                  <p className="mt-1 text-fine text-red-700">
+                    {fieldErrors.email}
+                  </p>
+                )}
+              </div>
+            </div>
 
-              <div className="mt-8 flex flex-wrap items-center gap-4">
-                <button
-                  type="button"
-                  onClick={next}
-                  disabled={status === "submitting"}
-                  className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-gold px-6 py-3 font-massilia text-[0.95rem] font-bold text-ink shadow-[0_4px_18px_rgba(255,168,0,0.35)] transition hover:shadow-[0_8px_28px_rgba(255,168,0,0.45)] disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {status === "submitting"
-                    ? "Sending…"
-                    : step === total - 1
-                      ? "Submit ticket"
-                      : "OK"}
-                  {status !== "submitting" && (
+            <div className="mt-4">
+              <label htmlFor="support-category" className={labelClass}>
+                What&apos;s this about?
+              </label>
+              <select
+                id="support-category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value as Category)}
+                className={`${fieldClass} cursor-pointer`}
+              >
+                {CATEGORIES.map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mt-4">
+              <label htmlFor="support-subject" className={labelClass}>
+                Subject
+              </label>
+              <input
+                id="support-subject"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                maxLength={200}
+                placeholder="e.g. Can't save a booking"
+                className={fieldClass}
+              />
+              {fieldErrors.subject && (
+                <p className="mt-1 text-fine text-red-700">
+                  {fieldErrors.subject}
+                </p>
+              )}
+            </div>
+
+            <div className="mt-4">
+              <label htmlFor="support-description" className={labelClass}>
+                How can we help?
+              </label>
+              <textarea
+                id="support-description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={5}
+                maxLength={5000}
+                placeholder="What were you trying to do, and what happened instead?"
+                className={`${fieldClass} resize-y`}
+              />
+              {fieldErrors.description && (
+                <p className="mt-1 text-fine text-red-700">
+                  {fieldErrors.description}
+                </p>
+              )}
+            </div>
+
+            {/* Suggested Help Centre pages, live as they type. */}
+            {showSuggestions && (
+              <div
+                ref={suggestionsRef}
+                className="mt-5 rounded-xl border border-gold/45 bg-gold-light/50 p-4"
+              >
+                <div className="mb-2.5 flex items-center gap-2">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gold text-ink">
                     <svg
-                      width="16"
-                      height="16"
+                      width="13"
+                      height="13"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -488,51 +476,87 @@ export default function SupportTicketForm() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
-                      <path d="M5 12h14" />
-                      <path d="M13 5l7 7-7 7" />
+                      <path d="M12 17h.01" />
+                      <path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3" />
                     </svg>
-                  )}
-                </button>
-                <span className="font-massilia text-sm text-white/55">
-                  press{" "}
-                  <kbd className="rounded bg-white/10 px-1.5 py-0.5 text-[0.7rem] text-white/80">
-                    Enter ↵
-                  </kbd>
-                </span>
-                {errorMsg && (
-                  <span className="text-sm text-gold-soft">{errorMsg}</span>
-                )}
-              </div>
+                  </span>
+                  <p className="font-massilia text-fine font-bold text-forest">
+                    This might save you the wait
+                  </p>
+                </div>
 
-              <div className="mt-10 flex items-center justify-between text-sm text-white/55">
-                <button
-                  type="button"
-                  onClick={back}
-                  disabled={step === 0}
-                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 transition hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M19 12H5" />
-                    <path d="M11 19l-7-7 7-7" />
-                  </svg>
-                  Back
-                </button>
-                <span className="font-caveat text-base text-white/60">
-                  {step + 1} of {total}
-                </span>
+                <ul className="flex flex-col gap-1.5">
+                  {suggestions.map((s) => (
+                    <li key={s.href}>
+                      <a
+                        href={s.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-start gap-2.5 rounded-lg border border-transparent bg-white/70 px-3 py-2.5 transition-colors hover:border-teal-mid hover:bg-white"
+                      >
+                        <span className="min-w-0 flex-1">
+                          <span className="block font-massilia text-fine font-bold text-forest">
+                            {s.title}
+                          </span>
+                          <span className="mt-0.5 line-clamp-2 text-[0.8rem] leading-snug text-ink-soft">
+                            {s.section} · {s.snippet}
+                          </span>
+                        </span>
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.4"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="mt-1 shrink-0 text-ink-soft transition-colors group-hover:text-forest"
+                        >
+                          <path d="M7 17L17 7" />
+                          <path d="M8 7h9v9" />
+                        </svg>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+
+                <p className="mt-2.5 text-[0.8rem] text-ink-soft">
+                  Opens in a new tab — your ticket stays as you left it.
+                </p>
               </div>
+            )}
+
+            {errorMsg && (
+              <p className="mt-4 rounded-xl border border-red-200 bg-red-50 px-3.5 py-2.5 text-meta text-red-800">
+                {errorMsg}
+              </p>
+            )}
+
+            <div className="mt-5 flex flex-wrap items-center justify-end gap-3 border-t border-teal-mid/60 pt-4">
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="cursor-pointer rounded-full px-4 py-2.5 font-massilia text-fine font-bold text-ink-soft transition-colors hover:bg-cream-dark hover:text-forest"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={status === "submitting" || checking}
+                className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-gold px-5 py-2.5 font-massilia text-fine font-bold text-ink shadow-[0_4px_14px_rgba(255,168,0,0.3)] transition-shadow hover:shadow-[0_6px_22px_rgba(255,168,0,0.45)] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {checking
+                  ? "Checking the docs…"
+                  : status === "submitting"
+                    ? "Sending…"
+                    : showSuggestions
+                      ? "Still need help — send"
+                      : "Send ticket"}
+              </button>
             </div>
-          )}
-        </div>
+          </form>
+        )}
       </div>
     </div>
   );

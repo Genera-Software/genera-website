@@ -13,6 +13,9 @@
 
 # next.js
 /.next/
+# `next dev` builds here instead, so Turbopack and webpack artifacts can't
+# collide (see distDir in next.config.ts).
+/.next-dev/
 /out/
 
 # production
