@@ -82,11 +82,9 @@ export default async function FaqsPage() {
       </section>
 
       {/* Accordion */}
-      {/* Searchable, category-grouped list. No `rev` wrapper here — its
-          transform would create a containing block and break the sticky
-          search bar inside FaqAccordion. */}
+      {/* Searchable, category-grouped list */}
       <section className="bg-cream px-8 py-22">
-        <div className="mx-auto max-w-[860px]">
+        <div className="rev mx-auto max-w-[860px]">
           {items.length > 0 ? (
             <FaqAccordion items={items} />
           ) : (

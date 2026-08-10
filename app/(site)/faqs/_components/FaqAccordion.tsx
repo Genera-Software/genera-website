@@ -145,7 +145,7 @@ export default function FaqAccordion({ items }: { items: FaqItem[] }) {
   return (
     <div>
       {/* Search */}
-      <div className="sticky top-[78px] z-30 -mx-4 border-b border-cream-dark/60 bg-cream px-4 pb-4 pt-3 md:top-[92px]">
+      <div>
         <div className="relative">
           <svg
             viewBox="0 0 24 24"
