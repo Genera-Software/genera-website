@@ -165,7 +165,10 @@
     color: var(--color-ink);
     font-family: var(--font-niveau);
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
+    /* `clip`, not `hidden`: both suppress horizontal overflow, but `hidden`
+       makes <html> a scroll container, which breaks `position: sticky`
+       descendants (e.g. the FAQ search bar). */
+    overflow-x: clip;
   }
 
   h1, h2, h3 {

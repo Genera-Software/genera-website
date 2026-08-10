@@ -21,7 +21,7 @@ export default async function FaqsPage() {
   const supabase = getPublicSupabase();
   const { data } = await supabase
     .from("faqs")
-    .select("id, question, answer_html")
+    .select("id, question, answer_html, category")
     .eq("is_visible", true)
     .order("sort_order", { ascending: true });
 
@@ -29,6 +29,7 @@ export default async function FaqsPage() {
     id: row.id,
     q: row.question,
     a: row.answer_html,
+    category: row.category,
   }));
 
   const faqSchema =
@@ -73,16 +74,19 @@ export default async function FaqsPage() {
             </span>
           </h1>
           <p className="mx-auto mt-5 max-w-[600px] text-white/80">
-            Got questions? We have got answers. If you cannot find what you are
-            looking for, drop us an email and we will get back to you within
-            one working day.
+            Search {items.length} answers below, or browse by topic. If you
+            cannot find what you are looking for, drop us an email and we will
+            get back to you within one working day.
           </p>
         </div>
       </section>
 
       {/* Accordion */}
+      {/* Searchable, category-grouped list. No `rev` wrapper here — its
+          transform would create a containing block and break the sticky
+          search bar inside FaqAccordion. */}
       <section className="bg-cream px-8 py-22">
-        <div className="rev mx-auto max-w-[860px]">
+        <div className="mx-auto max-w-[860px]">
           {items.length > 0 ? (
             <FaqAccordion items={items} />
           ) : (

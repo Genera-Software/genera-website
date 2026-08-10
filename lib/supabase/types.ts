@@ -234,6 +234,7 @@ export type Database = {
       faqs: {
         Row: {
           answer_html: string;
+          category: string | null;
           created_at: string;
           id: string;
           is_visible: boolean;
@@ -243,6 +244,7 @@ export type Database = {
         };
         Insert: {
           answer_html?: string;
+          category?: string | null;
           created_at?: string;
           id?: string;
           is_visible?: boolean;
@@ -252,6 +254,7 @@ export type Database = {
         };
         Update: {
           answer_html?: string;
+          category?: string | null;
           created_at?: string;
           id?: string;
           is_visible?: boolean;

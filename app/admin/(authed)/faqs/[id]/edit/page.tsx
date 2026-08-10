@@ -3,6 +3,7 @@ import { getAdminSupabase } from "@/lib/supabase/admin";
 import PageHeader from "../../../_components/PageHeader";
 import FaqForm from "../../_components/FaqForm";
 import { updateFaq } from "../../actions";
+import { listFaqCategories } from "../../categories";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,8 @@ export default async function EditFaqPage({
 
   if (!faq) notFound();
 
+  const categories = await listFaqCategories();
+
   const updateAction = async (formData: FormData) => {
     "use server";
     await updateFaq(faq.id, formData);
@@ -37,11 +40,13 @@ export default async function EditFaqPage({
           initial={{
             question: faq.question,
             answer_html: faq.answer_html,
+            category: faq.category,
             sort_order: faq.sort_order,
             is_visible: faq.is_visible,
           }}
           action={updateAction}
           submitLabel="Save changes"
+          categories={categories}
         />
       </div>
     </div>

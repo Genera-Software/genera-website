@@ -7,6 +7,7 @@ import RichTextEditor from "../../_components/RichTextEditor";
 type Initial = {
   question?: string;
   answer_html?: string;
+  category?: string | null;
   sort_order?: number;
   is_visible?: boolean;
 };
@@ -15,10 +16,13 @@ export default function FaqForm({
   initial,
   action,
   submitLabel,
+  categories = [],
 }: {
   initial?: Initial;
   action: (formData: FormData) => Promise<void>;
   submitLabel: string;
+  /** Existing categories, offered as suggestions. Free text is still allowed. */
+  categories?: string[];
 }) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -61,6 +65,30 @@ export default function FaqForm({
           uploadEndpoint="/admin/api/upload-image"
           placeholder="Write the answer…"
         />
+      </div>
+
+      <div>
+        <label className="mb-1.5 block text-sm font-semibold text-ink">
+          Category
+        </label>
+        <input
+          type="text"
+          name="category"
+          list="faq-categories"
+          maxLength={80}
+          placeholder="e.g. Payments & Billing — leave blank for no section"
+          defaultValue={initial?.category ?? ""}
+          className="w-full rounded-lg border border-teal-mid bg-white px-3 py-2.5 text-sm shadow-sm outline-none focus:border-gold focus:ring-2 focus:ring-gold-soft/60"
+        />
+        <datalist id="faq-categories">
+          {categories.map((c) => (
+            <option key={c} value={c} />
+          ))}
+        </datalist>
+        <p className="mt-1.5 text-xs text-ink-soft">
+          Groups this question into a section on the public FAQs page. Pick an
+          existing one or type a new name.
+        </p>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">

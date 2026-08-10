@@ -10,7 +10,7 @@ export default async function FaqsAdminPage() {
   const supabase = getAdminSupabase();
   const { data: faqs } = await supabase
     .from("faqs")
-    .select("id, question, sort_order, is_visible")
+    .select("id, question, category, sort_order, is_visible")
     .order("sort_order", { ascending: true });
 
   return (
@@ -34,6 +34,7 @@ export default async function FaqsAdminPage() {
             <tr>
               <th className="px-5 py-3">Order</th>
               <th className="px-5 py-3">Question</th>
+              <th className="px-5 py-3">Category</th>
               <th className="px-5 py-3">Visibility</th>
               <th className="px-5 py-3 text-right">Actions</th>
             </tr>
@@ -111,6 +112,15 @@ export default async function FaqsAdminPage() {
                   </Link>
                 </td>
                 <td className="px-5 py-3 align-middle">
+                  {f.category ? (
+                    <span className="rounded-full bg-cream px-2.5 py-0.5 text-xs font-semibold text-forest">
+                      {f.category}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-ink-soft/60">—</span>
+                  )}
+                </td>
+                <td className="px-5 py-3 align-middle">
                   {f.is_visible ? (
                     <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
                       Visible
@@ -149,7 +159,7 @@ export default async function FaqsAdminPage() {
             ))}
             {(faqs ?? []).length === 0 && (
               <tr>
-                <td colSpan={4} className="px-5 py-10 text-center text-sm text-ink-soft">
+                <td colSpan={5} className="px-5 py-10 text-center text-sm text-ink-soft">
                   No FAQs yet. Click &ldquo;New FAQ&rdquo; to add one.
                 </td>
               </tr>

@@ -8,6 +8,15 @@ import { getAdminSupabase } from "@/lib/supabase/admin";
 const Schema = z.object({
   question: z.string().trim().min(1, "Question is required").max(300),
   answer_html: z.string().default(""),
+  // Blank means "no section" — the public page groups those under a fallback
+  // heading rather than dropping them.
+  category: z
+    .string()
+    .trim()
+    .max(80)
+    .transform((v) => (v === "" ? null : v))
+    .nullable()
+    .default(null),
   sort_order: z.coerce.number().int().min(0).max(100000).default(0),
   is_visible: z.coerce.boolean().default(true),
 });
@@ -16,6 +25,7 @@ function parse(fd: FormData) {
   return Schema.parse({
     question: fd.get("question") ?? "",
     answer_html: fd.get("answer_html") ?? "",
+    category: fd.get("category") ?? "",
     sort_order: fd.get("sort_order") ?? 0,
     is_visible:
       fd.get("is_visible") === "on" || fd.get("is_visible") === "true",
