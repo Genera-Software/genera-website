@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { createMetadata } from "@/lib/seo";
 import Paw from "@/components/Paw";
+import RotatingWord from "./_components/RotatingWord";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
 import FoundingSpotsStats from "@/components/FoundingSpotsStats";
@@ -170,9 +171,9 @@ export default async function Home() {
         </div>
 
         <div className="relative z-10 mx-auto flex w-full max-w-[1160px] flex-col items-start text-left md:items-start md:text-left">
-          <div className="mb-4 inline-flex animate-[fadeInUp_0.6s_ease_both] items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft md:px-4 md:py-1.5 md:text-body-lg">
+          <div className="mb-4 inline-flex flex-wrap animate-[fadeInUp_0.6s_ease_both] items-center gap-x-2 gap-y-1 rounded-full border-2 border-gold/50 bg-white/10 px-4 py-1.5 font-caveat text-body-lg font-bold text-gold-soft md:px-6 md:py-2.5 md:text-section-h">
             <Paw className="h-[1.1em] w-[1.1em]" /> Built by a daycare, for
-            daycares
+            dog <RotatingWord />
           </div>
 
           <h1 className="rev mb-3 animate-[fadeInUp_0.7s_0.1s_ease_both] text-white text-figure-md md:mb-4 md:[font-size:clamp(2.4rem,4vw,3.6rem)]">
@@ -184,7 +185,7 @@ export default async function Home() {
               </svg>
             </span>
             <br />
-            gets your daycare.
+            gets your pet business.
           </h1>
 
           <p className="rev d1 mb-5 max-w-[300px] animate-[fadeInUp_0.7s_0.2s_ease_both] text-body-lg text-white/80 md:mb-6 md:max-w-[460px]">
