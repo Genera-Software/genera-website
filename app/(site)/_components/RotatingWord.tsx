@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const WORDS = ["daycare", "walkers", "sitters", "groomer", "trainers"];
+const WORDS = ["daycare", "walkers", "sitters", "groomers", "trainers"];
 // Extra copy of the first word at the end lets the stack keep rolling
 // forward through the loop point instead of snapping backward.
 const DISPLAY = [...WORDS, WORDS[0]];
