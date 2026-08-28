@@ -40,8 +40,12 @@ export default function Footer() {
               GENERA
             </span>
           </div>
-          <p className="mb-7 max-w-[280px] text-fine leading-[1.85] text-white/50">
+          <p className="mb-2 max-w-[280px] text-fine leading-[1.85] text-white/50">
             Software built by pet business owners, for pet business owners.
+          </p>
+          <p className="mb-7 flex items-center gap-1.5 text-fine text-white/50">
+            <span>Designed and Built in the UK</span>
+            <span role="img" aria-label="United Kingdom" className="text-xs leading-none">🇬🇧</span>
           </p>
           <div className="flex gap-2.5">
             <a
@@ -80,10 +84,20 @@ export default function Footer() {
       </div>
 
       <div className="mx-auto flex max-w-[1160px] flex-wrap items-center justify-between gap-4 py-5">
-        <p className="text-xs text-white/35">
-          © 2026 Genera Software Ltd. Built with love by{" "}
-          <a href="https://www.duncansdogco.com" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-white/70 transition-colors">Duncan&apos;s Dog Co</a>.
-        </p>
+        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] text-white/35">
+          <p>© 2026 Genera Software Ltd.</p>
+          <span aria-hidden="true" className="text-white/20">•</span>
+          <p className="flex items-center gap-1.5">
+            <span>Made with</span>
+            <svg viewBox="0 0 24 24" aria-label="love" role="img" className="h-2.5 w-2.5 shrink-0 fill-[#e25555]">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            </svg>
+            <span>
+              by{" "}
+              <a href="https://dihan.com" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 transition-colors hover:text-white/70">Dihan.com</a>
+            </span>
+          </p>
+        </div>
         <div className="flex flex-wrap gap-2.5">
           <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-eyebrow tracking-wide text-white/50">
             GDPR Compliant
