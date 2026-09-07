@@ -154,6 +154,187 @@ function ServiceIcon({ kind, className }: { kind: ServiceKey; className?: string
   return <SunIcon className={className} />;
 }
 
+/* ── interaction layer ────────────────────────────────────
+   A pointer walks each screen, hovers a row and clicks
+   something, numbers count up, and a wipe carries each view in.
+   Coordinates are canvas space, 1200 x 680. */
+type Beat = { at: number; x: number; y: number; click?: boolean };
+
+const CURSOR: Record<ViewKey, Beat[]> = {
+  monthly: [
+    { at: 0.10, x: 1090, y: 72 },
+    { at: 0.30, x: 257, y: 118, click: true },
+    { at: 0.58, x: 240, y: 316, click: true },
+    { at: 0.86, x: 700, y: 460 },
+  ],
+  services: [
+    { at: 0.10, x: 980, y: 72 },
+    { at: 0.34, x: 420, y: 218 },
+    { at: 0.58, x: 420, y: 392 },
+    { at: 0.84, x: 1144, y: 392, click: true },
+  ],
+  daily: [
+    { at: 0.10, x: 1000, y: 72 },
+    { at: 0.36, x: 430, y: 345 },
+    { at: 0.62, x: 430, y: 512 },
+    { at: 0.86, x: 1012, y: 512, click: true },
+  ],
+  schedule: [
+    { at: 0.10, x: 1020, y: 72 },
+    { at: 0.40, x: 300, y: 330, click: true },
+    { at: 0.70, x: 640, y: 420 },
+    { at: 0.92, x: 900, y: 330 },
+  ],
+  provider: [
+    { at: 0.10, x: 900, y: 60 },
+    { at: 0.40, x: 300, y: 300, click: true },
+    { at: 0.70, x: 640, y: 380 },
+    { at: 0.92, x: 960, y: 300 },
+  ],
+  boarding: [
+    { at: 0.10, x: 1040, y: 72 },
+    { at: 0.36, x: 620, y: 240 },
+    { at: 0.64, x: 500, y: 435, click: true },
+    { at: 0.90, x: 500, y: 590 },
+  ],
+  tracking: [
+    { at: 0.10, x: 1050, y: 72 },
+    { at: 0.40, x: 300, y: 300, click: true },
+    { at: 0.72, x: 760, y: 380 },
+    { at: 0.92, x: 880, y: 500 },
+  ],
+  messages: [
+    { at: 0.10, x: 1020, y: 72 },
+    { at: 0.36, x: 300, y: 214 },
+    { at: 0.60, x: 300, y: 313 },
+    { at: 0.86, x: 1146, y: 644, click: true },
+  ],
+  forecast: [
+    { at: 0.10, x: 400, y: 400 },
+    { at: 0.32, x: 1057, y: 72, click: true },
+    { at: 0.62, x: 520, y: 430 },
+    { at: 0.90, x: 1000, y: 330 },
+  ],
+};
+
+/* Measured row bands in canvas space, so the row under the
+   pointer is the one that lights up. */
+const ROW_BANDS: Partial<Record<ViewKey, Array<[number, number]>>> = {
+  services: Array.from({ length: 9 }, (_, i) => [131 + i * 58, 131 + (i + 1) * 58] as [number, number]),
+  daily: [
+    [326, 363],
+    [363, 400],
+    [400, 437],
+    [457, 494],
+    [494, 531],
+    [551, 588],
+    [608, 645],
+  ],
+  boarding: Array.from({ length: 7 }, (_, i) => [306 + i * 51.5, 306 + (i + 1) * 51.5] as [number, number]),
+  messages: Array.from({ length: 6 }, (_, i) => [192 + i * 49.5, 192 + (i + 1) * 49.5] as [number, number]),
+};
+
+function cursorAt(view: ViewKey, p: number) {
+  const beats = CURSOR[view];
+  if (!beats?.length) return { x: 0, y: 0, opacity: 0, clicking: 0 };
+  if (p < beats[0].at - 0.08) return { ...beats[0], opacity: 0, clicking: 0 };
+  let a = beats[0];
+  let b = beats[beats.length - 1];
+  for (let i = 0; i < beats.length - 1; i++) {
+    if (p >= beats[i].at && p <= beats[i + 1].at) {
+      a = beats[i];
+      b = beats[i + 1];
+      break;
+    }
+  }
+  const span = Math.max(0.0001, b.at - a.at);
+  const k = easeInOut(clamp01((p - a.at) / span));
+  const x = a.x + (b.x - a.x) * k;
+  const y = a.y + (b.y - a.y) * k;
+  // A click blooms just after the pointer lands on a clicking beat.
+  let clicking = 0;
+  for (const bt of beats) {
+    if (!bt.click) continue;
+    const d = p - bt.at;
+    if (d >= 0 && d < 0.09) clicking = Math.max(clicking, 1 - d / 0.09);
+  }
+  const fade = p > 0.95 ? clamp01((1 - p) / 0.05) : 1;
+  return { x, y, opacity: fade, clicking };
+}
+
+/* Which list row the pointer is resting on, so rows light up
+   under it the way they would if you were really using it. */
+function hoverRow(view: ViewKey, p: number) {
+  const bands = ROW_BANDS[view];
+  if (!bands) return -1;
+  const c = cursorAt(view, p);
+  if (c.opacity < 0.5) return -1;
+  for (let i = 0; i < bands.length; i++) {
+    if (c.y >= bands[i][0] && c.y < bands[i][1]) return i;
+  }
+  return -1;
+}
+
+const easeInOut = (x: number) =>
+  x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+
+/* Numbers roll up rather than appearing fully formed. */
+function countUp(target: number, p: number, from = 0.02, dur = 0.35) {
+  return Math.round(target * easeOut(clamp01((p - from) / dur)));
+}
+
+function Cursor({ view, p }: { view: ViewKey; p: number }) {
+  const c = cursorAt(view, p);
+  if (c.opacity <= 0) return null;
+  return (
+    <div
+      className="pointer-events-none absolute z-30"
+      style={{ left: c.x, top: c.y, opacity: c.opacity }}
+    >
+      {c.clicking > 0 ? (
+        <span
+          className="absolute rounded-full bg-[#0C3A3F]/25"
+          style={{
+            width: 34 * (1 - c.clicking) + 8,
+            height: 34 * (1 - c.clicking) + 8,
+            left: -(34 * (1 - c.clicking) + 8) / 2 + 4,
+            top: -(34 * (1 - c.clicking) + 8) / 2 + 4,
+            opacity: c.clicking * 0.8,
+          }}
+        />
+      ) : null}
+      <svg viewBox="0 0 18 18" width="20" height="20" className="relative drop-shadow">
+        <path
+          d="M2 1.5 14.5 8 8.7 9.5 7 15.5 2 1.5Z"
+          fill="#1f2937"
+          stroke="white"
+          strokeWidth="1.4"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
+/* A soft wipe carries each view in, so screens hand over
+   rather than cutting. */
+function EnterWipe({ p }: { p: number }) {
+  if (p > 0.16) return null;
+  const k = clamp01(p / 0.16);
+  return (
+    <div
+      className="pointer-events-none absolute inset-y-0 z-20"
+      style={{
+        left: `${k * 118 - 18}%`,
+        width: "18%",
+        background:
+          "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0) 100%)",
+        opacity: k < 0.9 ? 1 : (1 - k) * 10,
+      }}
+    />
+  );
+}
+
 const TONE: Record<ServiceKey, string> = {
   daycare: "border-l-amber-400 bg-amber-50/80",
   sleepover: "border-l-indigo-500 bg-indigo-50/80",
@@ -481,7 +662,7 @@ function MonthlyView({ p }: { p: number }) {
           return (
             <div
               key={i}
-              className={`min-w-0 overflow-hidden px-1.5 py-1 ${
+              className={`relative min-w-0 overflow-hidden px-1.5 py-1 ${
                 cell.off ? "bg-stone-50" : cell.today ? "bg-amber-50" : "bg-white"
               }`}
             >
@@ -506,6 +687,9 @@ function MonthlyView({ p }: { p: number }) {
                   </span>
                 ) : null}
               </div>
+              {cell.today && p > 0.6 ? (
+                <span className="anim-today-pulse pointer-events-none absolute inset-0.5 rounded-md" />
+              ) : null}
               {!cell.off && (
                 <div className="mt-1 space-y-[3px]">
                   {cell.services?.map(([kind, n], idx) => {
@@ -574,6 +758,7 @@ function Tick({ on }: { on: boolean }) {
 }
 
 function ServicesView({ p }: { p: number }) {
+  const hovered = hoverRow("services", p);
   return (
     <div className="flex min-h-0 flex-1 flex-col px-4 pb-3">
       <div className="grid shrink-0 grid-cols-[1.5fr_0.9fr_0.6fr_0.7fr_0.8fr_0.6fr_0.6fr_0.5fr] gap-x-2 border-b border-stone-200 pb-1.5 text-[8.5px] font-bold uppercase tracking-wide text-stone-400">
@@ -592,7 +777,9 @@ function ServicesView({ p }: { p: number }) {
           return (
             <div
               key={r.name}
-              className="grid grid-cols-[1.5fr_0.9fr_0.6fr_0.7fr_0.8fr_0.6fr_0.6fr_0.5fr] items-center gap-x-2 border-b border-stone-100 py-1.5"
+              className={`grid grid-cols-[1.5fr_0.9fr_0.6fr_0.7fr_0.8fr_0.6fr_0.6fr_0.5fr] items-center gap-x-2 rounded border-b border-stone-100 py-1.5 transition-colors ${
+                hovered === i ? "bg-amber-50/70" : ""
+              }`}
               style={{ opacity: k, transform: `translateY(${(1 - k) * 4}px)` }}
             >
               <span className="flex items-center gap-1.5 truncate text-[11px] font-semibold text-stone-800">
@@ -662,6 +849,7 @@ const DAILY_ROWS: Array<{ group: string; kind: ServiceKey; pet: string; owner: s
 
 function DailyView({ p }: { p: number }) {
   let lastGroup = "";
+  const hovered = hoverRow("daily", p);
   return (
     <div className="flex min-h-0 flex-1 gap-3 px-4 pb-3">
       <div className="flex min-w-0 flex-1 flex-col gap-2">
@@ -686,7 +874,9 @@ function DailyView({ p }: { p: number }) {
                 )}
                 <span className="text-[8.5px] font-bold uppercase tracking-wider text-stone-400">{l}</span>
               </div>
-              <div className="mt-0.5 text-[17px] font-extrabold leading-none text-[#0C3A3F]">{v}</div>
+              <div className="mt-0.5 text-[17px] font-extrabold leading-none text-[#0C3A3F]">
+                {countUp(parseInt(v, 10), p, 0.02, 0.3)}
+              </div>
             </div>
           ))}
         </div>
@@ -711,7 +901,11 @@ function DailyView({ p }: { p: number }) {
                       {r.group}
                     </div>
                   ) : null}
-                  <div className="grid grid-cols-[1.6fr_1.2fr_0.7fr_1fr_0.9fr] items-center gap-2 border-b border-stone-100 px-3 py-1">
+                  <div
+                    className={`grid grid-cols-[1.6fr_1.2fr_0.7fr_1fr_0.9fr] items-center gap-2 border-b border-stone-100 px-3 py-1 transition-colors ${
+                      hovered === i ? "bg-amber-50/70" : ""
+                    }`}
+                  >
                     <span className="flex items-center gap-1.5">
                       <span className="h-5 w-5 shrink-0 rounded-full bg-gradient-to-br from-stone-200 to-stone-300" />
                       <span className="truncate text-[11px] font-bold text-stone-800">{r.pet}</span>
@@ -985,6 +1179,7 @@ const STAYS: Array<{ dog: string; owner: string; arr: string; dep: string; night
 
 function BoardingView({ p }: { p: number }) {
   const max = Math.max(...NIGHTS);
+  const hovered = hoverRow("boarding", p);
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-2 px-4 pb-3">
       <div className="grid shrink-0 grid-cols-4 gap-2">
@@ -1000,7 +1195,11 @@ function BoardingView({ p }: { p: number }) {
             style={{ opacity: easeOut(clamp01((p - 0.02 - i * 0.04) / 0.18)) }}
           >
             <div className="text-[8.5px] font-bold uppercase tracking-wider text-stone-400">{l}</div>
-            <div className="mt-0.5 text-[18px] font-extrabold leading-none text-[#0C3A3F]">{v}</div>
+            <div className="mt-0.5 text-[18px] font-extrabold leading-none text-[#0C3A3F]">
+              {v.includes("/")
+                ? v
+                : countUp(parseInt(v, 10), p, 0.02, 0.32)}
+            </div>
           </div>
         ))}
       </div>
@@ -1041,7 +1240,9 @@ function BoardingView({ p }: { p: number }) {
           return (
             <div
               key={s.dog}
-              className="grid flex-1 grid-cols-[1.1fr_1.1fr_1.1fr_1.1fr_0.7fr_0.9fr_0.9fr] items-center gap-2 border-b border-stone-100 px-3"
+              className={`grid flex-1 grid-cols-[1.1fr_1.1fr_1.1fr_1.1fr_0.7fr_0.9fr_0.9fr] items-center gap-2 border-b border-stone-100 px-3 transition-colors ${
+                hovered === i ? "bg-amber-50/70" : ""
+              }`}
               style={{ opacity: k }}
             >
               <span className="flex items-center gap-1.5">
@@ -1302,6 +1503,7 @@ const BUBBLES: Array<{ me?: boolean; text: string; at: string }> = [
 ];
 
 function MessagesView({ p }: { p: number }) {
+  const hovered = hoverRow("messages", p);
   return (
     <div className="flex min-h-0 flex-1 gap-2.5 px-4 pb-3">
       <div className="flex w-[262px] shrink-0 flex-col gap-1 overflow-hidden rounded-xl bg-white p-2 ring-1 ring-stone-200">
@@ -1315,8 +1517,12 @@ function MessagesView({ p }: { p: number }) {
         {THREADS.map((t, i) => (
           <div
             key={t.who}
-            className={`rounded-lg px-2 py-1.5 ring-1 ${
-              i === 0 ? "bg-teal-50/70 ring-teal-200" : "bg-white ring-stone-100"
+            className={`rounded-lg px-2 py-1.5 ring-1 transition-colors ${
+              i === 0
+                ? "bg-teal-50/70 ring-teal-200"
+                : hovered === i
+                  ? "bg-amber-50/70 ring-amber-200"
+                  : "bg-white ring-stone-100"
             }`}
             style={{ opacity: easeOut(clamp01((p - 0.03 - i * 0.04) / 0.2)) }}
           >
@@ -1385,7 +1591,12 @@ function MessagesView({ p }: { p: number }) {
           <div className="flex-1 rounded-full bg-stone-50 px-3 py-1.5 text-[10.5px] text-stone-400 ring-1 ring-stone-200">
             Write a reply...
           </div>
-          <span className="rounded-full bg-[#FFA800] px-3 py-1.5 text-[10.5px] font-bold text-[#0C3A3F]">Send</span>
+          <span
+            className="rounded-full bg-[#FFA800] px-3 py-1.5 text-[10.5px] font-bold text-[#0C3A3F] transition-transform"
+            style={{ transform: p > 0.86 && p < 0.95 ? "scale(0.93)" : "scale(1)" }}
+          >
+            Send
+          </span>
         </div>
       </div>
     </div>
@@ -1625,7 +1836,9 @@ function Device({ t }: { t: number }) {
                 ].map(([l, v]) => (
                   <div key={l as string} className="flex items-center gap-1.5 px-2.5">
                     <span className="text-[8px] font-bold uppercase tracking-wider text-stone-400">{l}</span>
-                    <span className="anim-tabular text-[12px] font-bold text-[#0C3A3F]">{v}</span>
+                    <span className="anim-tabular text-[12px] font-bold text-[#0C3A3F]">
+                      {countUp(v as number, local)}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -1634,7 +1847,10 @@ function Device({ t }: { t: number }) {
             <div className="ml-auto flex items-center gap-2">
               {m.extra === "horizons" ? (
                 <>
-                  <Pills items={["1 month", "3 months", "6 months", "12 months"]} active="6 months" />
+                  <Pills
+                    items={["1 month", "3 months", "6 months", "12 months"]}
+                    active={local > 0.36 ? "12 months" : "6 months"}
+                  />
                   <span className="rounded-xl bg-white px-3 py-1.5 text-[11px] font-bold text-stone-600 ring-1 ring-stone-200">
                     Export CSV
                   </span>
@@ -1682,7 +1898,8 @@ function Device({ t }: { t: number }) {
           </div>
         )}
 
-        <div className="flex min-h-0 flex-1 flex-col" style={{ opacity: fade }}>
+        <div className="relative flex min-h-0 flex-1 flex-col" style={{ opacity: fade }}>
+          <EnterWipe p={local} />
           {view === "monthly" && <MonthlyView p={local} />}
           {view === "services" && <ServicesView p={local} />}
           {view === "daily" && <DailyView p={local} />}
@@ -1693,6 +1910,7 @@ function Device({ t }: { t: number }) {
           {view === "messages" && <MessagesView p={local} />}
           {view === "forecast" && <ForecastView p={local} />}
         </div>
+        <Cursor view={view} p={local} />
       </div>
     </div>
   );
