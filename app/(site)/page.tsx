@@ -6,7 +6,7 @@ import RotatingWord from "./_components/RotatingWord";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
 import FoundingSpotsStats from "@/components/FoundingSpotsStats";
-import AdminMiniAnimation from "@/components/AdminMiniAnimation";
+import AdminMiniAnimationV2 from "@/components/AdminMiniAnimationV2";
 import {
   BOOK_DEMO_FORM_SLUG,
   FOUNDING_100_CTA_LABEL,
@@ -473,7 +473,7 @@ export default async function Home() {
                   app.generasoftware.com
                 </div>
               </div>
-              <AdminMiniAnimation />
+              <AdminMiniAnimationV2 />
             </div>
           </div>
         </div>
