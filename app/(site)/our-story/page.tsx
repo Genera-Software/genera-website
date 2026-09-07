@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Reveal from "@/components/Reveal";
-import BookDemoButton from "@/components/BookDemoButton";
+import StartTrialLink from "@/components/StartTrialLink";
 import { createMetadata } from "@/lib/seo";
-import { FOUNDING_100_CTA_LABEL } from "@/lib/cta";
 import { getPublicSupabase } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -332,13 +331,11 @@ export default async function OurStoryPage() {
             <em className="text-gold">like yours</em>
           </h2>
           <p className="mx-auto mt-4 max-w-[560px] text-white/80">
-            Apply for the Founding 100 and we&apos;ll help you decide whether
-            Genera is the right fit.
+            Start a free trial and we&apos;ll help you decide whether Genera is
+            the right fit.
           </p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
-            <BookDemoButton className="btn btn-gold btn-lg">
-              {FOUNDING_100_CTA_LABEL}
-            </BookDemoButton>
+            <StartTrialLink className="btn btn-gold btn-lg" />
           </div>
         </div>
       </section>

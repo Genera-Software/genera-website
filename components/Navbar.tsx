@@ -4,12 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import BookDemoButton from "@/components/BookDemoButton";
+import StartTrialLink from "@/components/StartTrialLink";
 import { LOGIN_URL } from "@/lib/urls";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/features", label: "Features" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/our-story", label: "Our Story" },
   { href: "/blog", label: "Blog" },
   { href: "/faqs", label: "FAQs" },
@@ -143,11 +144,9 @@ export default function Navbar() {
           >
             Login
           </Link>
-          <BookDemoButton
-            className="inline-flex items-center rounded-full bg-gold px-5 py-2 font-massilia text-fine font-bold text-ink shadow-[0_4px_14px_rgba(255,168,0,0.35)] transition-shadow hover:shadow-[0_6px_22px_rgba(255,168,0,0.5)]"
-          >
-            Join Genera
-          </BookDemoButton>
+          <StartTrialLink className="inline-flex items-center rounded-full bg-gold px-5 py-2 font-massilia text-fine font-bold text-ink shadow-[0_4px_14px_rgba(255,168,0,0.35)] transition-shadow hover:shadow-[0_6px_22px_rgba(255,168,0,0.5)]">
+            Start free trial
+          </StartTrialLink>
         </div>
 
         <button
@@ -201,10 +200,7 @@ export default function Navbar() {
           </Link>
         ))}
         <div className="mt-6 flex flex-col gap-3">
-          <BookDemoButton
-            className="btn btn-gold btn-lg"
-            onClick={() => setOpen(false)}
-          />
+          <StartTrialLink className="btn btn-gold btn-lg" />
           <Link
             href={LOGIN_URL}
             className="btn btn-outline-w btn-lg"

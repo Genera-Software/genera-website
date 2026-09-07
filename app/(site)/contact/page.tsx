@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
+import StartTrialLink from "@/components/StartTrialLink";
 import { createMetadata } from "@/lib/seo";
-import { BOOK_DEMO_FORM_SLUG, FOUNDING_100_CTA_LABEL } from "@/lib/cta";
+import { BOOK_DEMO_FORM_SLUG } from "@/lib/cta";
 import { isFormActive } from "@/lib/forms";
 
 export const revalidate = 60;
 
 export const metadata: Metadata = {
   ...createMetadata({
-    title: "Contact Genera About the Founding 100",
+    title: "Contact Genera About Pricing, Plans and Getting Started",
     description:
-      "Contact Genera to ask about pet business management features, joining the Founding 100, or getting help with your next step.",
+      "Contact Genera to ask about pet business management features, pricing and plans, or getting help with your next step.",
     path: "/contact",
   }),
 };
@@ -29,7 +30,7 @@ export default async function ContactPage() {
             🐾 Get in Touch
           </div>
           <h1 className="mt-2 text-white">
-            Join the Founding 100. Ask a question. Or just{" "}
+            Start a free trial. Ask a question. Or just{" "}
             <span className="squig">
               say hello.
               <svg viewBox="0 0 180 12" preserveAspectRatio="none">
@@ -39,8 +40,8 @@ export default async function ContactPage() {
           </h1>
           <p className="mx-auto mt-5 max-w-[600px] text-white/80">
             We are a small team and we read every message. Whether you want to
-            join the Founding 100, have a question about pricing, or just want
-            to chat about running a pet business, we are here.
+            start a trial, have a question about pricing, or just want to chat
+            about running a pet business, we are here.
           </p>
         </div>
       </section>
@@ -65,9 +66,9 @@ export default async function ContactPage() {
             </div>
             <h2 className="text-heading-mid">Drop us an email</h2>
             <p className="mx-auto mt-3 max-w-[520px] text-ink-soft">
-              Whether you want to join the Founding 100, have a question, or
-              just want to know more about Genera — we are here. We reply
-              within one working day.
+              Whether you want to start a trial, have a question, or just want
+              to know more about Genera — we are here. We reply within one
+              working day.
             </p>
             <a
               href="mailto:info@generasoftware.com"
@@ -76,9 +77,7 @@ export default async function ContactPage() {
               info@generasoftware.com
             </a>
             <div className="mt-7 flex flex-wrap justify-center gap-3">
-              <BookDemoButton className="btn btn-gold btn-lg">
-                {FOUNDING_100_CTA_LABEL}
-              </BookDemoButton>
+              <StartTrialLink className="btn btn-gold btn-lg" />
               {showBookDemo && (
                 <BookDemoButton
                   slug={BOOK_DEMO_FORM_SLUG}

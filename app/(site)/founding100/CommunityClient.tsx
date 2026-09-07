@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Reveal from "@/components/Reveal";
-import BookDemoButton from "@/components/BookDemoButton";
+import StartTrialLink from "@/components/StartTrialLink";
 import FoundingSpotsStats from "@/components/FoundingSpotsStats";
 import Paw from "@/components/Paw";
-import { FOUNDING_100_CTA_LABEL } from "@/lib/cta";
 
 /* ── Animated paw trail ──────────────────────────────────────── */
 function PawTrail() {
@@ -125,7 +125,6 @@ export default function CommunityClient({
   totalSpots: number;
   claimedSpots: number;
 }) {
-  const remainingSpots = Math.max(totalSpots - claimedSpots, 0);
 
   return (
     <>
@@ -160,16 +159,16 @@ export default function CommunityClient({
                 Side by side. The Founding 100 are the first through the door.
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <BookDemoButton className="btn btn-gold btn-lg">
-                  {FOUNDING_100_CTA_LABEL}
-                </BookDemoButton>
+                <StartTrialLink className="btn btn-gold btn-lg" />
                 <a href="#what-you-get" className="btn btn-outline-w btn-lg">
                   What&apos;s included
                 </a>
               </div>
               <p className="mt-4 text-sm text-white/60">
                 No credit card · No commitment ·{" "}
-                <strong className="text-gold">{remainingSpots} spots remaining</strong>
+                <strong className="text-gold">
+                  Founding 100 applications are closed
+                </strong>
               </p>
             </div>
 
@@ -188,7 +187,7 @@ export default function CommunityClient({
                 claimedSpots={claimedSpots}
               />
               <p className="relative z-10 mt-3 text-sm text-white/70">
-                Applications close once we reach 100.
+                New businesses now join on one of the standard plans.
               </p>
             </div>
           </div>
@@ -338,11 +337,12 @@ export default function CommunityClient({
             <p className="eyebrow !text-gold">Limited offer</p>
             <h2 className="mt-2 text-heading-mid !text-white">The Founding One Hundred.</h2>
             <p className="mt-4 max-w-[680px] text-[1.1rem] text-white/80 leading-relaxed md:mx-0 mx-auto">
-              We&apos;re selecting 100 pet businesses to join Genera before we
-              open to the public. You&apos;ll get your first month completely free,
-              priority onboarding, and a direct line to our team — plus
-              founding member access to the Genera Business Network when it
-              launches.
+              We selected 100 pet businesses to join Genera before we opened to
+              the public. They kept their founding member rate, priority
+              onboarding and a direct line to our team — plus founding member
+              access to the Genera Business Network when it launches. The round
+              has now closed, and everyone else joins on a standard plan with a
+              free trial.
             </p>
           </div>
 
@@ -370,24 +370,26 @@ export default function CommunityClient({
           <div className="rev">
             <p className="eyebrow !text-gold-soft">Founding members</p>
             <h2 className="mt-2 text-heading-mid !text-white">
-              Be one of the first 100.
+              The first 100 are in.
             </h2>
             <p className="mx-auto mt-4 max-w-[560px] text-[1.1rem] text-white/80 leading-relaxed">
-              The Founding 100 get early access, a lifetime founding member
-              status, and a direct voice in shaping what Genera becomes.
-              These spots won&apos;t last.
+              The Founding 100 keep their rate and their voice in shaping what
+              Genera becomes. The round is closed — but the Network, the
+              software and the support are open to everyone. Pick a plan and
+              start a free trial.
             </p>
           </div>
           <div className="rev d2 mx-auto mt-8 max-w-[320px] rounded-2xl border border-white/10 bg-white/5 p-7 backdrop-blur-sm">
             <FoundingSpotsStats totalSpots={totalSpots} claimedSpots={claimedSpots} />
           </div>
           <div className="rev d3 mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <BookDemoButton className="btn btn-gold btn-lg">
-              {FOUNDING_100_CTA_LABEL}
-            </BookDemoButton>
+            <StartTrialLink className="btn btn-gold btn-lg" />
+            <Link href="/pricing" className="btn btn-outline-w btn-lg">
+              Compare plans
+            </Link>
           </div>
           <p className="mt-4 text-sm text-white/60">
-            No credit card · No commitment · First come, first in.
+            No credit card · No commitment · Cancel any time.
           </p>
         </div>
       </section>

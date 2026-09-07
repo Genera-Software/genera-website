@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
-import BookDemoButton from "@/components/BookDemoButton";
+import StartTrialLink from "@/components/StartTrialLink";
 import { createMetadata } from "@/lib/seo";
-import { FOUNDING_100_CTA_LABEL } from "@/lib/cta";
 import { getPublicSupabase } from "@/lib/supabase/server";
 
 export const revalidate = 60;
@@ -149,12 +148,10 @@ export default async function BlogPage() {
         <div className="rev mx-auto max-w-[760px]">
           <h2 className="text-heading-mid !text-white">Want to see Genera in action?</h2>
           <p className="mx-auto mt-4 max-w-[560px] text-white/80">
-            Apply for the Founding 100 today and see how Genera can transform
-            the way you run your pet business.
+            Start a free trial today and see how Genera can transform the way
+            you run your pet business.
           </p>
-          <BookDemoButton className="btn btn-gold btn-lg mt-6">
-            {FOUNDING_100_CTA_LABEL}
-          </BookDemoButton>
+          <StartTrialLink className="btn btn-gold btn-lg mt-6" />
         </div>
       </section>
     </>

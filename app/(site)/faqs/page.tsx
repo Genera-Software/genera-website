@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
-import BookDemoButton from "@/components/BookDemoButton";
+import StartTrialLink from "@/components/StartTrialLink";
 import { createMetadata } from "@/lib/seo";
-import { FOUNDING_100_CTA_LABEL } from "@/lib/cta";
 import { getPublicSupabase } from "@/lib/supabase/server";
 import FaqAccordion, { type FaqItem } from "./_components/FaqAccordion";
 
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
   ...createMetadata({
     title: "Dog Daycare Software FAQs for Pet Businesses",
     description:
-      "Find answers about Genera dog daycare software, including the Founding 100, online bookings, invoicing, client records, data security, support and setup.",
+      "Find answers about Genera dog daycare software, including pricing and plans, online bookings, invoicing, client records, data security, support and setup.",
     path: "/faqs",
   }),
 };
@@ -111,9 +110,7 @@ export default async function FaqsPage() {
             will help you figure out if Genera is right for your business.
           </p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
-            <BookDemoButton className="btn btn-gold btn-lg">
-              {FOUNDING_100_CTA_LABEL}
-            </BookDemoButton>
+            <StartTrialLink className="btn btn-gold btn-lg" />
             <a
               href="mailto:info@generasoftware.com?subject=Question%20about%20Genera"
               className="btn btn-forest btn-lg"

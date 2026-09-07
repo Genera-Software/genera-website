@@ -3,10 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
-import BookDemoButton from "@/components/BookDemoButton";
+import StartTrialLink from "@/components/StartTrialLink";
 import FoundingSpotsStats from "@/components/FoundingSpotsStats";
 import Paw from "@/components/Paw";
-import { FOUNDING_100_CTA_LABEL } from "@/lib/cta";
 
 /* ─────────────────────────────────────────────────────────────
    Static data
@@ -106,7 +105,6 @@ export default function CommunityClient({
   totalSpots: number;
   claimedSpots: number;
 }) {
-  const remainingSpots = Math.max(totalSpots - claimedSpots, 0);
 
   return (
     <>
@@ -135,16 +133,16 @@ export default function CommunityClient({
                 Side by side. The Founding 100 are the first through the door.
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <BookDemoButton className="btn btn-gold btn-lg">
-                  {FOUNDING_100_CTA_LABEL}
-                </BookDemoButton>
+                <StartTrialLink className="btn btn-gold btn-lg" />
                 <a href="#what-you-get" className="btn btn-outline-w btn-lg">
                   What&apos;s included
                 </a>
               </div>
               <p className="mt-4 text-sm text-white/60">
                 No credit card · No commitment ·{" "}
-                <strong className="text-gold">{remainingSpots} spots remaining</strong>
+                <strong className="text-gold">
+                  Founding 100 applications are closed
+                </strong>
               </p>
             </div>
 
@@ -163,7 +161,7 @@ export default function CommunityClient({
                 claimedSpots={claimedSpots}
               />
               <p className="relative z-10 mt-3 text-sm text-white/70">
-                Applications close once we reach 100.
+                New businesses now join on one of the standard plans.
               </p>
             </div>
           </div>
@@ -278,21 +276,19 @@ export default function CommunityClient({
                 claimedSpots={claimedSpots}
               />
               <p className="relative z-10 mt-3 text-sm text-white/70">
-                Be part of shaping the product from the start. Applications
-                close once we reach 100.
+                The founding round has closed — but the Network, the software
+                and the support are open to everyone.
               </p>
             </div>
             <div className="flex flex-col items-start gap-4">
               <p className="text-lg font-bold text-white">
-                Ready to be one of the first 100?
+                Ready to see what it does for your business?
               </p>
               <p className="text-white/70 leading-relaxed">
-                No credit card required. No commitment. Just one simple
-                application to see if Genera is right for your business.
+                No credit card required. No commitment. Just a free trial to
+                see if Genera is right for your business.
               </p>
-              <BookDemoButton className="btn btn-gold btn-lg">
-                {FOUNDING_100_CTA_LABEL}
-              </BookDemoButton>
+              <StartTrialLink className="btn btn-gold btn-lg" />
             </div>
           </div>
         </div>
@@ -424,14 +420,15 @@ export default function CommunityClient({
 
         <div className="relative z-10 mx-auto max-w-[760px]">
           <div className="rev">
-            <p className="eyebrow !text-gold-soft">Only 100 spots</p>
+            <p className="eyebrow !text-gold-soft">Founding members</p>
             <h2 className="mt-2 !text-white">
-              First come, first in.
+              The first 100 are in.
             </h2>
             <p className="mx-auto mt-4 max-w-[560px] text-[1.1rem] text-white/80 leading-relaxed">
-              The Founding 100 get early access, a lifetime founding member
-              status, and a direct voice in shaping what the Genera Business
-              Network becomes. These spots won&apos;t last.
+              The Founding 100 keep their rate, their early access and a direct
+              voice in shaping what the Genera Business Network becomes. The
+              round is closed — everyone else joins on a standard plan with a
+              free trial.
             </p>
           </div>
 
@@ -444,12 +441,10 @@ export default function CommunityClient({
           </div>
 
           <div className="rev d3 mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <BookDemoButton className="btn btn-gold btn-lg">
-              {FOUNDING_100_CTA_LABEL}
-            </BookDemoButton>
+            <StartTrialLink className="btn btn-gold btn-lg" />
           </div>
           <p className="mt-4 text-sm text-white/60">
-            No credit card · No commitment · Cancel anytime
+            No credit card · No commitment · Cancel any time
           </p>
         </div>
       </section>

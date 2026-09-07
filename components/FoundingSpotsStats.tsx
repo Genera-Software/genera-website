@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { FOUNDING_100_APPLICATIONS_OPEN } from "@/lib/cta";
 
 type Props = {
   totalSpots: number;
@@ -14,13 +15,18 @@ export default function FoundingSpotsStats({
   totalSpots,
   claimedSpots,
 }: Props) {
-  const remainingSpots = Math.max(totalSpots - claimedSpots, 0);
+  const open = FOUNDING_100_APPLICATIONS_OPEN;
+  // Open: how many spots are left to take. Closed: how many founding members there are —
+  // a "spots remaining" countdown beside "applications have closed" reads as a live offer.
+  const headlineFigure = open
+    ? Math.max(totalSpots - claimedSpots, 0)
+    : claimedSpots;
   const progressPct =
     totalSpots > 0
       ? Math.min(100, Math.round((claimedSpots / totalSpots) * 100))
       : 0;
 
-  const [displayRemaining, setDisplayRemaining] = useState(0);
+  const [displayFigure, setDisplayFigure] = useState(0);
   const [displayProgress, setDisplayProgress] = useState(0);
   const numberRef = useRef<HTMLDivElement>(null);
 
@@ -33,7 +39,7 @@ export default function FoundingSpotsStats({
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
     if (reduceMotion) {
-      setDisplayRemaining(remainingSpots);
+      setDisplayFigure(headlineFigure);
       setDisplayProgress(progressPct);
       return;
     }
@@ -48,7 +54,7 @@ export default function FoundingSpotsStats({
       const tick = (now: number) => {
         const t = Math.min(1, (now - start) / DURATION_MS);
         const eased = easeOutCubic(t);
-        setDisplayRemaining(Math.round(eased * remainingSpots));
+        setDisplayFigure(Math.round(eased * headlineFigure));
         setDisplayProgress(eased * progressPct);
         if (t < 1) raf = requestAnimationFrame(tick);
       };
@@ -72,22 +78,26 @@ export default function FoundingSpotsStats({
       io.disconnect();
       cancelAnimationFrame(raf);
     };
-  }, [remainingSpots, progressPct]);
+  }, [headlineFigure, progressPct]);
 
   return (
     <>
       <p className="relative z-10 text-eyebrow uppercase tracking-widest text-gold-soft md:text-sm">
-        Spots remaining
+        {open ? "Spots remaining" : "Founding members"}
       </p>
       <div
         ref={numberRef}
         className="relative z-10 mt-1 font-massilia text-figure-lg font-bold leading-none text-gold md:mt-2 md:text-display tabular-nums"
-        aria-label={`${remainingSpots} spots remaining`}
+        aria-label={
+          open
+            ? `${headlineFigure} spots remaining`
+            : `${headlineFigure} founding members of ${totalSpots}`
+        }
       >
-        {displayRemaining}
+        {displayFigure}
       </div>
       <p className="relative z-10 mb-4 text-fine text-white/70 md:mb-5 md:text-base">
-        out of {totalSpots} founding members
+        out of {totalSpots} founding {open ? "members" : "spots"}
       </p>
       <div
         className="relative z-10 h-[7px] w-full overflow-hidden rounded-full bg-white/10 md:h-2"
@@ -102,7 +112,9 @@ export default function FoundingSpotsStats({
         />
       </div>
       <p className="relative z-10 mt-2 text-fine text-white/60 md:text-sm">
-        {claimedSpots} {claimedSpots === 1 ? "spot" : "spots"} claimed so far
+        {open
+          ? `${claimedSpots} ${claimedSpots === 1 ? "spot" : "spots"} claimed so far`
+          : "The round is now closed"}
       </p>
     </>
   );

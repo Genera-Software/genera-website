@@ -5,13 +5,12 @@ import Paw from "@/components/Paw";
 import RotatingWord from "./_components/RotatingWord";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
-import FoundingSpotsStats from "@/components/FoundingSpotsStats";
+import StartTrialLink from "@/components/StartTrialLink";
+import PricingTiers from "@/components/PricingTiers";
+import WhatYouKeep from "@/components/WhatYouKeep";
 import AdminMiniAnimationV2 from "@/components/AdminMiniAnimationV2";
-import {
-  BOOK_DEMO_FORM_SLUG,
-  FOUNDING_100_CTA_LABEL,
-  FOUNDING_100_SECTION_URL,
-} from "@/lib/cta";
+import { BOOK_DEMO_FORM_SLUG, PRICING_URL } from "@/lib/cta";
+import { TRIAL_DAYS } from "@/lib/pricing";
 import { getPublicSupabase } from "@/lib/supabase/server";
 import { isFormActive } from "@/lib/forms";
 
@@ -44,20 +43,8 @@ const PAIN_POINTS = [
 
 const FEATURES = [
   {
-    title: "Every pet. Every detail. One place.",
-    body: "Full client and pet profiles — feeding notes, vet contacts, vaccination records — accessible in seconds by anyone on your team.",
-    icon: (
-      <>
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-      </>
-    ),
-  },
-  {
     title: "Bookings that run themselves",
-    body: "24/7 online booking portal for your clients. No more inbound messages — just a clean calendar that fills itself.",
+    body: "24/7 online booking portal for your clients, with approvals, recurring bookings and per-service capacity limits. No more inbound messages — just a clean calendar that fills itself.",
     icon: (
       <>
         <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
@@ -70,7 +57,7 @@ const FEATURES = [
   },
   {
     title: "Get paid without chasing anyone",
-    body: "Auto-charge on collection, bulk invoicing, direct debit and card payments. Your money arrives on time, every time.",
+    body: "Charges come off the bookings you actually took. Bulk invoicing, card payments and Direct Debit — plus Xero if that's where you keep your books.",
     icon: (
       <>
         <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
@@ -79,8 +66,50 @@ const FEATURES = [
     ),
   },
   {
+    title: "Every pet. Every detail. One place.",
+    body: "Full client and pet profiles — feeding notes, vet contacts, vaccination records — accessible in seconds by anyone on your team.",
+    icon: (
+      <>
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </>
+    ),
+  },
+  {
+    title: "Your own app, under your own name",
+    body: "Owners add your portal to their home screen and it opens with your name and your logo. Nothing to find in an app store, and nothing for you to build.",
+    icon: (
+      <>
+        <rect x="6" y="2" width="12" height="20" rx="2" ry="2" />
+        <line x1="10" y1="18.5" x2="14" y2="18.5" />
+      </>
+    ),
+  },
+  {
+    title: "Every conversation in one place",
+    body: "Owner messaging, driver day threads and broadcasts — instead of three WhatsApp accounts, a personal phone and a Facebook page nobody checks.",
+    icon: (
+      <>
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z" />
+      </>
+    ),
+  },
+  {
+    title: "Assessments they'll actually read",
+    body: "Trial days and temperament tests recorded on a phone in the yard, then turned into a branded report card the owner opens on theirs.",
+    icon: (
+      <>
+        <path d="M9 2h6a1 1 0 0 1 1 1v2H8V3a1 1 0 0 1 1-1z" />
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+        <path d="m9 14 2 2 4-4" />
+      </>
+    ),
+  },
+  {
     title: "Routes planned in minutes, not hours",
-    body: "Drag-and-drop transport scheduling with optimised routes for your drivers. No more scrambling on collection day.",
+    body: "Drag-and-drop collection and drop-off runs with optimised stops, plus a portal your drivers sign into. Always know which dog is on which van.",
     icon: (
       <>
         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
@@ -89,8 +118,20 @@ const FEATURES = [
     ),
   },
   {
+    title: "Know exactly where the money is",
+    body: "What you've invoiced, what's still owed, what the diary is worth for the next six months, and what your team costs to run — on one screen.",
+    icon: (
+      <>
+        <line x1="3" y1="21" x2="21" y2="21" />
+        <rect x="5" y="12" width="4" height="7" />
+        <rect x="11" y="8" width="4" height="11" />
+        <rect x="17" y="4" width="4" height="15" />
+      </>
+    ),
+  },
+  {
     title: "Your team, sorted",
-    body: "Staff schedules, shift planning and payroll prep — all in one system. Know who's in, who's driving, and what everyone's owed.",
+    body: "Rota, shift planning, time off and payroll prep — on every plan, whatever you pay. Know who's in, who's driving, and what everyone's owed.",
     icon: (
       <>
         <circle cx="9" cy="7" r="4" />
@@ -100,8 +141,29 @@ const FEATURES = [
     ),
   },
   {
+    title: "Marketing tools, on the way",
+    body: "Filling quiet days and bringing lapsed owners back. Still in development — included in Thrive, and it appears in your account as it ships.",
+    icon: (
+      <>
+        <path d="M3 11v2a1 1 0 0 0 1 1h3l5 4V6L7 10H4a1 1 0 0 0-1 1z" />
+        <path d="M17 9a4 4 0 0 1 0 6" />
+        <path d="M20 6.5a8 8 0 0 1 0 11" />
+      </>
+    ),
+  },
+  {
+    title: "Compliance built in",
+    body: "GDPR and DEFRA-ready records, vaccination expiry alerts and a full audit trail. Cloud-based, backed up, and always on the current version.",
+    icon: (
+      <>
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        <path d="m9 12 2 2 4-4" />
+      </>
+    ),
+  },
+  {
     title: "Support that actually understands",
-    body: "UK-based support from people who've run a daycare. GDPR & DEFRA compliant, cloud-based and always up to date.",
+    body: "UK-based support from people who've run a daycare. You get a human who knows what a wet Tuesday in November looks like.",
     icon: (
       <>
         <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
@@ -112,34 +174,19 @@ const FEATURES = [
   },
 ];
 
-const FOUNDING_PERKS = [
-  "1 month free, then £50 a month. No credit card required",
-  "One-on-one onboarding call with the Genera team",
-  "Priority access to new features as they launch",
-  "Your feedback shapes the product roadmap",
-  "Locked-in founding member pricing, forever",
-];
-
 export default async function Home() {
   const supabase = getPublicSupabase();
 
-  const [logosRes, spotsRes, showBookDemo] = await Promise.all([
+  const [logosRes, showBookDemo] = await Promise.all([
     supabase
       .from("trust_logos")
       .select("id, name, logo_url")
       .eq("is_visible", true)
       .order("sort_order", { ascending: true }),
-    supabase
-      .from("founding_spots")
-      .select("total_spots, claimed_spots")
-      .eq("id", 1)
-      .maybeSingle(),
     isFormActive(BOOK_DEMO_FORM_SLUG),
   ]);
 
   const trustLogos = logosRes.data ?? [];
-  const totalSpots = spotsRes.data?.total_spots ?? 100;
-  const claimedSpots = spotsRes.data?.claimed_spots ?? 0;
 
   return (
     <>
@@ -195,11 +242,7 @@ export default async function Home() {
           </p>
 
           <div className="rev d2 mb-4 flex w-full flex-col gap-2.5 md:w-auto md:flex-row md:flex-wrap md:justify-start md:gap-3.5">
-            <BookDemoButton
-              className="btn btn-gold btn-lg w-full justify-center md:w-auto"
-            >
-              {FOUNDING_100_CTA_LABEL}
-            </BookDemoButton>
+            <StartTrialLink className="btn btn-gold btn-lg w-full justify-center md:w-auto" />
             {showBookDemo && (
               <BookDemoButton
                 slug={BOOK_DEMO_FORM_SLUG}
@@ -489,6 +532,14 @@ export default async function Home() {
               <br />
               Nothing you don&apos;t.
             </h2>
+            <p className="mx-auto mt-2 max-w-[600px] text-meta text-ink-soft md:mt-3 md:text-body-lg">
+              Bookings, invoicing, records, your own branded app and the rota are
+              in every plan. The rest arrives as your setting grows —{" "}
+              <Link href={PRICING_URL} className="font-semibold text-forest underline decoration-gold decoration-2 underline-offset-4 hover:text-gold">
+                see what each plan unlocks
+              </Link>
+              .
+            </p>
           </div>
           <div className="grid gap-3 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
             {FEATURES.map((f, i) => (
@@ -522,66 +573,11 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Founding 100 ────────────────────────────────────────── */}
-      <section
-        id="founding"
-        className="relative overflow-hidden bg-forest-dark px-6 py-13 text-white md:px-8 md:py-22"
-      >
-        <div className="mx-auto grid max-w-[1160px] gap-6 md:grid-cols-2 md:items-center md:gap-12">
-          <div className="rev">
-            <p className="eyebrow !text-gold">Limited offer</p>
-            <h2 className="text-section-h !text-white md:text-[length:inherit]">
-              The Founding One Hundred.
-            </h2>
-            <p className="mt-2.5 text-meta text-white/80 md:mt-4 md:text-base">
-              We&apos;re selecting 100 pet businesses to join Genera before we
-              open to the public. You&apos;ll get your first month completely free,
-              priority onboarding and a direct line to our team.
-            </p>
-            <ul className="mt-4 flex flex-col gap-2 md:mt-5 md:gap-2.5">
-              {FOUNDING_PERKS.map((p) => (
-                <li
-                  key={p}
-                  className="flex items-start gap-2 text-meta text-white/85 md:text-base"
-                >
-                  <span className="mt-0.5 text-gold">✓</span> {p}
-                </li>
-              ))}
-            </ul>
-          </div>
+      {/* ── Pricing ─────────────────────────────────────────────── */}
+      <PricingTiers />
 
-          <div className="rev d2 relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm md:overflow-visible md:p-8 md:pr-64">
-            <Image
-              src="/images/welcome.png"
-              alt=""
-              aria-hidden
-              width={720}
-              height={720}
-              className="pointer-events-none absolute -right-6 bottom-0 z-0 h-[180px] w-auto select-none drop-shadow-[0_8px_20px_rgba(0,0,0,0.3)] md:-right-40 md:-bottom-16 md:z-20 md:h-[28rem] md:drop-shadow-[0_12px_28px_rgba(0,0,0,0.35)]"
-            />
-            <FoundingSpotsStats
-              totalSpots={totalSpots}
-              claimedSpots={claimedSpots}
-            />
-            <p className="relative z-10 mt-3.5 max-w-[200px] text-meta text-white/80 md:mt-4 md:max-w-none md:text-base">
-              Applications close once we reach 100. Be part of shaping the
-              product from the start.
-            </p>
-            <div className="relative z-10 mt-4 flex flex-col gap-2.5 md:mt-5 md:flex-row md:flex-wrap md:items-center md:gap-3.5">
-              <BookDemoButton className="btn btn-gold btn-lg justify-center">
-                {FOUNDING_100_CTA_LABEL}
-              </BookDemoButton>
-              <Link
-                href={FOUNDING_100_SECTION_URL}
-                className="btn btn-outline-w btn-lg justify-center"
-              >
-                About the Founding 100
-              </Link>
-            </div>
-          </div>
-
-        </div>
-      </section>
+      {/* ── What you keep ───────────────────────────────────────── */}
+      <WhatYouKeep />
 
       {/* ── Story teaser ────────────────────────────────────────── */}
       <section id="story" className="bg-white px-6 py-13 md:px-8 md:py-22">
@@ -639,20 +635,17 @@ export default async function Home() {
             Ready when you are.
           </h2>
           <p className="mt-2.5 text-meta text-white/80 md:mt-4 md:text-base">
-            Apply for the Founding 100 today. No credit card required. No
-            commitment. Just one simple path to see if Genera is right for you.
+            Start your {TRIAL_DAYS}-day free trial today. No card required, no
+            setup fee, no contract. Just one simple path to see if Genera is
+            right for you.
           </p>
           <div className="mt-5 flex flex-col gap-2.5 md:mt-7 md:flex-row md:flex-wrap md:justify-center md:gap-3.5">
-            <BookDemoButton
-              className="btn btn-gold btn-lg w-full justify-center md:w-auto"
-            >
-              {FOUNDING_100_CTA_LABEL}
-            </BookDemoButton>
+            <StartTrialLink className="btn btn-gold btn-lg w-full justify-center md:w-auto" />
             <Link
-              href={FOUNDING_100_SECTION_URL}
+              href={PRICING_URL}
               className="btn btn-outline-w btn-lg w-full justify-center md:w-auto"
             >
-              About the Founding 100
+              Compare plans
             </Link>
           </div>
           <p className="mt-3.5 font-caveat text-base text-white/70 md:mt-5 md:text-lg">

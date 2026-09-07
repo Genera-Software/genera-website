@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { FOUNDING_100_FORM_SLUG } from "@/lib/cta";
+import { BOOK_DEMO_FORM_SLUG } from "@/lib/cta";
 
 type Status = "idle" | "loading" | "submitting" | "sent" | "error";
 
@@ -42,7 +42,10 @@ type FormSchema = {
   questions: Question[];
 };
 
-const DEFAULT_SLUG = FOUNDING_100_FORM_SLUG;
+// The founding-hundred intake is closed (lib/cta.ts), so a `book-demo:open` event that
+// arrives without a slug falls back to the demo form rather than an application nobody can
+// act on. Every caller passes a slug explicitly; this is the safety net.
+const DEFAULT_SLUG = BOOK_DEMO_FORM_SLUG;
 
 export default function BookDemoModal() {
   const [open, setOpen] = useState(false);

@@ -25,11 +25,14 @@ const softwareSchema = {
   url: SITE_URL,
   description:
     "Dog daycare and pet business management software for bookings, payments, transport, staff scheduling and pet records.",
+  // Cheapest tier on sale, so the rich result quotes a price a visitor can actually buy.
+  // Mirrors lib/pricing.ts — see the note there about why plans are hard-coded.
   offers: {
     "@type": "Offer",
     price: "50",
     priceCurrency: "GBP",
-    description: "£50 per month. One month free for new customers, with Founding 100 onboarding available.",
+    description:
+      "From £50 per month. Starter £50, Grow £75, Thrive £99, each with a 30-day free trial. No setup fee and no contract.",
   },
 };
 

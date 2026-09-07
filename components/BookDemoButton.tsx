@@ -1,10 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import {
-  FOUNDING_100_CTA_LABEL,
-  FOUNDING_100_FORM_SLUG,
-} from "@/lib/cta";
+import { BOOK_DEMO_FORM_SLUG } from "@/lib/cta";
 
 type Props = {
   className?: string;
@@ -15,9 +12,9 @@ type Props = {
 
 export default function BookDemoButton({
   className = "btn btn-forest btn-lg",
-  children = FOUNDING_100_CTA_LABEL,
+  children = "Book a Demo",
   onClick,
-  slug = FOUNDING_100_FORM_SLUG,
+  slug = BOOK_DEMO_FORM_SLUG,
 }: Props) {
   return (
     <button
