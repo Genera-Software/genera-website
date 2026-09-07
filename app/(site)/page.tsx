@@ -6,7 +6,7 @@ import RotatingWord from "./_components/RotatingWord";
 import Reveal from "@/components/Reveal";
 import BookDemoButton from "@/components/BookDemoButton";
 import FoundingSpotsStats from "@/components/FoundingSpotsStats";
-import AdminMiniAnimation from "@/components/AdminMiniAnimation";
+import AdminMiniAnimationV2 from "@/components/AdminMiniAnimationV2";
 import {
   BOOK_DEMO_FORM_SLUG,
   FOUNDING_100_CTA_LABEL,
@@ -453,13 +453,13 @@ export default async function Home() {
           <div className="rev mb-4 text-center md:mb-14">
             <p className="eyebrow">See it in action</p>
             <h2 className="text-section-h md:text-[length:inherit]">
-              A dashboard built for busy people.
+              Daycare, walking, grooming and boarding. One system.
             </h2>
           </div>
 
           <div className="rev d1 relative mx-auto max-w-[1000px]">
             <p className="mb-3 text-center font-caveat text-body-lg text-forest md:text-xl">
-              Your 9am Monday, sorted ☕
+              Your Monday morning, whatever you run
             </p>
 
             <div className="relative overflow-hidden rounded-2xl border border-teal-mid/50 bg-white shadow-[0_18px_40px_rgba(0,62,69,0.16)] md:rounded-3xl md:shadow-[0_24px_60px_rgba(0,62,69,0.16)]">
@@ -473,7 +473,7 @@ export default async function Home() {
                   app.generasoftware.com
                 </div>
               </div>
-              <AdminMiniAnimation />
+              <AdminMiniAnimationV2 />
             </div>
           </div>
         </div>
