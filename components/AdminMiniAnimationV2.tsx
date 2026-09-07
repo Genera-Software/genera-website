@@ -145,6 +145,17 @@ const MeetIcon = ({ className, color = "#0284c7" }: IconProps) => (
   </svg>
 );
 
+const VanIcon = ({ className, color = "#fff" }: IconProps) => (
+  <svg viewBox="0 0 16 16" className={className} aria-hidden="true">
+    <path
+      d="M1.5 5.5a1 1 0 0 1 1-1h5.5v6H2.5a1 1 0 0 1-1-1v-4Zm6.5-1h2.6l3.4 2.6v2.9H8v-5.5Z"
+      fill={color}
+    />
+    <circle cx="5" cy="12" r="1.5" fill={color} />
+    <circle cx="11.4" cy="12" r="1.5" fill={color} />
+  </svg>
+);
+
 function ServiceIcon({ kind, className }: { kind: ServiceKey; className?: string }) {
   if (kind === "sleepover") return <MoonIcon className={className} />;
   if (kind === "walk") return <WalkIcon className={className} />;
@@ -1281,13 +1292,14 @@ const ROUNDS: Array<{
   driver: string;
   role: string;
   live: boolean;
+  stale?: boolean;
   detail: string;
   done: number;
   pets: string[];
 }> = [
   { name: "Morning Round 1", colour: "#7C6CF0", driver: "Sam T.", role: "Driver", live: true, detail: "Live location · 08:14", done: 2, pets: ["Bramble", "Nala", "Otis"] },
   { name: "Morning Round 2", colour: "#12A594", driver: "Priya N.", role: "Driver", live: true, detail: "Live location · 08:16", done: 1, pets: ["Pepper", "Milo"] },
-  { name: "Morning Round 3", colour: "#E85D9B", driver: "Ronnie B.", role: "Manager", live: true, detail: "Live location · 08:11", done: 2, pets: ["Bailey", "Poppy", "Rex"] },
+  { name: "Morning Round 3", colour: "#E85D9B", driver: "Ronnie B.", role: "Manager", live: true, stale: true, detail: "Last seen · 07:52", done: 2, pets: ["Bailey", "Poppy", "Rex"] },
   { name: "Drop off Dogs", colour: "#4A8BF0", driver: "Dev A.", role: "Driver", live: false, detail: "Not working today", done: 0, pets: [] },
 ];
 
@@ -1322,12 +1334,21 @@ function TrackingView({ p }: { p: number }) {
           </div>
         </div>
         <span className="ml-auto shrink-0 text-[10px] font-bold text-[#C77A00]">3 of 4 drivers reporting</span>
+        <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] text-stone-400 ring-1 ring-stone-200">
+          ⌃
+        </span>
       </div>
 
       <div className="flex min-h-0 flex-1 gap-2.5">
         <div className="flex w-[252px] shrink-0 flex-col gap-1 overflow-hidden rounded-xl bg-white p-2 ring-1 ring-stone-200">
-          <div className="text-[8.5px] font-bold uppercase tracking-wider text-stone-400">
-            Morning pickup routes
+          <div className="flex items-center">
+            <span className="text-[8.5px] font-bold uppercase tracking-wider text-stone-400">
+              Morning pickup routes
+            </span>
+            <span className="ml-auto flex gap-1 text-[9px] text-stone-400">
+              <span>⌃</span>
+              <span>⌄</span>
+            </span>
           </div>
           {ROUNDS.map((r, i) => (
             <div
@@ -1344,10 +1365,10 @@ function TrackingView({ p }: { p: number }) {
               </div>
               <div className="flex items-center gap-2 px-2 py-1">
                 <span
-                  className="grid h-5 w-5 shrink-0 place-items-center rounded-full text-[9px] font-bold text-white"
+                  className="grid h-5 w-5 shrink-0 place-items-center rounded-full"
                   style={{ background: r.colour }}
                 >
-                  {r.driver.charAt(0)}
+                  <VanIcon className="h-3 w-3" />
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5">
@@ -1361,7 +1382,7 @@ function TrackingView({ p }: { p: number }) {
                   </div>
                   <div
                     className={`truncate text-[8.5px] font-semibold ${
-                      r.live ? "text-emerald-600" : "text-stone-400"
+                      !r.live ? "text-stone-400" : r.stale ? "text-amber-600" : "text-emerald-600"
                     }`}
                   >
                     {r.detail}
@@ -1391,26 +1412,118 @@ function TrackingView({ p }: { p: number }) {
               </div>
             </div>
           ))}
+
+          {/* the other half of the day, collapsed, as it is on the real tab */}
+          <div className="mt-auto rounded-lg bg-stone-50 ring-1 ring-stone-200">
+            <div className="flex items-center gap-1.5 px-2 py-1.5">
+              <span className="text-[8.5px] font-bold uppercase tracking-wider text-stone-400">
+                Evening dropoffs
+              </span>
+              <span className="ml-auto text-[9px] font-semibold text-stone-400">4 routes</span>
+              <span className="text-[9px] text-stone-400">⌄</span>
+            </div>
+          </div>
+          <div className="rounded-lg bg-[#0C3A3F]/5 px-2 py-1.5 text-[8.5px] font-semibold leading-snug text-[#0C3A3F]">
+            Every pickup records who collected the dog and when.
+          </div>
         </div>
 
         <div className="relative min-w-0 flex-1 overflow-hidden rounded-xl ring-1 ring-stone-200">
           <svg viewBox="0 0 460 330" className="h-full w-full" preserveAspectRatio="xMidYMid slice">
-            <rect width="460" height="330" fill="#EAF2E6" />
-            <path d="M0 40 C 90 30, 130 90, 210 78 S 350 40, 460 66 L460 0 L0 0Z" fill="#DCEAD6" />
-            <path d="M0 250 C 110 236, 160 296, 268 284 S 390 250, 460 268 L460 330 L0 330Z" fill="#DCEAD6" />
-            <path d="M-10 176 C 80 160, 150 210, 250 190 S 390 150, 470 170" stroke="#BBD9EC" strokeWidth="13" fill="none" strokeLinecap="round" />
-            <g stroke="#FFFFFF" strokeWidth="7" fill="none" strokeLinecap="round">
-              <path d="M-10 118 H470" />
-              <path d="M-10 232 H470" />
-              <path d="M120 -10 V340" />
-              <path d="M296 -10 V340" />
-              <path d="M392 -10 V340" />
-              <path d="M40 -10 L150 340" />
+            {/* Map base. Street hierarchy, parks, water and a railway,
+                drawn dense enough to read as a real map. No place is named. */}
+            <rect width="460" height="330" fill="#EFF1EA" />
+
+            {/* green space */}
+            <g fill="#CFE3C2">
+              <path d="M-10 8 C 40 2, 96 16, 108 46 S 74 92, 26 86 S -14 44, -10 8Z" />
+              <path d="M336 22 C 384 10, 442 26, 456 58 S 420 104, 372 96 S 322 52, 336 22Z" />
+              <path d="M18 250 C 66 238, 116 256, 122 286 S 82 330, 36 324 S 4 274, 18 250Z" />
+              <path d="M296 250 C 340 240, 380 258, 384 284 S 350 322, 310 316 S 286 270, 296 250Z" />
             </g>
-            <g stroke="#F3D9A6" strokeWidth="3.5" fill="none" strokeLinecap="round">
-              <path d="M-10 76 H470" />
-              <path d="M210 -10 V340" />
+
+            {/* water */}
+            <path
+              d="M-12 206 C 60 190, 104 226, 172 214 S 268 172, 330 186 S 424 214, 474 200"
+              stroke="#A6C9E2"
+              strokeWidth="11"
+              fill="none"
+              strokeLinecap="round"
+            />
+            <ellipse cx="126" cy="146" rx="17" ry="11" fill="#A6C9E2" />
+
+            {/* buildings */}
+            <g fill="#E2E3DC">
+              {[
+                [166, 96], [180, 108], [196, 92], [206, 110], [252, 96], [268, 108],
+                [284, 92], [166, 232], [182, 244], [198, 230], [258, 236], [274, 248],
+                [292, 232], [60, 156], [76, 168], [92, 152], [372, 152], [388, 164],
+                [404, 148], [340, 234], [356, 246],
+              ].map(([bx, by], i) => (
+                <rect key={i} x={bx} y={by} width={i % 3 === 0 ? 11 : 8} height={i % 2 === 0 ? 8 : 11} rx="1" />
+              ))}
             </g>
+
+            {/* railway */}
+            <path
+              d="M-10 262 C 90 250, 180 274, 268 258 S 400 226, 474 240"
+              stroke="#C3C4BC"
+              strokeWidth="2.4"
+              fill="none"
+              strokeDasharray="7 5"
+            />
+
+            {/* road casings */}
+            <g stroke="#DDDED6" fill="none" strokeLinecap="round">
+              <path d="M-10 122 C 110 112, 250 136, 474 118" strokeWidth="11" />
+              <path d="M-10 236 C 120 246, 260 222, 474 238" strokeWidth="10" />
+              <path d="M118 -10 C 128 90, 108 214, 124 340" strokeWidth="10" />
+              <path d="M300 -10 C 292 96, 312 210, 298 340" strokeWidth="10" />
+              <path d="M392 -10 C 400 100, 384 220, 398 340" strokeWidth="9" />
+            </g>
+
+            {/* residential streets */}
+            <g stroke="#FFFFFF" strokeWidth="2.6" fill="none" strokeLinecap="round">
+              <path d="M20 60 H112 M20 60 V150 M60 60 V122" />
+              <path d="M150 60 H286 M186 40 V120 M232 34 V120" />
+              <path d="M330 118 H460 M356 118 V196 M424 118 V190" />
+              <path d="M40 176 H116 M40 176 V236 M84 176 V240" />
+              <path d="M150 156 H288 M170 156 V232 M262 156 V230" />
+              <path d="M320 200 H452 M348 200 V266 M420 200 V262" />
+              <path d="M150 282 H286 M196 282 V330 M254 282 V330" />
+            </g>
+
+            {/* A roads */}
+            <g stroke="#FFFFFF" fill="none" strokeLinecap="round">
+              <path d="M-10 122 C 110 112, 250 136, 474 118" strokeWidth="7" />
+              <path d="M-10 236 C 120 246, 260 222, 474 238" strokeWidth="6" />
+              <path d="M118 -10 C 128 90, 108 214, 124 340" strokeWidth="6" />
+              <path d="M300 -10 C 292 96, 312 210, 298 340" strokeWidth="6" />
+              <path d="M392 -10 C 400 100, 384 220, 398 340" strokeWidth="5" />
+            </g>
+
+            {/* motorway */}
+            <path
+              d="M-12 66 C 96 52, 188 86, 276 70 S 402 34, 474 52"
+              stroke="#E9C275"
+              strokeWidth="8"
+              fill="none"
+              strokeLinecap="round"
+            />
+            <path
+              d="M-12 66 C 96 52, 188 86, 276 70 S 402 34, 474 52"
+              stroke="#F7DFA8"
+              strokeWidth="4.5"
+              fill="none"
+              strokeLinecap="round"
+            />
+
+            {/* roundabouts */}
+            <g fill="none" stroke="#FFFFFF" strokeWidth="4">
+              <circle cx="124" cy="122" r="6" />
+              <circle cx="298" cy="236" r="5.5" />
+            </g>
+
             {[
               "M232 176 L326 126 M232 176 L236 58 M232 176 L116 92",
               "M232 176 L92 216 M232 176 L212 254",
@@ -1468,6 +1581,11 @@ function TrackingView({ p }: { p: number }) {
                   <circle cx={x} cy={y} r="10.5" fill={ROUNDS[i].colour} stroke="#fff" strokeWidth="2.5" />
                   <text x={x} y={y + 3.2} textAnchor="middle" fontSize="9" fontWeight="800" fill="#fff">
                     {ROUNDS[i].driver.charAt(0)}
+                  </text>
+                  <rect x={x - 26} y={y + 13} width="52" height="12" rx="3" fill="#fff" opacity="0.95" />
+                  <text x={x} y={y + 21.5} textAnchor="middle" fontSize="7.5" fontWeight="700" fill={ROUNDS[i].colour}>
+                    {ROUNDS[i].driver}
+                    {ROUNDS[i].stale ? " · stale" : ""}
                   </text>
                 </g>
               );
