@@ -31,15 +31,18 @@ type ViewKey =
   | "messages"
   | "forecast";
 
+/* Ordered the way you actually move through the week: the month,
+   then today, then the week, then one person's week, then the
+   stays. Logistics, then talking to owners, then the money. */
 const VIEW_ORDER: ViewKey[] = [
   "monthly",
-  "services",
   "daily",
   "schedule",
   "provider",
   "boarding",
   "routes",
   "messages",
+  "services",
   "forecast",
 ];
 
