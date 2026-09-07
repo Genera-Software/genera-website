@@ -27,7 +27,7 @@ type ViewKey =
   | "schedule"
   | "provider"
   | "boarding"
-  | "tracking"
+  | "routes"
   | "messages"
   | "forecast";
 
@@ -38,13 +38,13 @@ const VIEW_ORDER: ViewKey[] = [
   "schedule",
   "provider",
   "boarding",
-  "tracking",
+  "routes",
   "messages",
   "forecast",
 ];
 
 /* Views that sit under the Dashboard's Monthly/Daily/Schedule/Map toggle. */
-const DASH_VIEWS: ViewKey[] = ["monthly", "daily", "schedule", "tracking"];
+const DASH_VIEWS: ViewKey[] = ["monthly", "daily", "schedule"];
 
 type ServiceKey =
   | "daycare"
@@ -208,11 +208,11 @@ const CURSOR: Record<ViewKey, Beat[]> = {
     { at: 0.64, x: 500, y: 435, click: true },
     { at: 0.90, x: 500, y: 590 },
   ],
-  tracking: [
-    { at: 0.10, x: 1050, y: 72 },
-    { at: 0.40, x: 300, y: 300, click: true },
-    { at: 0.72, x: 760, y: 380 },
-    { at: 0.92, x: 880, y: 500 },
+  routes: [
+    { at: 0.10, x: 1080, y: 72 },
+    { at: 0.36, x: 250, y: 300 },
+    { at: 0.62, x: 520, y: 600, click: true },
+    { at: 0.90, x: 900, y: 430 },
   ],
   messages: [
     { at: 0.10, x: 1020, y: 72 },
@@ -1285,320 +1285,187 @@ function BoardingView({ p }: { p: number }) {
   );
 }
 
-/* ── 7. Tracking ──────────────────────────────────────────── */
+/* ── 7. Day Routes ────────────────────────────────────────
+   The planning board rather than the live map. It reads the same
+   whether you run one round yourself or four with drivers, which
+   the map does not. */
 const ROUNDS: Array<{
   name: string;
   colour: string;
   driver: string;
-  role: string;
-  live: boolean;
-  stale?: boolean;
-  detail: string;
-  done: number;
-  pets: string[];
+  pets: Array<{ name: string; kind: ServiceKey; when: string }>;
 }> = [
-  { name: "Morning Round 1", colour: "#7C6CF0", driver: "Sam T.", role: "Driver", live: true, detail: "Live location · 08:14", done: 2, pets: ["Bramble", "Nala", "Otis"] },
-  { name: "Morning Round 2", colour: "#12A594", driver: "Priya N.", role: "Driver", live: true, detail: "Live location · 08:16", done: 1, pets: ["Pepper", "Milo"] },
-  { name: "Morning Round 3", colour: "#E85D9B", driver: "Ronnie B.", role: "Manager", live: true, stale: true, detail: "Last seen · 07:52", done: 2, pets: ["Bailey", "Poppy", "Rex"] },
-  { name: "Drop off Dogs", colour: "#4A8BF0", driver: "Dev A.", role: "Driver", live: false, detail: "Not working today", done: 0, pets: [] },
+  {
+    name: "Morning Round 1",
+    colour: "#12A594",
+    driver: "Jess M.",
+    pets: [
+      { name: "Bramble", kind: "daycare", when: "07:40" },
+      { name: "Nala", kind: "daycare", when: "07:55" },
+      { name: "Otis", kind: "walk", when: "08:10" },
+      { name: "Pepper", kind: "daycare", when: "08:25" },
+      { name: "Daisy", kind: "walk", when: "08:40" },
+      { name: "Ziggy", kind: "daycare", when: "08:55" },
+    ],
+  },
+  {
+    name: "Morning Round 2",
+    colour: "#7C6CF0",
+    driver: "Sam T.",
+    pets: [
+      { name: "Milo", kind: "groom", when: "08:00" },
+      { name: "Bailey", kind: "daycare", when: "08:20" },
+      { name: "Poppy", kind: "walk", when: "08:35" },
+      { name: "Ralph", kind: "daycare", when: "08:50" },
+      { name: "Luna", kind: "groom", when: "09:05" },
+    ],
+  },
 ];
 
-const HOMES: Array<{ x: number; y: number; c: string; name: string }> = [
-  { x: 116, y: 92, c: "#7C6CF0", name: "Bramble" },
-  { x: 236, y: 58, c: "#7C6CF0", name: "Nala" },
-  { x: 326, y: 126, c: "#7C6CF0", name: "Otis" },
-  { x: 92, y: 216, c: "#12A594", name: "Pepper" },
-  { x: 212, y: 254, c: "#12A594", name: "Milo" },
-  { x: 376, y: 212, c: "#E85D9B", name: "Bailey" },
-  { x: 340, y: 292, c: "#E85D9B", name: "Poppy" },
+const UNASSIGNED = [
+  { name: "Rex", kind: "sleepover" as ServiceKey },
+  { name: "Tilly", kind: "walk" as ServiceKey },
 ];
 
-function TrackingView({ p }: { p: number }) {
-  const draw = (d: number) => easeOut(clamp01((p - d) / 0.4));
+function RoutesView({ p }: { p: number }) {
+  const optimised = p > 0.66;
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-2 px-4 pb-3">
       <div
-        className="flex shrink-0 items-start gap-2.5 rounded-xl bg-white px-3 py-2 ring-1 ring-stone-200"
-        style={{ opacity: easeOut(clamp01(p / 0.15)) }}
+        className="flex shrink-0 items-center gap-2 rounded-xl bg-white px-3 py-2 ring-1 ring-stone-200"
+        style={{ opacity: easeOut(clamp01(p / 0.14)) }}
       >
-        <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-amber-50">
-          <span
-            className="h-2 w-2 rounded-full bg-[#FFA800]"
-            style={{ opacity: 0.4 + 0.6 * Math.abs(Math.sin(p * 12)) }}
-          />
+        <Pills items={["Morning Pickups", "Evening Dropoffs"]} active="Morning Pickups" />
+        <span className="rounded-lg bg-stone-50 px-2.5 py-1 text-[10.5px] font-semibold text-stone-600 ring-1 ring-stone-200">
+          07 / 09 / 2026
         </span>
-        <div className="min-w-0">
-          <div className="text-[12px] font-extrabold leading-none text-[#0C3A3F]">Live Driver Tracking</div>
-          <div className="mt-0.5 text-[9.5px] font-medium text-stone-500">
-            Driver pins update automatically as they move.
-          </div>
-        </div>
-        <span className="ml-auto shrink-0 text-[10px] font-bold text-[#C77A00]">3 of 4 drivers reporting</span>
-        <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] text-stone-400 ring-1 ring-stone-200">
-          ⌃
+        <span className="flex items-center gap-1.5 text-[10px] font-semibold text-stone-500">
+          <span className="flex h-3.5 w-6 items-center rounded-full bg-emerald-500 px-0.5">
+            <span className="ml-auto h-2.5 w-2.5 rounded-full bg-white" />
+          </span>
+          Show service
+        </span>
+        <span className="ml-auto flex items-center gap-1.5">
+          <span className="rounded-lg bg-white px-2.5 py-1 text-[10px] font-bold text-stone-600 ring-1 ring-stone-200">
+            Reset to default
+          </span>
+          <span className="rounded-lg bg-white px-2.5 py-1 text-[10px] font-bold text-stone-600 ring-1 ring-stone-200">
+            + Add route
+          </span>
+          <span className="rounded-lg bg-[#FFA800] px-2.5 py-1 text-[10px] font-bold text-[#0C3A3F]">
+            Save day routes
+          </span>
         </span>
       </div>
 
       <div className="flex min-h-0 flex-1 gap-2.5">
-        <div className="flex w-[252px] shrink-0 flex-col gap-1 overflow-hidden rounded-xl bg-white p-2 ring-1 ring-stone-200">
-          <div className="flex items-center">
-            <span className="text-[8.5px] font-bold uppercase tracking-wider text-stone-400">
-              Morning pickup routes
-            </span>
-            <span className="ml-auto flex gap-1 text-[9px] text-stone-400">
-              <span>⌃</span>
-              <span>⌄</span>
-            </span>
+        <div className="flex w-[176px] shrink-0 flex-col gap-1.5 rounded-xl bg-white p-2.5 ring-1 ring-stone-200">
+          <div className="text-[8.5px] font-bold uppercase tracking-wider text-stone-400">
+            Not on a route
           </div>
-          {ROUNDS.map((r, i) => (
+          {UNASSIGNED.map((u, i) => (
             <div
-              key={r.name}
-              className="rounded-lg ring-1 ring-stone-200"
-              style={{ opacity: easeOut(clamp01((p - 0.04 - i * 0.05) / 0.22)) }}
+              key={u.name}
+              className="flex items-center gap-1.5 rounded-lg bg-stone-50 px-2 py-1.5 ring-1 ring-stone-200"
+              style={{ opacity: easeOut(clamp01((p - 0.06 - i * 0.05) / 0.2)) }}
             >
-              <div className="flex items-center gap-1.5 px-2 pt-1">
-                <span className="h-2 w-2 rounded-full" style={{ background: r.colour }} />
-                <span className="text-[10.5px] font-bold text-stone-800">{r.name}</span>
-                <span className="ml-auto text-[9px] font-bold text-stone-500">
-                  {r.done}/{r.pets.length}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 px-2 py-1">
-                <span
-                  className="grid h-5 w-5 shrink-0 place-items-center rounded-full"
-                  style={{ background: r.colour }}
-                >
-                  <VanIcon className="h-3 w-3" />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5">
-                    <span className="truncate text-[10px] font-bold text-stone-800">{r.driver}</span>
-                    <span className="shrink-0 text-[8.5px] text-stone-400">{r.role}</span>
-                    {!r.live ? (
-                      <span className="shrink-0 rounded bg-stone-200 px-1 text-[7.5px] font-bold text-stone-600">
-                        OFF
-                      </span>
-                    ) : null}
-                  </div>
-                  <div
-                    className={`truncate text-[8.5px] font-semibold ${
-                      !r.live ? "text-stone-400" : r.stale ? "text-amber-600" : "text-emerald-600"
-                    }`}
-                  >
-                    {r.detail}
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-1 px-2 pb-1">
-                {r.pets.length ? (
-                  r.pets.map((pet, pi) => (
-                    <span
-                      key={pet}
-                      className={`rounded px-1.5 py-0.5 text-[8.5px] font-semibold ring-1 ${
-                        pi < r.done
-                          ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
-                          : "bg-stone-50 text-stone-600 ring-stone-200"
-                      }`}
-                    >
-                      {pi < r.done ? "✓ " : ""}
-                      {pet}
-                    </span>
-                  ))
-                ) : (
-                  <span className="w-full rounded border border-dashed border-stone-200 py-0.5 text-center text-[8.5px] text-stone-400">
-                    No pets assigned
-                  </span>
-                )}
-              </div>
+              <span className="h-5 w-5 shrink-0 rounded-full bg-gradient-to-br from-stone-200 to-stone-300" />
+              <span className="truncate text-[10.5px] font-bold text-stone-700">{u.name}</span>
+              <ServiceIcon kind={u.kind} className="ml-auto h-3 w-3 shrink-0" />
             </div>
           ))}
+          <div className="mt-auto rounded-lg bg-[#0C3A3F]/5 px-2 py-1.5 text-[8.5px] font-semibold leading-snug text-[#0C3A3F]">
+            Drag a dog onto a round, or let Optimise order the stops for you.
+          </div>
+        </div>
 
-          {/* the other half of the day, collapsed, as it is on the real tab */}
-          <div className="mt-auto rounded-lg bg-stone-50 ring-1 ring-stone-200">
-            <div className="flex items-center gap-1.5 px-2 py-1.5">
-              <span className="text-[8.5px] font-bold uppercase tracking-wider text-stone-400">
-                Evening dropoffs
+        {ROUNDS.map((r, ri) => (
+          <div
+            key={r.name}
+            className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl bg-white ring-1 ring-stone-200"
+            style={{
+              borderTop: `4px solid ${r.colour}`,
+              opacity: easeOut(clamp01((p - 0.08 - ri * 0.07) / 0.24)),
+            }}
+          >
+            <div className="flex items-center gap-1.5 px-2.5 pt-2">
+              <span className="text-[12px] font-extrabold text-[#0C3A3F]">{r.name}</span>
+              <span className="ml-auto text-[9px] font-semibold text-stone-400">
+                {r.pets.length} stops
               </span>
-              <span className="ml-auto text-[9px] font-semibold text-stone-400">4 routes</span>
-              <span className="text-[9px] text-stone-400">⌄</span>
+            </div>
+
+            <div className="px-2.5 pt-1.5">
+              <div className="text-[8px] font-bold uppercase tracking-wider text-stone-400">
+                Assigned driver
+              </div>
+              <div className="mt-0.5 flex items-center gap-1.5 rounded-lg bg-stone-50 px-2 py-1.5 ring-1 ring-stone-200">
+                <span
+                  className="grid h-5 w-5 shrink-0 place-items-center rounded-full text-[9px] font-bold text-white"
+                  style={{ background: r.colour }}
+                >
+                  {r.driver.charAt(0)}
+                </span>
+                <span className="truncate text-[10.5px] font-bold text-stone-700">{r.driver}</span>
+                <span className="ml-auto text-[9px] text-stone-400">⌄</span>
+              </div>
+            </div>
+
+            <div className="mt-1.5 px-2.5 text-[8px] font-bold uppercase tracking-wider text-stone-400">
+              Assigned pets
+            </div>
+            <div className="flex min-h-0 flex-1 flex-col gap-1 px-2.5 pt-1">
+              {r.pets.map((pet, i) => {
+                const k = easeOut(clamp01((p - 0.14 - ri * 0.05 - i * 0.04) / 0.24));
+                return (
+                  <div
+                    key={pet.name}
+                    className="flex items-center gap-1.5 rounded-lg bg-white px-2 py-1.5 ring-1 ring-stone-200"
+                    style={{ opacity: k }}
+                  >
+                    <span className="w-3 text-[9px] font-bold text-stone-400">{i + 1}</span>
+                    <span className="h-5 w-5 shrink-0 rounded-full bg-gradient-to-br from-stone-200 to-stone-300" />
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-[10.5px] font-bold text-stone-800">
+                        {pet.name}
+                      </span>
+                      <span className="flex items-center gap-1 text-[9px] text-stone-500">
+                        <ServiceIcon kind={pet.kind} className="h-2.5 w-2.5" />
+                        {SERVICE_LABEL[pet.kind]}
+                      </span>
+                    </span>
+                    <span
+                      className="shrink-0 rounded bg-stone-50 px-1.5 py-0.5 text-[9px] font-bold text-stone-600 ring-1 ring-stone-200 transition-colors"
+                      style={optimised ? { background: "#ECFDF5", color: "#047857" } : undefined}
+                    >
+                      {pet.when}
+                    </span>
+                    <span className="shrink-0 text-[10px] leading-none text-stone-300">⠿</span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="flex items-center gap-1.5 px-2.5 py-2">
+              <span
+                className="rounded-lg px-2.5 py-1 text-[10px] font-bold ring-1 transition-colors"
+                style={
+                  optimised
+                    ? { background: "#ECFDF5", color: "#047857", boxShadow: "inset 0 0 0 1px #A7F3D0" }
+                    : { background: "#FFF7E6", color: "#B45309", boxShadow: "inset 0 0 0 1px #FDE7BD" }
+                }
+              >
+                {optimised ? "✓ Optimised" : "✦ Optimise"}
+              </span>
+              <span className="rounded-lg bg-white px-2.5 py-1 text-[10px] font-bold text-stone-600 ring-1 ring-stone-200">
+                Map
+              </span>
+              <span className="ml-auto rounded-lg bg-[#0C3A3F] px-2.5 py-1 text-[10px] font-bold text-white">
+                Save
+              </span>
             </div>
           </div>
-          <div className="rounded-lg bg-[#0C3A3F]/5 px-2 py-1.5 text-[8.5px] font-semibold leading-snug text-[#0C3A3F]">
-            Every pickup records who collected the dog and when.
-          </div>
-        </div>
-
-        <div className="relative min-w-0 flex-1 overflow-hidden rounded-xl ring-1 ring-stone-200">
-          <svg viewBox="0 0 460 330" className="h-full w-full" preserveAspectRatio="xMidYMid slice">
-            {/* Map base. Street hierarchy, parks, water and a railway,
-                drawn dense enough to read as a real map. No place is named. */}
-            <rect width="460" height="330" fill="#EFF1EA" />
-
-            {/* green space */}
-            <g fill="#CFE3C2">
-              <path d="M-10 8 C 40 2, 96 16, 108 46 S 74 92, 26 86 S -14 44, -10 8Z" />
-              <path d="M336 22 C 384 10, 442 26, 456 58 S 420 104, 372 96 S 322 52, 336 22Z" />
-              <path d="M18 250 C 66 238, 116 256, 122 286 S 82 330, 36 324 S 4 274, 18 250Z" />
-              <path d="M296 250 C 340 240, 380 258, 384 284 S 350 322, 310 316 S 286 270, 296 250Z" />
-            </g>
-
-            {/* water */}
-            <path
-              d="M-12 206 C 60 190, 104 226, 172 214 S 268 172, 330 186 S 424 214, 474 200"
-              stroke="#A6C9E2"
-              strokeWidth="11"
-              fill="none"
-              strokeLinecap="round"
-            />
-            <ellipse cx="126" cy="146" rx="17" ry="11" fill="#A6C9E2" />
-
-            {/* buildings */}
-            <g fill="#E2E3DC">
-              {[
-                [166, 96], [180, 108], [196, 92], [206, 110], [252, 96], [268, 108],
-                [284, 92], [166, 232], [182, 244], [198, 230], [258, 236], [274, 248],
-                [292, 232], [60, 156], [76, 168], [92, 152], [372, 152], [388, 164],
-                [404, 148], [340, 234], [356, 246],
-              ].map(([bx, by], i) => (
-                <rect key={i} x={bx} y={by} width={i % 3 === 0 ? 11 : 8} height={i % 2 === 0 ? 8 : 11} rx="1" />
-              ))}
-            </g>
-
-            {/* railway */}
-            <path
-              d="M-10 262 C 90 250, 180 274, 268 258 S 400 226, 474 240"
-              stroke="#C3C4BC"
-              strokeWidth="2.4"
-              fill="none"
-              strokeDasharray="7 5"
-            />
-
-            {/* road casings */}
-            <g stroke="#DDDED6" fill="none" strokeLinecap="round">
-              <path d="M-10 122 C 110 112, 250 136, 474 118" strokeWidth="11" />
-              <path d="M-10 236 C 120 246, 260 222, 474 238" strokeWidth="10" />
-              <path d="M118 -10 C 128 90, 108 214, 124 340" strokeWidth="10" />
-              <path d="M300 -10 C 292 96, 312 210, 298 340" strokeWidth="10" />
-              <path d="M392 -10 C 400 100, 384 220, 398 340" strokeWidth="9" />
-            </g>
-
-            {/* residential streets */}
-            <g stroke="#FFFFFF" strokeWidth="2.6" fill="none" strokeLinecap="round">
-              <path d="M20 60 H112 M20 60 V150 M60 60 V122" />
-              <path d="M150 60 H286 M186 40 V120 M232 34 V120" />
-              <path d="M330 118 H460 M356 118 V196 M424 118 V190" />
-              <path d="M40 176 H116 M40 176 V236 M84 176 V240" />
-              <path d="M150 156 H288 M170 156 V232 M262 156 V230" />
-              <path d="M320 200 H452 M348 200 V266 M420 200 V262" />
-              <path d="M150 282 H286 M196 282 V330 M254 282 V330" />
-            </g>
-
-            {/* A roads */}
-            <g stroke="#FFFFFF" fill="none" strokeLinecap="round">
-              <path d="M-10 122 C 110 112, 250 136, 474 118" strokeWidth="7" />
-              <path d="M-10 236 C 120 246, 260 222, 474 238" strokeWidth="6" />
-              <path d="M118 -10 C 128 90, 108 214, 124 340" strokeWidth="6" />
-              <path d="M300 -10 C 292 96, 312 210, 298 340" strokeWidth="6" />
-              <path d="M392 -10 C 400 100, 384 220, 398 340" strokeWidth="5" />
-            </g>
-
-            {/* motorway */}
-            <path
-              d="M-12 66 C 96 52, 188 86, 276 70 S 402 34, 474 52"
-              stroke="#E9C275"
-              strokeWidth="8"
-              fill="none"
-              strokeLinecap="round"
-            />
-            <path
-              d="M-12 66 C 96 52, 188 86, 276 70 S 402 34, 474 52"
-              stroke="#F7DFA8"
-              strokeWidth="4.5"
-              fill="none"
-              strokeLinecap="round"
-            />
-
-            {/* roundabouts */}
-            <g fill="none" stroke="#FFFFFF" strokeWidth="4">
-              <circle cx="124" cy="122" r="6" />
-              <circle cx="298" cy="236" r="5.5" />
-            </g>
-
-            {[
-              "M232 176 L326 126 M232 176 L236 58 M232 176 L116 92",
-              "M232 176 L92 216 M232 176 L212 254",
-              "M232 176 L376 212 M232 176 L340 292",
-            ].map((d, i) => (
-              <path
-                key={i}
-                d={d}
-                stroke={ROUNDS[i].colour}
-                strokeWidth="3"
-                fill="none"
-                strokeLinecap="round"
-                strokeDasharray={430}
-                strokeDashoffset={430 - 430 * draw(0.1 + i * 0.06)}
-              />
-            ))}
-            {HOMES.map((h, i) => {
-              const k = easeOut(clamp01((p - 0.16 - i * 0.04) / 0.2));
-              return (
-                <g key={h.name} style={{ opacity: k }}>
-                  <circle cx={h.x} cy={h.y} r="9.5" fill={h.c} stroke="#fff" strokeWidth="2" />
-                  <path
-                    d={`M${h.x - 4} ${h.y + 1} L${h.x} ${h.y - 3.5} L${h.x + 4} ${h.y + 1} V${h.y + 4} H${h.x - 4} Z`}
-                    fill="#fff"
-                  />
-                  <rect x={h.x - 24} y={h.y + 12} width="48" height="12" rx="3" fill="#fff" opacity="0.95" />
-                  <text x={h.x} y={h.y + 20.5} textAnchor="middle" fontSize="8" fontWeight="700" fill={h.c}>
-                    {h.name}
-                  </text>
-                </g>
-              );
-            })}
-            <g>
-              <circle cx="232" cy="176" r="13" fill="#0C3A3F" stroke="#fff" strokeWidth="2.5" />
-              <ellipse cx="228" cy="172" rx="2" ry="2.6" fill="#FFA800" />
-              <ellipse cx="233.5" cy="170.5" rx="2" ry="2.6" fill="#FFA800" />
-              <ellipse cx="238" cy="173" rx="2" ry="2.6" fill="#FFA800" />
-              <path d="M233 176c2.6 0 4.6 2 4.6 3.9 0 1.5-1.3 2.3-2.9 2.3h-3.4c-1.6 0-2.9-.8-2.9-2.3 0-1.9 2-3.9 4.6-3.9Z" fill="#FFA800" />
-              <rect x="200" y="192" width="66" height="13" rx="3" fill="#0C3A3F" />
-              <text x="233" y="201" textAnchor="middle" fontSize="8" fontWeight="700" fill="#fff">
-                The daycare
-              </text>
-            </g>
-            {[0, 1, 2].map((i) => {
-              const targets = [
-                { x: 326, y: 126 },
-                { x: 92, y: 216 },
-                { x: 376, y: 212 },
-              ][i];
-              const d = draw(0.2 + i * 0.06);
-              const x = 232 + (targets.x - 232) * d;
-              const y = 176 + (targets.y - 176) * d;
-              return (
-                <g key={`v${i}`}>
-                  <circle cx={x} cy={y} r="10.5" fill={ROUNDS[i].colour} stroke="#fff" strokeWidth="2.5" />
-                  <text x={x} y={y + 3.2} textAnchor="middle" fontSize="9" fontWeight="800" fill="#fff">
-                    {ROUNDS[i].driver.charAt(0)}
-                  </text>
-                  <rect x={x - 26} y={y + 13} width="52" height="12" rx="3" fill="#fff" opacity="0.95" />
-                  <text x={x} y={y + 21.5} textAnchor="middle" fontSize="7.5" fontWeight="700" fill={ROUNDS[i].colour}>
-                    {ROUNDS[i].driver}
-                    {ROUNDS[i].stale ? " · stale" : ""}
-                  </text>
-                </g>
-              );
-            })}
-          </svg>
-          <div className="absolute bottom-2 left-2 flex items-center gap-1.5 rounded-lg bg-white/95 px-2.5 py-1.5 text-[9.5px] font-semibold text-stone-600 ring-1 ring-stone-200">
-            <span
-              className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"
-              style={{ opacity: 0.35 + 0.65 * Math.abs(Math.sin(p * 10)) }}
-            />
-            3 vans out · 5 of 8 collected
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
@@ -1896,7 +1763,7 @@ const META: Record<ViewKey, Meta> = {
   schedule: { h: "Schedule", sub: "Weekly view, click a date to open that day", nav: "‹ Sep 7 – Sep 13 ›", side: "Dashboard", dashPill: "Schedule", extra: "week" },
   provider: { h: "Schedule", sub: "Your grooming appointments", nav: "‹ Sep 7 – Sep 13 ›", side: "", extra: "week" },
   boarding: { h: "Monthly Summary", sub: "Boarding across September", nav: "‹ September 2026 ›", side: "Bookings", extra: "boarding" },
-  tracking: { h: "Live Route Tracking", sub: "Today's drivers, routes and stops", nav: "", side: "Routes", extra: "routes" },
+  routes: { h: "Day Routes", sub: "Plan today's pickups and drop-offs", nav: "", side: "Routes", extra: "routes" },
   messages: { h: "Messages", sub: "Chat with your customers. Drivers join on the days they drive.", nav: "", side: "Messages", extra: "msgtabs" },
   forecast: { h: "Revenue Forecast", sub: "What is already in the diary", nav: "", side: "Finance", sub2: "Daycare Finance", extra: "horizons" },
 };
@@ -1976,7 +1843,10 @@ function Device({ t }: { t: number }) {
               ) : m.extra === "msgtabs" ? (
                 <Pills items={["New message", "Broadcast", "History"]} active="New message" />
               ) : m.extra === "routes" ? (
-                <Pills items={["Day Routes", "Default Routes", "Tracking"]} active="Tracking" gold />
+                <>
+                  <Pills items={["List", "Map"]} active="List" />
+                  <Pills items={["Day Routes", "Default Routes", "Tracking"]} active="Day Routes" gold />
+                </>
               ) : m.extra === "services" ? (
                 <>
                   <Pills items={["Services", "Memberships", "Custom Day Rate", "Charge Rates"]} active="Services" />
@@ -2024,7 +1894,7 @@ function Device({ t }: { t: number }) {
           {view === "schedule" && <ScheduleView p={local} />}
           {view === "provider" && <ProviderView p={local} />}
           {view === "boarding" && <BoardingView p={local} />}
-          {view === "tracking" && <TrackingView p={local} />}
+          {view === "routes" && <RoutesView p={local} />}
           {view === "messages" && <MessagesView p={local} />}
           {view === "forecast" && <ForecastView p={local} />}
         </div>
