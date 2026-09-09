@@ -85,7 +85,7 @@ const BODY = `
   <li><strong>Route and job activity</strong> — assigned stops, confirmations, timestamps and any notes you record against a stop, pet or owner.</li>
   <li><strong>Owner and pet details</strong> — the customer and pet records your employer has given you access to, so you can complete a route.</li>
   <li><strong>Messages</strong> — messages you send or receive within the app.</li>
-  <li><strong>Push notification token</strong> &mdash; if you turn notifications on, we store your device's Apple push token, along with the device name iOS reports and whether the build uses Apple's sandbox or production notification service, so we can send you alerts about routes, notes and messages. The token identifies the device, not you personally. It is not an advertising identifier and is not used for advertising or tracking. It is removed from our servers when you turn notifications off in the app.</li>
+  <li><strong>Push notification token</strong> &mdash; if you turn notifications on, we store your device's Apple push token, along with the device name iOS reports and whether the build uses Apple's sandbox or production notification service, so we can send you alerts about routes, notes and messages. The token identifies the device, not you personally. It is not an advertising identifier and is not used for advertising or tracking. It is removed from our servers when you turn notifications off in the app, and when you sign out, which clears every device registered to your account.</li>
 </ul>
 <p>The app does not collect contacts, photos from your library, health data, or advertising identifiers, and it does not track you across other companies' apps or websites.</p>
 
