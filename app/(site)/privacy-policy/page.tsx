@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   ...createMetadata({
     title: "Privacy Policy | Genera Software",
     description:
-      "How Genera Software collects, uses and protects your personal data. Read our full privacy policy.",
+      "How Genera Software collects, uses and protects your personal data, including location data collected by the Genera Driver iOS app.",
     path: "/privacy-policy",
   }),
 };
 
 const BODY = `
-<p>Last updated: 25 May 2026</p>
+<p>Last updated: 9 September 2026</p>
 
 <h2>Who we are</h2>
 <p>Genera Software Ltd ("Genera", "we", "us", "our") is a software company registered in England and Wales (Company No. 15009675), with registered address at C/O Mjf Accountancy, 47 Booker Avenue, Liverpool, England, L18 4QZ. We build and manage software products and websites for pet care and service businesses.</p>
@@ -65,6 +65,36 @@ const BODY = `
 <h2>Transfers outside the UK</h2>
 <p>Some of our service providers may process data outside the UK. Where this happens, we ensure appropriate safeguards are in place, such as UK adequacy decisions or standard contractual clauses.</p>
 
+<h2 id="genera-driver-app">Genera Driver iOS app</h2>
+<p>This section applies to the <strong>Genera Driver</strong> mobile app for iOS, used by drivers and staff of businesses that use Genera. It sits alongside the rest of this policy and describes the additional data the app collects. Where a business uses Genera to run its own operation, that business is the data controller for its drivers' and customers' data and Genera acts as its processor.</p>
+
+<h3>Location data</h3>
+<p><strong>The app collects precise location data.</strong> Here is exactly how:</p>
+<ul>
+  <li><strong>Only while the app is open.</strong> The app requests the &ldquo;While Using the App&rdquo; permission only. It does not request &ldquo;Always&rdquo; permission and does not declare a background location mode, so location is not collected when the app is in the background, when the screen is locked, or when the app is closed.</li>
+  <li><strong>Only during an active run.</strong> Location sharing starts only when a driver signs in and begins an assigned route, or explicitly starts the on-device GPS test. It stops when the run ends, when the app is suspended or backgrounded, and on sign-out.</li>
+  <li><strong>What is collected.</strong> Latitude and longitude, accuracy, and a timestamp. Location points are sampled at a reduced rate based on distance moved and elapsed time, and are lower accuracy in Low Power Mode.</li>
+  <li><strong>Why we collect it.</strong> So the business you drive for, and the pet owners it serves, can see live progress on a route and confirm that pickups and drop-offs happened. Location is used for this service only.</li>
+  <li><strong>What we do not do.</strong> We do not use location for advertising or profiling, we do not sell or share it with data brokers, and the app contains no third-party tracking or analytics SDKs. The app does not keep a durable location trail on the device.</li>
+  <li><strong>Permission is yours to control.</strong> You can decline the location permission, or withdraw it at any time in iOS <strong>Settings &rarr; Privacy &amp; Security &rarr; Location Services</strong>. Live route tracking will not work without it, but the rest of the app remains usable.</li>
+</ul>
+
+<h3>Other information the app collects</h3>
+<ul>
+  <li><strong>Account and identity</strong> — your name, email address and staff role with the business, used to sign you in and authorise access. Your sign-in session is stored securely in the iOS Keychain on your device.</li>
+  <li><strong>Route and job activity</strong> — assigned stops, confirmations, timestamps and any notes you record against a stop, pet or owner.</li>
+  <li><strong>Owner and pet details</strong> — the customer and pet records your employer has given you access to, so you can complete a route.</li>
+  <li><strong>Messages</strong> — messages you send or receive within the app.</li>
+</ul>
+<p>The app does not collect contacts, photos from your library, health data, or advertising identifiers, and it does not track you across other companies' apps or websites.</p>
+
+<h3>Storage, retention and deletion</h3>
+<p>App data is stored on our hosted infrastructure alongside the rest of the Genera platform, and is retained under the retention periods set out in <strong>How long we keep your data</strong> above. Location points are stored against the route record they belong to and are deleted when that record is deleted.</p>
+<p>Driver accounts are created and removed by the business that employs you, so please ask them first to close your account. You can also ask us directly to access or delete your personal data by emailing <a href="mailto:hello@generasoftware.com">hello@generasoftware.com</a>, and we will action or forward your request within 30 days.</p>
+
+<h3>Children</h3>
+<p>The Genera Driver app is a workplace tool intended for adults. It is not directed at children and we do not knowingly collect data from anyone under 16.</p>
+
 <h2>Changes to this policy</h2>
 <p>We may update this policy from time to time. The "last updated" date at the top will reflect any changes.</p>
 `;
@@ -83,7 +113,7 @@ export default function PrivacyPolicyPage() {
 
       <section className="bg-cream px-6 py-16 md:px-8 md:py-24">
         <article
-          className="rev mx-auto max-w-[720px] font-niveau text-body-lg leading-[1.75] text-ink-soft [&_a]:font-semibold [&_a]:text-forest [&_a]:underline [&_a]:decoration-gold [&_a]:underline-offset-2 hover:[&_a]:text-forest-mid [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:font-massilia [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:leading-[var(--leading-title)] [&_h2]:text-forest [&_h3]:mt-8 [&_h3]:mb-2 [&_h3]:font-massilia [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-forest [&_li]:my-1 [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-5 [&_strong]:font-bold [&_strong]:text-forest [&_ul]:my-4 [&_ul]:list-disc [&_ul]:pl-6"
+          className="rev mx-auto max-w-[720px] font-niveau text-body-lg leading-[1.75] text-ink-soft [&_a]:font-semibold [&_a]:text-forest [&_a]:underline [&_a]:decoration-gold [&_a]:underline-offset-2 hover:[&_a]:text-forest-mid [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:scroll-mt-28 [&_h2]:font-massilia [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:leading-[var(--leading-title)] [&_h2]:text-forest [&_h3]:mt-8 [&_h3]:mb-2 [&_h3]:scroll-mt-28 [&_h3]:font-massilia [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-forest [&_li]:my-1 [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-5 [&_strong]:font-bold [&_strong]:text-forest [&_ul]:my-4 [&_ul]:list-disc [&_ul]:pl-6"
           dangerouslySetInnerHTML={{ __html: BODY }}
         />
       </section>
