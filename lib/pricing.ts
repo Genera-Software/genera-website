@@ -94,7 +94,7 @@ export const PRICING_TIERS: PricingTier[] = [
   {
     id: "4cbec70f-59f6-4ec3-b83f-06ad9d74c469",
     name: "Thrive",
-    tagline: "Vans on the road and more owners than you can text back.",
+    tagline: "Dog Buses on the road and more owners than you can text back.",
     monthlyPrice: 99,
     staffLimit: null,
     featured: true,
@@ -201,7 +201,7 @@ export const GATED_FEATURE_CARDS: {
     title: "Routing & driver portal",
     plan: "Thrive",
     tone: "gold",
-    body: "Collection and drop-off runs planned once, driven from a phone, and tracked stop by stop — so you always know which dog is on which van and who last had them.",
+    body: "Collection and drop-off runs planned once, driven from a phone, and tracked stop by stop — so you always know which dog is on which Dog Bus and who last had them.",
   },
   {
     title: "Messages",
@@ -252,7 +252,7 @@ export const TIER_STORIES: Record<
     mock: "finance",
   },
   Thrive: {
-    headline: "Vans on the road and more owners than you can text back.",
+    headline: "Dog Buses on the road and more owners than you can text back.",
     body: "Collections, drivers and a hundred conversations a week are where the day actually goes. Thrive puts the runs, the driver portal and every owner message inside the same system as the bookings.",
     bullets: [
       "Route planning with optimised stops, plus a portal each driver signs into",
