@@ -21,7 +21,9 @@ export default function Reveal() {
           }
         }
       },
-      { threshold: 0.08, rootMargin: "0px 0px -30px 0px" },
+      // threshold 0: a ratio threshold can never be met by elements taller
+      // than the viewport (e.g. a full legal page), leaving them hidden.
+      { threshold: 0, rootMargin: "0px 0px -30px 0px" },
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();

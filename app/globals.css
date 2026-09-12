@@ -220,15 +220,19 @@
 }
 .anim-today-pulse { animation: animTodayPulse 2.4s ease-in-out infinite; }
 
-/* Scroll-reveal: starts hidden, .in adds visibility */
-.rev { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
-.rev.in { opacity: 1; transform: translateY(0); }
-.rev.d1 { transition-delay: 0.05s; }
-.rev.d2 { transition-delay: 0.15s; }
-.rev.d3 { transition-delay: 0.25s; }
-.rev.d4 { transition-delay: 0.35s; }
-.rev.d5 { transition-delay: 0.45s; }
-.rev.d6 { transition-delay: 0.55s; }
+/* Scroll-reveal: starts hidden, .in adds visibility. Desktop only — on mobile
+   (and for reduced-motion users) content is always visible, so long pages
+   never render blank while waiting on the observer. */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .rev { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .rev.in { opacity: 1; transform: translateY(0); }
+  .rev.d1 { transition-delay: 0.05s; }
+  .rev.d2 { transition-delay: 0.15s; }
+  .rev.d3 { transition-delay: 0.25s; }
+  .rev.d4 { transition-delay: 0.35s; }
+  .rev.d5 { transition-delay: 0.45s; }
+  .rev.d6 { transition-delay: 0.55s; }
+}
 
 /* Squiggle underline used in hero h1 */
 .squig { position: relative; display: inline-block; }
