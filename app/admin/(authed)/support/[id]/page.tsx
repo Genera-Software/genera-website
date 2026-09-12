@@ -14,6 +14,7 @@ import {
 import { listAdminUsers } from "@/lib/admin/allowlist";
 import { requireAdminUser } from "@/lib/admin/auth";
 import { assigneeName } from "@/lib/support/assignee";
+import { SUPPORT_FROM_EMAIL } from "@/lib/support/thread";
 import AssigneeAvatar from "../_components/AssigneeAvatar";
 import {
   PRIORITIES,
@@ -301,7 +302,7 @@ export default async function SupportTicketDetailPage({
                 />
                 <div className="mt-3 flex items-center justify-between gap-3">
                   <p className="text-xs text-ink-soft">
-                    Sent from help@generasoftware.com — their reply lands back
+                    Sent from {SUPPORT_FROM_EMAIL} — their reply lands back
                     here.
                   </p>
                   <AdminFormStatusButton

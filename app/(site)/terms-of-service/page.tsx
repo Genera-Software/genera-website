@@ -16,7 +16,7 @@ const BODY = `
 <p>These Terms of Service ("Terms") govern your use of Genera Software Ltd's services and website at <a href="https://generasoftware.com">generasoftware.com</a>. By using our services or website, you agree to these Terms.</p>
 
 <h2>About us</h2>
-<p>Genera Software Ltd is registered in England and Wales (Company No. 15009675), registered address C/O Mjf Accountancy, 47 Booker Avenue, Liverpool, England, L18 4QZ. Contact: <a href="mailto:hello@generasoftware.com">hello@generasoftware.com</a>.</p>
+<p>Genera Software Ltd is registered in England and Wales (Company No. 15009675), registered address C/O Mjf Accountancy, 47 Booker Avenue, Liverpool, England, L18 4QZ. Contact: <a href="mailto:info@generasoftware.com">info@generasoftware.com</a>.</p>
 
 <h2>Our services</h2>
 <p>Genera Software designs, builds and manages software products, websites, and digital tools for businesses — primarily in the pet care and service sector. The specific scope of work, timelines and fees for any client engagement are set out in a separate written agreement between you and Genera Software.</p>

@@ -46,7 +46,7 @@ const BODY = `
   <li>If you use Genera through a pet care business &mdash; as a pet owner, a member of staff or a driver &mdash; <strong>that business decides what information it keeps about you</strong>. We store and process it on its behalf and on its instructions.</li>
   <li>The Genera Driver apps share a driver&rsquo;s precise location <strong>only during an active run while the app is open on screen</strong>. They never collect location in the background.</li>
   <li>We rely on a small number of trusted providers for hosting, email, payments, maps and notifications, and <a href="#sharing">we name them below</a>.</li>
-  <li>You have rights over your data, including access, correction and deletion. Email <a href="mailto:hello@generasoftware.com">hello@generasoftware.com</a> to use them.</li>
+  <li>You have rights over your data, including access, correction and deletion. Email <a href="mailto:info@generasoftware.com">info@generasoftware.com</a> to use them.</li>
 </ul>
 
 <h2 id="who-we-are">Who we are</h2>
@@ -55,7 +55,7 @@ const BODY = `
   <li><strong>Company No.:</strong> 15009675</li>
   <li><strong>Registered address:</strong> C/O Mjf Accountancy, 47 Booker Avenue, Liverpool, England, L18 4QZ</li>
   <li><strong>ICO registration No.:</strong> ZC196623</li>
-  <li><strong>Privacy contact:</strong> <a href="mailto:hello@generasoftware.com">hello@generasoftware.com</a></li>
+  <li><strong>Privacy contact:</strong> <a href="mailto:info@generasoftware.com">info@generasoftware.com</a></li>
 </ul>
 
 <h2 id="scope">Who this policy covers and our role</h2>
@@ -202,7 +202,7 @@ const BODY = `
 <p>The apps do not access your contacts, photo library, camera, microphone or health data, and they contain no advertising identifiers or third-party analytics, crash-reporting or advertising SDKs. They do not track you across other companies&rsquo; apps or websites. If you have chosen to share analytics with Apple or Google in your device settings, those companies may give us anonymised crash reports.</p>
 
 <h3>Driver accounts and deletion</h3>
-<p>Driver accounts are created and removed by the business that employs you, so please ask it first to close your account. You can also ask us directly to access or delete your personal data by emailing <a href="mailto:hello@generasoftware.com">hello@generasoftware.com</a>, and we will action or forward your request within 30 days.</p>
+<p>Driver accounts are created and removed by the business that employs you, so please ask it first to close your account. You can also ask us directly to access or delete your personal data by emailing <a href="mailto:info@generasoftware.com">info@generasoftware.com</a>, and we will action or forward your request within 30 days.</p>
 
 <h2 id="payments">Payments</h2>
 <ul>
@@ -332,7 +332,7 @@ const BODY = `
   <li><strong>Withdraw consent</strong> &mdash; where we rely on your consent, withdraw it at any time. This does not affect anything we did before you withdrew it.</li>
   <li><strong>Human review</strong> &mdash; not to be subject to decisions made solely by automated means that have legal or similarly significant effects on you (see <a href="#automated-decisions">Automated decisions and AI</a>).</li>
 </ul>
-<p>To use any of these rights, email <a href="mailto:hello@generasoftware.com">hello@generasoftware.com</a> with your name and the right you want to use. We may need to confirm your identity first. There is normally no charge, and we will respond within 30 days.</p>
+<p>To use any of these rights, email <a href="mailto:info@generasoftware.com">info@generasoftware.com</a> with your name and the right you want to use. We may need to confirm your identity first. There is normally no charge, and we will respond within 30 days.</p>
 <p>If your data is held by a business that uses Genera, that business is responsible for your request, and you can also contact it directly. Pet owners can update some details, including notification settings, in their customer portal.</p>
 <p>If you are unhappy with how we have handled your data, you can complain to the <strong>Information Commissioner&rsquo;s Office (ICO)</strong> at <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer">ico.org.uk</a> or on 0303 123 1113. We would appreciate the chance to put things right first, so please contact us.</p>
 
@@ -354,7 +354,7 @@ const BODY = `
 <p>We may update this policy from time to time, and the &ldquo;last updated&rdquo; date at the top will reflect any changes. If we make significant changes, we will take reasonable steps to let you know, for example by email or with a notice in Genera.</p>
 
 <h2 id="contact">Contact us</h2>
-<p>For questions about this policy or your personal data, email <a href="mailto:hello@generasoftware.com">hello@generasoftware.com</a>, or write to Genera Software Ltd, C/O Mjf Accountancy, 47 Booker Avenue, Liverpool, England, L18 4QZ.</p>
+<p>For questions about this policy or your personal data, email <a href="mailto:info@generasoftware.com">info@generasoftware.com</a>, or write to Genera Software Ltd, C/O Mjf Accountancy, 47 Booker Avenue, Liverpool, England, L18 4QZ.</p>
 `;
 
 export default function PrivacyPolicyPage() {

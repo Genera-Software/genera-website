@@ -20,7 +20,7 @@ const BODY = `
 <ul>
   <li><strong>Company No.:</strong> 15009675</li>
   <li><strong>Registered address:</strong> C/O Mjf Accountancy, 47 Booker Avenue, Liverpool, England, L18 4QZ</li>
-  <li><strong>Contact:</strong> <a href="mailto:hello@generasoftware.com">hello@generasoftware.com</a></li>
+  <li><strong>Contact:</strong> <a href="mailto:info@generasoftware.com">info@generasoftware.com</a></li>
   <li><strong>ICO Registration No.:</strong> ZC196623</li>
 </ul>
 
@@ -33,7 +33,7 @@ const BODY = `
   <li>We support clients in meeting their own GDPR obligations, such as responding to subject access requests</li>
   <li>We enter into a Data Processing Agreement (DPA) with all clients whose platforms handle personal data</li>
 </ul>
-<p>If you are a client and need a DPA, please contact <a href="mailto:hello@generasoftware.com">hello@generasoftware.com</a>.</p>
+<p>If you are a client and need a DPA, please contact <a href="mailto:info@generasoftware.com">info@generasoftware.com</a>.</p>
 
 <h2>Your rights under UK GDPR</h2>
 <p>You have the following rights regarding your personal data:</p>
@@ -46,7 +46,7 @@ const BODY = `
   <li><strong>Objection</strong> — object to processing based on legitimate interests</li>
   <li><strong>Withdraw consent</strong> — opt out of any consent-based processing at any time</li>
 </ul>
-<p>To exercise any right, email <a href="mailto:hello@generasoftware.com">hello@generasoftware.com</a> with your name and the right you wish to exercise. We will respond within <strong>30 days</strong>.</p>
+<p>To exercise any right, email <a href="mailto:info@generasoftware.com">info@generasoftware.com</a> with your name and the right you wish to exercise. We will respond within <strong>30 days</strong>.</p>
 
 <h2>Data security</h2>
 <ul>
@@ -62,7 +62,7 @@ const BODY = `
   <li>Website: <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer">ico.org.uk</a></li>
   <li>Helpline: 0303 123 1113</li>
 </ul>
-<p>We would always appreciate the chance to resolve concerns directly first — please email <a href="mailto:hello@generasoftware.com">hello@generasoftware.com</a>.</p>
+<p>We would always appreciate the chance to resolve concerns directly first — please email <a href="mailto:info@generasoftware.com">info@generasoftware.com</a>.</p>
 `;
 
 export default function GdprPage() {

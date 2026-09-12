@@ -18,7 +18,7 @@ const BODY = `
 
 <h2>Contact us</h2>
 <ul>
-  <li><strong>Email</strong> — <a href="mailto:hello@generasoftware.com">hello@generasoftware.com</a></li>
+  <li><strong>Email</strong> — <a href="mailto:help@generasoftware.com">help@generasoftware.com</a></li>
   <li><strong>Response time</strong> — we aim to reply within one working day (Monday to Friday, UK hours)</li>
   <li><strong>Company</strong> — Genera Software Ltd, registered in England and Wales (Company No. 15009675), C/O Mjf Accountancy, 47 Booker Avenue, Liverpool, England, L18 4QZ</li>
 </ul>
@@ -64,7 +64,7 @@ const BODY = `
 </ul>
 
 <h2>Your account and your data</h2>
-<p>Driver accounts are created and removed by the business that employs you, so to close your account please ask them first. You can also email <a href="mailto:hello@generasoftware.com">hello@generasoftware.com</a> to request access to, or deletion of, your personal data and we will action or forward the request within 30 days.</p>
+<p>Driver accounts are created and removed by the business that employs you, so to close your account please ask them first. You can also email <a href="mailto:info@generasoftware.com">info@generasoftware.com</a> to request access to, or deletion of, your personal data and we will action or forward the request within 30 days.</p>
 <p>For full detail on what the app collects — including precise location data, what it is used for and how to withdraw permission — see the <a href="/privacy-policy#genera-driver-app">Genera Driver section of our Privacy Policy</a>.</p>
 
 <h2>Not a driver?</h2>
