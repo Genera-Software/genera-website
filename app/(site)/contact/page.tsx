@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Reveal from "@/components/Reveal";
-import BookDemoButton from "@/components/BookDemoButton";
-import StartTrialLink from "@/components/StartTrialLink";
 import { createMetadata } from "@/lib/seo";
 import { BOOK_DEMO_FORM_SLUG } from "@/lib/cta";
 import { isFormActive } from "@/lib/forms";
+import { TRIAL_DAYS } from "@/lib/pricing";
+import ContactClient from "./ContactClient";
 
 export const revalidate = 60;
 
@@ -12,144 +11,12 @@ export const metadata: Metadata = {
   ...createMetadata({
     title: "Contact Genera About Pricing, Plans and Getting Started",
     description:
-      "Contact Genera to ask about pet business management features, pricing and plans, or getting help with your next step.",
+      "Contact Genera to ask about pet business management features, pricing and plans, switching from another system, or getting help with your account.",
     path: "/contact",
   }),
 };
 
 export default async function ContactPage() {
   const showBookDemo = await isFormActive(BOOK_DEMO_FORM_SLUG);
-  return (
-    <>
-      <Reveal />
-
-      {/* Page hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-8 pt-32 pb-24 text-white">
-        <div className="mx-auto max-w-[860px] text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border-2 border-gold/50 bg-white/10 px-3.5 py-1 font-caveat text-body-lg font-bold text-gold-soft md:px-4 md:py-1.5">
-            🐾 Get in Touch
-          </div>
-          <h1 className="mt-2 text-white">
-            Start a free trial. Ask a question. Or just{" "}
-            <span className="squig">
-              say hello.
-              <svg viewBox="0 0 180 12" preserveAspectRatio="none">
-                <path d="M2,9 Q22,2 45,8 Q68,14 90,7 Q112,0 135,8 Q157,14 178,7" />
-              </svg>
-            </span>
-          </h1>
-          <p className="mx-auto mt-5 max-w-[600px] text-white/80">
-            We are a small team and we read every message. Whether you want to
-            start a trial, have a question about pricing, or just want to chat
-            about running a pet business, we are here.
-          </p>
-        </div>
-      </section>
-
-      {/* Contact card */}
-      <section className="bg-cream px-8 py-22">
-        <div className="mx-auto max-w-[860px]">
-          <div className="rev rounded-3xl border border-cream-dark bg-white p-10 text-center shadow-[0_24px_60px_rgba(0,62,69,0.08)] md:p-14">
-            <div className="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-forest text-gold">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={1.6}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-8 w-8"
-              >
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <polyline points="22,6 12,13 2,6" />
-              </svg>
-            </div>
-            <h2 className="text-heading-mid">Drop us an email</h2>
-            <p className="mx-auto mt-3 max-w-[520px] text-ink-soft">
-              Whether you want to start a trial, have a question, or just want
-              to know more about Genera — we are here. We reply within one
-              working day.
-            </p>
-            <a
-              href="mailto:info@generasoftware.com"
-              className="mt-6 inline-block font-massilia text-xl font-bold text-forest underline decoration-gold decoration-2 underline-offset-4 hover:text-forest-mid"
-            >
-              info@generasoftware.com
-            </a>
-            <div className="mt-7 flex flex-wrap justify-center gap-3">
-              <StartTrialLink className="btn btn-gold btn-lg" />
-              {showBookDemo && (
-                <BookDemoButton
-                  slug={BOOK_DEMO_FORM_SLUG}
-                  className="btn btn-outline-d btn-lg"
-                >
-                  Book a Demo
-                </BookDemoButton>
-              )}
-            </div>
-          </div>
-
-          {/* Info strip */}
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                label: "Response time",
-                value: "Within one working day",
-                icon: (
-                  <>
-                    <circle cx="12" cy="12" r="10" />
-                    <polyline points="12 6 12 12 16 14" />
-                  </>
-                ),
-              },
-              {
-                label: "Based in",
-                value: "Surrey, United Kingdom",
-                icon: (
-                  <>
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </>
-                ),
-              },
-              {
-                label: "Phone",
-                value: "Available on request",
-                icon: (
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 5.59 5.59l.91-.91a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7a2 2 0 0 1 1.72 2.09z" />
-                ),
-              },
-            ].map((s) => (
-              <div
-                key={s.label}
-                className="flex items-center gap-4 rounded-2xl border border-cream-dark bg-white p-5"
-              >
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-teal-soft text-forest">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.75}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-5 w-5"
-                  >
-                    {s.icon}
-                  </svg>
-                </span>
-                <div>
-                  <div className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
-                    {s.label}
-                  </div>
-                  <div className="font-massilia font-bold text-forest">
-                    {s.value}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </>
-  );
+  return <ContactClient showBookDemo={showBookDemo} trialDays={TRIAL_DAYS} />;
 }
