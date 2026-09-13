@@ -166,7 +166,9 @@
     color: var(--color-ink);
     font-family: var(--font-niveau);
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
+    /* clip, not hidden: hidden turns html/body into scroll containers,
+       which stops position: sticky (the /features section nav) sticking. */
+    overflow-x: clip;
   }
 
   h1, h2, h3 {
@@ -241,6 +243,16 @@
 @media (prefers-reduced-motion: reduce) {
   .chat-typing-dot { animation: none; }
 }
+/* Cards floating off a showcase phone's edges. Shown once there's room
+   beside a centred phone (sm, stacked layout) and again at xl, but not in
+   the two-column band between, where the phone's column is too narrow and
+   they'd clip at the viewport edge. Plain CSS so the three ranges can't be
+   reordered by utility sorting. */
+.showcase-float { display: none; }
+@media (min-width: 640px) and (max-width: 920px), (min-width: 1280px) {
+  .showcase-float { display: block; }
+}
+
 /* Branded-app showcase: a daycare's logo and name settling in on swap. */
 @keyframes brandIn {
   from { opacity: 0; transform: scale(0.9); }

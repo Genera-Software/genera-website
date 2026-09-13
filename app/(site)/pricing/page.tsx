@@ -15,6 +15,8 @@ import PricingTiers from "@/components/PricingTiers";
 import WhatYouKeep from "@/components/WhatYouKeep";
 import StartTrialLink from "@/components/StartTrialLink";
 import { TIER_MOCKUPS } from "@/components/pricing/TierMockups";
+import FeatureIcon from "@/components/features/FeatureIcon";
+import { featureCardStyle } from "@/lib/features";
 import {
   CORE_FEATURE_CARDS,
   GATED_FEATURE_CARDS,
@@ -139,8 +141,10 @@ export default function PricingPage() {
             {CORE_FEATURE_CARDS.map((feature, i) => (
               <div
                 key={feature.title}
-                className={`rev d${(i % 6) + 1} rounded-2xl border border-cream-dark bg-cream p-5`}
+                className={`rev d${(i % 6) + 1} rounded-2xl border border-cream-dark p-5 transition-colors hover:border-[color:var(--accent-edge)]`}
+                style={featureCardStyle(feature.feature)}
               >
+                <FeatureIcon feature={feature.feature} className="mb-3" />
                 <p className="font-massilia text-base font-bold text-forest md:text-lg">
                   {feature.title}
                 </p>
@@ -162,8 +166,10 @@ export default function PricingPage() {
                   feature.pending
                     ? "border border-dashed border-teal-mid bg-cream"
                     : "border border-teal-mid bg-white"
-                }`}
+                } transition-colors hover:border-[color:var(--accent-edge)]`}
+                style={featureCardStyle(feature.feature, feature.pending ? "var(--color-cream)" : "#fff")}
               >
+                <FeatureIcon feature={feature.feature} className="mb-3 self-start" />
                 <div className="flex items-center gap-2.5">
                   <p className="font-massilia text-base font-bold text-forest md:text-lg">
                     {feature.title}

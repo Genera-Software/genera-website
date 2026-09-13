@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { createMetadata } from "@/lib/seo";
@@ -9,9 +8,10 @@ import BookDemoButton from "@/components/BookDemoButton";
 import StartTrialLink from "@/components/StartTrialLink";
 import PricingTiers from "@/components/PricingTiers";
 import WhatYouKeep from "@/components/WhatYouKeep";
-import AdminMiniAnimationV2 from "@/components/AdminMiniAnimationV2";
 import BrandedAppShowcase from "@/components/showcase/BrandedAppShowcase";
 import LiveChatShowcase from "@/components/showcase/LiveChatShowcase";
+import FeatureIcon from "@/components/features/FeatureIcon";
+import { featureCardStyle, type FeatureKey } from "@/lib/features";
 import { BOOK_DEMO_FORM_SLUG, PRICING_URL } from "@/lib/cta";
 import { TRIAL_DAYS } from "@/lib/pricing";
 import { getPublicSupabase } from "@/lib/supabase/server";
@@ -44,135 +44,59 @@ const PAIN_POINTS = [
   },
 ];
 
-/* Each feature carries its own gradient (light → deep) so the grid reads as
-   ten distinct tools rather than one repeated tile. Neighbours on the 3-up
-   grid are kept on clearly different hues. */
-const FEATURES: Array<{
-  title: string;
-  body: string;
-  accent: [string, string];
-  icon: React.ReactNode;
-}> = [
+/* Colours and icons come from the shared feature catalogue
+   (lib/features.ts + components/features/FeatureIcon), so a feature
+   looks the same here, on /features and on /pricing. */
+const FEATURES: Array<{ title: string; body: string; feature: FeatureKey }> = [
   {
     title: "Bookings that run themselves",
-    accent: ["#19A7B6", "#00606E"],
+    feature: "bookings",
     body: "24/7 online booking portal for your clients, with approvals, recurring bookings and per-service capacity limits. No more inbound messages — just a clean calendar that fills itself.",
-    icon: (
-      <>
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-        <line x1="16" y1="2" x2="16" y2="6" />
-        <line x1="8" y1="2" x2="8" y2="6" />
-        <line x1="3" y1="10" x2="21" y2="10" />
-        <path d="m9 16 2 2 4-4" />
-      </>
-    ),
   },
   {
     title: "Get paid without chasing anyone",
-    accent: ["#72B57C", "#3F7F4B"],
+    feature: "payments",
     body: "Charges come off the bookings you actually took. Bulk invoicing, card payments and Direct Debit — plus Xero if that's where you keep your books.",
-    icon: (
-      <>
-        <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
-        <line x1="1" y1="10" x2="23" y2="10" />
-      </>
-    ),
   },
   {
     title: "Every pet. Every detail. One place.",
-    accent: ["#F0906F", "#C65A44"],
+    feature: "records",
     body: "Full client and pet profiles — feeding notes, vet contacts, vaccination records — accessible in seconds by anyone on your team.",
-    icon: (
-      <>
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-      </>
-    ),
   },
   {
     title: "Assessments they'll actually read",
-    accent: ["#9D8FE3", "#5E4DB3"],
+    feature: "assessments",
     body: "Trial days and temperament tests recorded on a phone in the yard, then turned into a branded report card the owner opens on theirs.",
-    icon: (
-      <>
-        <path d="M9 2h6a1 1 0 0 1 1 1v2H8V3a1 1 0 0 1 1-1z" />
-        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-        <path d="m9 14 2 2 4-4" />
-      </>
-    ),
   },
   {
     title: "Routes planned in minutes, not hours",
-    accent: ["#F5B940", "#CC8200"],
+    feature: "routes",
     body: "Drag-and-drop collection and drop-off runs with optimised stops, plus a portal your drivers sign into. Always know which dog is on which van.",
-    icon: (
-      <>
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-        <circle cx="12" cy="10" r="3" />
-      </>
-    ),
   },
   {
     title: "Know exactly where the money is",
-    accent: ["#5E9FE3", "#2B5FAE"],
+    feature: "finance",
     body: "What you've invoiced, what's still owed, what the diary is worth for the next six months, and what your team costs to run — on one screen.",
-    icon: (
-      <>
-        <line x1="3" y1="21" x2="21" y2="21" />
-        <rect x="5" y="12" width="4" height="7" />
-        <rect x="11" y="8" width="4" height="11" />
-        <rect x="17" y="4" width="4" height="15" />
-      </>
-    ),
   },
   {
     title: "Your team, sorted",
-    accent: ["#EE809D", "#BD4C6C"],
+    feature: "team",
     body: "Rota, shift planning, time off and payroll prep — on every plan, whatever you pay. Know who's in, who's driving, and what everyone's owed.",
-    icon: (
-      <>
-        <circle cx="9" cy="7" r="4" />
-        <path d="M3 21v-2a4 4 0 0 1 4-4h4" />
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-      </>
-    ),
   },
   {
     title: "Marketing tools, on the way",
-    accent: ["#BC82CE", "#7D4396"],
+    feature: "marketing",
     body: "Filling quiet days and bringing lapsed owners back. Still in development — included in Thrive, and it appears in your account as it ships.",
-    icon: (
-      <>
-        <path d="M3 11v2a1 1 0 0 0 1 1h3l5 4V6L7 10H4a1 1 0 0 0-1 1z" />
-        <path d="M17 9a4 4 0 0 1 0 6" />
-        <path d="M20 6.5a8 8 0 0 1 0 11" />
-      </>
-    ),
   },
   {
     title: "Compliance built in",
-    accent: ["#2F8A93", "#003E45"],
+    feature: "compliance",
     body: "GDPR and DEFRA-ready records, vaccination expiry alerts and a full audit trail. Cloud-based, backed up, and always on the current version.",
-    icon: (
-      <>
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-        <path d="m9 12 2 2 4-4" />
-      </>
-    ),
   },
   {
     title: "Support that actually understands",
-    accent: ["#A6CB5E", "#5F9128"],
+    feature: "support",
     body: "UK-based support from people who've run a daycare. You get a human who knows what a wet Tuesday in November looks like.",
-    icon: (
-      <>
-        <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
-        <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z" />
-        <path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
-      </>
-    ),
   },
 ];
 
@@ -180,6 +104,7 @@ const FEATURES: Array<{
    mockup; everything else stays in the card grid below them. */
 const SPOTLIGHTS = {
   app: {
+    feature: "ownerApp" as FeatureKey,
     badge: "In every plan",
     title: "Your own app, under your own name",
     body: "Owners add your portal to their home screen and it opens with your logo, your name and your colour. They request bookings, check their calendar and settle invoices from it. There's nothing to find in an app store, and nothing for you to build.",
@@ -190,6 +115,7 @@ const SPOTLIGHTS = {
     ],
   },
   chat: {
+    feature: "messages" as FeatureKey,
     badge: "Included in Thrive",
     title: "Every conversation in one place",
     body: "Owners message you from their app, drivers join the thread on the days they drive, and your whole team works from one inbox. It replaces three WhatsApp accounts, a personal phone and a Facebook page nobody checks.",
@@ -202,6 +128,7 @@ const SPOTLIGHTS = {
 };
 
 function SpotlightCopy({
+  feature,
   badge,
   title,
   body,
@@ -210,11 +137,14 @@ function SpotlightCopy({
 }: (typeof SPOTLIGHTS)["app"] & { badgeClassName: string }) {
   return (
     <>
-      <span
-        className={`inline-flex items-center rounded-full px-3 py-1 text-eyebrow font-semibold ${badgeClassName}`}
-      >
-        {badge}
-      </span>
+      <div className="flex items-center gap-3">
+        <FeatureIcon feature={feature} />
+        <span
+          className={`inline-flex items-center rounded-full px-3 py-1 text-eyebrow font-semibold ${badgeClassName}`}
+        >
+          {badge}
+        </span>
+      </div>
       <h3 className="mt-3 text-section-h leading-[1.08] md:mt-4 md:text-heading-mid">
         {title}
       </h3>
@@ -615,43 +545,15 @@ export default async function Home() {
               // A lone card on the last lg row spans it, laid out sideways.
               const wide =
                 i === FEATURES.length - 1 && FEATURES.length % 3 === 1;
-              const [from, to] = f.accent;
               return (
                 <div
                   key={f.title}
                   className={`rev d${(i % 6) + 1} rounded-2xl border border-cream-dark p-5 transition-[transform,border-color,box-shadow] hover:-translate-y-1 hover:border-[color:var(--accent-edge)] hover:shadow-[0_12px_28px_rgba(0,62,69,0.08)] md:p-8 ${
                     wide ? "lg:col-span-3 lg:flex lg:items-center lg:gap-6" : ""
                   }`}
-                  style={
-                    {
-                      "--accent-edge": `${to}55`,
-                      // A faint wash of the feature's colour from the icon corner.
-                      background: `radial-gradient(120% 90% at 0% 0%, ${from}1a, transparent 60%), var(--color-cream)`,
-                    } as CSSProperties
-                  }
+                  style={featureCardStyle(f.feature)}
                 >
-                  <div
-                    className={`mb-3 grid h-[42px] w-[42px] shrink-0 place-items-center rounded-xl text-white md:mb-4 md:h-12 md:w-12 ${
-                      wide ? "lg:mb-0" : ""
-                    }`}
-                    style={{
-                      background: `linear-gradient(135deg, ${from}, ${to})`,
-                      boxShadow: `0 8px 18px -8px ${to}, inset 0 1px 0 rgba(255,255,255,0.35)`,
-                    }}
-                  >
-                    <svg
-                      width={20}
-                      height={20}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      {f.icon}
-                    </svg>
-                  </div>
+                  <FeatureIcon feature={f.feature} className={`mb-3 md:mb-4 ${wide ? "lg:mb-0" : ""}`} />
                   <div>
                     <h3 className="mb-1.5 font-massilia text-base font-bold md:mb-2 md:text-lg">
                       {f.title}
@@ -672,38 +574,6 @@ export default async function Home() {
 
       {/* ── What you keep ───────────────────────────────────────── */}
       <WhatYouKeep />
-
-      {/* ── Product showcase ────────────────────────────────────── */}
-      <section className="bg-cream px-4 py-12 md:px-8 md:py-22">
-        <div className="mx-auto max-w-[1160px]">
-          <div className="rev mb-4 text-center md:mb-14">
-            <p className="eyebrow">See it in action</p>
-            <h2 className="text-section-h md:text-section-h-lg">
-              Daycare, walking, grooming and boarding. One system.
-            </h2>
-          </div>
-
-          <div className="rev d1 relative mx-auto max-w-[1000px]">
-            <p className="mb-3 text-center font-caveat text-body-lg text-forest md:text-xl">
-              Your Monday morning, whatever you run
-            </p>
-
-            <div className="relative overflow-hidden rounded-2xl border border-teal-mid/50 bg-white shadow-[0_18px_40px_rgba(0,62,69,0.16)] md:rounded-3xl md:shadow-[0_24px_60px_rgba(0,62,69,0.16)]">
-              <div className="flex items-center gap-2 border-b border-cream-dark bg-cream px-2.5 py-2 md:gap-3 md:px-4 md:py-3">
-                <div className="flex gap-1.5">
-                  <span className="block h-[9px] w-[9px] rounded-full bg-[#FF6058] md:h-3 md:w-3" />
-                  <span className="block h-[9px] w-[9px] rounded-full bg-[#FFBD2E] md:h-3 md:w-3" />
-                  <span className="block h-[9px] w-[9px] rounded-full bg-[#28C940] md:h-3 md:w-3" />
-                </div>
-                <div className="flex-1 rounded-md bg-white px-2.5 py-1 text-center text-eyebrow text-ink-soft md:flex-none md:text-xs">
-                  app.generasoftware.com
-                </div>
-              </div>
-              <AdminMiniAnimationV2 />
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ── Story teaser ────────────────────────────────────────── */}
       <section id="story" className="bg-white px-6 py-13 md:px-8 md:py-22">

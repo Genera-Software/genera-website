@@ -1,3 +1,4 @@
+import type { FeatureKey } from "@/lib/features";
 // The public pricing tiers, mirrored from the app's `platform_plans` table.
 //
 // Deliberately hard-coded rather than fetched. The marketing site talks to its own Supabase
@@ -149,25 +150,30 @@ export const SAMPLE_MONTH = {
  * unlocks. Deliberately separate from the homepage FEATURES grid — that one sells the
  * product, this one draws the line a buyer is about to pay for.
  */
-export const CORE_FEATURE_CARDS: { title: string; body: string }[] = [
+export const CORE_FEATURE_CARDS: { title: string; body: string; feature: FeatureKey }[] = [
   {
     title: "Bookings & scheduling",
+    feature: "bookings",
     body: "Monthly and daily views, an approval workflow, recurring bookings and per-service capacity limits. Owners request from their own portal.",
   },
   {
     title: "Invoicing & payments",
+    feature: "payments",
     body: "Charges raised from the bookings you already took, invoices sent, and payment collected by card or Direct Debit.",
   },
   {
     title: "Owners & pets",
+    feature: "records",
     body: "Pet profiles with photos, vet and vaccination details, and the owner records tied to them. One place, not a filing cabinet.",
   },
   {
     title: "Team & rota",
+    feature: "team",
     body: "Daily and weekly rota, time off, staff profiles. Never gated — a one-person daycare still has to roster itself. Your plan sets how many people hold a login.",
   },
   {
     title: "Branded customer app",
+    feature: "ownerApp",
     body: "Owners add your portal to their home screen and it opens under your name and your logo — where they request bookings, keep their pet's details current and settle invoices. Nothing to find in an app store, and nothing to build.",
   },
 ];
@@ -179,6 +185,7 @@ export const CORE_FEATURE_CARDS: { title: string; body: string }[] = [
  */
 export const GATED_FEATURE_CARDS: {
   title: string;
+  feature: FeatureKey;
   body: string;
   plan?: string;
   badge?: string;
@@ -187,30 +194,35 @@ export const GATED_FEATURE_CARDS: {
 }[] = [
   {
     title: "Reports",
+    feature: "assessments",
     plan: "Grow",
     tone: "teal",
     body: "Assessments, temperament tests and trial days, recorded on a phone in the yard and turned into a branded report card the owner actually reads.",
   },
   {
     title: "Daycare finance",
+    feature: "finance",
     plan: "Grow",
     tone: "teal",
     body: "The money side in one place: what you've invoiced and what's still owed, what the diary is worth for the next six months, and what your team costs to run.",
   },
   {
     title: "Routing & driver portal",
+    feature: "routes",
     plan: "Thrive",
     tone: "gold",
     body: "Collection and drop-off runs planned once, driven from a phone, and tracked stop by stop — so you always know which dog is on which Dog Bus and who last had them.",
   },
   {
     title: "Messages",
+    feature: "messages",
     plan: "Thrive",
     tone: "gold",
     body: "One place for every conversation with an owner, instead of three WhatsApp accounts, a personal phone and a Facebook page nobody checks.",
   },
   {
     title: "Marketing tools",
+    feature: "marketing",
     badge: "In development",
     tone: "muted",
     pending: true,
