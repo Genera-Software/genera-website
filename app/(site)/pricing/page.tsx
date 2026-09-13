@@ -122,7 +122,7 @@ export default function PricingPage() {
         <div className="mx-auto max-w-[1160px]">
           <div className="rev">
             <p className="eyebrow">What you get</p>
-            <h2 className="text-section-h md:text-[length:inherit]">
+            <h2 className="text-section-h md:text-section-h-lg">
               {toolCount} tools, one login.
             </h2>
             <p className="mt-2.5 max-w-[62ch] text-meta text-ink-soft md:mt-4 md:text-base">
@@ -193,7 +193,7 @@ export default function PricingPage() {
         <div className="mx-auto max-w-[1160px]">
           <div className="rev">
             <p className="eyebrow">Which tier</p>
-            <h2 className="text-section-h md:text-[length:inherit]">
+            <h2 className="text-section-h md:text-section-h-lg">
               Priced by the shape of your setting.
             </h2>
           </div>
@@ -263,7 +263,7 @@ export default function PricingPage() {
         <div className="mx-auto grid max-w-[1160px] items-start gap-7 md:grid-cols-2 md:gap-12">
           <div className="rev">
             <p className="eyebrow">Moving in</p>
-            <h2 className="text-section-h md:text-[length:inherit]">
+            <h2 className="text-section-h md:text-section-h-lg">
               Set up in an afternoon, not a quarter.
             </h2>
             <p className="mt-2.5 max-w-[46ch] text-meta leading-relaxed text-ink-soft md:mt-4 md:text-base">
@@ -315,7 +315,7 @@ export default function PricingPage() {
         <div className="mx-auto max-w-[880px]">
           <div className="rev">
             <p className="eyebrow">Before you sign up</p>
-            <h2 className="text-section-h md:text-[length:inherit]">
+            <h2 className="text-section-h md:text-section-h-lg">
               Questions people ask us first.
             </h2>
           </div>
@@ -353,7 +353,7 @@ export default function PricingPage() {
         />
         <div className="relative z-10 mx-auto max-w-[760px]">
           <p className="eyebrow !text-gold-soft">Ready when you are</p>
-          <h2 className="text-section-h !text-white md:text-[length:inherit]">
+          <h2 className="text-section-h !text-white md:text-section-h-lg">
             Give your Sundays back.
           </h2>
           <p className="mx-auto mt-2.5 max-w-[520px] text-meta text-white/80 md:mt-4 md:text-base">

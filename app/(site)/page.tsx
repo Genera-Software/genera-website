@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { createMetadata } from "@/lib/seo";
@@ -9,6 +10,8 @@ import StartTrialLink from "@/components/StartTrialLink";
 import PricingTiers from "@/components/PricingTiers";
 import WhatYouKeep from "@/components/WhatYouKeep";
 import AdminMiniAnimationV2 from "@/components/AdminMiniAnimationV2";
+import BrandedAppShowcase from "@/components/showcase/BrandedAppShowcase";
+import LiveChatShowcase from "@/components/showcase/LiveChatShowcase";
 import { BOOK_DEMO_FORM_SLUG, PRICING_URL } from "@/lib/cta";
 import { TRIAL_DAYS } from "@/lib/pricing";
 import { getPublicSupabase } from "@/lib/supabase/server";
@@ -41,9 +44,18 @@ const PAIN_POINTS = [
   },
 ];
 
-const FEATURES = [
+/* Each feature carries its own gradient (light → deep) so the grid reads as
+   ten distinct tools rather than one repeated tile. Neighbours on the 3-up
+   grid are kept on clearly different hues. */
+const FEATURES: Array<{
+  title: string;
+  body: string;
+  accent: [string, string];
+  icon: React.ReactNode;
+}> = [
   {
     title: "Bookings that run themselves",
+    accent: ["#19A7B6", "#00606E"],
     body: "24/7 online booking portal for your clients, with approvals, recurring bookings and per-service capacity limits. No more inbound messages — just a clean calendar that fills itself.",
     icon: (
       <>
@@ -57,6 +69,7 @@ const FEATURES = [
   },
   {
     title: "Get paid without chasing anyone",
+    accent: ["#72B57C", "#3F7F4B"],
     body: "Charges come off the bookings you actually took. Bulk invoicing, card payments and Direct Debit — plus Xero if that's where you keep your books.",
     icon: (
       <>
@@ -67,6 +80,7 @@ const FEATURES = [
   },
   {
     title: "Every pet. Every detail. One place.",
+    accent: ["#F0906F", "#C65A44"],
     body: "Full client and pet profiles — feeding notes, vet contacts, vaccination records — accessible in seconds by anyone on your team.",
     icon: (
       <>
@@ -78,26 +92,8 @@ const FEATURES = [
     ),
   },
   {
-    title: "Your own app, under your own name",
-    body: "Owners add your portal to their home screen and it opens with your name and your logo. Nothing to find in an app store, and nothing for you to build.",
-    icon: (
-      <>
-        <rect x="6" y="2" width="12" height="20" rx="2" ry="2" />
-        <line x1="10" y1="18.5" x2="14" y2="18.5" />
-      </>
-    ),
-  },
-  {
-    title: "Every conversation in one place",
-    body: "Owner messaging, driver day threads and broadcasts — instead of three WhatsApp accounts, a personal phone and a Facebook page nobody checks.",
-    icon: (
-      <>
-        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z" />
-      </>
-    ),
-  },
-  {
     title: "Assessments they'll actually read",
+    accent: ["#9D8FE3", "#5E4DB3"],
     body: "Trial days and temperament tests recorded on a phone in the yard, then turned into a branded report card the owner opens on theirs.",
     icon: (
       <>
@@ -109,6 +105,7 @@ const FEATURES = [
   },
   {
     title: "Routes planned in minutes, not hours",
+    accent: ["#F5B940", "#CC8200"],
     body: "Drag-and-drop collection and drop-off runs with optimised stops, plus a portal your drivers sign into. Always know which dog is on which van.",
     icon: (
       <>
@@ -119,6 +116,7 @@ const FEATURES = [
   },
   {
     title: "Know exactly where the money is",
+    accent: ["#5E9FE3", "#2B5FAE"],
     body: "What you've invoiced, what's still owed, what the diary is worth for the next six months, and what your team costs to run — on one screen.",
     icon: (
       <>
@@ -131,6 +129,7 @@ const FEATURES = [
   },
   {
     title: "Your team, sorted",
+    accent: ["#EE809D", "#BD4C6C"],
     body: "Rota, shift planning, time off and payroll prep — on every plan, whatever you pay. Know who's in, who's driving, and what everyone's owed.",
     icon: (
       <>
@@ -142,6 +141,7 @@ const FEATURES = [
   },
   {
     title: "Marketing tools, on the way",
+    accent: ["#BC82CE", "#7D4396"],
     body: "Filling quiet days and bringing lapsed owners back. Still in development — included in Thrive, and it appears in your account as it ships.",
     icon: (
       <>
@@ -153,6 +153,7 @@ const FEATURES = [
   },
   {
     title: "Compliance built in",
+    accent: ["#2F8A93", "#003E45"],
     body: "GDPR and DEFRA-ready records, vaccination expiry alerts and a full audit trail. Cloud-based, backed up, and always on the current version.",
     icon: (
       <>
@@ -163,6 +164,7 @@ const FEATURES = [
   },
   {
     title: "Support that actually understands",
+    accent: ["#A6CB5E", "#5F9128"],
     body: "UK-based support from people who've run a daycare. You get a human who knows what a wet Tuesday in November looks like.",
     icon: (
       <>
@@ -173,6 +175,80 @@ const FEATURES = [
     ),
   },
 ];
+
+/* The two features owners see and touch get a spotlight with a live
+   mockup; everything else stays in the card grid below them. */
+const SPOTLIGHTS = {
+  app: {
+    badge: "In every plan",
+    title: "Your own app, under your own name",
+    body: "Owners add your portal to their home screen and it opens with your logo, your name and your colour. They request bookings, check their calendar and settle invoices from it. There's nothing to find in an app store, and nothing for you to build.",
+    points: [
+      "Your logo, name and brand colour, set once",
+      "Booking requests, recurring days and invoices in their pocket",
+      "Opens from the home screen like any other app",
+    ],
+  },
+  chat: {
+    badge: "Included in Thrive",
+    title: "Every conversation in one place",
+    body: "Owners message you from their app, drivers join the thread on the days they drive, and your whole team works from one inbox. It replaces three WhatsApp accounts, a personal phone and a Facebook page nobody checks.",
+    points: [
+      "Every reply signed by whoever sent it, with typing and read receipts",
+      "Drivers join the owner's thread on the days they drive",
+      "Broadcasts to every owner at once, in the app and by push",
+    ],
+  },
+};
+
+function SpotlightCopy({
+  badge,
+  title,
+  body,
+  points,
+  badgeClassName,
+}: (typeof SPOTLIGHTS)["app"] & { badgeClassName: string }) {
+  return (
+    <>
+      <span
+        className={`inline-flex items-center rounded-full px-3 py-1 text-eyebrow font-semibold ${badgeClassName}`}
+      >
+        {badge}
+      </span>
+      <h3 className="mt-3 text-section-h leading-[1.08] md:mt-4 md:text-heading-mid">
+        {title}
+      </h3>
+      <p className="mt-3 text-meta text-ink-soft md:mt-4 md:text-body-lg">
+        {body}
+      </p>
+      <ul className="mt-5 space-y-2.5 md:mt-6">
+        {points.map((point) => (
+          <li
+            key={point}
+            className="flex items-start gap-2.5 text-meta text-ink md:text-base"
+          >
+            <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-forest text-gold">
+              <svg
+                viewBox="0 0 24 24"
+                width={12}
+                height={12}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={3}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <path d="m5 12 5 5 9-10" />
+              </svg>
+            </span>
+            {point}
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
 
 export default async function Home() {
   const supabase = getPublicSupabase();
@@ -437,7 +513,7 @@ export default async function Home() {
         <div className="mx-auto max-w-[1160px]">
           <div className="rev mb-6 text-center md:mb-14">
             <p className="eyebrow">Sound familiar?</p>
-            <h2 className="text-section-h md:text-[length:inherit]">
+            <h2 className="text-section-h md:text-section-h-lg">
               Running a daycare is harder than it looks.
             </h2>
             <p className="mx-auto mt-2 max-w-[560px] text-meta text-ink-soft md:mt-3 md:text-body-lg">
@@ -490,12 +566,119 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* ── Features ────────────────────────────────────────────── */}
+      <section id="features" className="bg-white px-6 py-13 md:px-8 md:py-22">
+        <div className="mx-auto max-w-[1160px]">
+          <div className="rev mb-6 text-center md:mb-14">
+            <p className="eyebrow">What Genera does</p>
+            <p className="mx-auto max-w-[600px] text-meta text-ink-soft md:text-body-lg">
+              Bookings, invoicing, records, your own branded app and the rota are
+              in every plan. The rest arrives as your setting grows —{" "}
+              <Link href={PRICING_URL} className="font-semibold text-forest underline decoration-gold decoration-2 underline-offset-4 hover:text-gold">
+                see what each plan unlocks
+              </Link>
+              .
+            </p>
+          </div>
+          <div className="mb-14 space-y-16 md:mb-22 md:space-y-24">
+            <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-14">
+              <div className="rev">
+                <SpotlightCopy
+                  {...SPOTLIGHTS.app}
+                  badgeClassName="bg-teal-soft text-forest"
+                />
+              </div>
+              <div className="rev d2">
+                <BrandedAppShowcase />
+              </div>
+            </div>
+
+            <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-14">
+              <div className="rev lg:order-2">
+                <SpotlightCopy
+                  {...SPOTLIGHTS.chat}
+                  badgeClassName="bg-gold-light text-forest"
+                />
+              </div>
+              <div className="rev d2 lg:order-1">
+                <LiveChatShowcase />
+              </div>
+            </div>
+          </div>
+
+          <p className="rev mb-5 text-center font-caveat text-body-lg text-forest md:mb-8 md:text-mini-h">
+            …and everything else that keeps the day running
+          </p>
+
+          <div className="grid gap-3 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
+            {FEATURES.map((f, i) => {
+              // A lone card on the last lg row spans it, laid out sideways.
+              const wide =
+                i === FEATURES.length - 1 && FEATURES.length % 3 === 1;
+              const [from, to] = f.accent;
+              return (
+                <div
+                  key={f.title}
+                  className={`rev d${(i % 6) + 1} rounded-2xl border border-cream-dark p-5 transition-[transform,border-color,box-shadow] hover:-translate-y-1 hover:border-[color:var(--accent-edge)] hover:shadow-[0_12px_28px_rgba(0,62,69,0.08)] md:p-8 ${
+                    wide ? "lg:col-span-3 lg:flex lg:items-center lg:gap-6" : ""
+                  }`}
+                  style={
+                    {
+                      "--accent-edge": `${to}55`,
+                      // A faint wash of the feature's colour from the icon corner.
+                      background: `radial-gradient(120% 90% at 0% 0%, ${from}1a, transparent 60%), var(--color-cream)`,
+                    } as CSSProperties
+                  }
+                >
+                  <div
+                    className={`mb-3 grid h-[42px] w-[42px] shrink-0 place-items-center rounded-xl text-white md:mb-4 md:h-12 md:w-12 ${
+                      wide ? "lg:mb-0" : ""
+                    }`}
+                    style={{
+                      background: `linear-gradient(135deg, ${from}, ${to})`,
+                      boxShadow: `0 8px 18px -8px ${to}, inset 0 1px 0 rgba(255,255,255,0.35)`,
+                    }}
+                  >
+                    <svg
+                      width={20}
+                      height={20}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      {f.icon}
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="mb-1.5 font-massilia text-base font-bold md:mb-2 md:text-lg">
+                      {f.title}
+                    </h3>
+                    <p className="text-meta text-ink-soft md:text-base">
+                      {f.body}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Pricing ─────────────────────────────────────────────── */}
+      <PricingTiers />
+
+      {/* ── What you keep ───────────────────────────────────────── */}
+      <WhatYouKeep />
+
       {/* ── Product showcase ────────────────────────────────────── */}
       <section className="bg-cream px-4 py-12 md:px-8 md:py-22">
         <div className="mx-auto max-w-[1160px]">
           <div className="rev mb-4 text-center md:mb-14">
             <p className="eyebrow">See it in action</p>
-            <h2 className="text-section-h md:text-[length:inherit]">
+            <h2 className="text-section-h md:text-section-h-lg">
               Daycare, walking, grooming and boarding. One system.
             </h2>
           </div>
@@ -522,63 +705,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Features ────────────────────────────────────────────── */}
-      <section id="features" className="bg-white px-6 py-13 md:px-8 md:py-22">
-        <div className="mx-auto max-w-[1160px]">
-          <div className="rev mb-6 text-center md:mb-14">
-            <p className="eyebrow">What Genera does</p>
-            <h2 className="text-section-h md:text-[length:inherit]">
-              Everything you need.
-              <br />
-              Nothing you don&apos;t.
-            </h2>
-            <p className="mx-auto mt-2 max-w-[600px] text-meta text-ink-soft md:mt-3 md:text-body-lg">
-              Bookings, invoicing, records, your own branded app and the rota are
-              in every plan. The rest arrives as your setting grows —{" "}
-              <Link href={PRICING_URL} className="font-semibold text-forest underline decoration-gold decoration-2 underline-offset-4 hover:text-gold">
-                see what each plan unlocks
-              </Link>
-              .
-            </p>
-          </div>
-          <div className="grid gap-3 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
-            {FEATURES.map((f, i) => (
-              <div
-                key={f.title}
-                className={`rev d${(i % 6) + 1} rounded-2xl border border-cream-dark bg-cream p-5 transition-transform hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,62,69,0.08)] md:p-8`}
-              >
-                <div className="mb-3 grid h-[42px] w-[42px] place-items-center rounded-xl bg-forest text-gold md:mb-4 md:h-12 md:w-12">
-                  <svg
-                    width={20}
-                    height={20}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    {f.icon}
-                  </svg>
-                </div>
-                <h3 className="mb-1.5 font-massilia text-base font-bold md:mb-2 md:text-lg">
-                  {f.title}
-                </h3>
-                <p className="text-meta text-ink-soft md:text-base">
-                  {f.body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Pricing ─────────────────────────────────────────────── */}
-      <PricingTiers />
-
-      {/* ── What you keep ───────────────────────────────────────── */}
-      <WhatYouKeep />
-
       {/* ── Story teaser ────────────────────────────────────────── */}
       <section id="story" className="bg-white px-6 py-13 md:px-8 md:py-22">
         <div className="mx-auto grid max-w-[1160px] gap-7 md:grid-cols-2 md:items-center md:gap-12">
@@ -603,7 +729,7 @@ export default async function Home() {
 
           <div className="rev d2">
             <p className="eyebrow">Why we built this</p>
-            <h2 className="text-section-h md:text-[length:inherit]">
+            <h2 className="text-section-h md:text-section-h-lg">
               From a dog walking round in South West London to software used
               across the UK.
             </h2>
@@ -631,7 +757,7 @@ export default async function Home() {
       {/* ── Final CTA ───────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-6 py-14 text-center text-white md:px-8 md:py-22">
         <div className="relative z-10 mx-auto max-w-[760px]">
-          <h2 className="text-section-h !text-white md:text-[length:inherit]">
+          <h2 className="text-section-h !text-white md:text-section-h-lg">
             Ready when you are.
           </h2>
           <p className="mt-2.5 text-meta text-white/80 md:mt-4 md:text-base">

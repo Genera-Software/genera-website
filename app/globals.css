@@ -40,6 +40,7 @@
   --text-body-lg:     1.125rem; /* slightly larger than base body */
   --text-mini-h:      1.4rem;   /* small section sub-heading */
   --text-section-h:   1.65rem;  /* mobile section heading */
+  --text-section-h-lg: clamp(2rem, 3.6vw, 2.75rem); /* section heading from md up — just under the hero h1 */
   --text-figure-md:   2.2rem;   /* mid figures (stat numbers) */
   --text-figure-lg:   3.2rem;   /* large figures (hero stat numbers) */
   --text-display:     5rem;     /* display-size figures */
@@ -219,6 +220,32 @@
   50%      { box-shadow: 0 0 0 6px rgba(255,168,0,0.18); }
 }
 .anim-today-pulse { animation: animTodayPulse 2.4s ease-in-out infinite; }
+
+/* Live-chat showcase (landing "What Genera does") — mirrors the app's
+   typing dots and the way a new message settles into the thread. */
+.chat-typing-dot {
+  display: inline-block;
+  width: 5px; height: 5px;
+  border-radius: 9999px;
+  background: #9ca3af;
+  animation: chatTypingBounce 1s ease-in-out infinite;
+}
+@keyframes chatTypingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30%           { transform: translateY(-3px); opacity: 1; }
+}
+@keyframes chatIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chat-typing-dot { animation: none; }
+}
+/* Branded-app showcase: a daycare's logo and name settling in on swap. */
+@keyframes brandIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: none; }
+}
 
 /* Scroll-reveal: starts hidden, .in adds visibility. Desktop only — on mobile
    (and for reduced-motion users) content is always visible, so long pages

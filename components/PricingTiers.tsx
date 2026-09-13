@@ -66,7 +66,7 @@ export default function PricingTiers({
         {showHeader && (
           <div className="rev mb-6 text-center md:mb-12">
             <p className="eyebrow">Simple pricing</p>
-            <h2 className="text-section-h md:text-[length:inherit]">
+            <h2 className="text-section-h md:text-section-h-lg">
               One subscription.
               <br />
               Everything your business runs on.

@@ -44,7 +44,7 @@ export default function WhatYouKeep() {
       <div className="relative z-10 mx-auto grid max-w-[1160px] items-center gap-7 md:grid-cols-2 md:gap-14">
         <div className="rev">
           <p className="eyebrow !text-gold-soft">What you keep</p>
-          <h2 className="text-section-h !text-white md:text-[length:inherit]">
+          <h2 className="text-section-h !text-white md:text-section-h-lg">
             This is the whole bill.
           </h2>
           <p className="mt-2.5 max-w-[62ch] text-meta text-white/75 md:mt-4 md:text-base">

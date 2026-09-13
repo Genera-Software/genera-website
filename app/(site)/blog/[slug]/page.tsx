@@ -152,7 +152,7 @@ export default async function BlogPostPage({
           <span className="rounded-full bg-gold-light/95 px-3 py-1 text-xs font-bold uppercase tracking-wider text-forest">
             {post.category}
           </span>
-          <h1 className="mt-4 text-white md:text-[length:inherit]">
+          <h1 className="mt-4 text-white [font-size:clamp(2rem,3.8vw,3.4rem)] leading-[1.05]">
             {post.title}
           </h1>
 
