@@ -539,6 +539,48 @@ export type Database = {
         };
         Relationships: [];
       };
+      testimonials: {
+        Row: {
+          business: string;
+          created_at: string;
+          id: string;
+          image_url: string | null;
+          is_visible: boolean;
+          name: string;
+          quote: string;
+          role: string | null;
+          sort_order: number;
+          updated_at: string;
+          video_url: string | null;
+        };
+        Insert: {
+          business: string;
+          created_at?: string;
+          id?: string;
+          image_url?: string | null;
+          is_visible?: boolean;
+          name: string;
+          quote: string;
+          role?: string | null;
+          sort_order?: number;
+          updated_at?: string;
+          video_url?: string | null;
+        };
+        Update: {
+          business?: string;
+          created_at?: string;
+          id?: string;
+          image_url?: string | null;
+          is_visible?: boolean;
+          name?: string;
+          quote?: string;
+          role?: string | null;
+          sort_order?: number;
+          updated_at?: string;
+          video_url?: string | null;
+        };
+        Relationships: [];
+      };
       story_timeline: {
         Row: {
           created_at: string;
@@ -701,6 +743,7 @@ export type Database = {
 export type BlogPost = Database["public"]["Tables"]["blog_posts"]["Row"];
 export type Faq = Database["public"]["Tables"]["faqs"]["Row"];
 export type TrustLogo = Database["public"]["Tables"]["trust_logos"]["Row"];
+export type TestimonialRow = Database["public"]["Tables"]["testimonials"]["Row"];
 export type FoundingSpots = Database["public"]["Tables"]["founding_spots"]["Row"];
 export type Form = Database["public"]["Tables"]["forms"]["Row"];
 export type FormQuestion = Database["public"]["Tables"]["form_questions"]["Row"];

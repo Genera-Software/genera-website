@@ -102,6 +102,17 @@ const NAV: NavEntry[] = [
   },
   {
     kind: "item",
+    href: "/admin/testimonials",
+    label: "Testimonials",
+    icon: (
+      <>
+        <path d="M3 21c3 0 7-1 7-8V5H3v7h4c0 3-1.5 5-4 5v4Z" />
+        <path d="M14 21c3 0 7-1 7-8V5h-7v7h4c0 3-1.5 5-4 5v4Z" />
+      </>
+    ),
+  },
+  {
+    kind: "item",
     href: "/admin/blog",
     label: "Blog",
     icon: (

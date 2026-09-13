@@ -8,6 +8,8 @@ import BookDemoButton from "@/components/BookDemoButton";
 import StartTrialLink from "@/components/StartTrialLink";
 import PricingTiers from "@/components/PricingTiers";
 import WhatYouKeep from "@/components/WhatYouKeep";
+import Testimonials from "@/components/testimonials/Testimonials";
+import { TESTIMONIAL_COLUMNS, testimonialFromRow } from "@/lib/testimonials";
 import BrandedAppShowcase from "@/components/showcase/BrandedAppShowcase";
 import LiveChatShowcase from "@/components/showcase/LiveChatShowcase";
 import FeatureIcon from "@/components/features/FeatureIcon";
@@ -183,16 +185,22 @@ function SpotlightCopy({
 export default async function Home() {
   const supabase = getPublicSupabase();
 
-  const [logosRes, showBookDemo] = await Promise.all([
+  const [logosRes, testimonialsRes, showBookDemo] = await Promise.all([
     supabase
       .from("trust_logos")
       .select("id, name, logo_url")
+      .eq("is_visible", true)
+      .order("sort_order", { ascending: true }),
+    supabase
+      .from("testimonials")
+      .select(TESTIMONIAL_COLUMNS)
       .eq("is_visible", true)
       .order("sort_order", { ascending: true }),
     isFormActive(BOOK_DEMO_FORM_SLUG),
   ]);
 
   const trustLogos = logosRes.data ?? [];
+  const testimonials = (testimonialsRes.data ?? []).map(testimonialFromRow);
 
   return (
     <>
@@ -568,6 +576,9 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── Testimonials ────────────────────────────────────────── */}
+      <Testimonials testimonials={testimonials} />
 
       {/* ── Pricing ─────────────────────────────────────────────── */}
       <PricingTiers />
