@@ -13,6 +13,15 @@ function PlayIcon({ className }: { className?: string }) {
   );
 }
 
+function initials(name: string) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase())
+    .join("");
+}
+
 /** Headshot, name and business. When the testimonial has a video the
     headshot becomes a play button and a "Watch" link appears; both open
     the same popup. Without a video it's a plain, static byline. */
@@ -27,7 +36,7 @@ export default function TestimonialAuthor({
   const firstName = name.split(" ")[0];
   const videoTitle = `${name}, ${business}, on Genera`;
 
-  const avatar = (
+  const avatar = image ? (
     <Image
       src={image}
       alt={video ? "" : name}
@@ -36,6 +45,13 @@ export default function TestimonialAuthor({
       sizes="64px"
       className="h-full w-full object-cover"
     />
+  ) : (
+    <span
+      aria-hidden={video ? true : undefined}
+      className="grid h-full w-full place-items-center bg-teal-soft font-massilia text-lg font-bold text-forest"
+    >
+      {initials(name)}
+    </span>
   );
 
   return (

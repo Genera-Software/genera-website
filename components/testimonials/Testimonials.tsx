@@ -1,9 +1,13 @@
 import Paw from "@/components/Paw";
-import { TESTIMONIALS } from "@/lib/testimonials";
+import type { Testimonial } from "@/lib/testimonials";
 import TestimonialAuthor from "./TestimonialAuthor";
 
-export default function Testimonials() {
-  if (TESTIMONIALS.length === 0) return null;
+export default function Testimonials({
+  testimonials,
+}: {
+  testimonials: Testimonial[];
+}) {
+  if (testimonials.length === 0) return null;
 
   return (
     <section
@@ -25,10 +29,10 @@ export default function Testimonials() {
 
         <div
           className={`mx-auto grid gap-10 md:gap-8 ${
-            TESTIMONIALS.length > 1 ? "max-w-[1040px] md:grid-cols-2" : "max-w-[600px]"
+            testimonials.length > 1 ? "max-w-[1040px] md:grid-cols-2" : "max-w-[600px]"
           }`}
         >
-          {TESTIMONIALS.map((t, i) => (
+          {testimonials.map((t, i) => (
             <figure
               key={t.id}
               className={`rev d${(i % 6) + 1} relative flex flex-col rounded-[22px_18px_24px_20px/20px_24px_18px_22px] border border-teal-mid/70 bg-white px-6 pb-6 pt-9 shadow-[0_8px_32px_rgba(0,62,69,0.07)] md:px-9 md:pb-8 md:pt-11`}

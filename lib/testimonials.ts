@@ -1,7 +1,9 @@
-/* Landing-page testimonials. Add a `video` to any entry and its card
-   grows a play button that opens the video in a popup — no other change
-   needed. `url` takes a YouTube, Vimeo or Instagram link, or a direct
-   video file (e.g. an .mp4 in /public or Supabase storage). */
+import type { TestimonialRow } from "@/lib/supabase/types";
+
+/* Landing-page testimonials live in the `testimonials` table and are
+   managed at /admin/testimonials. Give one a video link and its card
+   grows a play button that opens the video in a popup. The link can be
+   Instagram, YouTube or Vimeo, or a direct video file. */
 
 export type TestimonialVideo = {
   url: string;
@@ -16,24 +18,29 @@ export type Testimonial = {
   id: string;
   quote: string;
   name: string;
-  role?: string;
+  role?: string | null;
   business: string;
-  /** Square-ish headshot; anything in /public or an allowed remote host. */
-  image: string;
+  /** Square-ish headshot; falls back to the person's initials. */
+  image?: string | null;
   video?: TestimonialVideo;
 };
 
-export const TESTIMONIALS: Testimonial[] = [
-  {
-    id: "ceara-big-bowowski",
-    quote:
-      "This is stopping us sitting tearing our hair out for hours on end… at 3:00 in the morning doing invoices… The less time that I spend crying behind my laptop and the more time I spend in the field…",
-    name: "Ceara",
-    business: "The Big Bowowski",
-    image: "/images/testimonials/ceara-big-bowowski.jpg",
-    video: {
-      url: "https://www.instagram.com/reels/DbiGBXBjLzL/",
-      orientation: "portrait",
-    },
-  },
-];
+export const TESTIMONIAL_COLUMNS =
+  "id, quote, name, role, business, image_url, video_url" as const;
+
+export function testimonialFromRow(
+  row: Pick<
+    TestimonialRow,
+    "id" | "quote" | "name" | "role" | "business" | "image_url" | "video_url"
+  >,
+): Testimonial {
+  return {
+    id: row.id,
+    quote: row.quote,
+    name: row.name,
+    role: row.role,
+    business: row.business,
+    image: row.image_url,
+    video: row.video_url ? { url: row.video_url } : undefined,
+  };
+}
