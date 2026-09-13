@@ -8,6 +8,7 @@ import BookDemoButton from "@/components/BookDemoButton";
 import StartTrialLink from "@/components/StartTrialLink";
 import PricingTiers from "@/components/PricingTiers";
 import WhatYouKeep from "@/components/WhatYouKeep";
+import Testimonials from "@/components/testimonials/Testimonials";
 import BrandedAppShowcase from "@/components/showcase/BrandedAppShowcase";
 import LiveChatShowcase from "@/components/showcase/LiveChatShowcase";
 import FeatureIcon from "@/components/features/FeatureIcon";
@@ -568,6 +569,9 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── Testimonials ────────────────────────────────────────── */}
+      <Testimonials />
 
       {/* ── Pricing ─────────────────────────────────────────────── */}
       <PricingTiers />
