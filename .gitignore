@@ -49,3 +49,6 @@ next-env.d.ts
 # legacy / dual-graph local
 /.dual-graph
 .dual-graph/
+
+# Claude Code local config
+.claude/
