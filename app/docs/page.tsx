@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getDocSections } from "./_data/load";
+import { getDocSections, getLatestUpdates } from "./_data/load";
+import { WHATS_NEW_SLUG, type UpdateSummary } from "./_data/sections";
 import SectionIcon from "./_components/SectionIcon";
 import SupportTicketButton from "./_components/SupportTicketButton";
 
@@ -13,11 +14,33 @@ export const metadata: Metadata = {
 };
 
 export default async function DocsHome() {
-  const SECTIONS = await getDocSections();
+  const [SECTIONS, updates] = await Promise.all([
+    getDocSections(),
+    getLatestUpdates(3),
+  ]);
+  const guide = SECTIONS.filter((s) => s.slug !== WHATS_NEW_SLUG);
+  const latest = updates.items[0];
   return (
     <div className="mx-auto max-w-[860px]">
       {/* Hero */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-7 py-12 text-white sm:px-10 sm:py-14">
+        {latest && (
+          <Link
+            href={`/docs/${WHATS_NEW_SLUG}#${latest.anchor}`}
+            className="group mb-6 inline-flex max-w-full items-center gap-2 rounded-full bg-white/10 py-1 pr-3 pl-1 text-fine text-white ring-1 ring-white/20 transition hover:bg-white/15"
+          >
+            <span className="shrink-0 rounded-full bg-gold px-2 py-0.5 font-massilia text-[0.7rem] font-bold tracking-wide text-ink">
+              NEW
+            </span>
+            <span className="truncate">{latest.title}</span>
+            <span
+              aria-hidden
+              className="shrink-0 text-gold transition-transform group-hover:translate-x-0.5"
+            >
+              →
+            </span>
+          </Link>
+        )}
         <p className="eyebrow !text-gold-soft !mb-2">Help Centre</p>
         <h1 className="!text-white text-[clamp(2.1rem,5vw,3.2rem)]">
           Learn <em className="text-gold">Genera</em>, page by page
@@ -28,6 +51,10 @@ export default async function DocsHome() {
           to get started.
         </p>
       </section>
+
+      {updates.items.length > 0 && (
+        <WhatsNewPanel items={updates.items} total={updates.total} />
+      )}
 
       {/* Orientation note */}
       <section className="mt-8 rounded-2xl border border-teal-mid bg-white p-6">
@@ -45,7 +72,7 @@ export default async function DocsHome() {
       {/* Section grid */}
       <h2 className="mt-12 mb-5 !text-[1.65rem] text-ink">Browse by section</h2>
       <div className="grid gap-4 sm:grid-cols-2">
-        {SECTIONS.map((s) => (
+        {guide.map((s) => (
           <Link
             key={s.slug}
             href={`/docs/${s.slug}`}
@@ -99,6 +126,60 @@ export default async function DocsHome() {
         </SupportTicketButton>
       </section>
     </div>
+  );
+}
+
+/* The latest few changelog entries, straight under the hero, so returning
+   users see what changed before they reach the guide. */
+function WhatsNewPanel({
+  items,
+  total,
+}: {
+  items: UpdateSummary[];
+  total: number;
+}) {
+  return (
+    <section className="mt-6 rounded-2xl border border-gold-soft bg-white p-6 shadow-[0_10px_30px_rgba(255,168,0,0.10)]">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gold text-forest">
+            <SectionIcon slug={WHATS_NEW_SLUG} className="h-5 w-5" />
+          </span>
+          <div>
+            <h2 className="!text-[1.4rem] text-forest">What&apos;s New</h2>
+            <p className="!text-fine text-ink-soft">
+              The latest changes to Genera
+            </p>
+          </div>
+        </div>
+        <Link
+          href={`/docs/${WHATS_NEW_SLUG}`}
+          className="text-meta font-semibold text-forest underline decoration-gold underline-offset-4 transition-colors hover:text-forest-dark"
+        >
+          See all {total} updates →
+        </Link>
+      </div>
+
+      <ul className="mt-4 divide-y divide-teal-mid/70">
+        {items.map((u) => (
+          <li key={u.anchor}>
+            <Link
+              href={`/docs/${WHATS_NEW_SLUG}#${u.anchor}`}
+              className="group flex flex-col gap-0.5 py-3 sm:flex-row sm:items-baseline sm:gap-4"
+            >
+              {u.date && (
+                <span className="shrink-0 text-fine font-semibold text-ink-soft sm:w-[8.5rem]">
+                  {u.date}
+                </span>
+              )}
+              <span className="font-massilia text-[1.02rem] font-bold text-ink transition-colors group-hover:text-forest">
+                {u.title}
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 

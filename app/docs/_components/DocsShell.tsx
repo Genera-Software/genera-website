@@ -5,7 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { LOGIN_URL } from "@/lib/urls";
-import { rankSearch, type SearchEntry } from "../_data/sections";
+import {
+  WHATS_NEW_SLUG,
+  rankSearch,
+  type SearchEntry,
+  type UpdateSummary,
+} from "../_data/sections";
 import SectionIcon from "./SectionIcon";
 import SupportTicketForm, {
   openSupportTicketForm,
@@ -16,10 +21,12 @@ type NavEntry = { slug: string; num: number; title: string; tagline: string };
 export default function DocsShell({
   nav,
   searchIndex,
+  latestUpdate,
   children,
 }: {
   nav: NavEntry[];
   searchIndex: SearchEntry[];
+  latestUpdate: UpdateSummary | null;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -53,7 +60,12 @@ export default function DocsShell({
             onNavigate={handleResultClick}
           />
         ) : (
-          <SectionNav nav={nav} isActive={isActive} pathname={pathname} />
+          <SectionNav
+            nav={nav}
+            isActive={isActive}
+            pathname={pathname}
+            latestUpdate={latestUpdate}
+          />
         )}
       </div>
     </>
@@ -88,7 +100,7 @@ export default function DocsShell({
 
           <Link
             href="/docs"
-            className="flex min-w-0 shrink items-center gap-2 sm:gap-2.5"
+            className="flex shrink-0 items-center gap-2 sm:gap-2.5"
           >
             <Image
               src="/images/genera-svg.svg"
@@ -98,11 +110,13 @@ export default function DocsShell({
               className="h-7 w-7 shrink-0 object-contain sm:h-8 sm:w-8"
               priority
             />
-            <span className="flex min-w-0 items-baseline gap-2 leading-none">
+            {/* The wordmark and pill only show where they fit beside the
+                action buttons; on the narrowest phones the paw stands alone. */}
+            <span className="hidden items-baseline gap-2 leading-none min-[430px]:flex">
               <span className="font-massilia text-body-lg font-extrabold tracking-[0.08em] text-forest">
                 GENERA
               </span>
-              <span className="hidden rounded-full bg-gold-light px-2 py-0.5 font-massilia text-[0.72rem] font-bold tracking-wide text-forest min-[420px]:inline-block">
+              <span className="hidden rounded-full bg-gold-light px-2 py-0.5 font-massilia text-[0.72rem] font-bold tracking-wide whitespace-nowrap text-forest md:inline-block">
                 HELP CENTRE
               </span>
             </span>
@@ -177,11 +191,14 @@ function SectionNav({
   nav,
   isActive,
   pathname,
+  latestUpdate,
 }: {
   nav: NavEntry[];
   isActive: (slug: string) => boolean;
   pathname: string;
+  latestUpdate: UpdateSummary | null;
 }) {
+  const onChangelog = isActive(WHATS_NEW_SLUG);
   return (
     <nav className="flex flex-col gap-1">
       <Link
@@ -195,14 +212,34 @@ function SectionNav({
         Overview
       </Link>
       <Link
-        href="/docs/whats-new"
-        className={`rounded-xl px-3 py-2 font-massilia text-[0.95rem] font-bold transition-colors ${
-          pathname === "/docs/whats-new"
-            ? "bg-forest text-white"
-            : "text-forest hover:bg-teal-soft"
+        href={`/docs/${WHATS_NEW_SLUG}`}
+        className={`mt-1 flex items-center gap-3 rounded-xl border px-3 py-2 transition-colors ${
+          onChangelog
+            ? "border-forest bg-forest text-white"
+            : "border-gold-soft bg-gold-light text-forest hover:border-gold"
         }`}
       >
-        What&apos;s New
+        <span
+          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
+            onChangelog ? "bg-white/15 text-gold" : "bg-gold text-forest"
+          }`}
+        >
+          <SectionIcon slug={WHATS_NEW_SLUG} className="h-[18px] w-[18px]" />
+        </span>
+        <span className="flex min-w-0 flex-col leading-tight">
+          <span className="font-massilia text-[0.95rem] font-bold">
+            What&apos;s New
+          </span>
+          {latestUpdate?.date && (
+            <span
+              className={`text-[0.72rem] ${
+                onChangelog ? "text-white/70" : "text-ink-soft"
+              }`}
+            >
+              Updated {latestUpdate.date}
+            </span>
+          )}
+        </span>
       </Link>
 
       <div className="mt-3 mb-1 px-3 text-eyebrow font-semibold tracking-[0.14em] text-ink-soft/70 uppercase">
@@ -210,7 +247,7 @@ function SectionNav({
       </div>
 
       {nav
-        .filter((s) => s.slug !== "whats-new")
+        .filter((s) => s.slug !== WHATS_NEW_SLUG)
         .map((s) => {
         const active = isActive(s.slug);
         return (

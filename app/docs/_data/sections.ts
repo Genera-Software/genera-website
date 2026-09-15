@@ -1822,6 +1822,24 @@ export function subAnchor(title: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
+/** The changelog. It's stored like a section so the CMS can edit it, but the
+    site presents it on its own: out of the section grid and prev/next chain. */
+export const WHATS_NEW_SLUG = "whats-new";
+
+/** A What's New entry for teasers (overview panel, sidebar). */
+export type UpdateSummary = { date: string | null; title: string; anchor: string };
+
+/** What's New titles are dated — "15 September 2026 — Title". Splits the date
+    off; a title without one comes back with `date: null`. */
+export function splitUpdateTitle(title: string): {
+  date: string | null;
+  title: string;
+} {
+  const sep = title.indexOf(" — ");
+  if (sep === -1) return { date: null, title };
+  return { date: title.slice(0, sep).trim(), title: title.slice(sep + 3).trim() };
+}
+
 /** One searchable record per subsection, linking to /docs/[slug]#anchor. */
 export type SearchEntry = {
   sectionSlug: string;

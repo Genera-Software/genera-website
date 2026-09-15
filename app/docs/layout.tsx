@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import DocsShell from "./_components/DocsShell";
-import { getDocNav, getDocSearchIndex } from "./_data/load";
+import { getDocNav, getDocSearchIndex, getLatestUpdates } from "./_data/load";
 
 export const revalidate = 60;
 
@@ -19,12 +19,17 @@ export default async function DocsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [nav, searchIndex] = await Promise.all([
+  const [nav, searchIndex, updates] = await Promise.all([
     getDocNav(),
     getDocSearchIndex(),
+    getLatestUpdates(1),
   ]);
   return (
-    <DocsShell nav={nav} searchIndex={searchIndex}>
+    <DocsShell
+      nav={nav}
+      searchIndex={searchIndex}
+      latestUpdate={updates.items[0] ?? null}
+    >
       {children}
     </DocsShell>
   );

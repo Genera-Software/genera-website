@@ -1,7 +1,12 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { subAnchor, type DocSubsection } from "../_data/sections";
+import {
+  WHATS_NEW_SLUG,
+  splitUpdateTitle,
+  subAnchor,
+  type DocSubsection,
+} from "../_data/sections";
 import { getDocSections } from "../_data/load";
 import SectionIcon from "../_components/SectionIcon";
 import CopyLinkButton from "../_components/CopyLinkButton";
@@ -42,9 +47,13 @@ export default async function SectionPage({
   const s = SECTIONS.find((x) => x.slug === section);
   if (!s) notFound();
 
-  const idx = SECTIONS.findIndex((x) => x.slug === s.slug);
-  const prev = idx > 0 ? SECTIONS[idx - 1] : null;
-  const next = idx < SECTIONS.length - 1 ? SECTIONS[idx + 1] : null;
+  // What's New sits outside the guide: it has no prev/next of its own and is
+  // never the "next" step from a guide section.
+  const isChangelog = s.slug === WHATS_NEW_SLUG;
+  const guide = SECTIONS.filter((x) => x.slug !== WHATS_NEW_SLUG);
+  const idx = guide.findIndex((x) => x.slug === s.slug);
+  const prev = !isChangelog && idx > 0 ? guide[idx - 1] : null;
+  const next = !isChangelog && idx < guide.length - 1 ? guide[idx + 1] : null;
 
   return (
     <LightboxProvider>
@@ -63,15 +72,19 @@ export default async function SectionPage({
 
       {/* Header */}
       <header className="flex items-start gap-4">
-        <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-teal-soft text-forest">
+        <span
+          className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-forest ${
+            isChangelog ? "bg-gold" : "bg-teal-soft"
+          }`}
+        >
           <SectionIcon slug={s.slug} className="h-7 w-7" />
         </span>
         <div>
-          {s.slug !== "whats-new" && (
-            <p className="font-massilia text-fine font-bold tracking-wide text-gold">
-              SECTION {String(s.num).padStart(2, "0")}
-            </p>
-          )}
+          <p className="font-massilia text-fine font-bold tracking-wide text-gold">
+            {isChangelog
+              ? `CHANGELOG · ${s.subsections.length} UPDATES`
+              : `SECTION ${String(s.num).padStart(2, "0")}`}
+          </p>
           <h1 className="mt-0.5 text-[clamp(2rem,4.5vw,2.9rem)] text-ink">
             {s.title}
           </h1>
@@ -99,53 +112,130 @@ export default async function SectionPage({
       )}
 
       {/* Subsections */}
-      <div className="mt-10 flex flex-col gap-6">
-        {s.subsections.map((sub, i) => (
-          <Subsection key={i} sub={sub} />
-        ))}
-      </div>
+      {isChangelog ? (
+        <Changelog subs={s.subsections} />
+      ) : (
+        <div className="mt-10 flex flex-col gap-6">
+          {s.subsections.map((sub, i) => (
+            <Subsection key={i} sub={sub} />
+          ))}
+        </div>
+      )}
 
       {/* Prev / next */}
-      <nav className="mt-14 grid gap-3 border-t border-teal-mid pt-7 sm:grid-cols-2">
-        {prev ? (
-          <Link
-            href={`/docs/${prev.slug}`}
-            className="group rounded-2xl border border-teal-mid bg-white p-4 transition-colors hover:border-forest"
-          >
-            <span className="text-fine text-ink-soft">← Previous</span>
-            <span className="mt-1 block font-massilia text-[1.1rem] font-bold text-forest">
-              {prev.title}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-        {next && (
-          <Link
-            href={`/docs/${next.slug}`}
-            className="group rounded-2xl border border-teal-mid bg-white p-4 text-right transition-colors hover:border-forest sm:col-start-2"
-          >
-            <span className="text-fine text-ink-soft">Next →</span>
-            <span className="mt-1 block font-massilia text-[1.1rem] font-bold text-forest">
-              {next.title}
-            </span>
-          </Link>
-        )}
-      </nav>
+      {(prev || next) && (
+        <nav className="mt-14 grid gap-3 border-t border-teal-mid pt-7 sm:grid-cols-2">
+          {prev ? (
+            <Link
+              href={`/docs/${prev.slug}`}
+              className="group rounded-2xl border border-teal-mid bg-white p-4 transition-colors hover:border-forest"
+            >
+              <span className="text-fine text-ink-soft">← Previous</span>
+              <span className="mt-1 block font-massilia text-[1.1rem] font-bold text-forest">
+                {prev.title}
+              </span>
+            </Link>
+          ) : (
+            <span />
+          )}
+          {next && (
+            <Link
+              href={`/docs/${next.slug}`}
+              className="group rounded-2xl border border-teal-mid bg-white p-4 text-right transition-colors hover:border-forest sm:col-start-2"
+            >
+              <span className="text-fine text-ink-soft">Next →</span>
+              <span className="mt-1 block font-massilia text-[1.1rem] font-bold text-forest">
+                {next.title}
+              </span>
+            </Link>
+          )}
+        </nav>
+      )}
     </article>
     </LightboxProvider>
   );
 }
 
-function Subsection({ sub }: { sub: DocSubsection }) {
+/* What's New as a changelog: entries grouped under month headings, with a
+   jump bar so the older months stay reachable on a long list. */
+function Changelog({ subs }: { subs: DocSubsection[] }) {
+  const months = groupByMonth(subs);
+  return (
+    <>
+      {months.length > 1 && (
+        <nav aria-label="Jump to month" className="mt-7 flex flex-wrap gap-2">
+          {months.map((m) => (
+            <a
+              key={m.id}
+              href={`#${m.id}`}
+              className="rounded-full border border-teal-mid bg-white px-3 py-1.5 text-fine font-semibold text-forest transition-colors hover:border-forest"
+            >
+              {m.label}
+              <span className="font-normal text-ink-soft"> · {m.subs.length}</span>
+            </a>
+          ))}
+        </nav>
+      )}
+      <div className="mt-10 flex flex-col gap-12">
+        {months.map((m) => (
+          <section key={m.id} id={m.id} className="scroll-mt-24">
+            <h2 className="mb-5 flex items-center gap-4 !text-[1.35rem] text-forest">
+              {m.label}
+              <span aria-hidden className="h-px flex-1 bg-teal-mid" />
+            </h2>
+            <div className="flex flex-col gap-6">
+              {m.subs.map((sub, i) => (
+                <Subsection key={i} sub={sub} dated />
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+    </>
+  );
+}
+
+/* Groups newest-first entries into runs by month ("15 September 2026" →
+   "September 2026"). An undated entry joins the month before it. */
+function groupByMonth(subs: DocSubsection[]) {
+  const months: { id: string; label: string; subs: DocSubsection[] }[] = [];
+  for (const sub of subs) {
+    const { date } = splitUpdateTitle(sub.title);
+    const last = months[months.length - 1];
+    const label = date
+      ? date.replace(/^\d{1,2}\s+/, "")
+      : (last?.label ?? "Earlier");
+    if (last?.label === label) last.subs.push(sub);
+    else months.push({ id: `month-${subAnchor(label)}`, label, subs: [sub] });
+  }
+  return months;
+}
+
+function Subsection({
+  sub,
+  dated = false,
+}: {
+  sub: DocSubsection;
+  /** Changelog entry: show the title's date as a chip above the heading. */
+  dated?: boolean;
+}) {
   const anchor = subAnchor(sub.title);
+  const { date, title } = dated
+    ? splitUpdateTitle(sub.title)
+    : { date: null, title: sub.title };
+  const Heading = dated ? "h3" : "h2";
   return (
     <section
       id={anchor}
       className="scroll-mt-24 rounded-2xl border border-teal-mid bg-white p-6 transition-shadow target:border-gold target:shadow-[0_0_0_3px_var(--color-gold-soft)] sm:p-7"
     >
+      {date && (
+        <p className="mb-2 inline-flex rounded-full bg-gold-light px-2.5 py-0.5 text-fine font-bold text-forest">
+          {date}
+        </p>
+      )}
       <div className="group/heading flex flex-wrap items-center gap-x-3 gap-y-2">
-        <h2 className="!text-[1.45rem] text-ink">{sub.title}</h2>
+        <Heading className="!text-[1.45rem] text-ink">{title}</Heading>
         {sub.route && <RouteChip route={sub.route} />}
         <CopyLinkButton anchor={anchor} title={sub.title} />
       </div>

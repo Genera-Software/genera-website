@@ -3,11 +3,15 @@ import { cache } from "react";
 import { getPublicSupabase } from "@/lib/supabase/server";
 import {
   SECTIONS,
+  WHATS_NEW_SLUG,
   buildSearchIndex,
+  splitUpdateTitle,
+  subAnchor,
   type DocSection,
   type DocItem,
   type DocImage,
   type SearchEntry,
+  type UpdateSummary,
 } from "./sections";
 
 /* Loads the Help Centre from Supabase (help_centre_sections +
@@ -91,6 +95,21 @@ export async function getDocSection(
 ): Promise<DocSection | undefined> {
   const sections = await getDocSections();
   return sections.find((s) => s.slug === slug);
+}
+
+/** The newest What's New entries (the CMS keeps them newest-first), plus the
+    total count, for the overview panel and sidebar. */
+export async function getLatestUpdates(
+  limit: number,
+): Promise<{ total: number; items: UpdateSummary[] }> {
+  const subs = (await getDocSection(WHATS_NEW_SLUG))?.subsections ?? [];
+  return {
+    total: subs.length,
+    items: subs.slice(0, limit).map((sub) => ({
+      ...splitUpdateTitle(sub.title),
+      anchor: subAnchor(sub.title),
+    })),
+  };
 }
 
 export async function getDocSearchIndex(): Promise<SearchEntry[]> {
