@@ -1029,8 +1029,323 @@ export const SECTIONS: DocSection[] = [
     ],
   },
   {
-    slug: "whats-new",
+    slug: "mobile-apps",
     num: 10,
+    title: "Mobile apps",
+    tagline: "The Genera Driver app for iPhone & Android",
+    intro:
+      "Genera Driver is the driver portal as a native app for iPhone and Android: the day's stops in run order, a tap to confirm each pickup and drop-off, owner lookup, chat with the office, and the driver's own rota and time off. It uses the same driver login and the same data as the driver portal in the browser. The screenshots below come from the iPhone app's built-in demo, which anyone can open without an account.",
+    subsections: [
+      {
+        title: "Getting the app & signing in",
+        route: "Genera Driver (iPhone · Android)",
+        whatItDoes:
+          "Drivers sign in with the same email and password they use for Genera. Anyone with the Driver role at your daycare can use it; everyone else is turned away at sign-in.",
+        items: [
+          { label: "iPhone", desc: "Needs iOS 17 or later." },
+          { label: "Android", desc: "Needs Android 8.0 or later." },
+          {
+            label: "Who can sign in",
+            desc: "Team members with the Driver role (see Team › Staff profile). Choosing the Driver role also makes them route-assignable.",
+          },
+          {
+            label: "Notifications",
+            desc: "On iPhone, drivers get push notifications for route changes, new notes and messages. Android push notifications aren't available yet, so Android drivers see changes when they open the app.",
+          },
+        ],
+        howToUse: [
+          "Give the person the Driver role on their staff profile and make sure they've finished setting up their Genera login from the invite email.",
+          "Ask Genera for the install link for iPhone or Android and send it to your driver.",
+          "The driver opens Genera Driver, enters their Genera email and password, and taps Sign in to Genera.",
+          "Forgot password? on the sign-in screen emails them the same reset link as the web portal.",
+          "If a driver sees 'Genera still needs to verify your driver access', their login worked but they don't have the Driver role at your daycare yet.",
+        ],
+        images: [
+          {
+            src: "/docs/images/mobile-apps-sign-in.jpg",
+            alt: "Genera Driver sign-in screen with email and password fields, a Sign in to Genera button, Forgot password and a Driver App Demo button top right",
+            caption:
+              "Sign in — the driver's usual Genera email and password. Driver App Demo, top right, opens the sample workspace.",
+          },
+        ],
+      },
+      {
+        title: "Try the demo",
+        route: "Sign-in screen › Driver App Demo",
+        whatItDoes:
+          "A complete sample workspace, a fictional daycare called Meadow & Paws with a driver called Jamie, so you or a new driver can learn the app before a real run. Nothing in the demo is sent to Genera, and it never shares your location.",
+        howToUse: [
+          "On the sign-in screen, tap Driver App Demo (Explore Driver App Demo on Android). No account is needed.",
+          "Every tab works: confirm stops, open the map, send a message, draft a time-off request. A 'Demo workspace · sample data' badge shows you're in the demo.",
+          "Profile › Reset sample data puts everything back. Sample changes are also cleared when the app is closed.",
+        ],
+      },
+      {
+        title: "Routes: today's run",
+        route: "Routes tab",
+        whatItDoes:
+          "The home screen. A card for the round shows how many dogs are still to collect, with progress, and below it Your stops lists every stop in run order under its route's name and colour, the same way the office sees the route.",
+        items: [
+          {
+            label: "Pickups / Dropoffs",
+            desc: "Switches between the morning and evening legs. Each leg keeps its own progress.",
+          },
+          {
+            label: "Date",
+            desc: "Tap the date to look at another day's run; Return to today brings you back.",
+          },
+          {
+            label: "Each stop",
+            desc: "The number in the run, the dog, the owner and address, what the dog is booked in for (e.g. Daycare, or Groom · 11:00), the collection or home time, and care flags such as Shoes off or Crate. A cake marks a birthday, and the note badge counts the notes on file.",
+          },
+          {
+            label: "Route map",
+            desc: "The map button beside Start run shows the day's stops as numbered pins with your daycare, with lines joining them in order (Hide lines turns them off).",
+          },
+        ],
+        howToUse: [
+          "Switch to Pickups or Dropoffs for the leg you're driving.",
+          "Tap Start run & share location when you set off. Your daycare then sees your live position on the Map and Tracking views while the app is open.",
+          "Tap End run when you're finished to stop sharing. Stops you've confirmed stay confirmed.",
+          "Tap a stop to open its details, or tap the circle on its right to confirm it straight from the list.",
+        ],
+        images: [
+          {
+            src: "/docs/images/mobile-apps-routes.jpg",
+            alt: "Routes tab with a greeting, the date, Pickups and Dropoffs switch, a Morning round card showing 4 passengers to go and a Start run button",
+            caption:
+              "Routes — Pickups or Dropoffs, the date, and the round's progress with Start run and the route map button.",
+          },
+          {
+            src: "/docs/images/mobile-apps-stops.jpg",
+            alt: "Your stops list with four numbered stops, each showing dog, owner, address, service chip, collection time and care flags",
+            caption:
+              "Your stops — run order, the service and time for each dog, care flags like Shoes off and Crate, and a circle to confirm.",
+          },
+          {
+            src: "/docs/images/mobile-apps-route-map.jpg",
+            alt: "Map of numbered stop pins joined by lines, with the daycare marked by a paw pin",
+            caption:
+              "Route map — the stops as numbered pins joined in run order, with your daycare marked.",
+          },
+        ],
+      },
+      {
+        title: "Stop details & confirming a stop",
+        route: "Routes tab › tap a stop",
+        whatItDoes:
+          "Everything the driver needs at the door: where to go, the office's collection and drop-off instructions (with the leg they're on marked This stop), today's note from the owner, the dog's details, food, an emergency contact and driver notes. Confirming a stop updates the live booking and records who confirmed it and when.",
+        items: [
+          {
+            label: "Where to go",
+            desc: "The full address, with directions in the driver's chosen navigation app.",
+          },
+          {
+            label: "About the dog",
+            desc: "Gender, dogs in the household, lead, lunch and flight risk, then a Food card (what, brand and quantity) and the emergency contact.",
+          },
+          {
+            label: "Driver notes",
+            desc: "Notes left for whoever does this stop next, with who wrote them. Drivers can add their own.",
+          },
+          {
+            label: "Gallery",
+            desc: "Add photos, or take one with the camera, straight into the dog's gallery.",
+          },
+        ],
+        howToUse: [
+          "Tap a stop to open it. Read Where to go and the instruction marked This stop before you knock.",
+          "At the bottom, tap Confirm pickup (or Confirm drop-off), or tap the stop's circle in the list.",
+          "Confirm when asked. The stop is crossed through and shows who picked the dog up and at what time, and the office sees it straight away.",
+        ],
+        images: [
+          {
+            src: "/docs/images/mobile-apps-stop-detail.jpg",
+            alt: "Stop detail for Milo showing the address, collection and drop-off instructions with This stop marked, a Daycare chip and a note from the owner",
+            caption:
+              "Stop details — the address, the office's instructions with This stop marked, and today's note from the owner.",
+          },
+          {
+            src: "/docs/images/mobile-apps-stop-detail-lower.jpg",
+            alt: "Lower part of stop detail with Food, Emergency contact, Driver notes, Gallery and a Confirm pickup button",
+            caption:
+              "Further down — food, emergency contact, driver notes, the photo gallery and Confirm pickup.",
+          },
+          {
+            src: "/docs/images/mobile-apps-confirm-stop.jpg",
+            alt: "Dialog asking Confirm pickup for Milo? over the stop list",
+            caption:
+              "Confirm — the app checks before it records the pickup (this one is from the demo).",
+          },
+          {
+            src: "/docs/images/mobile-apps-stop-confirmed.jpg",
+            alt: "Stop list with the first stop crossed out and a green tick reading Picked up by Jamie with the time",
+            caption:
+              "Done — the stop shows who picked the dog up and when, and the round's count moves on.",
+          },
+        ],
+      },
+      {
+        title: "Navigating a route",
+        route: "Routes tab › Navigate · Profile › Navigation app",
+        whatItDoes:
+          "Navigate on each route opens the stops still to do, in run order, starting from where the driver is, in the navigation app they've chosen. Stops already confirmed drop out, so a driver halfway round is sent on from there.",
+        items: [
+          {
+            label: "Apple Maps",
+            desc: "Up to 14 stops in one go on iOS 18.4 and later; one stop at a time on earlier versions.",
+          },
+          { label: "Google Maps", desc: "Up to 10 stops in one go." },
+          { label: "Waze", desc: "One stop at a time." },
+          {
+            label: "Longer routes",
+            desc: "A route with more stops than the app takes comes in parts. Open the next part when you reach the end of one.",
+          },
+        ],
+        howToUse: [
+          "Choose the app once in Profile › Navigation app. Apps that aren't installed are shown as not installed.",
+          "Tap Navigate beside a route's name. To use a different app just this once, hold the button down, or the directions button on a stop.",
+          "Your daycare only sees the driver's position while Genera is open, so sharing pauses while they drive in another app and picks up again when they come back.",
+        ],
+        images: [
+          {
+            src: "/docs/images/mobile-apps-navigation-app.jpg",
+            alt: "Navigation app settings listing Apple Maps (selected, up to 14 stops at a time), Google Maps and Waze",
+            caption:
+              "Navigation app — pick Apple Maps, Google Maps or Waze; each shows how many stops it takes at once.",
+          },
+        ],
+      },
+      {
+        title: "Owners",
+        route: "Owners tab",
+        whatItDoes:
+          "Look up an address, a phone number or a dog, on or off today's run. With the search box empty it lists the owners on today's run, then recent ones.",
+        howToUse: [
+          "Search by owner, pet or address.",
+          "Open an owner for tap-to-call, Navigate, the full address, each of their dogs and the driver notes left for the household.",
+          "The message button on an owner opens a chat only when one of their dogs is on your run that day.",
+        ],
+        images: [
+          {
+            src: "/docs/images/mobile-apps-owners.jpg",
+            alt: "Owners tab with a search box, owners on today's run tagged On today, and a Recent owner",
+            caption:
+              "Owners — search, with today's households tagged On today and recent ones below.",
+          },
+          {
+            src: "/docs/images/mobile-apps-household.jpg",
+            alt: "Owner page for Alex Morgan with Call and Navigate buttons, the address, two pets and driver notes",
+            caption:
+              "A household — call, navigate, the address, their dogs and driver notes.",
+          },
+        ],
+      },
+      {
+        title: "Messages",
+        route: "Messages tab",
+        whatItDoes:
+          "The driver's line to the office at the top, titled with your daycare's name, then conversations with customers on today's routes. Customer threads are day-scoped: a driver can only message owners with a dog booked in that day.",
+        items: [
+          {
+            label: "Your team",
+            desc: "The office thread, open every day. Drivers can start it themselves.",
+          },
+          {
+            label: "Start a conversation",
+            desc: "Customers on today's routes, tagged On today. This list changes day to day.",
+          },
+          {
+            label: "Report or block",
+            desc: "A driver can report a message or conversation, or block a customer, from the conversation.",
+          },
+        ],
+        howToUse: [
+          "Open Messages and tap the office thread, or a customer under Start a conversation.",
+          "Type a message and tap the arrow to send.",
+          "If customer messaging isn't turned on for your daycare, drivers still have the office thread and see a note saying so.",
+        ],
+        images: [
+          {
+            src: "/docs/images/mobile-apps-messages.jpg",
+            alt: "Messages tab with the office thread under Your team, one conversation, and customers on today under Start a conversation",
+            caption:
+              "Messages — the office thread, today's conversations, and customers you can message today.",
+          },
+          {
+            src: "/docs/images/mobile-apps-office-thread.jpg",
+            alt: "Chat thread with the daycare office showing a message from the office and the driver's reply",
+            caption:
+              "The office thread — quick changes to the run, straight from the office.",
+          },
+        ],
+      },
+      {
+        title: "Schedule & time off",
+        route: "Schedule tab",
+        whatItDoes:
+          "The driver's own rota: holiday left this year, the week at a glance, and upcoming driving shifts with their hours. Working days and hours come from the pattern you set in Genera.",
+        howToUse: [
+          "Check Holiday left for the allowance, days used and requests pending approval.",
+          "Tap Request time off, choose Holiday (a date range) or Sick (a single day), add an optional note for the office, and tap Send.",
+          "The request appears under Team › Approve holidays for you to accept or decline.",
+        ],
+        images: [
+          {
+            src: "/docs/images/mobile-apps-schedule.jpg",
+            alt: "Schedule tab showing 18 of 25 holiday days left, a week strip and upcoming driving shifts with times",
+            caption:
+              "Schedule — holiday left, the week, and upcoming shifts with their hours.",
+          },
+          {
+            src: "/docs/images/mobile-apps-time-off.jpg",
+            alt: "Request time off sheet with Holiday and Sick options, From and To dates, a calendar and a note field",
+            caption:
+              "Request time off — Holiday or Sick, the dates and an optional note for the office.",
+          },
+        ],
+      },
+      {
+        title: "Profile & settings",
+        route: "Profile tab",
+        whatItDoes:
+          "The driver's account and app settings, with their location status under their name.",
+        items: [
+          {
+            label: "Push notifications",
+            desc: "Route changes, new notes and messages (iPhone).",
+          },
+          {
+            label: "Profile information",
+            desc: "Name, phone and home daycare.",
+          },
+          {
+            label: "App & location",
+            desc: "Location is shared only during an active run while the app is open. Genera Driver never asks for background ('Always') location access.",
+          },
+          {
+            label: "Navigation app",
+            desc: "Apple Maps, Google Maps or Waze. See Navigating a route.",
+          },
+          {
+            label: "Change password",
+            desc: "Opens Genera in the browser to change it.",
+          },
+        ],
+        images: [
+          {
+            src: "/docs/images/mobile-apps-profile.jpg",
+            alt: "Profile tab for Jamie Cole with location status, a Push notifications toggle and Account rows for profile, app and location, navigation app and change password",
+            caption:
+              "Profile — notifications, account details, location sharing, navigation app and password.",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "whats-new",
+    num: 11,
     title: "What's New",
     tagline: "Recent updates and improvements",
     intro:
