@@ -74,6 +74,7 @@ export async function POST(req: NextRequest) {
   }
 
   await notifySupportTicket({
+    ticket_id: row.id,
     category: t.category,
     subject: t.subject,
     description: t.description,

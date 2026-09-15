@@ -125,6 +125,7 @@ export async function POST(req: Request) {
   });
 
   await notifySupportTicket({
+    ticket_id: created.id,
     category: "other",
     subject,
     description: body,

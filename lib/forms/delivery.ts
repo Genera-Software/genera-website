@@ -74,7 +74,7 @@ export async function deliverWebhook(opts: {
   }
 }
 
-function escapeHtml(s: string) {
+export function escapeHtml(s: string) {
   return s
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")

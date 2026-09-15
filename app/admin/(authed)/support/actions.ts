@@ -110,6 +110,7 @@ export async function createTicket(formData: FormData) {
   if (error || !row) throw new Error(error?.message ?? "Could not create ticket");
 
   await notifySupportTicket({
+    ticket_id: row.id,
     category: data.category,
     subject: data.subject,
     description: data.description,
