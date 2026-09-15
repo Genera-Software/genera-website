@@ -45,6 +45,7 @@ const CATEGORY_LABEL: Record<string, string> = {
   billing: "Billing",
   feature_request: "Feature request",
   account: "Account",
+  app_testing: "App testing",
   other: "Other",
 };
 

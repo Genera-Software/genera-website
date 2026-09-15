@@ -31,6 +31,7 @@ const CATEGORY_LABEL: Record<SupportTicketCategory, string> = {
   billing: "Billing",
   feature_request: "Feature",
   account: "Account",
+  app_testing: "App testing",
   other: "Other",
 };
 

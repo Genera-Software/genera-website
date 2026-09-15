@@ -321,7 +321,8 @@ export type Database = {
             | "billing"
             | "feature_request"
             | "account"
-            | "other";
+            | "other"
+            | "app_testing";
           priority: "low" | "medium" | "high" | "urgent";
           subject: string;
           description: string;
@@ -358,7 +359,8 @@ export type Database = {
             | "billing"
             | "feature_request"
             | "account"
-            | "other";
+            | "other"
+            | "app_testing";
           priority?: "low" | "medium" | "high" | "urgent";
           subject: string;
           description: string;
@@ -395,7 +397,8 @@ export type Database = {
             | "billing"
             | "feature_request"
             | "account"
-            | "other";
+            | "other"
+            | "app_testing";
           priority?: "low" | "medium" | "high" | "urgent";
           subject?: string;
           description?: string;

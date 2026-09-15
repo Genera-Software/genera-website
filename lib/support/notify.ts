@@ -18,6 +18,7 @@ export function categoryLabel(c: string) {
       billing: "Billing",
       feature_request: "Feature request",
       account: "Account",
+      app_testing: "App testing",
       other: "Other",
     }[c] ?? c
   );

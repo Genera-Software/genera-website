@@ -1,22 +1,35 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { TestPlatform } from "@/lib/support/app-testing";
 
 type Status = "idle" | "submitting" | "sent";
 
-type Category =
+export type SupportCategory =
   | "technical"
   | "billing"
   | "feature_request"
   | "account"
+  | "app_testing"
   | "other";
 
-const CATEGORIES: Array<{ value: Category; label: string }> = [
+const CATEGORIES: Array<{ value: SupportCategory; label: string }> = [
   { value: "technical", label: "Technical issue" },
   { value: "billing", label: "Billing" },
   { value: "feature_request", label: "Feature request" },
   { value: "account", label: "Account" },
+  { value: "app_testing", label: "Test the mobile apps" },
   { value: "other", label: "Something else" },
+];
+
+const PLATFORM_OPTIONS: Array<{
+  value: TestPlatform;
+  title: string;
+  sub: string;
+}> = [
+  { value: "ios", title: "iPhone", sub: "via TestFlight" },
+  { value: "android", title: "Android", sub: "Google Play closed testing" },
+  { value: "both", title: "Both", sub: "iPhone and Android" },
 ];
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -32,7 +45,7 @@ type DocSuggestion = {
 };
 
 type FieldErrors = Partial<
-  Record<"name" | "email" | "subject" | "description", string>
+  Record<"name" | "email" | "subject" | "description" | "platform", string>
 >;
 
 function detectBrowser(ua: string): string {
@@ -52,8 +65,17 @@ function detectOS(ua: string): string {
   return "Unknown";
 }
 
-export function openSupportTicketForm() {
-  window.dispatchEvent(new CustomEvent("support-ticket:open"));
+/** Pre-pick the platform for someone already on a phone. */
+function platformFor(ua: string): TestPlatform | null {
+  if (/Android/.test(ua)) return "android";
+  if (/iPhone|iPad|iPod/.test(ua)) return "ios";
+  return null;
+}
+
+export function openSupportTicketForm(opts?: { category?: SupportCategory }) {
+  window.dispatchEvent(
+    new CustomEvent("support-ticket:open", { detail: opts ?? {} }),
+  );
 }
 
 const labelClass =
@@ -67,11 +89,12 @@ export default function SupportTicketForm() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
-  const [category, setCategory] = useState<Category>("technical");
+  const [category, setCategory] = useState<SupportCategory>("technical");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
+  const [platform, setPlatform] = useState<TestPlatform | null>(null);
 
   const [suggestions, setSuggestions] = useState<DocSuggestion[]>([]);
   // The exact text the current `suggestions` were fetched for. Used to tell
@@ -82,19 +105,24 @@ export default function SupportTicketForm() {
   const nameRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  const query = `${subject} ${description}`.trim();
+  // A tester request is just name, email and platform — no subject or
+  // description, so nothing to match Help Centre pages against.
+  const isTesting = category === "app_testing";
+  const query = isTesting ? "" : `${subject} ${description}`.trim();
 
   useEffect(() => {
-    const onOpen = () => {
+    const onOpen = (e: Event) => {
+      const detail = (e as CustomEvent<{ category?: SupportCategory }>).detail;
       setOpen(true);
       setStatus("idle");
       setErrorMsg(null);
       setFieldErrors({});
-      setCategory("technical");
+      setCategory(detail?.category ?? "technical");
       setName("");
       setEmail("");
       setSubject("");
       setDescription("");
+      setPlatform(platformFor(navigator.userAgent));
       setSuggestions([]);
       setSuggestedFor("");
       setChecking(false);
@@ -199,6 +227,10 @@ export default function SupportTicketForm() {
     else if (!EMAIL_RE.test(email.trim())) {
       errors.email = "That email doesn't look right.";
     }
+    if (isTesting) {
+      if (!platform) errors.platform = "Choose which app you'd like to test.";
+      return errors;
+    }
     if (!subject.trim()) errors.subject = "Give your ticket a short subject.";
     if (!description.trim()) {
       errors.description = "Tell us a little about what's happening.";
@@ -250,8 +282,9 @@ export default function SupportTicketForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           category,
-          subject: subject.trim(),
-          description: description.trim(),
+          ...(isTesting
+            ? { test_platform: platform }
+            : { subject: subject.trim(), description: description.trim() }),
           account_email: email.trim(),
           account_name: name.trim(),
           page_url: window.location.href,
@@ -339,11 +372,14 @@ export default function SupportTicketForm() {
               </svg>
             </div>
             <h3 className="font-massilia text-body-lg font-extrabold text-forest">
-              Got it — we&apos;ll be in touch
+              {isTesting
+                ? "You're on the list"
+                : "Got it — we’ll be in touch"}
             </h3>
             <p className="mx-auto mt-2 max-w-[380px] text-meta text-ink-soft">
-              Your ticket is with the Genera team. We typically reply within a
-              day.
+              {isTesting
+                ? `We'll email ${email.trim()} once you've been added as a tester.`
+                : "Your ticket is with the Genera team. We typically reply within a day."}
             </p>
             <button
               type="button"
@@ -408,7 +444,9 @@ export default function SupportTicketForm() {
               <select
                 id="support-category"
                 value={category}
-                onChange={(e) => setCategory(e.target.value as Category)}
+                onChange={(e) =>
+                  setCategory(e.target.value as SupportCategory)
+                }
                 className={`${fieldClass} cursor-pointer`}
               >
                 {CATEGORIES.map((c) => (
@@ -419,44 +457,95 @@ export default function SupportTicketForm() {
               </select>
             </div>
 
-            <div className="mt-4">
-              <label htmlFor="support-subject" className={labelClass}>
-                Subject
-              </label>
-              <input
-                id="support-subject"
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                maxLength={200}
-                placeholder="e.g. Can't save a booking"
-                className={fieldClass}
-              />
-              {fieldErrors.subject && (
-                <p className="mt-1 text-fine text-red-700">
-                  {fieldErrors.subject}
-                </p>
-              )}
-            </div>
+            {isTesting ? (
+              <>
+                <fieldset className="mt-4">
+                  <legend className={labelClass}>Which app?</legend>
+                  <div className="grid gap-2 sm:grid-cols-3">
+                    {PLATFORM_OPTIONS.map((p) => {
+                      const selected = platform === p.value;
+                      return (
+                        <label
+                          key={p.value}
+                          className={`flex cursor-pointer flex-col rounded-xl border px-3.5 py-2.5 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-forest/40 ${
+                            selected
+                              ? "border-forest bg-teal-soft"
+                              : "border-teal-mid bg-cream hover:border-forest/50"
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name="support-platform"
+                            value={p.value}
+                            checked={selected}
+                            onChange={() => setPlatform(p.value)}
+                            className="sr-only"
+                          />
+                          <span className="font-massilia text-fine font-bold text-forest">
+                            {p.title}
+                          </span>
+                          <span className="text-[0.8rem] leading-snug text-ink-soft">
+                            {p.sub}
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                  {fieldErrors.platform && (
+                    <p className="mt-1 text-fine text-red-700">
+                      {fieldErrors.platform}
+                    </p>
+                  )}
+                </fieldset>
 
-            <div className="mt-4">
-              <label htmlFor="support-description" className={labelClass}>
-                How can we help?
-              </label>
-              <textarea
-                id="support-description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={5}
-                maxLength={5000}
-                placeholder="What were you trying to do, and what happened instead?"
-                className={`${fieldClass} resize-y`}
-              />
-              {fieldErrors.description && (
-                <p className="mt-1 text-fine text-red-700">
-                  {fieldErrors.description}
+                <p className="mt-4 rounded-xl border border-teal-mid bg-cream px-3.5 py-3 text-[0.85rem] leading-relaxed text-ink-soft">
+                  We&apos;ll send your invite to the email above. For iPhone,
+                  use the email on your Apple ID. For Android, use the Google
+                  account you sign in to Google Play with.
                 </p>
-              )}
-            </div>
+              </>
+            ) : (
+              <>
+                <div className="mt-4">
+                  <label htmlFor="support-subject" className={labelClass}>
+                    Subject
+                  </label>
+                  <input
+                    id="support-subject"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    maxLength={200}
+                    placeholder="e.g. Can't save a booking"
+                    className={fieldClass}
+                  />
+                  {fieldErrors.subject && (
+                    <p className="mt-1 text-fine text-red-700">
+                      {fieldErrors.subject}
+                    </p>
+                  )}
+                </div>
+
+                <div className="mt-4">
+                  <label htmlFor="support-description" className={labelClass}>
+                    How can we help?
+                  </label>
+                  <textarea
+                    id="support-description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={5}
+                    maxLength={5000}
+                    placeholder="What were you trying to do, and what happened instead?"
+                    className={`${fieldClass} resize-y`}
+                  />
+                  {fieldErrors.description && (
+                    <p className="mt-1 text-fine text-red-700">
+                      {fieldErrors.description}
+                    </p>
+                  )}
+                </div>
+              </>
+            )}
 
             {/* Suggested Help Centre pages, live as they type. */}
             {showSuggestions && (
@@ -550,9 +639,11 @@ export default function SupportTicketForm() {
                   ? "Checking the docs…"
                   : status === "submitting"
                     ? "Sending…"
-                    : showSuggestions
-                      ? "Still need help — send"
-                      : "Send ticket"}
+                    : isTesting
+                      ? "Request invite"
+                      : showSuggestions
+                        ? "Still need help — send"
+                        : "Send ticket"}
               </button>
             </div>
           </form>

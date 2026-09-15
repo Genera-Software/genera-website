@@ -8,6 +8,7 @@ const CATEGORIES: Array<{ value: string; label: string }> = [
   { value: "billing", label: "Billing" },
   { value: "feature_request", label: "Feature request" },
   { value: "account", label: "Account" },
+  { value: "app_testing", label: "App testing" },
   { value: "other", label: "Other" },
 ];
 

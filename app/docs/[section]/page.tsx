@@ -10,6 +10,7 @@ import {
 import { getDocSections } from "../_data/load";
 import SectionIcon from "../_components/SectionIcon";
 import CopyLinkButton from "../_components/CopyLinkButton";
+import SupportTicketButton from "../_components/SupportTicketButton";
 import { LightboxProvider, ZoomableImage } from "../_components/Lightbox";
 import { Suspense } from "react";
 import SearchHighlighter from "../_components/SearchHighlighter";
@@ -109,6 +110,28 @@ export default async function SectionPage({
             sizes="(max-width: 820px) 100vw, 820px"
           />
         </figure>
+      )}
+
+      {/* The apps are in beta, so point readers at a tester invite. */}
+      {s.slug === "mobile-apps" && (
+        <aside className="mt-7 flex flex-col gap-4 rounded-2xl border border-gold-soft bg-gold-light/60 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div>
+            <p className="font-massilia text-[1.1rem] font-bold text-forest">
+              Want to try the apps?
+            </p>
+            <p className="mt-1 text-meta leading-relaxed text-ink-soft">
+              The iPhone app is on TestFlight and the Android app is in Google
+              Play closed testing. Send us your name and email and we&apos;ll
+              add you as a tester.
+            </p>
+          </div>
+          <SupportTicketButton
+            category="app_testing"
+            className="inline-flex shrink-0 cursor-pointer items-center justify-center rounded-full bg-forest px-5 py-2.5 font-massilia text-fine font-bold whitespace-nowrap text-white transition-shadow hover:shadow-[0_6px_22px_rgba(0,62,69,0.3)]"
+          >
+            Request an invite
+          </SupportTicketButton>
+        </aside>
       )}
 
       {/* Subsections */}

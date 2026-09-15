@@ -18,6 +18,7 @@ const CATEGORIES = [
   "feature_request",
   "account",
   "other",
+  "app_testing",
 ] as const;
 const PRIORITIES = ["low", "medium", "high", "urgent"] as const;
 const StatusSchema = z.enum(STATUSES);
