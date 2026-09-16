@@ -31,7 +31,6 @@ import AssigneeAvatar from "./_components/AssigneeAvatar";
 import { listAdminUsers } from "@/lib/admin/allowlist";
 import { requireAdminUser } from "@/lib/admin/auth";
 import { assigneeName } from "@/lib/support/assignee";
-import { isManualPage } from "@/lib/support/manual";
 
 export const dynamic = "force-dynamic";
 
@@ -74,32 +73,6 @@ const CATEGORY_LABEL: Record<SupportTicketCategory, string> = {
   app_testing: "App testing",
   other: "Other",
 };
-
-/** Hover text for the notes icon — first line or so, not the whole note. */
-function notePreview(notes: string) {
-  const flat = notes.trim().replace(/\s+/g, " ");
-  return flat.length > 140 ? `${flat.slice(0, 140)}…` : flat;
-}
-
-function NoteIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M4 4.5A1.5 1.5 0 0 1 5.5 3h9L20 8.5v11a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19.5z" />
-      <path d="M14 3v6h6" />
-      <path d="M8.5 13h7M8.5 16.5h4.5" />
-    </svg>
-  );
-}
 
 /** One labelled row of the filter panel — the label says which dimension the
     pills belong to, which the old single wrapping row never did. */
@@ -203,7 +176,7 @@ export default async function SupportTicketsPage({
   let q = supabase
     .from("support_tickets")
     .select(
-      "id, status, priority, category, subject, account_email, account_name, page_url, internal_notes, assigned_to, created_by, created_at",
+      "id, status, priority, category, subject, account_email, account_name, assigned_to, created_by, created_at",
     )
     .order("created_at", { ascending: false })
     .limit(200);
@@ -486,7 +459,7 @@ export default async function SupportTicketsPage({
       {/* overflow-x-auto, not overflow-hidden — narrow windows must scroll the
           table rather than silently clipping the Status column. */}
       <div className="overflow-x-auto rounded-2xl border border-teal-mid bg-white">
-        <table className="w-full min-w-[72rem] text-left text-sm">
+        <table className="w-full min-w-[60rem] text-left text-sm">
           <thead className="bg-cream text-xs uppercase tracking-wider text-ink-soft">
             <tr>
               <th className="px-5 py-3">Ref</th>
@@ -495,8 +468,6 @@ export default async function SupportTicketsPage({
               <th className="px-5 py-3">Priority</th>
               <th className="px-5 py-3">Category</th>
               <th className="px-5 py-3">Account</th>
-              <th className="px-5 py-3">Page</th>
-              <th className="px-5 py-3">Notes</th>
               <th className="px-5 py-3">Submitted</th>
               <th className="px-5 py-3">Status</th>
             </tr>
@@ -570,41 +541,6 @@ export default async function SupportTicketsPage({
                     )
                   )}
                 </td>
-                <td className="px-5 py-3 align-middle font-mono text-xs text-ink-soft">
-                  {isManualPage(t.page_url) ? (
-                    <span
-                      className="rounded-full bg-cream px-2 py-0.5 font-sans text-[11px] font-semibold not-italic text-ink-soft"
-                      title="Logged by hand from the admin console — no browser session behind it"
-                    >
-                      Admin
-                    </span>
-                  ) : t.page_url ? (
-                    <span title={t.page_url}>
-                      {(() => {
-                        try {
-                          return new URL(t.page_url).pathname;
-                        } catch {
-                          return t.page_url.slice(0, 40);
-                        }
-                      })()}
-                    </span>
-                  ) : (
-                    "—"
-                  )}
-                </td>
-                <td className="px-5 py-3 align-middle text-ink-soft">
-                  {t.internal_notes?.trim() ? (
-                    <span
-                      className="inline-flex items-center text-forest"
-                      title={notePreview(t.internal_notes)}
-                    >
-                      <NoteIcon />
-                      <span className="sr-only">Has internal notes</span>
-                    </span>
-                  ) : (
-                    <span aria-hidden>—</span>
-                  )}
-                </td>
                 <td className="whitespace-nowrap px-5 py-3 align-middle text-ink-soft">
                   {formatDate(t.created_at)}
                 </td>
@@ -621,7 +557,7 @@ export default async function SupportTicketsPage({
             {(tickets ?? []).length === 0 && (
               <tr>
                 <td
-                  colSpan={10}
+                  colSpan={8}
                   className="px-5 py-10 text-center text-sm text-ink-soft"
                 >
                   No tickets match the current filters.

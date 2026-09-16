@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Sidebar from "./_components/Sidebar";
+import SupportReplyBanner from "./_components/SupportReplyBanner";
 import { getAdminSupabase } from "@/lib/supabase/admin";
 import { requireAdminUser } from "@/lib/admin/auth";
 
@@ -56,6 +57,9 @@ export default async function AuthedAdminLayout({
         <main className="px-4 pb-12 pt-20 lg:px-8 lg:pt-8">
           {/* Pages opt out of the reading-width cap with data-full-width. */}
           <div className="mx-auto max-w-6xl has-[[data-full-width]]:max-w-none">
+            {/* Unread customer replies, surfaced on every admin page — the
+                sidebar count on its own was too easy to walk past. */}
+            <SupportReplyBanner />
             {children}
           </div>
         </main>
