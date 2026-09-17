@@ -30,21 +30,14 @@ const nextConfig: NextConfig = {
       { source: "/about", destination: "/our-story", permanent: true },
       { source: "/about-us", destination: "/our-story", permanent: true },
       // Postcard + Instagram campaign (Sep 2026): the printed URL is
-      // generasoftware.com/yourapp. Send it to the register page with a
-      // UTM so sign-ups from the cards are visible in analytics. Not
-      // permanent, so it can become a real landing page later without a
-      // cached 308 getting in the way. /yourapp?s=ig tags Instagram DMs.
-      {
-        source: "/yourapp",
-        has: [{ type: "query", key: "s", value: "ig" }],
-        destination:
-          "https://app.generasoftware.com/register?utm_source=instagram&utm_medium=dm&utm_campaign=yourapp",
-        permanent: false,
-      },
+      // generasoftware.com/yourapp. Lands on the app's Welcome page (not
+      // straight into the register form) with a UTM so sign-ups from the
+      // campaign show in analytics. Not permanent, so it can become a real
+      // landing page later without a cached 308 getting in the way.
       {
         source: "/yourapp",
         destination:
-          "https://app.generasoftware.com/register?utm_source=postcard&utm_medium=print&utm_campaign=yourapp",
+          "https://app.generasoftware.com/?utm_source=yourapp&utm_medium=outreach&utm_campaign=yourapp",
         permanent: false,
       },
     ];
