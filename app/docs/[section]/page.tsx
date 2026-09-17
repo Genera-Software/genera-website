@@ -339,7 +339,7 @@ function Subsection({
                   </svg>
                 </span>
                 <span className="text-meta leading-relaxed text-ink">
-                  {step}
+                  <LinkifiedText text={step} />
                 </span>
               </li>
             ))}
@@ -393,6 +393,30 @@ function Subsection({
 /* Screenshot caption. Captions follow a "Title — description" pattern; we
    lift the leading title onto its own prominent line and mute the rest.
    Captions without the separator render as a single muted line. */
+/** Plain CMS text with any https:// links made clickable, shown without the scheme. */
+function LinkifiedText({ text }: { text: string }) {
+  const parts = text.split(/(https?:\/\/[^\s)]+[^\s).,;:!?])/g);
+  return (
+    <>
+      {parts.map((part, i) =>
+        i % 2 === 1 ? (
+          <a
+            key={i}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold break-all text-forest underline decoration-gold underline-offset-2"
+          >
+            {part.replace(/^https?:\/\//, "")}
+          </a>
+        ) : (
+          part
+        ),
+      )}
+    </>
+  );
+}
+
 function Caption({ text }: { text: string }) {
   const sep = text.indexOf(" — ");
   if (sep === -1) {
