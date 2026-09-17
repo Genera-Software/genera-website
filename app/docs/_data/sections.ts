@@ -1055,7 +1055,7 @@ export const SECTIONS: DocSection[] = [
         ],
         howToUse: [
           "Give the person the Driver role on their staff profile and make sure they've finished setting up their Genera login from the invite email.",
-          "Ask Genera for the install link for iPhone or Android and send it to your driver.",
+          "Get the app onto your driver's phone. Android: they join the test with the Get it on Google Play badge above (play.google.com/apps/testing/com.genera.driver), then install Genera Driver from Google Play. iPhone: tap Request an invite on the TestFlight badge above with their name and email, and they'll get a TestFlight invite.",
           "The driver opens Genera Driver, enters their Genera email and password, and taps Sign in to Genera.",
           "Forgot password? on the sign-in screen emails them the same reset link as the web portal.",
           "If a driver sees 'Genera still needs to verify your driver access', their login worked but they don't have the Driver role at your daycare yet.",
