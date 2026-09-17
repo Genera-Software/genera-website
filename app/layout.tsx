@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Caveat } from "next/font/google";
 import Script from "next/script";
 import ConsentProvider from "@/components/ConsentProvider";
-import { GA_MEASUREMENT_ID } from "@/lib/analytics/ga-measurement-id";
+import { GA_HOSTNAMES, GA_MEASUREMENT_ID } from "@/lib/analytics/ga-measurement-id";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
@@ -111,17 +111,20 @@ export default function RootLayout({
             `}
           </Script>
           {children}
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-            strategy="afterInteractive"
-          />
+          {/* Only the live site loads gtag.js — previews and localhost stay out of GA. */}
           <Script id="google-analytics" strategy="afterInteractive">
             {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              window.gtag = gtag;
-              gtag('js', new Date());
-              gtag('config', '${GA_MEASUREMENT_ID}');
+              if (${JSON.stringify(GA_HOSTNAMES)}.indexOf(window.location.hostname) !== -1) {
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                window.gtag = gtag;
+                gtag('js', new Date());
+                gtag('config', '${GA_MEASUREMENT_ID}');
+                var s = document.createElement('script');
+                s.async = true;
+                s.src = 'https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}';
+                document.head.appendChild(s);
+              }
             `}
           </Script>
         </ConsentProvider>
