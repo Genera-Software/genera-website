@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { TestPlatform } from "@/lib/support/app-testing";
+import { PLAY_TESTING_URL, type TestPlatform } from "@/lib/support/app-testing";
 
 type Status = "idle" | "submitting" | "sent";
 
@@ -72,7 +72,10 @@ function platformFor(ua: string): TestPlatform | null {
   return null;
 }
 
-export function openSupportTicketForm(opts?: { category?: SupportCategory }) {
+export function openSupportTicketForm(opts?: {
+  category?: SupportCategory;
+  platform?: TestPlatform;
+}) {
   window.dispatchEvent(
     new CustomEvent("support-ticket:open", { detail: opts ?? {} }),
   );
@@ -112,7 +115,9 @@ export default function SupportTicketForm() {
 
   useEffect(() => {
     const onOpen = (e: Event) => {
-      const detail = (e as CustomEvent<{ category?: SupportCategory }>).detail;
+      const detail = (
+        e as CustomEvent<{ category?: SupportCategory; platform?: TestPlatform }>
+      ).detail;
       setOpen(true);
       setStatus("idle");
       setErrorMsg(null);
@@ -122,7 +127,7 @@ export default function SupportTicketForm() {
       setEmail("");
       setSubject("");
       setDescription("");
-      setPlatform(platformFor(navigator.userAgent));
+      setPlatform(detail?.platform ?? platformFor(navigator.userAgent));
       setSuggestions([]);
       setSuggestedFor("");
       setChecking(false);
@@ -381,6 +386,27 @@ export default function SupportTicketForm() {
                 ? `We'll email ${email.trim()} once you've been added as a tester.`
                 : "Your ticket is with the Genera team. We typically reply within a day."}
             </p>
+            {/* Google Play's opt-in page only lets in accounts already on the
+                testers list, so the link is offered here, after the request. */}
+            {isTesting && (platform === "android" || platform === "both") && (
+              <div className="mx-auto mt-5 max-w-[400px] rounded-xl border border-teal-mid bg-cream px-4 py-3 text-left text-[0.85rem] leading-relaxed text-ink-soft">
+                <p>
+                  <span className="font-bold text-forest">Android:</span> once
+                  we&apos;ve confirmed you&apos;re added, open the Google Play
+                  test page signed in with that Google account and tap{" "}
+                  <span className="font-semibold text-forest">Become a tester</span>.
+                  Before then, Google Play will say the page isn&apos;t available.
+                </p>
+                <a
+                  href={PLAY_TESTING_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-block font-semibold text-forest underline decoration-gold underline-offset-2"
+                >
+                  Open the Google Play test page
+                </a>
+              </div>
+            )}
             <button
               type="button"
               onClick={() => setOpen(false)}
@@ -499,9 +525,11 @@ export default function SupportTicketForm() {
                 </fieldset>
 
                 <p className="mt-4 rounded-xl border border-teal-mid bg-cream px-3.5 py-3 text-[0.85rem] leading-relaxed text-ink-soft">
-                  We&apos;ll send your invite to the email above. For iPhone,
-                  use the email on your Apple ID. For Android, use the Google
-                  account you sign in to Google Play with.
+                  We&apos;ll add the email above as a tester. For iPhone, use
+                  the email on your Apple ID. For Android, use the Google
+                  account you sign in to Google Play with. Google Play only
+                  lets in accounts we&apos;ve added, so the test link won&apos;t
+                  work until then.
                 </p>
               </>
             ) : (

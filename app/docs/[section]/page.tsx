@@ -18,9 +18,6 @@ import { Suspense } from "react";
 import SearchHighlighter from "../_components/SearchHighlighter";
 import { APP_BASE_URL } from "@/lib/urls";
 
-const PLAY_TESTING_URL =
-  "https://play.google.com/apps/testing/com.genera.driver";
-
 export const revalidate = 60;
 
 export async function generateStaticParams() {
@@ -125,31 +122,32 @@ export default async function SectionPage({
               Want to try the apps?
             </p>
             <p className="mt-1 text-meta leading-relaxed text-ink-soft">
-              On Android, join the test on Google Play. The iPhone app is on
-              TestFlight: send us your name and email and we&apos;ll add you
-              as a tester.
+              Both apps are in testing, so we need to add you first. Pick your
+              phone, send us your name and the email you use with Google Play
+              or your Apple ID, and we&apos;ll add you as a tester.
             </p>
           </div>
           <div className="flex shrink-0 flex-wrap items-center gap-3">
-            <a
-              href={PLAY_TESTING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Join the Android test on Google Play"
-              className="inline-flex items-center gap-2.5 rounded-xl bg-black py-2 pr-4 pl-3 text-white transition-shadow hover:shadow-[0_6px_22px_rgba(0,0,0,0.3)]"
+            <SupportTicketButton
+              category="app_testing"
+              platform="android"
+              ariaLabel="Request an invite to test the Android app on Google Play"
+              className="inline-flex cursor-pointer items-center gap-2.5 rounded-xl bg-black py-2 pr-4 pl-3 text-left text-white transition-shadow hover:shadow-[0_6px_22px_rgba(0,0,0,0.3)]"
             >
               <GooglePlayLogo className="h-6 w-6" />
               <span className="flex flex-col leading-none">
                 <span className="text-[0.6rem] font-medium tracking-wide uppercase">
-                  Get it on
+                  Request an invite
                 </span>
                 <span className="mt-0.5 text-[1.05rem] font-semibold">
                   Google Play
                 </span>
               </span>
-            </a>
+            </SupportTicketButton>
             <SupportTicketButton
               category="app_testing"
+              platform="ios"
+              ariaLabel="Request an invite to test the iPhone app on TestFlight"
               className="inline-flex cursor-pointer items-center gap-2.5 rounded-xl bg-black py-2 pr-4 pl-3 text-left text-white transition-shadow hover:shadow-[0_6px_22px_rgba(0,0,0,0.3)]"
             >
               <AppleLogo className="h-6 w-6" />
