@@ -395,6 +395,7 @@ replaced).
 | `SUPPORT_INGEST_TOKEN`     | Shared secret for widget ticket creation          |
 | `SUPPORT_INBOUND_SECRET`   | Verifies the Postmark inbound webhook             |
 | `SUPPORT_NOTIFY_EMAIL`     | Where new-ticket notifications go                 |
+| `DOCS_UPLOAD_TOKEN`        | Shared secret for Help Centre screenshot uploads   |
 
 ### Analytics — GA4 service account
 
