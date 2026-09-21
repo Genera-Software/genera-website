@@ -47,6 +47,11 @@ import s from "./features.module.css";
 
    Mock data uses one cast throughout — the same owners, dogs and
    staff as the landing page — and never a real person's name.
+
+   The drawn screens (BookingsShowcase, CapacityAnimation, …) and the
+   Feature split layout are named exports so the per-vertical landing
+   pages (components/verticals) show the same screens rather than
+   redrawing them. Keep them self-contained.
    ───────────────────────────────────────────────────────────── */
 const NAV_ITEMS: Array<{ id: string; label: string; feature: FeatureKey }> = [
   { id: "bookings",       label: "Bookings", feature: "bookings" },
@@ -369,7 +374,7 @@ const REQUESTS = [
 const REQUEST_PRESS = [2, 4, 6];
 const REQUEST_ACCEPT = [3, 5, 7];
 
-function BookingsShowcase() {
+export function BookingsShowcase() {
   const [ref, step] = useStepper(10, 1100);
   const arrived = step >= 1;
   const shown = REQUESTS.map((_, i) => i > 0 || arrived);
@@ -468,7 +473,7 @@ const INVOICES = [
   { ref: "DDC-000233", owner: "Tom H.",    pets: "Rex",    amount: 320, statusAt: (): InvoiceStatus => "awaiting" },
 ];
 
-function InvoicingShowcase() {
+export function InvoicingShowcase() {
   const [ref, step] = useStepper(10, 950);
   const raised = step >= 3;
 
@@ -594,7 +599,7 @@ const ROUTE_STOPS = [
   { dog: "Pepper", photo: "/daycare/dog4.jpg", addr: "41 Barn Close",   collect: "8:40", done: "08:41", pin: [186, 18] },
 ] as const;
 
-function RoutesShowcase() {
+export function RoutesShowcase() {
   const [ref, step] = useStepper(8, 1000);
   const done = Math.min(step, ROUTE_STOPS.length);
   const van = ROUTE_STOPS[Math.max(0, done - 1)].pin;
@@ -767,7 +772,7 @@ function DailyScheduleScreen({ count }: { count: number }) {
   );
 }
 
-function DailyScheduleShowcase() {
+export function DailyScheduleShowcase() {
   const [ref, step] = useStepper(6, 900);
   const count = Math.min(2 + step, SCHED_DOGS.length);
   return (
@@ -817,7 +822,7 @@ function Stars({ value }: { value: number }) {
   );
 }
 
-function AssessmentsShowcase() {
+export function AssessmentsShowcase() {
   const [ref, step] = useStepper(120, 110);
   const typed = ASSESS_NOTE.slice(0, Math.max(0, (step - ASSESS_NOTE_START) * 2));
   const ratings = ASSESS_QUESTIONS.map((x, i) =>
@@ -999,7 +1004,7 @@ const ROTA_CELL: Record<RotaCell, [string, string]> = {
   hol: ["Hol", "bg-amber-100 text-amber-800"],
 };
 
-function TeamShowcase() {
+export function TeamShowcase() {
   const [ref, step] = useStepper(7, 1000);
   const approved = step >= 3;
   const rota = ROTA.map(r =>
@@ -1123,7 +1128,7 @@ const CAP_SERVICES = [
 const CAP_TOTAL = CAP_SERVICES.reduce((a, sv) => a + sv.max, 0);
 const CAP_HOLD = 30;
 
-function CapacityAnimation() {
+export function CapacityAnimation() {
   const [ref, step] = useStepper(CAP_TOTAL + CAP_HOLD, 65);
   const vals = CAP_SERVICES.map((sv, i) => {
     const offset = CAP_SERVICES.slice(0, i).reduce((a, x) => a + x.max, 0);
@@ -1189,7 +1194,7 @@ const SERIES = [
   { key: "awaiting",  label: "Awaiting approval",  color: "#a8a29e" },
 ] as const;
 
-function FinanceAnimation() {
+export function FinanceAnimation() {
   const [ref, step] = useStepper(72, 70);
   const k = easeOut(clamp01(step / 14));
   const avgIn = step >= 36;
@@ -1288,7 +1293,7 @@ const TYPING_RECORD = "Bordetella booster booked with the vet for 12 Oct";
 const RECORD_BANNER = 8;
 const RECORD_TYPE_START = 26;
 
-function RecordsAnimation() {
+export function RecordsAnimation() {
   const [ref, step] = useStepper(RECORD_TYPE_START + TYPING_RECORD.length + 45, 60);
   const typedLen = Math.max(0, Math.min(TYPING_RECORD.length, step - RECORD_TYPE_START));
   const showNew = step >= RECORD_TYPE_START;
@@ -1370,7 +1375,7 @@ function RecordsAnimation() {
 /* ─────────────────────────────────────────────────────────────
    Layout pieces
    ───────────────────────────────────────────────────────────── */
-function CategoryHeader({ title, desc }: { title: string; desc: string }) {
+export function CategoryHeader({ title, desc }: { title: string; desc: string }) {
   return (
     <div className={`rev ${s.cat}`}>
       <div className={s.catInner}>
@@ -1383,14 +1388,14 @@ function CategoryHeader({ title, desc }: { title: string; desc: string }) {
 
 /* Which plan includes it — the same split as /pricing. Grow's two
    extras are in Thrive too, so they read "Grow & Thrive". */
-type Plan = "every" | "grow" | "thrive";
+export type Plan = "every" | "grow" | "thrive";
 const PLAN_BADGE: Record<Plan, [string, string]> = {
   every:  ["Every plan", ""],
   grow:   ["Grow & Thrive", s.featPlanGrow],
   thrive: ["Thrive", s.featPlanThrive],
 };
 
-function Feature({
+export function Feature({
   id,
   feature,
   eyebrow,

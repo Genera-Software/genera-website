@@ -26,6 +26,44 @@ export type VerticalBlock = {
 
 export type VerticalFaq = { q: string; a: string };
 
+/** A drawn screen from /features (named exports of FeaturesClient) or a homepage showcase. */
+export type ShowcaseKey =
+  | "bookings"
+  | "invoicing"
+  | "routes"
+  | "daily"
+  | "assessments"
+  | "team"
+  | "capacity"
+  | "finance"
+  | "records"
+  | "ownerApp"
+  | "chat";
+
+export type VerticalSpotlight = {
+  showcase: ShowcaseKey;
+  feature: FeatureKey;
+  eyebrow: string;
+  plan: "every" | "grow" | "thrive";
+  onlyOnGenera?: boolean;
+  title: string;
+  lead: string;
+  bullets: string[];
+  /** Screen on the left, copy on the right. Alternate down the page. */
+  flip?: boolean;
+};
+
+/** The three floating cards in the hero, with this business's numbers on them. */
+export type HeroCard = {
+  tone: "coral" | "green" | "gold";
+  badge: string;
+  figure: string;
+  title: string;
+  body: string;
+};
+
+export type Pain = { n: string; title: string; body: string };
+
 export type Vertical = {
   slug: string;
   /** Who the page is for, in their words. */
@@ -41,6 +79,14 @@ export type Vertical = {
    * business type, the jobs, the price and the trial.
    */
   definition: string;
+  /** The Caveat pill above the h1: "Built by a daycare, for dog walkers". */
+  pill: string;
+  heroCards: HeroCard[];
+  /** "Sound familiar?" Three, in this business's words. */
+  pains: Pain[];
+  /** The drawn screens, in selling order. Four or five. */
+  spotlights: VerticalSpotlight[];
+  /** Everything else, as the card grid under the spotlights. */
   blocks: VerticalBlock[];
   /** Licensing or honesty notes shown between the blocks and the pricing. */
   notes?: { title: string; body: string; href?: string; linkLabel?: string }[];
@@ -59,20 +105,89 @@ export const VERTICALS: Vertical[] = [
     eyebrow: "For dog daycares",
     h1: "Dog daycare software built inside a licensed daycare",
     lead: "Duncan has run Duncan's Dog Co for 15 years. Genera is the software he built to run it, and the daily cap, the vaccination dates and the invoice run are there because an inspector asked for them.",
+    pill: "Built by a daycare, for dog daycares",
+    heroCards: [
+      { tone: "coral", badge: "Today", figure: "18", title: "Dogs in. 20 on the licence.", body: "The daily cap holds the number the inspector wrote down." },
+      { tone: "green", badge: "Paid", figure: "£1,240", title: "Invoiced from bookings.", body: "Direct Debit collected it. Nobody chased anyone." },
+      { tone: "gold", badge: "Full", figure: "2", title: "Waiting for Thursday.", body: "The day filled, so two requests wait for you to decide." },
+    ],
+    pains: [
+      { n: "01", title: "Bookings from every direction", body: "Texts, emails, DMs and a voicemail from 6am, all landing in different places. You spend more of the morning managing messages than dogs." },
+      { n: "02", title: "Sunday evenings lost to invoicing", body: "Building every owner's invoice by hand, every month, then chasing the ones who did not open it." },
+      { n: "03", title: "Counting dogs against the licence in your head", body: "The inspector's number is on the wall. Today's number is spread across a diary, a group chat and whoever last answered the phone." },
+    ],
+    spotlights: [
+      {
+        showcase: "bookings",
+        feature: "bookings",
+        eyebrow: "Bookings",
+        plan: "every",
+        title: "Owners book themselves. You decide what is confirmed.",
+        lead: "A booking portal with your services, prices and rules built in. Requests land in one approval queue instead of your texts and DMs, and nothing is confirmed until you say so, unless you have told it to auto-accept.",
+        bullets: [
+          "One queue for every booking and membership request",
+          "Auto-accept for the services you never need to check",
+          "Recurring bookings written into the diary a year ahead",
+        ],
+      },
+      {
+        showcase: "capacity",
+        feature: "compliance",
+        eyebrow: "Capacity and your licence",
+        plan: "every",
+        onlyOnGenera: true,
+        flip: true,
+        title: "Stay inside your licensed number. Automatically.",
+        lead: "Set a daily limit for each service and Genera holds you to it. Once a day is full, new bookings become waitlist requests for you to approve, so you never slip over the number on your licence by accident.",
+        bullets: [
+          "A daily cap for every service, tied to your licence",
+          "Full days flagged on every calendar",
+          "Waitlist requests instead of accidental overbooking",
+        ],
+      },
+      {
+        showcase: "ownerApp",
+        feature: "ownerApp",
+        eyebrow: "Branded owner app",
+        plan: "every",
+        title: "Your own app, under your own name.",
+        lead: "Owners add your portal to their home screen and it opens with your logo, your name and your colour. It is where they request days, keep the dog's details current and settle invoices, and every request still comes back to you.",
+        bullets: [
+          "Your logo, name and brand colour, set once",
+          "Booking requests, recurring days and pet details",
+          "Opens from the home screen, nothing in an app store",
+        ],
+      },
+      {
+        showcase: "invoicing",
+        feature: "payments",
+        eyebrow: "Invoicing and payments",
+        plan: "every",
+        flip: true,
+        title: "Invoices raise themselves. Direct Debit does the chasing.",
+        lead: "Charges come off the bookings you actually took. Raise the month's invoices for every owner in one go, then let card payments and Direct Debit collect, with Xero kept in step if that is where your books live.",
+        bullets: [
+          "Every owner invoiced from real bookings, in one run",
+          "Card payments through Stripe, Direct Debit through GoCardless",
+          "See who has opened, who has paid and what is still owed",
+        ],
+      },
+      {
+        showcase: "assessments",
+        feature: "assessments",
+        eyebrow: "Assessments and report cards",
+        plan: "grow",
+        title: "Scored in the yard. Read on the sofa.",
+        lead: "Pick a template for a first day, development, behaviour or health, rate each question on a phone while the dog is in front of you, add photos, and send the owner a branded report card instead of a vague text.",
+        bullets: [
+          "Templates for first days, development, behaviour, health and swimming",
+          "Star ratings, staff notes and photos, saved as a draft until you are ready",
+          "A branded report card, emailed and kept in the owner's app",
+        ],
+      },
+    ],
     definition: `Genera is UK dog daycare software for taking bookings, invoicing owners and running the day. Owners request days from an app under your own name and logo, every request lands in one queue for you to approve or auto-accept, a daily capacity on each service keeps you inside your licensed numbers, and the month's invoices are raised from the bookings you took and collected by Direct Debit or card. Plans are ${PRICE_LIST}. ${TRIAL} ${NO_METER}`,
     blocks: [
-      {
-        feature: "bookings",
-        title: "One queue instead of your DMs",
-        body: "Owners book from their own app with your services, prices and rules built in. Requests land in one approval queue, and nothing is confirmed until you say so unless you have set that service to auto-accept. Recurring bookings go into the diary a year ahead.",
-        more: "bookings",
-      },
-      {
-        feature: "compliance",
-        title: "A daily cap tied to your licence",
-        body: "Set the daily limit for each service. Once a day is full, new requests become waitlist requests for you to decide on, and full days are flagged on every calendar. You never slip over your licensed number by accident.",
-        more: "capacity",
-      },
       {
         feature: "dailySchedule",
         title: "Who is in today, on one screen",
@@ -80,22 +195,10 @@ export const VERTICALS: Vertical[] = [
         more: "daily-schedule",
       },
       {
-        feature: "payments",
-        title: "Invoices raised from the bookings you took",
-        body: "Raise the month's invoices for every owner in one run, then let Direct Debit through GoCardless and card payments through Stripe collect. See who has opened, who has paid and what is still owed, with Xero kept in step if that is where your books live.",
-        more: "invoicing",
-      },
-      {
         feature: "records",
         title: "Vaccination dates where an inspector can see them",
         body: "Pet profiles hold each dog's vet and vaccination details, and the Vaccinations report shows what is due. The licence conditions ask for a completed primary course two weeks before a first day; the record of when that was is here, not in a text thread.",
         more: "records",
-      },
-      {
-        feature: "assessments",
-        title: "First-day assessments on a phone in the yard",
-        body: "Pick a template, rate each question while the dog is in front of you, add photos, and send the owner a branded report card instead of a vague text. Included from the Grow plan.",
-        more: "assessments",
       },
       {
         feature: "team",
@@ -149,37 +252,80 @@ export const VERTICALS: Vertical[] = [
     eyebrow: "For dog walkers",
     h1: "Dog walker software that puts the regular Tuesday walk in the diary for good",
     lead: "Walks are services with a price, a time and a daily limit. Owners book them from an app with your name on it, and the month invoices itself from the walks you actually did.",
+    pill: "Built by a daycare, for dog walkers",
+    heroCards: [
+      { tone: "coral", badge: "Today", figure: "6", title: "Walks out today.", body: "Grouped by walk, with the dog, the owner and the notes." },
+      { tone: "green", badge: "Paid", figure: "£420", title: "Invoiced from walks.", body: "The walks you did, invoiced in one run, collected by Direct Debit." },
+      { tone: "gold", badge: "Booked", figure: "52", title: "Tuesdays in the diary.", body: "One recurring booking, a year of walks." },
+    ],
+    pains: [
+      { n: "01", title: "The Tuesday walk, rebooked every Monday night", body: "The same owners, the same dogs, the same slot, confirmed by text every single week because nothing holds it." },
+      { n: "02", title: "Invoices built from memory", body: "Counting walks off a calendar at the end of the month and hoping the owner remembers the same number you do." },
+      { n: "03", title: "Every owner on a different app", body: "One texts, one WhatsApps, one messages on Instagram and one still rings. Nobody can see what was agreed." },
+    ],
+    spotlights: [
+      {
+        showcase: "bookings",
+        feature: "bookings",
+        eyebrow: "Bookings",
+        plan: "every",
+        title: "Regular walks, booked once.",
+        lead: "A walk is a service with its price, its time and how many dogs it takes. A recurring booking puts the Monday and Thursday walk in the diary a year ahead, and one-off requests land in one queue for you to approve.",
+        bullets: [
+          "Recurring walks written into the diary for as far ahead as you like",
+          "One queue for every request, or auto-accept and never look",
+          "A limit on each walk group that you set and hold to",
+        ],
+      },
+      {
+        showcase: "ownerApp",
+        feature: "ownerApp",
+        eyebrow: "Branded owner app",
+        plan: "every",
+        flip: true,
+        title: "Your own app, under your own name.",
+        lead: "Owners add your portal to their home screen and it opens with your logo and your colour. That is where they request walks, keep the dog's vet and vaccination details current and settle invoices. Nothing to build and nothing in an app store.",
+        bullets: [
+          "Your logo, name and brand colour, set once",
+          "Walk requests, recurring days and pet details",
+          "Invoices, card payments and Direct Debit in the Billing tab",
+        ],
+      },
+      {
+        showcase: "invoicing",
+        feature: "payments",
+        eyebrow: "Invoicing and payments",
+        plan: "every",
+        title: "Invoices from the walks you did.",
+        lead: "Raise the month's invoices in one run from the bookings in the diary, then let Direct Debit through GoCardless or card payments through Stripe collect. See who has paid and what is still owed without a spreadsheet.",
+        bullets: [
+          "Every owner invoiced from real walks, in one run",
+          "Card payments through Stripe, Direct Debit through GoCardless",
+          "Credits taken off the next invoice automatically",
+        ],
+      },
+      {
+        showcase: "daily",
+        feature: "dailySchedule",
+        eyebrow: "Daily schedule",
+        plan: "every",
+        flip: true,
+        title: "Who is out today, on one screen.",
+        lead: "Every walk for the day in one list, grouped by service, with the dog, the owner and the notes beside it. Add a booking from the same screen when someone texts at seven.",
+        bullets: [
+          "Every walk for the day, in one list",
+          "Notes and the owner's number beside each dog",
+          "Create bookings from the same screen",
+        ],
+      },
+    ],
     definition: `Genera is UK dog walking software for booking walks, invoicing owners and keeping each dog's details in one place. A walk is set up as a service with its price, its timeslot and how many dogs it takes; owners request it from an app under your name and logo; recurring bookings write a regular walk into the diary a year ahead; and the month's invoices are raised from the walks you did and collected by Direct Debit or card. Plans are ${PRICE_LIST}, and a solo walker with one helper is the £${FROM} plan. ${TRIAL} ${NO_METER}`,
     blocks: [
-      {
-        feature: "bookings",
-        title: "Regular walks, booked once",
-        body: "A recurring booking puts the Monday and Thursday walk in the diary a year ahead. One-off requests land in one queue for you to approve, or set a walk to auto-accept and never look at it again.",
-        more: "bookings",
-      },
-      {
-        feature: "ownerApp",
-        title: "Your own app, under your own name",
-        body: "Owners add your portal to their home screen and it opens with your logo and your colour. That is where they request walks, keep the dog's vet and vaccination details current and settle invoices. Nothing to build and nothing in an app store.",
-        more: "owner-app",
-      },
       {
         feature: "compliance",
         title: "A limit on every walk group",
         body: "Give each walk service a daily capacity, whether that is four dogs or six. Once it is full, new requests wait for you to decide. Owners increasingly ask how many dogs you take out at once; this is how you set the number and hold to it.",
         more: "capacity",
-      },
-      {
-        feature: "payments",
-        title: "Invoices from the walks you did",
-        body: "Raise the month's invoices in one run from the bookings in the diary, then let Direct Debit through GoCardless or card payments through Stripe collect. See who has paid and what is still owed without a spreadsheet.",
-        more: "invoicing",
-      },
-      {
-        feature: "dailySchedule",
-        title: "Who is out today",
-        body: "Every walk for the day in one list, grouped by service, with the dog, the owner and the notes. Add a booking from the same screen when someone texts.",
-        more: "daily-schedule",
       },
       {
         feature: "messages",
@@ -223,32 +369,75 @@ export const VERTICALS: Vertical[] = [
     eyebrow: "For dog groomers",
     h1: "Dog grooming software with a diary owners fill in themselves",
     lead: "A full groom is a sixty-minute slot, a nail clip is five pounds, and both are booked from an app with your name on it while you have your hands in a coat.",
+    pill: "Built by a daycare, for dog groomers",
+    heroCards: [
+      { tone: "coral", badge: "Today", figure: "5", title: "Grooms booked.", body: "Sixty-minute slots, filled from the owner's phone." },
+      { tone: "green", badge: "Paid", figure: "£310", title: "Card, on the day.", body: "Stripe takes it. The invoice marks itself paid." },
+      { tone: "gold", badge: "Deposit", figure: "£20", title: "Off the next invoice.", body: "Taken when they booked, deducted when they paid." },
+    ],
+    pains: [
+      { n: "01", title: "Bookings taken with wet hands", body: "The phone rings mid-groom, the diary is in the other room, and the slot you promised is one you had already given away." },
+      { n: "02", title: "No-shows with no deposit", body: "A sixty-minute gap on a Saturday that nobody paid for and nobody else could fill." },
+      { n: "03", title: "Which dog was the nervous one?", body: "The notes that matter about each dog live in your head, and your head is not on shift every day." },
+    ],
+    spotlights: [
+      {
+        showcase: "bookings",
+        feature: "bookings",
+        eyebrow: "Bookings",
+        plan: "every",
+        title: "A timeslot diary owners fill in themselves.",
+        lead: "Set a full groom at sixty minutes and a nail clip at ten, each with its price and a daily capacity. Owners see what is open and request it. Requests land in one queue to approve, or set a service to auto-accept.",
+        bullets: [
+          "A timeslot length, price and daily capacity on every service",
+          "One queue for every request, or auto-accept",
+          "The week and day schedule shows every slot from six in the morning",
+        ],
+      },
+      {
+        showcase: "ownerApp",
+        feature: "ownerApp",
+        eyebrow: "Branded owner app",
+        plan: "every",
+        flip: true,
+        title: "Owners book while you are mid-groom.",
+        lead: "Your portal opens from the owner's home screen with your logo and your colour. They request a slot, update the dog's details and pay the invoice without ringing you.",
+        bullets: [
+          "Your logo, name and brand colour, set once",
+          "Slot requests and pet details from their phone",
+          "Invoices and card payments in the Billing tab",
+        ],
+      },
+      {
+        showcase: "invoicing",
+        feature: "payments",
+        eyebrow: "Invoicing and payments",
+        plan: "every",
+        title: "Deposits, credits and card payments.",
+        lead: "Take card payments through Stripe and Direct Debit through GoCardless. Credits and deposits come off the next invoice automatically, and you can see who has opened an invoice and who has paid.",
+        bullets: [
+          "Card payments through Stripe, Direct Debit through GoCardless",
+          "Deposits and credits taken off the next invoice automatically",
+          "See who has opened, who has paid and what is still owed",
+        ],
+      },
+      {
+        showcase: "records",
+        feature: "records",
+        eyebrow: "Pet records",
+        plan: "every",
+        flip: true,
+        title: "Each dog's notes and vaccination dates, in one place.",
+        lead: "Pet profiles with photos, vet details, vaccination dates and your own notes on the dog, tied to the owner record. The owner keeps their side current from the app.",
+        bullets: [
+          "Photos, vet and vaccination details on every dog",
+          "Your own notes, read by whoever is on shift",
+          "Owners update their side from the app",
+        ],
+      },
+    ],
     definition: `Genera is UK dog grooming software for a bookable diary, invoicing and pet records. Each groom is a service with its price and its timeslot length, owners request a slot from an app under your name and logo, requests land in one queue to approve or auto-accept, and invoices are settled by card through Stripe or by Direct Debit through GoCardless with deposits and credits taken off the next bill automatically. Plans are ${PRICE_LIST}, and a solo groomer is the £${FROM} plan. ${TRIAL} ${NO_METER}`,
     blocks: [
-      {
-        feature: "bookings",
-        title: "Timeslot services, not a free-for-all diary",
-        body: "Set a full groom at sixty minutes and a nail clip at five, with a daily capacity on each. Owners see what is open and request it. The week and day schedule shows every slot from six in the morning.",
-        more: "bookings",
-      },
-      {
-        feature: "ownerApp",
-        title: "Owners book while you are mid-groom",
-        body: "Your portal opens from the owner's home screen with your logo and your colour. They request a slot, update the dog's details and pay the invoice without ringing you. Every request still comes back to you to approve unless you have set it to auto-accept.",
-        more: "owner-app",
-      },
-      {
-        feature: "payments",
-        title: "Deposits, credits and card payments",
-        body: "Take card payments through Stripe and Direct Debit through GoCardless. Credits and deposits come off the next invoice automatically, and you can see who has opened an invoice and who has paid.",
-        more: "invoicing",
-      },
-      {
-        feature: "records",
-        title: "Each dog's notes and vaccination dates",
-        body: "Pet profiles with photos, vet details, vaccination dates and your own notes on the dog, tied to the owner record. The owner keeps their side current from the app.",
-        more: "records",
-      },
       {
         feature: "dailySchedule",
         title: "Today's dogs in one list",
@@ -295,14 +484,76 @@ export const VERTICALS: Vertical[] = [
     eyebrow: "For boarding kennels and home boarders",
     h1: "Dog boarding software that counts the dogs on site every night",
     lead: "A sleepover is a service with a nightly capacity. The monthly summary shows every stay, every arrival and departure, the peak night, and how close you are to the number on your licence.",
+    pill: "Built by a daycare, for boarding kennels",
+    heroCards: [
+      { tone: "coral", badge: "Tonight", figure: "7", title: "On site. 8 on the licence.", body: "The nightly cap holds the number the inspector wrote down." },
+      { tone: "green", badge: "Paid", figure: "£960", title: "Invoiced from stays.", body: "Deposit taken at booking, the rest by Direct Debit." },
+      { tone: "gold", badge: "Peak", figure: "Sat", title: "Full, 8 of 8.", body: "The next request for Saturday waits for you to decide." },
+    ],
+    pains: [
+      { n: "01", title: "Bank holiday maths on the back of an envelope", body: "Who arrives Friday, who leaves Monday, and whether Saturday night is one over the licence." },
+      { n: "02", title: "Vaccination cards in a drawer", body: "Leptospirosis is a core vaccine in the boarding guidance. The date it was done is on a card the owner brought two stays ago." },
+      { n: "03", title: "Deposits that never match the stay", body: "Taken by bank transfer in March, half-remembered in July, argued about at pick-up." },
+    ],
+    spotlights: [
+      {
+        showcase: "capacity",
+        feature: "compliance",
+        eyebrow: "Capacity and your licence",
+        plan: "every",
+        onlyOnGenera: true,
+        title: "A nightly limit tied to your licence.",
+        lead: "Give the boarding service the number of dogs your licence allows per night. Once a night is full, new requests become waitlist requests for you to decide on, so a bank holiday weekend never goes one over by accident.",
+        bullets: [
+          "A cap per night, tied to your licence",
+          "Full nights flagged on every calendar",
+          "Waitlist requests instead of accidental overbooking",
+        ],
+      },
+      {
+        showcase: "records",
+        feature: "records",
+        eyebrow: "Pet records",
+        plan: "every",
+        flip: true,
+        title: "Vaccination dates, including leptospirosis.",
+        lead: "Pet profiles hold each dog's vet and vaccination dates, the Vaccinations report shows what is due, and the owner updates their side from the app. When an inspector asks, it is on the screen, not in a drawer.",
+        bullets: [
+          "Vet and vaccination details on every dog",
+          "A Vaccinations report of what is due",
+          "Owners update their side from the app",
+        ],
+      },
+      {
+        showcase: "invoicing",
+        feature: "payments",
+        eyebrow: "Invoicing and payments",
+        plan: "every",
+        title: "Invoices from the stays you took.",
+        lead: "Raise the month's invoices in one run, collect by Direct Debit through GoCardless or card through Stripe, and see who has paid. Deposits come off the final invoice automatically, and Xero is kept in step if you use it.",
+        bullets: [
+          "Every owner invoiced from real stays, in one run",
+          "Deposits taken off the final invoice automatically",
+          "Card payments through Stripe, Direct Debit through GoCardless",
+        ],
+      },
+      {
+        showcase: "finance",
+        feature: "finance",
+        eyebrow: "Finance and forecast",
+        plan: "grow",
+        flip: true,
+        title: "What the diary is worth six months out.",
+        lead: "Boarding is booked further ahead than anything else. The forecast shows what the next one to twelve months are worth from the stays already in the diary, month by month, and where it comes from.",
+        bullets: [
+          "Invoiced, paid, outstanding and unbilled for any period",
+          "One to twelve months of forecast from the diary",
+          "A month-by-month table and the service split",
+        ],
+      },
+    ],
     definition: `Genera is UK dog boarding software for kennels and home boarders that handles overnight bookings, a nightly capacity tied to your licence, vaccination records, invoicing and an owner app. Boarding is set up as a service with tiered pricing and a limit on dogs per night; owners request stays from an app under your name; the monthly summary lists every stay with arrival, departure, nights and transport and shows dogs on site for each night; and invoices are raised from the stays you took and collected by Direct Debit or card. Plans are ${PRICE_LIST}. ${TRIAL} ${NO_METER}`,
     blocks: [
-      {
-        feature: "compliance",
-        title: "A nightly limit tied to your licence",
-        body: "Give the boarding service the number of dogs your licence allows per night. Once a night is full, new requests become waitlist requests for you to decide on. The licensed number is never crossed by accident on a bank holiday weekend.",
-        more: "capacity",
-      },
       {
         feature: "bookings",
         title: "The monthly summary is the boarding screen",
@@ -310,28 +561,10 @@ export const VERTICALS: Vertical[] = [
         more: "bookings",
       },
       {
-        feature: "records",
-        title: "Vaccination dates, including leptospirosis",
-        body: "The boarding guidance treats leptospirosis as a core vaccine, and a licence was refused renewal in 2025 over it. Pet profiles hold each dog's vet and vaccination dates, the Vaccinations report shows what is due, and the owner updates their side from the app.",
-        more: "records",
-      },
-      {
         feature: "ownerApp",
         title: "Owners request stays from your own app",
         body: "Your portal opens from the owner's home screen with your logo and your colour. They request dates, keep the dog's details current and settle the invoice. Every request comes back to you to approve.",
         more: "owner-app",
-      },
-      {
-        feature: "payments",
-        title: "Invoices from the stays you took",
-        body: "Raise the month's invoices in one run, collect by Direct Debit through GoCardless or card through Stripe, and see who has paid. Deposits come off the final invoice automatically. Xero is kept in step if you use it.",
-        more: "invoicing",
-      },
-      {
-        feature: "finance",
-        title: "What the diary is worth six months out",
-        body: "Boarding is booked further ahead than anything else. The forecast shows what the next one to twelve months are worth from the stays already in the diary, month by month, and where it comes from. From the Grow plan.",
-        more: "finance",
       },
     ],
     notes: [

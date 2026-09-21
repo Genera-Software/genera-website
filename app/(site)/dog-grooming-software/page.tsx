@@ -14,7 +14,7 @@ export const metadata: Metadata = vertical
     })
   : {};
 
-export default function Page() {
+export default async function Page() {
   if (!vertical) notFound();
   return <VerticalPage vertical={vertical} />;
 }
