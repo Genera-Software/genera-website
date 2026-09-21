@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo";
 import { getPublicSupabase } from "@/lib/supabase/server";
+import { GUIDES } from "@/lib/guides";
+import { VERTICALS } from "@/lib/verticals";
 
 export const revalidate = 3600;
 
@@ -16,6 +18,12 @@ const staticRoutes: Array<{
   { path: "/our-story", priority: 0.7, changeFrequency: "monthly" },
   { path: "/faqs", priority: 0.7, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.6, changeFrequency: "monthly" },
+  { path: "/guides", priority: 0.8, changeFrequency: "monthly" },
+  ...VERTICALS.map((v) => ({
+    path: `/${v.slug}`,
+    priority: 0.9,
+    changeFrequency: "monthly" as const,
+  })),
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -56,6 +64,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Supabase env missing or query failed — fall back to static sitemap only.
   }
 
-  return [...staticEntries, ...postEntries];
+  // Reference guides carry the date their figures were last checked, which is the
+  // honest lastModified: the page changes when a fact does.
+  const guideEntries: MetadataRoute.Sitemap = GUIDES.map((g) => ({
+    url: new URL(`/guides/${g.slug}`, SITE_URL).toString(),
+    lastModified: new Date(g.checkedOn),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  return [...staticEntries, ...guideEntries, ...postEntries];
 }
 

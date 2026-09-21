@@ -63,6 +63,17 @@ export default async function BlogPage() {
             Practical advice, industry commentary, and lessons learned from 15
             years of running a real pet business.
           </p>
+          <p className="mx-auto mt-4 max-w-[600px] text-sm text-white/70">
+            Looking for the licensing rules with the sources attached? Those are in
+            the{" "}
+            <Link
+              href="/guides"
+              className="font-semibold text-gold-soft underline decoration-gold underline-offset-2 hover:text-gold"
+            >
+              reference guides
+            </Link>
+            .
+          </p>
         </div>
       </section>
 

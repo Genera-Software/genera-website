@@ -6,12 +6,18 @@ const PAW_LOGO = "/images/genera-svg.svg";
 
 const PRODUCT_LINKS = [
   { href: "/features", label: "Features" },
-  { href: "/faqs", label: "FAQs" },
-  { href: "/blog", label: "Blog" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/dog-daycare-software", label: "For dog daycares" },
+  { href: "/dog-walker-software", label: "For dog walkers" },
+  { href: "/dog-grooming-software", label: "For dog groomers" },
+  { href: "/dog-boarding-software", label: "For boarding kennels" },
 ];
 
 const COMPANY_LINKS = [
   { href: "/our-story", label: "Our Story" },
+  { href: "/guides", label: "Licensing Guides" },
+  { href: "/blog", label: "Blog" },
+  { href: "/faqs", label: "FAQs" },
   { href: "/contact", label: "Contact" },
   { href: "/driver-support", label: "Driver App Help" },
   { href: "/badge-kit", label: "Badge Kit" },
