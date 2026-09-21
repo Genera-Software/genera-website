@@ -4,6 +4,7 @@ import {
   AssessmentsShowcase,
   BookingsShowcase,
   CapacityAnimation,
+  CategoryHeader,
   DailyScheduleShowcase,
   Feature,
   FinanceAnimation,
@@ -37,9 +38,18 @@ const SCREENS: Record<ShowcaseKey, () => React.JSX.Element> = {
   chat: LiveChatShowcase,
 };
 
-export default function Spotlights({ items }: { items: VerticalSpotlight[] }) {
+export default function Spotlights({
+  items,
+  title,
+  desc,
+}: {
+  items: VerticalSpotlight[];
+  title: string;
+  desc: string;
+}) {
   return (
     <div className="mx-auto max-w-[1200px]">
+      <CategoryHeader title={title} desc={desc} />
       {items.map((sp) => {
         const Screen = SCREENS[sp.showcase];
         return (

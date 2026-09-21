@@ -84,7 +84,9 @@ export type Vertical = {
   heroCards: HeroCard[];
   /** "Sound familiar?" Three, in this business's words. */
   pains: Pain[];
-  /** The drawn screens, in selling order. Four or five. */
+  /** The /features-style category header over the spotlights: "Why daycares switch" + one line. */
+  categoryDesc: string;
+  /** The drawn screens, in selling order. The owner app is always first. Four or five. */
   spotlights: VerticalSpotlight[];
   /** Everything else, as the card grid under the spotlights. */
   blocks: VerticalBlock[];
@@ -116,11 +118,26 @@ export const VERTICALS: Vertical[] = [
       { n: "02", title: "Sunday evenings lost to invoicing", body: "Building every owner's invoice by hand, every month, then chasing the ones who did not open it." },
       { n: "03", title: "Counting dogs against the licence in your head", body: "The inspector's number is on the wall. Today's number is spread across a diary, a group chat and whoever last answered the phone." },
     ],
+    categoryDesc: "Your own app, bookings, the licence cap and invoicing: the jobs that eat most of the week, handled first.",
     spotlights: [
+      {
+        showcase: "ownerApp",
+        feature: "ownerApp",
+        eyebrow: "Branded owner app",
+        plan: "every",
+        title: "Your own app, under your own name.",
+        lead: "Owners add your portal to their home screen and it opens with your logo, your name and your colour. It is where they request days, keep the dog's details current and settle invoices, and every request still comes back to you.",
+        bullets: [
+          "Your logo, name and brand colour, set once",
+          "Booking requests, recurring days and pet details",
+          "Opens from the home screen, nothing in an app store",
+        ],
+      },
       {
         showcase: "bookings",
         feature: "bookings",
         eyebrow: "Bookings",
+        flip: true,
         plan: "every",
         title: "Owners book themselves. You decide what is confirmed.",
         lead: "A booking portal with your services, prices and rules built in. Requests land in one approval queue instead of your texts and DMs, and nothing is confirmed until you say so, unless you have told it to auto-accept.",
@@ -136,7 +153,6 @@ export const VERTICALS: Vertical[] = [
         eyebrow: "Capacity and your licence",
         plan: "every",
         onlyOnGenera: true,
-        flip: true,
         title: "Stay inside your licensed number. Automatically.",
         lead: "Set a daily limit for each service and Genera holds you to it. Once a day is full, new bookings become waitlist requests for you to approve, so you never slip over the number on your licence by accident.",
         bullets: [
@@ -146,24 +162,11 @@ export const VERTICALS: Vertical[] = [
         ],
       },
       {
-        showcase: "ownerApp",
-        feature: "ownerApp",
-        eyebrow: "Branded owner app",
-        plan: "every",
-        title: "Your own app, under your own name.",
-        lead: "Owners add your portal to their home screen and it opens with your logo, your name and your colour. It is where they request days, keep the dog's details current and settle invoices, and every request still comes back to you.",
-        bullets: [
-          "Your logo, name and brand colour, set once",
-          "Booking requests, recurring days and pet details",
-          "Opens from the home screen, nothing in an app store",
-        ],
-      },
-      {
         showcase: "invoicing",
         feature: "payments",
         eyebrow: "Invoicing and payments",
-        plan: "every",
         flip: true,
+        plan: "every",
         title: "Invoices raise themselves. Direct Debit does the chasing.",
         lead: "Charges come off the bookings you actually took. Raise the month's invoices for every owner in one go, then let card payments and Direct Debit collect, with Xero kept in step if that is where your books live.",
         bullets: [
@@ -263,11 +266,26 @@ export const VERTICALS: Vertical[] = [
       { n: "02", title: "Invoices built from memory", body: "Counting walks off a calendar at the end of the month and hoping the owner remembers the same number you do." },
       { n: "03", title: "Every owner on a different app", body: "One texts, one WhatsApps, one messages on Instagram and one still rings. Nobody can see what was agreed." },
     ],
+    categoryDesc: "Your own app, regular walks, invoicing and who is out today: the jobs that eat a walker's week, handled first.",
     spotlights: [
+      {
+        showcase: "ownerApp",
+        feature: "ownerApp",
+        eyebrow: "Branded owner app",
+        plan: "every",
+        title: "Your own app, under your own name.",
+        lead: "Owners add your portal to their home screen and it opens with your logo and your colour. That is where they request walks, keep the dog's vet and vaccination details current and settle invoices. Nothing to build and nothing in an app store.",
+        bullets: [
+          "Your logo, name and brand colour, set once",
+          "Walk requests, recurring days and pet details",
+          "Invoices, card payments and Direct Debit in the Billing tab",
+        ],
+      },
       {
         showcase: "bookings",
         feature: "bookings",
         eyebrow: "Bookings",
+        flip: true,
         plan: "every",
         title: "Regular walks, booked once.",
         lead: "A walk is a service with its price, its time and how many dogs it takes. A recurring booking puts the Monday and Thursday walk in the diary a year ahead, and one-off requests land in one queue for you to approve.",
@@ -275,20 +293,6 @@ export const VERTICALS: Vertical[] = [
           "Recurring walks written into the diary for as far ahead as you like",
           "One queue for every request, or auto-accept and never look",
           "A limit on each walk group that you set and hold to",
-        ],
-      },
-      {
-        showcase: "ownerApp",
-        feature: "ownerApp",
-        eyebrow: "Branded owner app",
-        plan: "every",
-        flip: true,
-        title: "Your own app, under your own name.",
-        lead: "Owners add your portal to their home screen and it opens with your logo and your colour. That is where they request walks, keep the dog's vet and vaccination details current and settle invoices. Nothing to build and nothing in an app store.",
-        bullets: [
-          "Your logo, name and brand colour, set once",
-          "Walk requests, recurring days and pet details",
-          "Invoices, card payments and Direct Debit in the Billing tab",
         ],
       },
       {
@@ -308,8 +312,8 @@ export const VERTICALS: Vertical[] = [
         showcase: "daily",
         feature: "dailySchedule",
         eyebrow: "Daily schedule",
-        plan: "every",
         flip: true,
+        plan: "every",
         title: "Who is out today, on one screen.",
         lead: "Every walk for the day in one list, grouped by service, with the dog, the owner and the notes beside it. Add a booking from the same screen when someone texts at seven.",
         bullets: [
@@ -332,6 +336,18 @@ export const VERTICALS: Vertical[] = [
         title: "Every owner conversation in one inbox",
         body: "Owners message you from their app and you reply from one place instead of a personal phone and three WhatsApp threads. Broadcast a wet-weather cancellation to everyone by push. On the Thrive plan.",
         more: "messages",
+      },
+      {
+        feature: "team",
+        title: "A rota, even for a team of two",
+        body: "Daily and weekly rota, time off and staff profiles are in every plan. The plan only sets how many people hold a login.",
+        more: "team",
+      },
+      {
+        feature: "records",
+        title: "Each dog's details in one place",
+        body: "Pet profiles with photos, vet and vaccination details and your own notes, tied to the owner record. The owner keeps their side current from the app.",
+        more: "records",
       },
     ],
     notes: [
@@ -380,11 +396,26 @@ export const VERTICALS: Vertical[] = [
       { n: "02", title: "No-shows with no deposit", body: "A sixty-minute gap on a Saturday that nobody paid for and nobody else could fill." },
       { n: "03", title: "Which dog was the nervous one?", body: "The notes that matter about each dog live in your head, and your head is not on shift every day." },
     ],
+    categoryDesc: "Your own app, a timeslot diary, deposits and each dog's notes: the jobs that eat a groomer's week, handled first.",
     spotlights: [
+      {
+        showcase: "ownerApp",
+        feature: "ownerApp",
+        eyebrow: "Branded owner app",
+        plan: "every",
+        title: "Owners book while you are mid-groom.",
+        lead: "Your portal opens from the owner's home screen with your logo and your colour. They request a slot, update the dog's details and pay the invoice without ringing you.",
+        bullets: [
+          "Your logo, name and brand colour, set once",
+          "Slot requests and pet details from their phone",
+          "Invoices and card payments in the Billing tab",
+        ],
+      },
       {
         showcase: "bookings",
         feature: "bookings",
         eyebrow: "Bookings",
+        flip: true,
         plan: "every",
         title: "A timeslot diary owners fill in themselves.",
         lead: "Set a full groom at sixty minutes and a nail clip at ten, each with its price and a daily capacity. Owners see what is open and request it. Requests land in one queue to approve, or set a service to auto-accept.",
@@ -392,20 +423,6 @@ export const VERTICALS: Vertical[] = [
           "A timeslot length, price and daily capacity on every service",
           "One queue for every request, or auto-accept",
           "The week and day schedule shows every slot from six in the morning",
-        ],
-      },
-      {
-        showcase: "ownerApp",
-        feature: "ownerApp",
-        eyebrow: "Branded owner app",
-        plan: "every",
-        flip: true,
-        title: "Owners book while you are mid-groom.",
-        lead: "Your portal opens from the owner's home screen with your logo and your colour. They request a slot, update the dog's details and pay the invoice without ringing you.",
-        bullets: [
-          "Your logo, name and brand colour, set once",
-          "Slot requests and pet details from their phone",
-          "Invoices and card payments in the Billing tab",
         ],
       },
       {
@@ -425,8 +442,8 @@ export const VERTICALS: Vertical[] = [
         showcase: "records",
         feature: "records",
         eyebrow: "Pet records",
-        plan: "every",
         flip: true,
+        plan: "every",
         title: "Each dog's notes and vaccination dates, in one place.",
         lead: "Pet profiles with photos, vet details, vaccination dates and your own notes on the dog, tied to the owner record. The owner keeps their side current from the app.",
         bullets: [
@@ -449,6 +466,12 @@ export const VERTICALS: Vertical[] = [
         title: "Photos and pick-up times in one thread",
         body: "Owners message you from their app and you answer from one inbox, with read receipts. Send the finished-coat photo and the pick-up time from the same place. On the Thrive plan.",
         more: "messages",
+      },
+      {
+        feature: "team",
+        title: "A rota, even for a team of two",
+        body: "Daily and weekly rota, time off and staff profiles are in every plan. The plan only sets how many people hold a login.",
+        more: "team",
       },
     ],
     notes: [
@@ -495,11 +518,26 @@ export const VERTICALS: Vertical[] = [
       { n: "02", title: "Vaccination cards in a drawer", body: "Leptospirosis is a core vaccine in the boarding guidance. The date it was done is on a card the owner brought two stays ago." },
       { n: "03", title: "Deposits that never match the stay", body: "Taken by bank transfer in March, half-remembered in July, argued about at pick-up." },
     ],
+    categoryDesc: "Your own app, a nightly cap tied to the licence, vaccination dates and invoicing: the jobs that eat a boarder's week, handled first.",
     spotlights: [
+      {
+        showcase: "ownerApp",
+        feature: "ownerApp",
+        eyebrow: "Branded owner app",
+        plan: "every",
+        title: "Owners request stays from your own app.",
+        lead: "Your portal opens from the owner's home screen with your logo and your colour. They request dates, keep the dog's details current and settle the invoice, and every request comes back to you to approve.",
+        bullets: [
+          "Your logo, name and brand colour, set once",
+          "Stay requests and pet details from their phone",
+          "Invoices, card payments and Direct Debit in the Billing tab",
+        ],
+      },
       {
         showcase: "capacity",
         feature: "compliance",
         eyebrow: "Capacity and your licence",
+        flip: true,
         plan: "every",
         onlyOnGenera: true,
         title: "A nightly limit tied to your licence.",
@@ -515,7 +553,6 @@ export const VERTICALS: Vertical[] = [
         feature: "records",
         eyebrow: "Pet records",
         plan: "every",
-        flip: true,
         title: "Vaccination dates, including leptospirosis.",
         lead: "Pet profiles hold each dog's vet and vaccination dates, the Vaccinations report shows what is due, and the owner updates their side from the app. When an inspector asks, it is on the screen, not in a drawer.",
         bullets: [
@@ -528,6 +565,7 @@ export const VERTICALS: Vertical[] = [
         showcase: "invoicing",
         feature: "payments",
         eyebrow: "Invoicing and payments",
+        flip: true,
         plan: "every",
         title: "Invoices from the stays you took.",
         lead: "Raise the month's invoices in one run, collect by Direct Debit through GoCardless or card through Stripe, and see who has paid. Deposits come off the final invoice automatically, and Xero is kept in step if you use it.",
@@ -542,7 +580,6 @@ export const VERTICALS: Vertical[] = [
         feature: "finance",
         eyebrow: "Finance and forecast",
         plan: "grow",
-        flip: true,
         title: "What the diary is worth six months out.",
         lead: "Boarding is booked further ahead than anything else. The forecast shows what the next one to twelve months are worth from the stays already in the diary, month by month, and where it comes from.",
         bullets: [
@@ -561,10 +598,16 @@ export const VERTICALS: Vertical[] = [
         more: "bookings",
       },
       {
-        feature: "ownerApp",
-        title: "Owners request stays from your own app",
-        body: "Your portal opens from the owner's home screen with your logo and your colour. They request dates, keep the dog's details current and settle the invoice. Every request comes back to you to approve.",
-        more: "owner-app",
+        feature: "team",
+        title: "A rota, even for a team of two",
+        body: "Daily and weekly rota, time off and staff profiles are in every plan. The plan only sets how many people hold a login.",
+        more: "team",
+      },
+      {
+        feature: "messages",
+        title: "Every owner conversation in one inbox",
+        body: "Owners message you from their app and you reply from one place, with read receipts. Broadcast to everyone by push. On the Thrive plan.",
+        more: "messages",
       },
     ],
     notes: [

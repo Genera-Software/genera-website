@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Paw from "@/components/Paw";
+import TrustBar, { type TrustLogo } from "@/components/TrustBar";
 import PricingTiers from "@/components/PricingTiers";
 import Reveal from "@/components/Reveal";
 import StartTrialLink from "@/components/StartTrialLink";
@@ -38,16 +39,25 @@ export default async function VerticalPage({ vertical }: { vertical: Vertical })
   const from = PRICING_TIERS.reduce((a, t) => Math.min(a, t.monthlyPrice), Infinity);
 
   let testimonials: ReturnType<typeof testimonialFromRow>[] = [];
+  let trustLogos: TrustLogo[] = [];
   try {
     const supabase = getPublicSupabase();
-    const { data } = await supabase
-      .from("testimonials")
-      .select(TESTIMONIAL_COLUMNS)
-      .eq("is_visible", true)
-      .order("sort_order", { ascending: true });
-    testimonials = (data ?? []).map(testimonialFromRow);
+    const [logosRes, testimonialsRes] = await Promise.all([
+      supabase
+        .from("trust_logos")
+        .select("id, name, logo_url")
+        .eq("is_visible", true)
+        .order("sort_order", { ascending: true }),
+      supabase
+        .from("testimonials")
+        .select(TESTIMONIAL_COLUMNS)
+        .eq("is_visible", true)
+        .order("sort_order", { ascending: true }),
+    ]);
+    trustLogos = logosRes.data ?? [];
+    testimonials = (testimonialsRes.data ?? []).map(testimonialFromRow);
   } catch {
-    // No Supabase (local preview): the page still renders, without the quotes.
+    // No Supabase (local preview): the page still renders, without logos or quotes.
   }
 
   const productSchema = {
@@ -195,8 +205,11 @@ export default async function VerticalPage({ vertical }: { vertical: Vertical })
         ))}
       </section>
 
+      {/* ── Trust bar ──────────────────────────────────────────── */}
+      <TrustBar logos={trustLogos} />
+
       {/* ── The one-paragraph answer ───────────────────────────── */}
-      <section className="border-y-2 border-teal-mid bg-teal-soft px-6 py-12 md:px-8 md:py-16">
+      <section className="bg-cream px-6 py-12 md:px-8 md:py-16">
         <div className="mx-auto max-w-[860px]">
           <p className="mb-3 text-center font-caveat text-body-lg text-forest md:text-mini-h">
             In one paragraph
@@ -262,15 +275,13 @@ export default async function VerticalPage({ vertical }: { vertical: Vertical })
         </div>
       </section>
 
-      {/* ── Spotlights: the drawn screens ──────────────────────── */}
-      <section className="bg-white px-[clamp(22px,4vw,56px)] pt-4 pb-6 md:pt-8 md:pb-10">
-        <div className="rev mx-auto max-w-[1200px] pt-10 text-center md:pt-14">
-          <p className="eyebrow">What it does for {vertical.audience}</p>
-          <h2 className="text-section-h md:text-section-h-lg">
-            The jobs that eat the week, handled.
-          </h2>
-        </div>
-        <Spotlights items={vertical.spotlights} />
+      {/* ── Spotlights: the drawn screens, laid out as on /features ── */}
+      <section className="bg-white px-[clamp(22px,4vw,56px)] pb-6 md:pb-10">
+        <Spotlights
+          items={vertical.spotlights}
+          title={`Why ${vertical.audience} switch`}
+          desc={vertical.categoryDesc}
+        />
       </section>
 
       {/* ── Everything else ────────────────────────────────────── */}
