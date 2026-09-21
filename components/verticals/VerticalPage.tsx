@@ -7,6 +7,7 @@ import StartTrialLink from "@/components/StartTrialLink";
 import FeatureIcon from "@/components/features/FeatureIcon";
 import Testimonials from "@/components/testimonials/Testimonials";
 import Spotlights from "@/components/verticals/Spotlights";
+import { COMPARISON_POSTS } from "@/lib/compare";
 import { featureCardStyle } from "@/lib/features";
 import { PRICING_TIERS, TOP_TIER, TRIAL_DAYS } from "@/lib/pricing";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
@@ -260,6 +261,33 @@ export default async function VerticalPage({ vertical }: { vertical: Vertical })
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* ── How Genera compares ────────────────────────────────── */}
+      <section className="bg-white px-6 pb-16 md:px-8 md:pb-22">
+        <div className="mx-auto max-w-[1160px] rounded-2xl border border-cream-dark bg-cream px-6 py-7 md:px-9 md:py-9">
+          <div className="md:flex md:items-start md:justify-between md:gap-10">
+            <div className="md:max-w-[360px]">
+              <p className="eyebrow">How Genera compares</p>
+              <p className="text-meta text-ink-soft md:text-body-lg">
+                Honest, feature by feature, against the systems {vertical.audience} in the
+                UK are usually moving from.
+              </p>
+            </div>
+            <ul className="mt-5 grid gap-2.5 sm:grid-cols-2 md:mt-0 md:min-w-[480px]">
+              {COMPARISON_POSTS.map((p) => (
+                <li key={p.slug}>
+                  <Link
+                    href={`/blog/${p.slug}`}
+                    className="block rounded-xl border border-cream-dark bg-white px-4 py-3 text-[0.98rem] font-semibold text-forest transition-colors hover:border-forest/40 hover:text-forest-mid"
+                  >
+                    {p.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 
