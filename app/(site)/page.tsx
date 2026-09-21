@@ -21,10 +21,14 @@ import { isFormActive } from "@/lib/forms";
 
 export const revalidate = 60;
 
+// The homepage carries the brand; the keyword "dog daycare software" belongs to
+// /dog-daycare-software (and its walker, groomer and boarding siblings), which
+// hold the quotable definition and the schema. Two pages after one phrase
+// means Google picks one, and it would pick this one.
 export const metadata = createMetadata({
-  title: "Dog Daycare Software for Bookings, Payments & Routes",
+  title: "Genera: Software for UK Dog Daycares, Walkers, Groomers and Boarders",
   description:
-    "Genera helps UK dog daycares and pet care businesses manage online bookings, invoices, payments, transport routes, staff schedules and pet records.",
+    "Genera is the booking, invoicing and owner-app software built inside a licensed UK dog daycare, for daycares, dog walkers, groomers and boarding kennels. 30 days free, from £50 a month.",
   path: "/",
 });
 

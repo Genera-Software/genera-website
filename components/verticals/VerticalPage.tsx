@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import Paw from "@/components/Paw";
 import TrustBar, { type TrustLogo } from "@/components/TrustBar";
-import PricingTiers from "@/components/PricingTiers";
 import Reveal from "@/components/Reveal";
 import StartTrialLink from "@/components/StartTrialLink";
 import FeatureIcon from "@/components/features/FeatureIcon";
@@ -18,10 +17,11 @@ import { VERTICALS, type HeroCard, type Vertical } from "@/lib/verticals";
 /* ============================================================
    One landing page per business type, built from the same
    parts as the homepage and /features so the four read as one
-   family: the hero with floating cards and the dogs, the
-   one-paragraph answer, "Sound familiar?", the drawn screens
-   as spotlights, everything else as cards, a licensing or
-   honesty note, testimonials, the plans, questions, trial.
+   family: the hero with floating cards and the dogs, the trust
+   bar, the one-paragraph answer, the drawn screens as
+   spotlights under a /features category header, everything
+   else as cards, a licensing or honesty note, testimonials, the
+   plans in one strip, questions, trial.
    Copy and numbers live in lib/verticals.ts.
    ============================================================ */
 
@@ -222,59 +222,6 @@ export default async function VerticalPage({ vertical }: { vertical: Vertical })
         </div>
       </section>
 
-      {/* ── Sound familiar? ────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-cream to-teal-soft px-6 py-12 md:px-8 md:py-22">
-        <Paw className="absolute right-[3%] top-[5%] hidden h-[5rem] w-[5rem] animate-[var(--animate-wobble)] text-forest opacity-10 md:block" />
-        <div className="mx-auto max-w-[1160px]">
-          <div className="rev mb-6 text-center md:mb-14">
-            <p className="eyebrow">Sound familiar?</p>
-            <h2 className="text-section-h md:text-section-h-lg">
-              The week, before Genera.
-            </h2>
-            <p className="mx-auto mt-2 max-w-[560px] text-meta text-ink-soft md:mt-3 md:text-body-lg">
-              You got into this for the dogs, not the admin.
-            </p>
-          </div>
-          <div className="relative grid gap-3.5 md:grid-cols-3 md:gap-6">
-            <Image
-              src="/images/confused.png"
-              alt=""
-              aria-hidden
-              width={720}
-              height={720}
-              className="pointer-events-none absolute -bottom-24 -left-40 z-0 hidden h-[28rem] w-auto -rotate-6 select-none drop-shadow-[0_10px_24px_rgba(0,62,69,0.22)] md:block md:-bottom-32 md:-left-48 md:h-[36rem]"
-            />
-            {vertical.pains.map((p, i) => (
-              <div
-                key={p.n}
-                className={`rev d${i + 1} relative z-10 rounded-2xl border border-teal-mid/60 bg-white/80 p-5 shadow-[0_4px_20px_rgba(0,62,69,0.06)] backdrop-blur-sm md:p-7`}
-              >
-                <div className="mb-1.5 font-massilia text-section-h font-bold leading-none text-gold/70 md:mb-3 md:text-figure-md">
-                  {p.n}
-                </div>
-                <h3 className="mb-1.5 font-massilia text-base font-bold md:mb-2 md:text-lg">
-                  {p.title}
-                </h3>
-                <p className="text-meta text-ink-soft md:text-base">{p.body}</p>
-              </div>
-            ))}
-          </div>
-          <div className="relative mt-7 flex items-end justify-center md:hidden">
-            <span className="absolute right-[10%] top-2 z-10 -rotate-[4deg] whitespace-nowrap rounded-full border-2 border-teal-mid bg-white px-3.5 py-1.5 font-caveat text-base text-forest shadow-[0_4px_14px_rgba(0,62,69,0.08)]">
-              …sound about right?
-            </span>
-            <Image
-              src="/images/confused.png"
-              alt=""
-              aria-hidden
-              width={720}
-              height={720}
-              className="pointer-events-none h-[230px] w-auto -rotate-3 select-none pr-20 drop-shadow-[0_10px_18px_rgba(0,62,69,0.18)]"
-            />
-          </div>
-        </div>
-      </section>
-
       {/* ── Spotlights: the drawn screens, laid out as on /features ── */}
       <section className="bg-white px-[clamp(22px,4vw,56px)] pb-6 md:pb-10">
         <Spotlights
@@ -347,8 +294,48 @@ export default async function VerticalPage({ vertical }: { vertical: Vertical })
       {/* ── Testimonials ───────────────────────────────────────── */}
       <Testimonials testimonials={testimonials} />
 
-      {/* ── Plans ──────────────────────────────────────────────── */}
-      <PricingTiers id="plans" showHeader background="bg-cream" />
+      {/* ── Plans, in one strip. The full cards live on /pricing. ── */}
+      <section id="plans" className="bg-cream px-6 pt-16 pb-6 md:px-8 md:pt-22 md:pb-8">
+        <div className="mx-auto max-w-[1000px]">
+          <div className="rev mb-6 text-center">
+            <p className="eyebrow">Simple pricing</p>
+            <h2 className="text-section-h md:text-section-h-lg">
+              One subscription. From £{from} a month.
+            </h2>
+            <p className="mx-auto mt-2 max-w-[560px] text-meta text-ink-soft md:mt-3 md:text-body-lg">
+              {TRIAL_DAYS} days free with everything unlocked and no card. No setup fee, no
+              contract, nothing per dog or per booking.
+            </p>
+          </div>
+          <ul className="rev grid gap-3 md:grid-cols-3 md:gap-5">
+            {PRICING_TIERS.map((t) => (
+              <li
+                key={t.name}
+                className={`rounded-2xl border-2 bg-white px-5 py-4 md:px-6 md:py-5 ${
+                  t.featured ? "border-gold" : "border-teal-mid"
+                }`}
+              >
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="font-massilia text-[1.15rem] font-bold text-forest">{t.name}</span>
+                  <span className="font-massilia text-[1.35rem] font-bold text-forest">
+                    £{t.monthlyPrice}
+                    <span className="text-meta font-normal text-ink-soft">/month</span>
+                  </span>
+                </div>
+                <p className="mt-1.5 text-meta leading-snug text-ink-soft">{t.tagline}</p>
+              </li>
+            ))}
+          </ul>
+          <p className="rev mt-5 text-center text-meta text-ink-soft">
+            <Link
+              href="/pricing"
+              className="font-semibold text-forest underline decoration-gold underline-offset-2 hover:text-forest-mid"
+            >
+              See what each plan unlocks
+            </Link>
+          </p>
+        </div>
+      </section>
 
       {/* ── FAQ ────────────────────────────────────────────────── */}
       <section className="bg-cream px-6 pb-16 md:px-8 md:pb-22">

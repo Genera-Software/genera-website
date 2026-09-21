@@ -62,8 +62,6 @@ export type HeroCard = {
   body: string;
 };
 
-export type Pain = { n: string; title: string; body: string };
-
 export type Vertical = {
   slug: string;
   /** Who the page is for, in their words. */
@@ -82,11 +80,9 @@ export type Vertical = {
   /** The Caveat pill above the h1: "Built by a daycare, for dog walkers". */
   pill: string;
   heroCards: HeroCard[];
-  /** "Sound familiar?" Three, in this business's words. */
-  pains: Pain[];
   /** The /features-style category header over the spotlights: "Why daycares switch" + one line. */
   categoryDesc: string;
-  /** The drawn screens, in selling order. The owner app is always first. Four or five. */
+  /** The drawn screens, in selling order. The owner app is always first. Four. */
   spotlights: VerticalSpotlight[];
   /** Everything else, as the card grid under the spotlights. */
   blocks: VerticalBlock[];
@@ -112,11 +108,6 @@ export const VERTICALS: Vertical[] = [
       { tone: "coral", badge: "Today", figure: "18", title: "Dogs in. 20 on the licence.", body: "The daily cap holds the number the inspector wrote down." },
       { tone: "green", badge: "Paid", figure: "£1,240", title: "Invoiced from bookings.", body: "Direct Debit collected it. Nobody chased anyone." },
       { tone: "gold", badge: "Full", figure: "2", title: "Waiting for Thursday.", body: "The day filled, so two requests wait for you to decide." },
-    ],
-    pains: [
-      { n: "01", title: "Bookings from every direction", body: "Texts, emails, DMs and a voicemail from 6am, all landing in different places. You spend more of the morning managing messages than dogs." },
-      { n: "02", title: "Sunday evenings lost to invoicing", body: "Building every owner's invoice by hand, every month, then chasing the ones who did not open it." },
-      { n: "03", title: "Counting dogs against the licence in your head", body: "The inspector's number is on the wall. Today's number is spread across a diary, a group chat and whoever last answered the phone." },
     ],
     categoryDesc: "Your own app, bookings, the licence cap and invoicing: the jobs that eat most of the week, handled first.",
     spotlights: [
@@ -175,22 +166,15 @@ export const VERTICALS: Vertical[] = [
           "See who has opened, who has paid and what is still owed",
         ],
       },
-      {
-        showcase: "assessments",
-        feature: "assessments",
-        eyebrow: "Assessments and report cards",
-        plan: "grow",
-        title: "Scored in the yard. Read on the sofa.",
-        lead: "Pick a template for a first day, development, behaviour or health, rate each question on a phone while the dog is in front of you, add photos, and send the owner a branded report card instead of a vague text.",
-        bullets: [
-          "Templates for first days, development, behaviour, health and swimming",
-          "Star ratings, staff notes and photos, saved as a draft until you are ready",
-          "A branded report card, emailed and kept in the owner's app",
-        ],
-      },
     ],
     definition: `Genera is UK dog daycare software for taking bookings, invoicing owners and running the day. Owners request days from an app under your own name and logo, every request lands in one queue for you to approve or auto-accept, a daily capacity on each service keeps you inside your licensed numbers, and the month's invoices are raised from the bookings you took and collected by Direct Debit or card. Plans are ${PRICE_LIST}. ${TRIAL} ${NO_METER}`,
     blocks: [
+      {
+        feature: "assessments",
+        title: "First-day assessments on a phone in the yard",
+        body: "Pick a template, rate each question while the dog is in front of you, add photos, and send the owner a branded report card instead of a vague text. From the Grow plan.",
+        more: "assessments",
+      },
       {
         feature: "dailySchedule",
         title: "Who is in today, on one screen",
@@ -260,11 +244,6 @@ export const VERTICALS: Vertical[] = [
       { tone: "coral", badge: "Today", figure: "6", title: "Walks out today.", body: "Grouped by walk, with the dog, the owner and the notes." },
       { tone: "green", badge: "Paid", figure: "£420", title: "Invoiced from walks.", body: "The walks you did, invoiced in one run, collected by Direct Debit." },
       { tone: "gold", badge: "Booked", figure: "52", title: "Tuesdays in the diary.", body: "One recurring booking, a year of walks." },
-    ],
-    pains: [
-      { n: "01", title: "The Tuesday walk, rebooked every Monday night", body: "The same owners, the same dogs, the same slot, confirmed by text every single week because nothing holds it." },
-      { n: "02", title: "Invoices built from memory", body: "Counting walks off a calendar at the end of the month and hoping the owner remembers the same number you do." },
-      { n: "03", title: "Every owner on a different app", body: "One texts, one WhatsApps, one messages on Instagram and one still rings. Nobody can see what was agreed." },
     ],
     categoryDesc: "Your own app, regular walks, invoicing and who is out today: the jobs that eat a walker's week, handled first.",
     spotlights: [
@@ -391,11 +370,6 @@ export const VERTICALS: Vertical[] = [
       { tone: "green", badge: "Paid", figure: "£310", title: "Card, on the day.", body: "Stripe takes it. The invoice marks itself paid." },
       { tone: "gold", badge: "Deposit", figure: "£20", title: "Off the next invoice.", body: "Taken when they booked, deducted when they paid." },
     ],
-    pains: [
-      { n: "01", title: "Bookings taken with wet hands", body: "The phone rings mid-groom, the diary is in the other room, and the slot you promised is one you had already given away." },
-      { n: "02", title: "No-shows with no deposit", body: "A sixty-minute gap on a Saturday that nobody paid for and nobody else could fill." },
-      { n: "03", title: "Which dog was the nervous one?", body: "The notes that matter about each dog live in your head, and your head is not on shift every day." },
-    ],
     categoryDesc: "Your own app, a timeslot diary, deposits and each dog's notes: the jobs that eat a groomer's week, handled first.",
     spotlights: [
       {
@@ -513,11 +487,6 @@ export const VERTICALS: Vertical[] = [
       { tone: "green", badge: "Paid", figure: "£960", title: "Invoiced from stays.", body: "Deposit taken at booking, the rest by Direct Debit." },
       { tone: "gold", badge: "Peak", figure: "Sat", title: "Full, 8 of 8.", body: "The next request for Saturday waits for you to decide." },
     ],
-    pains: [
-      { n: "01", title: "Bank holiday maths on the back of an envelope", body: "Who arrives Friday, who leaves Monday, and whether Saturday night is one over the licence." },
-      { n: "02", title: "Vaccination cards in a drawer", body: "Leptospirosis is a core vaccine in the boarding guidance. The date it was done is on a card the owner brought two stays ago." },
-      { n: "03", title: "Deposits that never match the stay", body: "Taken by bank transfer in March, half-remembered in July, argued about at pick-up." },
-    ],
     categoryDesc: "Your own app, a nightly cap tied to the licence, vaccination dates and invoicing: the jobs that eat a boarder's week, handled first.",
     spotlights: [
       {
@@ -575,22 +544,15 @@ export const VERTICALS: Vertical[] = [
           "Card payments through Stripe, Direct Debit through GoCardless",
         ],
       },
-      {
-        showcase: "finance",
-        feature: "finance",
-        eyebrow: "Finance and forecast",
-        plan: "grow",
-        title: "What the diary is worth six months out.",
-        lead: "Boarding is booked further ahead than anything else. The forecast shows what the next one to twelve months are worth from the stays already in the diary, month by month, and where it comes from.",
-        bullets: [
-          "Invoiced, paid, outstanding and unbilled for any period",
-          "One to twelve months of forecast from the diary",
-          "A month-by-month table and the service split",
-        ],
-      },
     ],
     definition: `Genera is UK dog boarding software for kennels and home boarders that handles overnight bookings, a nightly capacity tied to your licence, vaccination records, invoicing and an owner app. Boarding is set up as a service with tiered pricing and a limit on dogs per night; owners request stays from an app under your name; the monthly summary lists every stay with arrival, departure, nights and transport and shows dogs on site for each night; and invoices are raised from the stays you took and collected by Direct Debit or card. Plans are ${PRICE_LIST}. ${TRIAL} ${NO_METER}`,
     blocks: [
+      {
+        feature: "finance",
+        title: "What the diary is worth six months out",
+        body: "Boarding is booked further ahead than anything else. The forecast shows what the next one to twelve months are worth from the stays already in the diary. From the Grow plan.",
+        more: "finance",
+      },
       {
         feature: "bookings",
         title: "The monthly summary is the boarding screen",
