@@ -16,6 +16,7 @@ const PRODUCT_LINKS = [
 const COMPANY_LINKS = [
   { href: "/our-story", label: "Our Story" },
   { href: "/guides", label: "Licensing Guides" },
+  { href: "/research/licensing-report-2026", label: "Licensing Report 2026" },
   { href: "/blog", label: "Blog" },
   { href: "/faqs", label: "FAQs" },
   { href: "/contact", label: "Contact" },

@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo";
 import { getPublicSupabase } from "@/lib/supabase/server";
 import { GUIDES } from "@/lib/guides";
+import { REPORT } from "@/lib/report";
 import { VERTICALS } from "@/lib/verticals";
 
 export const revalidate = 3600;
@@ -73,6 +74,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticEntries, ...guideEntries, ...postEntries];
+  const reportEntry: MetadataRoute.Sitemap = [
+    {
+      url: new URL(REPORT.path, SITE_URL).toString(),
+      lastModified: new Date(REPORT.checkedOn),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+  ];
+
+  return [...staticEntries, ...guideEntries, ...reportEntry, ...postEntries];
 }
 

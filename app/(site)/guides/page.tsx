@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import { GUIDES, formatGuideDate } from "@/lib/guides";
+import { REPORT } from "@/lib/report";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createMetadata({
@@ -33,6 +34,25 @@ export default function GuidesIndex() {
       </section>
 
       <section className="bg-cream px-6 py-16 md:px-8 md:py-22">
+        <Link
+          href={REPORT.path}
+          className="rev mx-auto mb-8 block max-w-[1000px] rounded-2xl border-2 border-gold bg-white p-6 transition-colors hover:border-forest/60 md:p-7"
+        >
+          <span className="text-xs font-bold uppercase tracking-wider text-forest-mid">
+            {REPORT.eyebrow}
+          </span>
+          <span className="mt-2 block font-massilia text-[1.35rem] font-bold leading-snug text-forest">
+            {REPORT.title}
+          </span>
+          <span className="mt-3 block text-[0.98rem] leading-[1.6] text-ink-soft">
+            The guides below, pulled into one report with the Surrey fee comparison, the
+            2027 council merger and the sentencing comparison. Eight findings, each with its
+            source. Made for journalists and councillors to quote.
+          </span>
+          <span className="mt-5 block text-meta text-ink-soft">
+            Checked {formatGuideDate(REPORT.checkedOn)} · PDF available
+          </span>
+        </Link>
         <ul className="mx-auto grid max-w-[1000px] gap-5 md:grid-cols-2">
           {GUIDES.map((g, i) => (
             <li key={g.slug} className={`rev d${(i % 4) + 1}`}>
