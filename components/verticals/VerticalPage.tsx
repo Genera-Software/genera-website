@@ -236,7 +236,7 @@ export default async function VerticalPage({ vertical }: { vertical: Vertical })
       <section className="bg-white px-6 pb-16 md:px-8 md:pb-22">
         <div className="mx-auto max-w-[1160px]">
           <p className="rev mb-5 text-center font-caveat text-body-lg text-forest md:mb-8 md:text-mini-h">
-            …and everything else that keeps the day running
+            What you get for {vertical.audience}
           </p>
           <ul className="grid gap-3 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
             {vertical.blocks.map((b, i) => (
@@ -261,6 +261,16 @@ export default async function VerticalPage({ vertical }: { vertical: Vertical })
               </li>
             ))}
           </ul>
+          <p className="rev mt-8 text-center text-meta text-ink-soft">
+            Every one of these has a screen you can look at on{" "}
+            <Link
+              href="/features"
+              className="font-semibold text-forest underline decoration-gold underline-offset-2 hover:text-forest-mid"
+            >
+              the features page
+            </Link>
+            .
+          </p>
         </div>
       </section>
 
