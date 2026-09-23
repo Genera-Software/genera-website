@@ -33,6 +33,12 @@ export type Guide = {
    * engine can lift them whole. Rendered in the box under the title.
    */
   shortAnswer: string;
+  /**
+   * Three or four numbers this page exists to answer, shown as a strip under
+   * the short answer. They break up what is otherwise a wall of prose, and
+   * they are the bit a reader photographs.
+   */
+  keyFigures?: { figure: string; label: string; note: string }[];
   faqs: GuideFaq[];
   sources: GuideSource[];
 };
@@ -48,6 +54,12 @@ export const GUIDES: Guide[] = [
     publishedOn: "2026-09-21",
     shortAnswer:
       "In England, a business that looks after other people's dogs during the day at a fixed premises needs a dog day care licence from its local council under the Animal Welfare (Licensing of Activities Involving Animals) (England) Regulations 2018. Dog walkers and dog sitters who work in the owner's home are not covered, and looking after dogs in your own home needs a home boarding licence instead. The licence carries a star rating from 1 to 5, lasts one, two or three years, and comes with conditions on staff numbers, space, fencing, temperature, vaccinations and records.",
+    keyFigures: [
+      { figure: "10", label: "Dogs per staff member", note: "8 for the higher standard" },
+      { figure: "6m²", label: "Space per dog", note: "Inside and outside combined" },
+      { figure: "2 wks", label: "After the last jab", note: "Before a first day" },
+      { figure: "1 to 3", label: "Years per licence", note: "By star rating" },
+    ],
     faqs: [
       {
         q: "Do I need a licence to run a dog daycare in England?",
@@ -112,6 +124,12 @@ export const GUIDES: Guide[] = [
     publishedOn: "2026-09-21",
     shortAnswer:
       "A dog day care licence in England costs between about £325 and £500 in council fees for most applicants in 2026, and over £1,000 where the council sends a vet and charges for it. The fee is the small part. The licence conditions set a staff ratio of one person to ten dogs and six square metres per dog, and those two numbers decide your wage bill, your holiday cover and the most dogs you can ever take.",
+    keyFigures: [
+      { figure: "£325", label: "Cheapest fee we found", note: "Liverpool, 2026" },
+      { figure: "£1,048", label: "Dearest, with a vet", note: "Bromley, three years" },
+      { figure: "£6,700", label: "Holiday cover, per person", note: "Pay plus a stand-in" },
+      { figure: "£14,400", label: "What two fewer dogs cost", note: "Per staff member, a year" },
+    ],
     faqs: [
       {
         q: "How much is a dog daycare licence in the UK?",
@@ -188,6 +206,12 @@ export const GUIDES: Guide[] = [
     publishedOn: "2026-09-21",
     shortAnswer:
       "Rarely. Boarding or day-caring dogs without a licence in England is a criminal offence under section 13 of the Animal Welfare Act 2006, but enforcement is left to each council. Wokingham Borough Council told a Freedom of Information request that it brought one prosecution between 2021 and 2025 and logged one complaint in 2025. In Wales, a home boarder whose unlicensed farm saw two separate dog attacks a year apart was fined a total of £393. Two councils have confirmed in writing that a public social media advert is enough to start an investigation without a complaint.",
+    keyFigures: [
+      { figure: "1", label: "Prosecution in five years", note: "Wokingham, 2021 to 2025" },
+      { figure: "1", label: "Complaint logged in 2025", note: "In the same borough" },
+      { figure: "£393", label: "Fine after two attacks", note: "A Welsh home boarder" },
+      { figure: "2", label: "Councils confirming in writing", note: "An advert can start it" },
+    ],
     faqs: [
       {
         q: "Is it illegal to board dogs without a licence in the UK?",
@@ -258,6 +282,12 @@ export const GUIDES: Guide[] = [
     publishedOn: "2026-09-21",
     shortAnswer:
       "No. Dog walking is not a licensable activity in England. The 2018 Regulations list the activities that need a licence, and the dog day care guidance excludes dog walkers and dog sitters by name. A walker is still bound by the Animal Welfare Act's duty of care and by any council public space order that caps the number of dogs one person may have in a park. The six-dog limit people quote applies to licensed daycares and boarders when they take dogs off the premises, not to independent walkers.",
+    keyFigures: [
+      { figure: "0", label: "Licences for dog walking", note: "None exists in England" },
+      { figure: "6", label: "Dogs on a licensed walk", note: "Condition 7.2, daycares only" },
+      { figure: "4", label: "Dogs in some parks", note: "Tower Hamlets, by order" },
+      { figure: "2,913", label: "Petition signatures", note: "Across both, 15 Sep 2026" },
+    ],
     faqs: [
       {
         q: "Is there a legal limit on how many dogs a dog walker can walk in the UK?",

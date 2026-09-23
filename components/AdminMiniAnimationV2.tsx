@@ -841,7 +841,7 @@ function ServicesView({ p }: { p: number }) {
   );
 }
 
-/* ── 3. Daily run sheet ───────────────────────────────────── */
+/* ── 3. The day's list ────────────────────────────────────── */
 const DAILY_STATS: Array<[string, string, ServiceKey | null]> = [
   ["Pets", "23", "daycare"],
   ["Unassigned", "0", null],
@@ -967,7 +967,7 @@ function DailyView({ p }: { p: number }) {
           ))}
         </div>
         <div className="mt-auto rounded-lg bg-[#0C3A3F]/5 px-2 py-1.5 text-[9px] font-semibold leading-snug text-[#0C3A3F]">
-          Today&apos;s run sheet, grouped by the service each dog is booked in for.
+          Everyone in today, grouped by the service each dog is booked in for.
         </div>
       </div>
     </div>

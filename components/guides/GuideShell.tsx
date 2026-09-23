@@ -124,8 +124,9 @@ export default function GuideShell({
         </div>
       </section>
 
-      {/* Short answer */}
-      <section className="bg-cream px-6 md:px-8">
+      {/* Short answer. Lifts into the hero, so it needs its own stacking
+          context: the hero is overflow-hidden and clips it otherwise. */}
+      <section className="relative z-10 bg-cream px-6 md:px-8">
         <div className="mx-auto -mt-8 max-w-[820px] md:-mt-10">
           <div className="rounded-2xl border-2 border-gold bg-white p-6 md:p-8">
             <p className="eyebrow">Short answer</p>
@@ -135,6 +136,26 @@ export default function GuideShell({
           </div>
         </div>
       </section>
+
+      {/* The numbers people came for, before the prose starts. */}
+      {guide.keyFigures && guide.keyFigures.length > 0 && (
+        <section className="bg-cream px-6 pt-10 md:px-8 md:pt-12">
+          <ul className="mx-auto grid max-w-[820px] gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {guide.keyFigures.map((k) => (
+              <li
+                key={k.label}
+                className="rev rounded-2xl border-2 border-teal-mid bg-white px-5 py-4 text-center"
+              >
+                <span className="block font-massilia text-figure-md font-bold leading-none text-forest">
+                  {k.figure}
+                </span>
+                <span className="mt-2 block text-meta font-semibold text-ink">{k.label}</span>
+                <span className="mt-1 block text-fine text-ink-soft">{k.note}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {/* Contents + body */}
       <section className="bg-cream px-6 py-14 md:px-8 md:py-20">

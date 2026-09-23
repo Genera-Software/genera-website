@@ -8,7 +8,11 @@ import type { ReactNode } from "react";
    be quoted without its source.
    ============================================================ */
 
-/** A section with an anchor for the in-page contents list. */
+/**
+ * A section with an anchor for the in-page contents list. Each one opens with a
+ * paw rule rather than running straight on from the last, so a long reference
+ * page reads as parts instead of one column of prose.
+ */
 export function GuideSection({
   id,
   title,
@@ -20,6 +24,17 @@ export function GuideSection({
 }) {
   return (
     <section id={id} className="scroll-mt-28">
+      <div className="mb-5 flex items-center gap-3" aria-hidden>
+        <span className="h-px flex-1 bg-teal-mid" />
+        <svg viewBox="0 0 24 24" className="h-5 w-5 flex-none text-gold" fill="currentColor">
+          <circle cx="5.5" cy="11" r="2.2" />
+          <circle cx="9.5" cy="6" r="2.2" />
+          <circle cx="14.5" cy="6" r="2.2" />
+          <circle cx="18.5" cy="11" r="2.2" />
+          <path d="M12 11.5c-3 0-5.5 2.5-5.5 5.5 0 1.5 1 3 2.5 3.5 1 0 2-.5 3-.5s2 .5 3 .5c1.5-.5 2.5-2 2.5-3.5 0-3-2.5-5.5-5.5-5.5z" />
+        </svg>
+        <span className="h-px flex-1 bg-teal-mid" />
+      </div>
       <h2 className="mb-4 font-massilia text-[1.6rem] font-bold leading-[var(--leading-title)] text-forest md:text-[1.85rem]">
         {title}
       </h2>

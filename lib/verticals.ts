@@ -471,11 +471,11 @@ export const VERTICALS: Vertical[] = [
      ──────────────────────────────────────────────────────────── */
   {
     slug: "dog-boarding-software",
-    audience: "boarding kennels and hotels",
-    metaTitle: "Dog Boarding and Kennel Software UK with Occupancy Per Night",
-    description: `Kennel and dog boarding software for the UK: a month of stays on one page with dogs on site every night, night-only or daycare-on-top pricing with AM and PM arrivals, weekend and bank holiday rates, vaccination tracking and a forward revenue view. From £${FROM} a month.`,
-    eyebrow: "For boarding kennels and hotels",
-    h1: "Kennel software that counts the dogs on site every night",
+    audience: "boarding kennels",
+    metaTitle: "Kennel Software UK: Dog Boarding, Occupancy Per Night",
+    description: `Kennel management and dog boarding software for the UK: a month of stays on one page with dogs on site every night, night-only or daycare-on-top pricing with AM and PM arrivals, weekend and bank holiday rates, vaccination tracking and a forward revenue view. From £${FROM} a month.`,
+    eyebrow: "For boarding kennels",
+    h1: "Dog boarding and kennel software that counts the dogs on site every night",
     h1Highlight: "every night",
     lead: "A stay occupies a fortnight of squares on a calendar and tells you nothing. The monthly summary puts it on one page, with a bar for each night showing how many dogs are in.",
     definition:
@@ -564,7 +564,7 @@ export const VERTICALS: Vertical[] = [
     ],
     faqs: [
       {
-        q: "What is the best kennel software in the UK?",
+        q: "What is the best kennel management software in the UK?",
         a: `For a boarding kennels the parts that matter are occupancy per night, pricing that handles arrival and departure days, vaccination tracking and UK payments. Genera puts a month of stays on one page with a bar for every night, prices each day on its own date, and starts at £${FROM} a month with ${TRIAL_DAYS} days free.`,
       },
       {
