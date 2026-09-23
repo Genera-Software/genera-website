@@ -73,6 +73,12 @@ export type Vertical = {
   description: string;
   eyebrow: string;
   h1: string;
+  /**
+   * The words inside h1 that carry the gold hand-drawn underline, exactly as
+   * they appear in h1. The homepage does the same to one word; without it a
+   * landing page headline reads as a flat block of white.
+   */
+  h1Highlight: string;
   lead: string;
   /**
    * The one-paragraph answer to "what is Genera for a X". Stands alone; names the
@@ -107,9 +113,10 @@ export const VERTICALS: Vertical[] = [
     description: `Dog daycare software for UK daycares: online booking, a daily capacity tied to your licensed number with a waitlist once a day fills, one screen showing who is in today, report cards and invoicing by Direct Debit. From £${FROM} a month, ${TRIAL_DAYS} days free.`,
     eyebrow: "For dog daycares",
     h1: "Dog daycare software built inside a licensed daycare",
-    lead: "Duncan has run Duncan's Dog Co for 15 years. Genera is the software he built to run it, and the daily cap, the vaccination dates and the invoice run are there because an inspector asked for them.",
+    h1Highlight: "licensed daycare",
+    lead: "Duncan has run Duncan's Dog Co since 2011. Genera is the software he built to run it, and the daily cap and the vaccination dates are there because an inspector asked for them.",
     definition:
-      "Genera is UK dog daycare software, built inside a licensed daycare. Owners request their days from an app that carries your name and logo, and every request lands in one queue for you to approve or let through automatically. Each service holds a limit for the day, so you can set it to the number on your licence and the day closes itself once it is full. The whole day then runs off one screen, and the month invoices itself from the days you actually took.",
+      "Genera is UK dog daycare software, built inside a licensed daycare. Owners request their days from an app under your own name, every request lands in one queue, and each service holds a limit you can set to the number on your licence. The month then invoices itself from the days you took.",
     pill: "Built by a daycare, for dog daycares",
     heroCards: [
       { tone: "coral", badge: "Today", figure: "18", title: "Dogs in. 20 on the licence.", body: "The daily cap holds the number the inspector wrote down." },
@@ -125,7 +132,7 @@ export const VERTICALS: Vertical[] = [
         eyebrow: "Owner booking portal",
         plan: "every",
         title: "Owners book their daycare days from your own app.",
-        lead: "Your booking portal opens from the owner's home screen with your logo, your name and your colour. They request days, set a regular Monday and Wednesday pattern, keep the dog's details current and pay. Every request still comes back to you to approve.",
+        lead: "Your portal opens from the owner's home screen with your logo and your colour. They request days, set a regular weekly pattern and pay, and every request still comes back to you.",
         bullets: [
           "Your logo, name and brand colour, set once",
           "Day requests and recurring weekly patterns",
@@ -138,7 +145,7 @@ export const VERTICALS: Vertical[] = [
       {
         feature: "compliance",
         title: "A daily cap set to your licensed number",
-        body: "Each service carries a maximum number of bookings per day. Once a day hits the limit it shows as full and the next request arrives as a waitlist request for you to approve. Owners are told the date is full, never how close to full you run.",
+        body: "Once a day hits its limit it shows as full, and the next request arrives as a waitlist request for you to approve. Owners are told the date is full, never how close to full you run.",
         more: "capacity",
       },
       {
@@ -193,7 +200,7 @@ export const VERTICALS: Vertical[] = [
     notes: [
       {
         title: "Three licence conditions the software carries for you",
-        body: "Condition 4.1 puts a number of dogs on your licence; the daily cap holds it. Condition 9.4 wants a completed primary vaccination course two weeks before a first day; the pet record dates it. Condition 25.1 wants each dog's vet on file; the owner keeps it current from their app. The rest of the licence is the building and the people, which no software can do.",
+        body: "Your licence puts a number of dogs on the day, wants a completed vaccination course two weeks before a first day, and wants each dog's vet on file. The cap, the pet record and the owner's own app cover those three. The rest is the building and the people.",
         href: "/guides/dog-daycare-licence-england",
         linkLabel: "Every condition, with the sources",
       },
@@ -235,9 +242,10 @@ export const VERTICALS: Vertical[] = [
     description: `Dog walking software for UK walkers: recurring walk schedules on any weekdays, separate AM and PM walks, a limit on each group walk, a daily list of who is out and invoices raised from the walks you did. From £${FROM} a month, ${TRIAL_DAYS} days free.`,
     eyebrow: "For dog walkers",
     h1: "Dog walking software that books the regular Tuesday walk once",
-    lead: "A walk is a service with its own time, price and group size. Owners book it from an app with your name on it, the regular ones repeat for as long as you like, and the month invoices itself from the walks you actually did.",
+    h1Highlight: "once",
+    lead: "A walk carries its own time, price and group size. Owners book from an app with your name on it, and the regular ones repeat for as long as you like.",
     definition:
-      "Genera is UK dog walking software, built around the regular round. A walk is a service with its own time, price and group size, and a recurring schedule repeats on as many weekdays as you like without anyone rebooking it. Owners request walks from an app under your own name, you see who is out today in one list with the notes and the access details, and the month invoices itself from the walks you actually did.",
+      "Genera is UK dog walking software, built around the regular round. A walk carries its own time, price and group size, and a recurring schedule repeats on as many weekdays as you like without anyone rebooking it. The month then invoices itself from the walks you did.",
     pill: "Built by a daycare, for dog walkers",
     heroCards: [
       { tone: "coral", badge: "Today", figure: "6", title: "Walks out today.", body: "Grouped by walk, with the dog, the owner and the notes." },
@@ -253,7 +261,7 @@ export const VERTICALS: Vertical[] = [
         eyebrow: "Owner booking portal",
         plan: "every",
         title: "Your own app, under your own name.",
-        lead: "Owners add your portal to their home screen and it opens with your logo and your colour. They request walks, see the price list you publish, keep the dog's vet and vaccination details current and settle invoices. No app store, nothing to build.",
+        lead: "Your portal opens from the owner's home screen with your logo and your colour. They request walks, see your price list and settle invoices. No app store, nothing to build.",
         bullets: [
           "Your logo, name and brand colour, set once",
           "Walk requests and your published price list",
@@ -266,13 +274,13 @@ export const VERTICALS: Vertical[] = [
       {
         feature: "bookings",
         title: "Monday, Wednesday and Friday is one schedule",
-        body: "A recurring schedule repeats weekly or fortnightly on any combination of weekdays and shows as a single row with a chip per day. Edit or end it once and every day changes. Fortnightly rounds carry their own badge.",
+        body: "A schedule repeats weekly or fortnightly on any combination of weekdays, as one row with a chip per day. Edit or end it once and every day changes.",
         more: "bookings",
       },
       {
         feature: "compliance",
         title: "Morning and afternoon walks, and a cap per group",
-        body: "A timeslot service sells times rather than whole days, so the same dog on the 9am and the 2pm round is two bookings, not a duplicate. Set how many dogs share a walk and the slot closes itself when it is full.",
+        body: "A timeslot walk sells times rather than whole days, so the same dog on the 9am and the 2pm round is two bookings. Set how many dogs share a walk and the slot closes when it is full.",
         more: "capacity",
       },
       {
@@ -314,10 +322,10 @@ export const VERTICALS: Vertical[] = [
     ],
     notes: [
       {
-        title: "No licence, so the number is yours to set and show",
-        body: "Dog walking is not a licensable activity in England, and the six-dog limit people quote is a condition on a daycare licence, not a law that reaches an independent walker. Some councils cap dogs per person in their parks. Genera lets you put your own cap on each walk and hold to it, which is increasingly what owners ask for before they book.",
+        title: "Set your own number, and be able to show it",
+        body: "More owners ask how many dogs go out at once before they book. Give each walk its own cap and the answer is the same every time, whoever is walking.",
         href: "/guides/do-dog-walkers-need-a-licence",
-        linkLabel: "Do dog walkers need a licence in England?",
+        linkLabel: "What the rules say about dog walkers",
       },
     ],
     faqs: [
@@ -358,9 +366,10 @@ export const VERTICALS: Vertical[] = [
     description: `Dog grooming software for UK groomers: an appointment slot grid owners book themselves, one pet per slot, editable services with their own timeslot length and price, pending requests you approve, deposits and card payments. From £${FROM} a month, ${TRIAL_DAYS} days free.`,
     eyebrow: "For dog groomers",
     h1: "Dog grooming software with an appointment diary owners fill themselves",
+    h1Highlight: "fill themselves",
     lead: "A full groom is a ninety-minute slot, a nail clip is ten. Owners pick from the times you actually have free while your hands are in a coat, and the slot closes behind them.",
     definition:
-      "Genera is UK dog grooming software, built around a diary your clients fill in themselves. Every service holds its own slot length and price, so a full groom and a nail trim take the right amount of your day, and owners pick from the times you genuinely have free while your hands are busy. You approve the bookings you want to look at first, take deposits up front, and keep each dog's notes and vaccination dates where whoever is on shift can read them.",
+      "Genera is UK dog grooming software, built around a diary your clients fill in themselves. Every service holds its own slot length and price, so owners pick from the times you genuinely have free while your hands are busy. You approve what you want to check first, and take deposits up front.",
     pill: "Built by a daycare, for dog groomers",
     heroCards: [
       { tone: "coral", badge: "Today", figure: "5", title: "Appointments booked.", body: "Picked from the slot grid, one dog per slot." },
@@ -376,7 +385,7 @@ export const VERTICALS: Vertical[] = [
         eyebrow: "Owner booking portal",
         plan: "every",
         title: "Owners book an appointment while you are mid-groom.",
-        lead: "Your portal opens from the owner's home screen with your logo and your colour. They pick a time from the slot grid, see your published price list, upload the dog's details and pay the invoice, without ringing you with clippers in your hand.",
+        lead: "Your portal opens from the owner's home screen with your logo and your colour. They pick a time, see your price list and pay, without ringing you with clippers in your hand.",
         bullets: [
           "Your logo, name and brand colour, set once",
           "A View prices button and your own price list",
@@ -389,13 +398,13 @@ export const VERTICALS: Vertical[] = [
       {
         feature: "bookings",
         title: "Appointment slots, one dog at a time",
-        body: "Turn on Requires a Timeslot and the service sells times instead of whole days. Owners pick from the times you have free, and a booked slot closes because a grooming slot takes one pet. Slot length is set per service, so a full groom and a nail trim are different blocks of your day.",
+        body: "The service sells times instead of whole days. Owners pick from the times you have free, and a booked slot closes behind them. Slot length is set per service, so a full groom and a nail trim take different blocks of your day.",
         more: "bookings",
       },
       {
         feature: "compliance",
         title: "Services you edit, requests you approve",
-        body: "Standard and puppy price, tiered pricing, slot length, a daily maximum, closed days and whether customers can see it at all, each editable in a minute. Tick Requires Approval and that service's bookings land as pending requests instead of going straight into your day.",
+        body: "Price, puppy price, slot length, a daily maximum, closed days and whether customers see it at all, each editable in a minute. Tick Requires Approval and that service's bookings land as pending requests.",
         more: "capacity",
       },
       {
@@ -467,9 +476,10 @@ export const VERTICALS: Vertical[] = [
     description: `Kennel and dog boarding software for the UK: a month of stays on one page with dogs on site every night, night-only or daycare-on-top pricing with AM and PM arrivals, weekend and bank holiday rates, vaccination tracking and a forward revenue view. From £${FROM} a month.`,
     eyebrow: "For boarding kennels and hotels",
     h1: "Kennel software that counts the dogs on site every night",
-    lead: "A stay occupies a fortnight of squares on a calendar and tells you nothing. The monthly summary puts the whole month on one page: every stay, every arrival and departure, and a bar for each night showing how many dogs are in.",
+    h1Highlight: "every night",
+    lead: "A stay occupies a fortnight of squares on a calendar and tells you nothing. The monthly summary puts it on one page, with a bar for each night showing how many dogs are in.",
     definition:
-      "Genera is UK kennel and dog boarding software, built around seeing a whole month at once. Every stay sits on one page with a bar for each night showing how many dogs are on site, so the peak nights and the quiet ones are obvious without counting squares on a calendar. Nights are priced on their own dates, which means weekend and bank holiday rates apply themselves, and each dog's vaccination record stays where an inspector can see it.",
+      "Genera is UK kennel and dog boarding software, built around seeing a whole month at once. Every stay sits on one page with a bar for each night showing how many dogs are on site, so the busy nights are obvious without counting squares on a calendar. Nights price on their own dates, so weekend rates apply themselves.",
     pill: "Built by a daycare, for boarding kennels",
     heroCards: [
       { tone: "coral", badge: "Tonight", figure: "7", title: "On site. 8 on the licence.", body: "The nightly cap holds the number the inspector wrote down." },
@@ -485,7 +495,7 @@ export const VERTICALS: Vertical[] = [
         eyebrow: "Owner booking portal",
         plan: "every",
         title: "Owners request their holiday dates from your own app.",
-        lead: "Your portal opens from the owner's home screen with your logo and your colour. They request arrival and departure dates, keep vaccination details current and settle the invoice, and every request comes back to you to approve before it holds a night.",
+        lead: "Your portal opens from the owner's home screen with your logo and your colour. They request dates and settle the invoice, and nothing holds a night until you approve it.",
         bullets: [
           "Your logo, name and brand colour, set once",
           "Stay requests with arrival and departure dates",
@@ -498,7 +508,7 @@ export const VERTICALS: Vertical[] = [
       {
         feature: "bookings",
         title: "A month of boarding on one page",
-        body: "Pick a service and a month: a bar for every night shows how many dogs are on site, with stays, nights booked and the peak night above it, then each stay with its arrival, departure, nights and transport. Stays that cross a month boundary are counted properly.",
+        body: "A bar for every night shows how many dogs are on site, with stays, nights booked and the peak night above it, then each stay listed underneath. Stays crossing a month boundary are counted properly.",
         more: "bookings",
       },
       {
@@ -510,13 +520,13 @@ export const VERTICALS: Vertical[] = [
       {
         feature: "finance",
         title: "Night-only or daycare on top, priced per date",
-        body: "Charge by the night, or add the day charge with an AM or PM arrival so the first and last day price correctly. Each day is priced on its own date, so weekend and bank holiday rates apply by themselves. The forecast then shows what the diary is already worth.",
+        body: "Charge by the night, or add the day charge with an AM or PM arrival so the first and last day price correctly. Weekend and bank holiday rates apply by themselves, and the forecast shows what the diary is already worth.",
         more: "finance",
       },
       {
         feature: "records",
         title: "Vaccinations, including leptospirosis",
-        body: "The boarding guidance treats leptospirosis as a core vaccine and a licence was refused renewal over it in 2026. Every dog's vet and vaccination dates sit on the profile, the Vaccinations report shows what is due, and late notices catch the ones that lapse.",
+        body: "The boarding guidance treats leptospirosis as a core vaccine, and a licence was refused renewal over it in 2026. Vet and vaccination dates sit on every profile, with a report of what is due.",
         more: "records",
       },
       {
@@ -547,7 +557,7 @@ export const VERTICALS: Vertical[] = [
     notes: [
       {
         title: "Kennels and home boarding are set up the same way",
-        body: "Both run as a boarding service with a maximum number of dogs per night, set to the number on your licence. Whether you have a block of runs or spare rooms in the house, the month reads the same on the summary and the cap holds the same way.",
+        body: "Both run as a boarding service with a cap per night. Set it to your licensed number and everything else works the same.",
         href: "/guides/dog-daycare-licence-england",
         linkLabel: "The licence conditions, with sources",
       },

@@ -143,7 +143,24 @@ export default async function VerticalPage({ vertical }: { vertical: Vertical })
           </div>
 
           <h1 className="rev mb-3 max-w-[560px] animate-[fadeInUp_0.7s_0.1s_ease_both] text-white text-figure-md md:mb-4 md:[font-size:clamp(2.4rem,4vw,3.6rem)]">
-            {vertical.h1}
+            {(() => {
+              // Same treatment as the homepage: one phrase carries the gold
+              // hand-drawn underline so the headline is not a flat white block.
+              const at = vertical.h1.indexOf(vertical.h1Highlight);
+              if (at < 0) return vertical.h1;
+              return (
+                <>
+                  {vertical.h1.slice(0, at)}
+                  <span className="squig">
+                    {vertical.h1Highlight}
+                    <svg viewBox="0 0 180 12" preserveAspectRatio="none" aria-hidden>
+                      <path d="M2,9 Q22,2 45,8 Q68,14 90,7 Q112,0 135,8 Q157,14 178,7" />
+                    </svg>
+                  </span>
+                  {vertical.h1.slice(at + vertical.h1Highlight.length)}
+                </>
+              );
+            })()}
           </h1>
 
           <p className="rev d1 mb-5 max-w-[300px] animate-[fadeInUp_0.7s_0.2s_ease_both] text-body-lg text-white/80 md:mb-6 md:max-w-[460px]">
