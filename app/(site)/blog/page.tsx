@@ -121,9 +121,6 @@ export default async function BlogPage() {
 
       {/* Blog list */}
       <section className="bg-cream px-8 py-22">
-        <div className="rev mx-auto mb-8 max-w-[860px] text-center">
-          <p className="eyebrow">From the yard</p>
-        </div>
         {posts && posts.length > 0 ? (
           <div className="mx-auto max-w-[860px] flex flex-col gap-5">
             {posts.map((p, i) => (

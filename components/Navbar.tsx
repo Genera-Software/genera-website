@@ -18,17 +18,15 @@ const NAV_LINKS = [
 ] as const;
 
 /**
- * The "For" menu: one landing page per business type, plus the licensing
- * guides. Sits between Home and Features on desktop and as an indented group
- * in the phone menu, so the pages carry a main-nav link rather than only a
- * footer one.
+ * The "For" menu: one landing page per business type. Audiences only, so the
+ * label stays true; the licensing guides and the report are a content type,
+ * not an audience, and are reached from Blog instead.
  */
 const FOR_LINKS = [
   { href: "/dog-daycare-software", label: "Dog daycares" },
   { href: "/dog-walker-software", label: "Dog walkers" },
   { href: "/dog-grooming-software", label: "Dog groomers" },
   { href: "/dog-boarding-software", label: "Boarding kennels" },
-  { href: "/guides", label: "Licensing guides" },
 ] as const;
 
 const PAW_LOGO = "/images/genera-svg.svg";
@@ -208,15 +206,13 @@ export default function Navbar() {
                     }`}
                   >
                     <div className="overflow-hidden rounded-2xl border border-white/10 bg-forest-dark p-1.5 shadow-[0_14px_36px_rgba(0,0,0,0.35)]">
-                      {FOR_LINKS.map((f, j) => (
+                      {FOR_LINKS.map((f) => (
                         <Link
                           key={f.href}
                           href={f.href}
                           role="menuitem"
                           onClick={() => setForOpen(false)}
-                          className={`block rounded-xl px-3.5 py-2 text-fine font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-gold ${
-                            j === FOR_LINKS.length - 1 ? "mt-1 border-t border-white/10 pt-2.5" : ""
-                          }`}
+                          className="block rounded-xl px-3.5 py-2 text-fine font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-gold"
                         >
                           {f.label}
                         </Link>
