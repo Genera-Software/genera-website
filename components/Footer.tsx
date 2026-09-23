@@ -4,21 +4,19 @@ import ConsentPreferencesLink from "@/components/ConsentPreferencesLink";
 
 const PAW_LOGO = "/images/genera-svg.svg";
 
+// The footer stays as short as it was. The four landing pages and the guides are
+// reached from the nav's "For" menu, and the guides and report from /blog, so
+// repeating them here would only make this column long for no gain: a sitewide
+// boilerplate link is the weakest kind there is.
 const PRODUCT_LINKS = [
   { href: "/features", label: "Features" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/dog-daycare-software", label: "For dog daycares" },
-  { href: "/dog-walker-software", label: "For dog walkers" },
-  { href: "/dog-grooming-software", label: "For dog groomers" },
-  { href: "/dog-boarding-software", label: "For boarding kennels" },
+  { href: "/faqs", label: "FAQs" },
+  { href: "/blog", label: "Blog" },
 ];
 
 const COMPANY_LINKS = [
   { href: "/our-story", label: "Our Story" },
-  { href: "/guides", label: "Licensing Guides" },
-  { href: "/research/licensing-report-2026", label: "Licensing Report 2026" },
-  { href: "/blog", label: "Blog" },
-  { href: "/faqs", label: "FAQs" },
   { href: "/contact", label: "Contact" },
   { href: "/driver-support", label: "Driver App Help" },
   { href: "/badge-kit", label: "Badge Kit" },

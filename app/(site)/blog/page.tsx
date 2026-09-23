@@ -5,6 +5,8 @@ import Reveal from "@/components/Reveal";
 import StartTrialLink from "@/components/StartTrialLink";
 import { createMetadata } from "@/lib/seo";
 import { getPublicSupabase } from "@/lib/supabase/server";
+import { GUIDES, formatGuideDate } from "@/lib/guides";
+import { REPORT } from "@/lib/report";
 
 export const revalidate = 60;
 
@@ -63,22 +65,65 @@ export default async function BlogPage() {
             Practical advice, industry commentary, and lessons learned from 15
             years of running a real pet business.
           </p>
-          <p className="mx-auto mt-4 max-w-[600px] text-sm text-white/70">
-            Looking for the licensing rules with the sources attached? Those are in
-            the{" "}
-            <Link
-              href="/guides"
-              className="font-semibold text-gold-soft underline decoration-gold underline-offset-2 hover:text-gold"
-            >
-              reference guides
-            </Link>
-            .
-          </p>
+        </div>
+      </section>
+
+      {/* Research and guides. Kept above the posts and visually distinct, because
+          these are reference pages that get corrected in place rather than dated
+          posts that are published and left. */}
+      <section className="border-b-2 border-teal-mid bg-teal-soft px-8 pt-14 pb-16">
+        <div className="mx-auto max-w-[860px]">
+          <div className="rev mb-6 text-center">
+            <p className="eyebrow">Research and guides</p>
+            <p className="mx-auto max-w-[560px] text-meta text-ink-soft md:text-body-lg">
+              The licensing rules read carefully, with every figure sourced and dated.
+              Corrected when a rule changes, not republished.
+            </p>
+          </div>
+
+          <Link
+            href={REPORT.path}
+            className="rev group mb-3 flex flex-col overflow-hidden rounded-2xl border-2 border-gold bg-white p-6 transition-colors hover:border-forest md:p-7"
+          >
+            <span className="text-xs font-bold uppercase tracking-wider text-forest-mid">
+              {REPORT.eyebrow}
+            </span>
+            <span className="mt-2 font-massilia text-xl font-bold leading-snug text-forest group-hover:text-forest-mid md:text-mini-h">
+              {REPORT.title}
+            </span>
+            <span className="mt-2 text-sm text-ink-soft">
+              Figures checked {formatGuideDate(REPORT.checkedOn)} · PDF available
+            </span>
+          </Link>
+
+          <ul className="rev grid gap-3 md:grid-cols-2">
+            {GUIDES.map((g) => (
+              <li key={g.slug}>
+                <Link
+                  href={`/guides/${g.slug}`}
+                  className="group flex h-full flex-col rounded-2xl border border-teal-mid bg-white px-5 py-4 transition-colors hover:border-forest"
+                >
+                  <span className="text-xs font-bold uppercase tracking-wider text-forest-mid">
+                    {g.eyebrow}
+                  </span>
+                  <span className="mt-1 font-massilia text-base font-bold leading-snug text-forest group-hover:text-forest-mid">
+                    {g.title}
+                  </span>
+                  <span className="mt-2 text-xs text-ink-soft">
+                    Checked {formatGuideDate(g.checkedOn)} · {g.sources.length} sources
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
       {/* Blog list */}
       <section className="bg-cream px-8 py-22">
+        <div className="rev mx-auto mb-8 max-w-[860px] text-center">
+          <p className="eyebrow">From the yard</p>
+        </div>
         {posts && posts.length > 0 ? (
           <div className="mx-auto max-w-[860px] flex flex-col gap-5">
             {posts.map((p, i) => (
