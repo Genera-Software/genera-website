@@ -12,7 +12,7 @@ const PRODUCT_LINKS = [
   { href: "/features", label: "Features" },
   { href: "/pricing", label: "Pricing" },
   { href: "/faqs", label: "FAQs" },
-  { href: "/blog", label: "Blog" },
+  { href: "/blog", label: "Blog & Guides" },
 ];
 
 const COMPANY_LINKS = [
