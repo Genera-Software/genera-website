@@ -10,9 +10,9 @@ export const DEFAULT_OG_IMAGE = "/images/hero-background-fun.png";
 // AI answer engines.
 export const AUTHOR_NAME = "Duncan";
 export const AUTHOR_TITLE =
-  "Founder of Genera and owner of Duncan's Doggy Daycare";
+  "Founder of Genera and owner of Duncan's Dog Co";
 export const AUTHOR_BIO =
-  "Duncan has run Duncan's Doggy Daycare for 15 years. Genera is the software he built to run his own pet business, shaped by what actually works day to day, not theory.";
+  "Duncan has run Duncan's Dog Co, a licensed dog daycare in Surrey, since 2011. Genera is the software he built to run it, shaped by what actually works day to day, not theory.";
 
 type SeoConfig = {
   title: string;
