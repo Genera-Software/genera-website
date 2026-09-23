@@ -99,17 +99,17 @@ export const VERTICALS: Vertical[] = [
      Search intent: "dog daycare software uk", "daycare booking
      system", "how many dogs can I take". The daycare-only ideas
      are the licensed daily number, the waitlist once a day fills,
-     the run sheet for who is in today, and report cards.
+     who is in today on one screen, and report cards.
      ──────────────────────────────────────────────────────────── */
   {
     slug: "dog-daycare-software",
     audience: "dog daycares",
     metaTitle: "Dog Daycare Software UK, Built Inside a Licensed Daycare",
-    description: `Dog daycare software for UK daycares: online booking, a daily capacity tied to your licensed number with a waitlist once a day fills, a run sheet of who is in today, report cards and invoicing by Direct Debit. From £${FROM} a month, ${TRIAL_DAYS} days free.`,
+    description: `Dog daycare software for UK daycares: online booking, a daily capacity tied to your licensed number with a waitlist once a day fills, one screen showing who is in today, report cards and invoicing by Direct Debit. From £${FROM} a month, ${TRIAL_DAYS} days free.`,
     eyebrow: "For dog daycares",
     h1: "Dog daycare software built inside a licensed daycare",
     lead: "Duncan has run Duncan's Dog Co for 15 years. Genera is the software he built to run it, and the daily cap, the vaccination dates and the invoice run are there because an inspector asked for them.",
-    definition: `Genera is UK dog daycare software for online booking, daily capacity and invoicing. Owners request daycare days from an app under your own name and logo, including recurring weekly patterns; every request lands in one approval queue; each service carries a maximum number of bookings per day, so once you reach the number on your licence the day shows as full and further requests arrive as waitlist requests; the daily schedule lists every dog, collection and drop-off for the day; assessments and report cards are scored on a phone in the yard; and the month's invoices are raised from the days you actually took and collected by Direct Debit through GoCardless or card through Stripe, with Xero kept in step. Plans are ${PRICE_LIST}. ${TRIAL} ${NO_METER}`,
+    definition: `Genera is UK dog daycare software for online booking, daily capacity and invoicing. Owners request daycare days from an app under your own name and logo, including recurring weekly patterns; every request lands in one approval queue; each service carries a maximum number of bookings per day, so once you reach the number on your licence the day shows as full and further requests arrive as waitlist requests; the daily schedule lists every dog, collection and drop-off for the day; assessments and report cards are scored on a phone with the dog in front of you; and the month's invoices are raised from the days you actually took and collected by Direct Debit through GoCardless or card through Stripe, with Xero kept in step. Plans are ${PRICE_LIST}. ${TRIAL} ${NO_METER}`,
     pill: "Built by a daycare, for dog daycares",
     heroCards: [
       { tone: "coral", badge: "Today", figure: "18", title: "Dogs in. 20 on the licence.", body: "The daily cap holds the number the inspector wrote down." },
@@ -117,7 +117,7 @@ export const VERTICALS: Vertical[] = [
       { tone: "gold", badge: "Full", figure: "2", title: "Waitlisted for Thursday.", body: "The day filled, so two requests wait for you to decide." },
     ],
     categoryDesc:
-      "Daily capacity against your licensed number, the run sheet for who is in today, assessments and report cards, and daycare billing that raises itself.",
+      "Daily capacity against your licensed number, who is in today on one screen, assessments and report cards, and daycare billing that raises itself.",
     spotlights: [
       {
         showcase: "ownerApp",
@@ -143,13 +143,13 @@ export const VERTICALS: Vertical[] = [
       },
       {
         feature: "dailySchedule",
-        title: "The run sheet for who is in today",
-        body: "A single-day summary with stat cards per service, then every dog, owner, collection and drop-off in one list, plus day notes for the team. It is the screen the yard works off.",
+        title: "Who is in today, on one screen",
+        body: "A single-day summary with stat cards per service, then every dog, owner, collection and drop-off in one list, plus day notes for the team. It is the screen your staff work from all day.",
         more: "daily-schedule",
       },
       {
         feature: "assessments",
-        title: "Trial days scored in the yard",
+        title: "Trial days scored on a phone",
         body: "Templates for first days, temperament, behaviour and health, scored on a phone with the dog in front of you, sent as a branded report card instead of a vague text at pick-up. From Grow.",
         more: "assessments",
       },
@@ -232,7 +232,7 @@ export const VERTICALS: Vertical[] = [
     slug: "dog-walker-software",
     audience: "dog walkers",
     metaTitle: "Dog Walking Software UK for Recurring Walks and Invoicing",
-    description: `Dog walking software for UK walkers: recurring walk schedules on any weekdays, separate AM and PM walks, a limit on each group walk, a daily run sheet and invoices raised from the walks you did. From £${FROM} a month, ${TRIAL_DAYS} days free.`,
+    description: `Dog walking software for UK walkers: recurring walk schedules on any weekdays, separate AM and PM walks, a limit on each group walk, a daily list of who is out and invoices raised from the walks you did. From £${FROM} a month, ${TRIAL_DAYS} days free.`,
     eyebrow: "For dog walkers",
     h1: "Dog walking software that books the regular Tuesday walk once",
     lead: "A walk is a service with its own time, price and group size. Owners book it from an app with your name on it, the regular ones repeat for as long as you like, and the month invoices itself from the walks you actually did.",
@@ -241,10 +241,10 @@ export const VERTICALS: Vertical[] = [
     heroCards: [
       { tone: "coral", badge: "Today", figure: "6", title: "Walks out today.", body: "Grouped by walk, with the dog, the owner and the notes." },
       { tone: "green", badge: "Paid", figure: "£420", title: "Invoiced from walks.", body: "One run at month end, collected by Direct Debit." },
-      { tone: "gold", badge: "Repeating", figure: "Mon Wed Fri", title: "One schedule, not three.", body: "A pet on three weekdays is a single recurring row." },
+      { tone: "gold", badge: "Repeating", figure: "3", title: "Days, one schedule.", body: "Monday, Wednesday and Friday is a single recurring row, not three bookings." },
     ],
     categoryDesc:
-      "Recurring walk schedules, morning and afternoon walks as separate bookings, a cap on every group walk, and the run sheet for who is out today.",
+      "Recurring walk schedules, morning and afternoon walks as separate bookings, a cap on every group walk, and who is out today in one list.",
     spotlights: [
       {
         showcase: "ownerApp",
@@ -322,7 +322,7 @@ export const VERTICALS: Vertical[] = [
     faqs: [
       {
         q: "What is the best software for dog walkers in the UK?",
-        a: `Genera is built in England and priced from £${FROM} a month with ${TRIAL_DAYS} days free. For a walker the parts that matter are recurring schedules on any combination of weekdays, separate morning and afternoon walks, a cap per group walk, a daily run sheet and invoicing collected by UK Direct Debit through GoCardless.`,
+        a: `Genera is built in England and priced from £${FROM} a month with ${TRIAL_DAYS} days free. For a walker the parts that matter are recurring schedules on any combination of weekdays, separate morning and afternoon walks, a cap per group walk, a daily list of who is out and invoicing collected by UK Direct Debit through GoCardless.`,
       },
       {
         q: "Can owners book a regular weekly dog walk?",

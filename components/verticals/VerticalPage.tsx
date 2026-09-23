@@ -34,6 +34,18 @@ const TONES: Record<HeroCard["tone"], string> = {
 const FLOATS = ["var(--animate-float-1)", "var(--animate-float-2)", "var(--animate-float-3)"];
 const OFFSETS = ["", "mt-8", "mt-2"];
 
+/**
+ * A two-character figure and a six-character one cannot share a font size, or
+ * "£1,240" dwarfs "18" on the card beside it. The homepage picks the size by
+ * hand per card; here the figures are data, so the size follows their length.
+ */
+const figureSize = (figure: string) =>
+  figure.length <= 2
+    ? "text-figure-lg"
+    : figure.length <= 4
+      ? "text-figure-md"
+      : "text-section-h";
+
 export default async function VerticalPage({ vertical }: { vertical: Vertical }) {
   const url = `${SITE_URL}/${vertical.slug}`;
   const others = VERTICALS.filter((v) => v.slug !== vertical.slug);
@@ -174,7 +186,9 @@ export default async function VerticalPage({ vertical }: { vertical: Vertical })
                 <span className="absolute right-4 top-4 rounded-full bg-white/35 px-2.5 py-0.5 text-eyebrow font-bold tracking-wide text-white backdrop-blur-sm">
                   {c.badge}
                 </span>
-                <div className="mb-2 font-massilia text-figure-lg font-bold leading-none text-white">
+                <div
+                  className={`mb-2 font-massilia ${figureSize(c.figure)} font-bold leading-none text-white`}
+                >
                   {c.figure}
                 </div>
                 <p className="font-massilia text-base font-bold text-white">{c.title}</p>
@@ -198,7 +212,11 @@ export default async function VerticalPage({ vertical }: { vertical: Vertical })
             <span className="inline-block rounded-full bg-white/35 px-1.5 py-0.5 text-eyebrow font-bold uppercase tracking-wider">
               {c.badge}
             </span>
-            <div className="mt-2 mb-1 font-massilia text-figure-md font-bold leading-none">
+            <div
+              className={`mt-2 mb-1 font-massilia font-bold leading-none ${
+                c.figure.length <= 2 ? "text-figure-md" : "text-section-h"
+              }`}
+            >
               {c.figure}
             </div>
             <p className="font-massilia text-fine font-bold leading-tight">{c.title}</p>
