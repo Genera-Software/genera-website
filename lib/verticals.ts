@@ -3,8 +3,10 @@ import { PRICING_TIERS, TRIAL_DAYS, TOP_TIER } from "@/lib/pricing";
 
 // One landing page per business type. The homepage stays a broad overview; these
 // pages carry the detail for the keyword a daycare owner, walker, groomer or boarder
-// actually types, and each opens with a plain paragraph that says what Genera is,
-// who it is for and what it costs, so an answer engine has something to lift.
+// actually types, and each opens with a plain paragraph that says what Genera is
+// and who it is for, so an answer engine has something to lift. Price is not in
+// that paragraph: the plans sit further down the page and in the meta
+// description, and leading a solo walker with three price points loses them.
 //
 // Feature claims come from /features and the live demo account. A vertical only
 // lists a feature it genuinely uses: a solo walker is not shown the Dog Bus, a
@@ -91,9 +93,6 @@ export type Vertical = {
   faqs: VerticalFaq[];
 };
 
-const TRIAL = `Every plan starts with a ${TRIAL_DAYS}-day free trial with everything unlocked and no card.`;
-const NO_METER = "There is no charge per dog, per booking or per invoice, and no commission on what your customers pay you.";
-
 export const VERTICALS: Vertical[] = [
   /* ── Dog daycares ─────────────────────────────────────────────
      Search intent: "dog daycare software uk", "daycare booking
@@ -109,7 +108,8 @@ export const VERTICALS: Vertical[] = [
     eyebrow: "For dog daycares",
     h1: "Dog daycare software built inside a licensed daycare",
     lead: "Duncan has run Duncan's Dog Co for 15 years. Genera is the software he built to run it, and the daily cap, the vaccination dates and the invoice run are there because an inspector asked for them.",
-    definition: `Genera is UK dog daycare software for online booking, daily capacity and invoicing. Owners request daycare days from an app under your own name and logo, including recurring weekly patterns; every request lands in one approval queue; each service carries a maximum number of bookings per day, so once you reach the number on your licence the day shows as full and further requests arrive as waitlist requests; the daily schedule lists every dog, collection and drop-off for the day; assessments and report cards are scored on a phone with the dog in front of you; and the month's invoices are raised from the days you actually took and collected by Direct Debit through GoCardless or card through Stripe, with Xero kept in step. Plans are ${PRICE_LIST}. ${TRIAL} ${NO_METER}`,
+    definition:
+      "Genera is UK dog daycare software, built inside a licensed daycare. Owners request their days from an app that carries your name and logo, and every request lands in one queue for you to approve or let through automatically. Each service holds a limit for the day, so you can set it to the number on your licence and the day closes itself once it is full. The whole day then runs off one screen, and the month invoices itself from the days you actually took.",
     pill: "Built by a daycare, for dog daycares",
     heroCards: [
       { tone: "coral", badge: "Today", figure: "18", title: "Dogs in. 20 on the licence.", body: "The daily cap holds the number the inspector wrote down." },
@@ -236,7 +236,8 @@ export const VERTICALS: Vertical[] = [
     eyebrow: "For dog walkers",
     h1: "Dog walking software that books the regular Tuesday walk once",
     lead: "A walk is a service with its own time, price and group size. Owners book it from an app with your name on it, the regular ones repeat for as long as you like, and the month invoices itself from the walks you actually did.",
-    definition: `Genera is UK dog walking software for recurring walks, group size and invoicing. A walk is a service with its own price, timeslot and capacity; a recurring schedule repeats weekly or fortnightly on any combination of weekdays and shows as one row you edit in a single place; because a timeslot service sells times rather than days, a morning walk and an afternoon walk for the same dog are two separate bookings; each group walk carries a cap and closes itself when full; owners request walks and see your price list in an app under your own name and logo; the daily schedule lists who is out today with the day notes; and the month's invoices are raised from the walks you did and collected by Direct Debit through GoCardless or card through Stripe. Plans are ${PRICE_LIST}. ${TRIAL} ${NO_METER}`,
+    definition:
+      "Genera is UK dog walking software, built around the regular round. A walk is a service with its own time, price and group size, and a recurring schedule repeats on as many weekdays as you like without anyone rebooking it. Owners request walks from an app under your own name, you see who is out today in one list with the notes and the access details, and the month invoices itself from the walks you actually did.",
     pill: "Built by a daycare, for dog walkers",
     heroCards: [
       { tone: "coral", badge: "Today", figure: "6", title: "Walks out today.", body: "Grouped by walk, with the dog, the owner and the notes." },
@@ -358,7 +359,8 @@ export const VERTICALS: Vertical[] = [
     eyebrow: "For dog groomers",
     h1: "Dog grooming software with an appointment diary owners fill themselves",
     lead: "A full groom is a ninety-minute slot, a nail clip is ten. Owners pick from the times you actually have free while your hands are in a coat, and the slot closes behind them.",
-    definition: `Genera is UK dog grooming software for online appointment booking, editable services and deposits. Turning on Requires a Timeslot makes a service sell times rather than whole days, so owners pick from a slot grid in an app under your own name and logo and a booked slot greys itself out, because a grooming slot takes one pet; each service holds its own slot length, standard and puppy price, tiered pricing, daily maximum, closed days and visibility, all editable by you; Requires Approval turns a service's bookings into pending requests you approve; deposits are raised as their own request and come off the final invoice automatically; a second groomer can be given a Service Provider portal showing only their own weekly schedule; and payment is by card through Stripe or Direct Debit through GoCardless. Plans are ${PRICE_LIST}. ${TRIAL} ${NO_METER}`,
+    definition:
+      "Genera is UK dog grooming software, built around a diary your clients fill in themselves. Every service holds its own slot length and price, so a full groom and a nail trim take the right amount of your day, and owners pick from the times you genuinely have free while your hands are busy. You approve the bookings you want to look at first, take deposits up front, and keep each dog's notes and vaccination dates where whoever is on shift can read them.",
     pill: "Built by a daycare, for dog groomers",
     heroCards: [
       { tone: "coral", badge: "Today", figure: "5", title: "Appointments booked.", body: "Picked from the slot grid, one dog per slot." },
@@ -466,7 +468,8 @@ export const VERTICALS: Vertical[] = [
     eyebrow: "For boarding kennels and hotels",
     h1: "Kennel software that counts the dogs on site every night",
     lead: "A stay occupies a fortnight of squares on a calendar and tells you nothing. The monthly summary puts the whole month on one page: every stay, every arrival and departure, and a bar for each night showing how many dogs are in.",
-    definition: `Genera is UK kennel and dog boarding software for occupancy, boarding rates and invoicing. The monthly summary puts a month of stays on one page with a bar for every night showing how many dogs are on site, plus total stays, nights booked and the peak night, and each stay listed with its arrival, departure, nights and transport; boarding carries a maximum per night, so a full night turns further requests into waitlist requests; pricing is night-only or daycare-on-top with AM and PM arrivals, and each day is priced on its own date so weekend and bank holiday rates apply automatically; vaccination dates including leptospirosis sit on every pet profile with a report of what is due; and the forecast shows what the next one to twelve months are already worth. Plans are ${PRICE_LIST}. ${TRIAL} ${NO_METER}`,
+    definition:
+      "Genera is UK kennel and dog boarding software, built around seeing a whole month at once. Every stay sits on one page with a bar for each night showing how many dogs are on site, so the peak nights and the quiet ones are obvious without counting squares on a calendar. Nights are priced on their own dates, which means weekend and bank holiday rates apply themselves, and each dog's vaccination record stays where an inspector can see it.",
     pill: "Built by a daycare, for boarding kennels",
     heroCards: [
       { tone: "coral", badge: "Tonight", figure: "7", title: "On site. 8 on the licence.", body: "The nightly cap holds the number the inspector wrote down." },
