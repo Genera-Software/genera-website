@@ -79,7 +79,7 @@ export default function GuideShell({
       <Reveal />
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-6 pt-28 pb-14 text-white md:px-8 md:pt-36 md:pb-16">
+      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest-mid to-[#007080] px-6 pt-28 pb-24 text-white md:px-8 md:pt-36 md:pb-28">
         <div className="mx-auto max-w-[820px]">
           <Link
             href="/guides"
@@ -106,7 +106,7 @@ export default function GuideShell({
           <h1 className="mt-4 text-white [font-size:clamp(1.9rem,3.6vw,3.1rem)] leading-[1.08]">
             {guide.title}
           </h1>
-          <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-white/80">
+          <div className="mt-7 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-white/80">
             <span className="grid h-8 w-8 place-items-center rounded-full bg-gold font-bold text-forest-dark">
               {AUTHOR_NAME.charAt(0)}
             </span>

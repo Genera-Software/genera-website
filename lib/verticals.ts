@@ -114,7 +114,7 @@ export const VERTICALS: Vertical[] = [
     eyebrow: "For dog daycares",
     h1: "Dog daycare software built inside a licensed daycare",
     h1Highlight: "licensed daycare",
-    lead: "Duncan has run Duncan's Dog Co since 2011. Genera is the software he built to run it, and the daily cap and the vaccination dates are there because an inspector asked for them.",
+    lead: "The number on your licence, the number booked in, and how many people are on the floor. Genera keeps those three in agreement without anyone counting in their head.",
     definition:
       "Genera is UK dog daycare software, built inside a licensed daycare. Owners request their days from an app under your own name, every request lands in one queue, and each service holds a limit you can set to the number on your licence. The month then invoices itself from the days you took.",
     pill: "Built by a daycare, for dog daycares",

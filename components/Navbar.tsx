@@ -8,7 +8,6 @@ import StartTrialLink from "@/components/StartTrialLink";
 import { LOGIN_URL } from "@/lib/urls";
 
 const NAV_LINKS = [
-  { href: "/", label: "Home" },
   { href: "/features", label: "Features" },
   { href: "/pricing", label: "Pricing" },
   { href: "/our-story", label: "Our Story" },
@@ -23,10 +22,10 @@ const NAV_LINKS = [
  * not an audience, and are reached from Blog instead.
  */
 const FOR_LINKS = [
-  { href: "/dog-daycare-software", label: "Dog daycares" },
-  { href: "/dog-walker-software", label: "Dog walkers" },
-  { href: "/dog-grooming-software", label: "Dog groomers" },
-  { href: "/dog-boarding-software", label: "Boarding kennels" },
+  { href: "/dog-daycare-software", label: "Dog Daycares" },
+  { href: "/dog-walker-software", label: "Dog Walkers" },
+  { href: "/dog-grooming-software", label: "Dog Groomers" },
+  { href: "/dog-boarding-software", label: "Boarding Kennels" },
 ] as const;
 
 const PAW_LOGO = "/images/genera-svg.svg";
@@ -166,12 +165,6 @@ export default function Navbar() {
         <div className="mx-auto hidden items-center gap-0 lg:flex">
           {NAV_LINKS.map((l, i) => (
             <span key={l.href} className="contents">
-              <Link
-                href={l.href}
-                className="rounded-full px-2 py-1.5 text-fine font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white whitespace-nowrap"
-              >
-                {l.label}
-              </Link>
               {i === 0 && (
                 <div ref={forRef} className="group relative">
                   <button
@@ -183,7 +176,7 @@ export default function Navbar() {
                       forActive ? "text-white" : "text-white/80"
                     }`}
                   >
-                    For
+                    Built for
                     <svg
                       viewBox="0 0 24 24"
                       width={12}
@@ -221,6 +214,12 @@ export default function Navbar() {
                   </div>
                 </div>
               )}
+              <Link
+                href={l.href}
+                className="rounded-full px-2 py-1.5 text-fine font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white whitespace-nowrap"
+              >
+                {l.label}
+              </Link>
             </span>
           ))}
         </div>
