@@ -494,12 +494,6 @@ export const VERTICALS: Vertical[] = [
         more: "messages",
       },
     ],
-    notes: [
-      {
-        title: "What Genera does not do for groomers",
-        body: "There is no breed styling library, no before-and-after gallery and no till. It is an appointment diary owners fill themselves, services you control, deposits and invoicing that collect themselves, and a record for each dog. If that is the part of the week you want back, it fits. If you need a full salon system with a till, it is not that.",
-      },
-    ],
     faqs: [
       {
         q: "What is the best dog grooming software in the UK?",
@@ -639,8 +633,8 @@ export const VERTICALS: Vertical[] = [
     ],
     notes: [
       {
-        title: "Kennels, home boarding, and what Genera does not allocate",
-        body: "Genera counts dogs per night against your licensed number. It does not allocate individual kennels, runs or rooms, and there is no kennel card. Kennel boarding and home boarding are both set up as a boarding service with a cap per night. If block and run allocation is the job you need doing, it is not the tool.",
+        title: "Kennels and home boarding are set up the same way",
+        body: "Both run as a boarding service with a maximum number of dogs per night, set to the number on your licence. Whether you have a block of runs or spare rooms in the house, the month reads the same on the summary and the cap holds the same way.",
         href: "/guides/dog-daycare-licence-england",
         linkLabel: "The licence conditions, with sources",
       },
