@@ -73,6 +73,13 @@ const PATHS: Record<string, React.ReactNode> = {
       <path d="M12 3l2.1 4.6L19 9.2l-3.6 3.3.9 5L12 15.3 7.7 17.5l.9-5L5 9.2l4.9-1.6z" />
     </>
   ),
+  "mobile-apps-whats-new": (
+    <>
+      <rect x="4.5" y="2.5" width="11" height="19" rx="2.5" />
+      <path d="M8.5 18.5h3" />
+      <path d="M18.5 3.5l.9 2 2 .9-2 .9-.9 2-.9-2-2-.9 2-.9z" />
+    </>
+  ),
 };
 
 export default function SectionIcon({

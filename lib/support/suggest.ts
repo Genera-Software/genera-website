@@ -126,8 +126,9 @@ export type DocSuggestion = {
  * "What's New" is a changelog: it name-checks every feature in the product, so
  * it out-matches the actual how-to page for almost any question, and then
  * answers none of them. Excluding it is the single biggest quality win here.
+ * The mobile app release notes are a changelog too, and excluded the same way.
  */
-const EXCLUDED_SECTIONS = new Set(["whats-new"]);
+const EXCLUDED_SECTIONS = new Set(["whats-new", "mobile-apps-whats-new"]);
 
 // Where a token hit counts for most. A word in the page title is a far better
 // signal than the same word buried in a how-to step.

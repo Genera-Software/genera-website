@@ -6,7 +6,9 @@ import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { LOGIN_URL } from "@/lib/urls";
 import {
+  PARENT_SECTION,
   WHATS_NEW_SLUG,
+  isGuideSection,
   rankSearch,
   type SearchEntry,
   type UpdateSummary,
@@ -247,12 +249,13 @@ function SectionNav({
       </div>
 
       {nav
-        .filter((s) => s.slug !== WHATS_NEW_SLUG)
+        .filter((s) => isGuideSection(s.slug))
         .map((s) => {
         const active = isActive(s.slug);
+        const children = nav.filter((c) => PARENT_SECTION[c.slug] === s.slug);
         return (
+          <div key={s.slug} className="flex flex-col gap-1">
           <Link
-            key={s.slug}
             href={`/docs/${s.slug}`}
             className={`group flex items-center gap-3 rounded-xl px-3 py-2 transition-colors ${
               active ? "bg-forest text-white" : "text-ink hover:bg-teal-soft"
@@ -280,6 +283,31 @@ function SectionNav({
               </span>
             </span>
           </Link>
+          {children.map((c) => {
+            const childActive = isActive(c.slug);
+            return (
+              <Link
+                key={c.slug}
+                href={`/docs/${c.slug}`}
+                className={`ml-7 flex items-center gap-2.5 rounded-lg border-l-2 py-1.5 pr-3 pl-3 transition-colors ${
+                  childActive
+                    ? "border-forest bg-forest text-white"
+                    : "border-teal-mid text-ink hover:bg-teal-soft"
+                }`}
+              >
+                <SectionIcon
+                  slug={c.slug}
+                  className={`h-4 w-4 shrink-0 ${
+                    childActive ? "text-gold" : "text-forest"
+                  }`}
+                />
+                <span className="font-massilia text-[0.85rem] font-bold">
+                  {c.title}
+                </span>
+              </Link>
+            );
+          })}
+          </div>
         );
       })}
     </nav>

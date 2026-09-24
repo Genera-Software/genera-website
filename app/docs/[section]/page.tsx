@@ -2,9 +2,13 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
-  WHATS_NEW_SLUG,
+  APP_RELEASES_SLUG,
+  CHANGELOG_SLUGS,
+  PARENT_SECTION,
+  isGuideSection,
   splitUpdateTitle,
   subAnchor,
+  type DocSection,
   type DocSubsection,
 } from "../_data/sections";
 import { getDocSections } from "../_data/load";
@@ -50,13 +54,19 @@ export default async function SectionPage({
   const s = SECTIONS.find((x) => x.slug === section);
   if (!s) notFound();
 
-  // What's New sits outside the guide: it has no prev/next of its own and is
-  // never the "next" step from a guide section.
-  const isChangelog = s.slug === WHATS_NEW_SLUG;
-  const guide = SECTIONS.filter((x) => x.slug !== WHATS_NEW_SLUG);
+  // Changelogs and child pages sit outside the guide: they have no prev/next
+  // of their own and are never the "next" step from a guide section.
+  const isChangelog = CHANGELOG_SLUGS.has(s.slug);
+  const isAppReleases = s.slug === APP_RELEASES_SLUG;
+  const parent = SECTIONS.find((x) => x.slug === PARENT_SECTION[s.slug]);
+  const guide = SECTIONS.filter((x) => isGuideSection(x.slug));
   const idx = guide.findIndex((x) => x.slug === s.slug);
-  const prev = !isChangelog && idx > 0 ? guide[idx - 1] : null;
-  const next = !isChangelog && idx < guide.length - 1 ? guide[idx + 1] : null;
+  const prev = idx > 0 ? guide[idx - 1] : null;
+  const next = idx !== -1 && idx < guide.length - 1 ? guide[idx + 1] : null;
+  const appReleases =
+    s.slug === PARENT_SECTION[APP_RELEASES_SLUG]
+      ? SECTIONS.find((x) => x.slug === APP_RELEASES_SLUG)
+      : undefined;
 
   return (
     <LightboxProvider>
@@ -70,6 +80,14 @@ export default async function SectionPage({
           Help Centre
         </Link>
         <span>/</span>
+        {parent && (
+          <>
+            <Link href={`/docs/${parent.slug}`} className="hover:text-forest">
+              {parent.title}
+            </Link>
+            <span>/</span>
+          </>
+        )}
         <span className="font-semibold text-forest">{s.title}</span>
       </nav>
 
@@ -84,7 +102,9 @@ export default async function SectionPage({
         </span>
         <div>
           <p className="font-massilia text-fine font-bold tracking-wide text-gold">
-            {isChangelog
+            {isAppReleases
+              ? `RELEASE NOTES · ${s.subsections.length} VERSIONS`
+              : isChangelog
               ? `CHANGELOG · ${s.subsections.length} UPDATES`
               : `SECTION ${String(s.num).padStart(2, "0")}`}
           </p>
@@ -164,6 +184,10 @@ export default async function SectionPage({
         </aside>
       )}
 
+      {appReleases && appReleases.subsections.length > 0 && (
+        <AppReleasesCard section={appReleases} />
+      )}
+
       {/* Subsections */}
       {isChangelog ? (
         <Changelog subs={s.subsections} />
@@ -206,6 +230,39 @@ export default async function SectionPage({
       )}
     </article>
     </LightboxProvider>
+  );
+}
+
+/* On Mobile apps: the newest app version, linking to the full release notes. */
+function AppReleasesCard({ section }: { section: DocSection }) {
+  const latest = section.subsections[0];
+  const { date, title } = splitUpdateTitle(latest.title);
+  return (
+    <Link
+      href={`/docs/${section.slug}`}
+      className="group mt-5 flex items-center gap-4 rounded-2xl border border-teal-mid bg-white p-5 transition-all hover:border-forest hover:shadow-[0_14px_32px_rgba(0,62,69,0.12)] sm:p-6"
+    >
+      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gold text-forest">
+        <SectionIcon slug={section.slug} className="h-6 w-6" />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block font-massilia text-[1.1rem] font-bold text-forest">
+          {section.title}
+        </span>
+        <span className="mt-0.5 block text-meta text-ink-soft">
+          Latest: <span className="font-semibold text-ink">{title}</span>
+          {date && <> · {date}</>}
+          {" · "}
+          {section.subsections.length} versions
+        </span>
+      </span>
+      <span
+        aria-hidden
+        className="shrink-0 text-body-lg text-gold transition-transform group-hover:translate-x-0.5"
+      >
+        →
+      </span>
+    </Link>
   );
 }
 

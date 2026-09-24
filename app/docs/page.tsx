@@ -1,7 +1,11 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getDocSections, getLatestUpdates } from "./_data/load";
-import { WHATS_NEW_SLUG, type UpdateSummary } from "./_data/sections";
+import {
+  WHATS_NEW_SLUG,
+  isGuideSection,
+  type UpdateSummary,
+} from "./_data/sections";
 import SectionIcon from "./_components/SectionIcon";
 import SupportTicketButton from "./_components/SupportTicketButton";
 
@@ -18,7 +22,7 @@ export default async function DocsHome() {
     getDocSections(),
     getLatestUpdates(3),
   ]);
-  const guide = SECTIONS.filter((s) => s.slug !== WHATS_NEW_SLUG);
+  const guide = SECTIONS.filter((s) => isGuideSection(s.slug));
   const latest = updates.items[0];
   return (
     <div className="mx-auto max-w-[860px]">

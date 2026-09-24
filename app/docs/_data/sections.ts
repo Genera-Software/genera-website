@@ -1799,6 +1799,162 @@ export const SECTIONS: DocSection[] = [
       },
     ],
   },
+  {
+    slug: "mobile-apps-whats-new",
+    num: 12,
+    title: "What's New in the apps",
+    tagline: "Version notes for Genera Driver",
+    intro:
+      "What changed in each version of Genera Driver, the app for iPhone and Android. The newest version is at the top. iPhone and Android share version numbers from 1.1.0 onwards; the chip on each entry shows the build for each phone. Testers get new versions through TestFlight and Google Play testing.",
+    subsections: [
+      {
+        title: "23 September 2026 — Version 1.2.0",
+        route: "iPhone build 14 · Android version code 14",
+        whatItDoes:
+          "Routes that stay current on the phone, a choice of navigation app on every route, and addresses you can copy.",
+        items: [
+          {
+            label: "Routes stay up to date",
+            desc: "While the app is open, changes from the office show within a minute, even with notifications off, and an app left open overnight moves on to the new day. If the routes can't load, a retry card shows instead of an empty day.",
+          },
+          {
+            label: "Hold Navigate",
+            desc: "Hold Navigate on a route to open it in any navigation app on the phone, with your usual one ticked, or send its stops to Spoke Route Planner.",
+          },
+          {
+            label: "Copy an address",
+            desc: "Copy an owner's or a stop's address from its address card.",
+          },
+        ],
+      },
+      {
+        title: "22 September 2026 — Version 1.1.0",
+        route: "iPhone build 13 · Android version code 13",
+        whatItDoes:
+          "Pet photos from anywhere in the app, and a gallery to look through them.",
+        items: [
+          {
+            label: "Add photos from Owners",
+            desc: "Add photos to any pet at your daycare from their profile in Owners, not just from a stop on your run.",
+          },
+          {
+            label: "Pet gallery",
+            desc: "View a pet's gallery from the same card: every photo, who added it and when.",
+          },
+          {
+            label: "Remove your own photos",
+            desc: "Hold a photo you added yourself, or open it and tap the bin, to remove it. Other people's photos stay put.",
+          },
+        ],
+      },
+      {
+        title: "21 September 2026 — Version 1.0.11",
+        route: "iPhone 1.0 build 12 · Android 1.0.11",
+        whatItDoes:
+          "Driver notes you can take back, and navigation that lands in the right place.",
+        items: [
+          {
+            label: "Delete your own driver notes",
+            desc: "Delete a driver note you wrote yourself, from a household or from a stop. Notes from the office or another driver stay put.",
+          },
+          {
+            label: "Choose a navigation app once",
+            desc: "The first time you tap Navigate, Genera asks which app to use and remembers it. Change it under Profile › Navigation app.",
+          },
+          {
+            label: "Navigate to the stop itself",
+            desc: "Navigate drives to the stop's exact point rather than searching its address, so flats and long driveways land in the right place.",
+          },
+          {
+            label: "Pet photos (Android)",
+            desc: "Photos added to a pet's gallery send again, and one that fails now says why.",
+          },
+        ],
+      },
+      {
+        title: "15 September 2026 — Version 1.0.10",
+        route: "iPhone 1.0 builds 10–11 · Android 1.0.9–1.0.10",
+        whatItDoes:
+          "Routes in the office's colours, a numbered route map, a fuller stop detail, and whole-route navigation.",
+        items: [
+          {
+            label: "Route colours & map",
+            desc: "Routes show in the office's route colours, and the route map numbers each stop and joins them in order, with your position and the daycare marked.",
+          },
+          {
+            label: "Fuller stop detail",
+            desc: "Each stop shows the pet's collection and drop-off notes, driver notes, lead, lunch, food and emergency contacts, and you can correct a pet's food from the stop.",
+          },
+          {
+            label: "Navigate a whole route",
+            desc: "Navigate on a route opens its remaining stops, in order, in Apple Maps (iPhone), Google Maps or Waze. Google Maps plans them as one route; Waze takes you one stop at a time.",
+          },
+          {
+            label: "Postcodes",
+            desc: "A stop's address shows its postcode once.",
+          },
+        ],
+      },
+      {
+        title: "14 September 2026 — Version 1.0.8",
+        route: "iPhone 1.0 builds 8–9 · Android 1.0.7–1.0.8",
+        whatItDoes: "Pet photos from a stop, and routes that update themselves.",
+        items: [
+          {
+            label: "Pet photos from a stop",
+            desc: "Add photos of a pet to its gallery from a stop: choose from your photos or take one with the camera, and the owner and office see them.",
+          },
+          {
+            label: "Route changes",
+            desc: "When the office changes your route, your stops update on their own. On iPhone you also get a notification that opens the route.",
+          },
+        ],
+      },
+      {
+        title: "13 September 2026 — Version 1.0.6",
+        route: "iPhone 1.0 build 7 · Android 1.0.6",
+        whatItDoes: "Password reset from the app.",
+        items: [
+          {
+            label: "Forgot password",
+            desc: "Tap Forgot password? on the sign-in screen and Genera emails you a link to reset it.",
+          },
+          {
+            label: "New icon",
+            desc: "The van icon is now a bus.",
+          },
+        ],
+      },
+      {
+        title: "10 September 2026 — Version 1.0",
+        route: "iPhone 1.0 · Android 1.0",
+        whatItDoes:
+          "The first release of Genera Driver for testers: the driver portal as a native app, using the same login and data as Genera in the browser.",
+        items: [
+          {
+            label: "Routes & stops",
+            desc: "The day's stops in run order, with a tap to confirm each pickup and drop-off.",
+          },
+          {
+            label: "Owners",
+            desc: "Look up an owner and their household, with a badge on owners who already carry a driver note.",
+          },
+          {
+            label: "Messages",
+            desc: "Chat with the office and households, start a new thread from the Messages tab, and report or block a message.",
+          },
+          {
+            label: "Schedule & time off",
+            desc: "Your rota and time-off requests.",
+          },
+          {
+            label: "Notifications (iPhone)",
+            desc: "Push notifications for messages and route changes, switched on or off from Profile.",
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 /** Lightweight nav list (serialisable for client components). */
@@ -1825,6 +1981,24 @@ export function subAnchor(title: string): string {
 /** The changelog. It's stored like a section so the CMS can edit it, but the
     site presents it on its own: out of the section grid and prev/next chain. */
 export const WHATS_NEW_SLUG = "whats-new";
+
+/** Release notes for the Genera Driver apps: a changelog too, but one that
+    belongs to Mobile apps, so it's shown under that section. */
+export const APP_RELEASES_SLUG = "mobile-apps-whats-new";
+
+/** Sections rendered as a dated changelog rather than a guide page. */
+export const CHANGELOG_SLUGS = new Set([WHATS_NEW_SLUG, APP_RELEASES_SLUG]);
+
+/** Pages that sit under another section: nested beneath it in the sidebar and
+    breadcrumb, and kept out of the section grid and prev/next chain. */
+export const PARENT_SECTION: Record<string, string> = {
+  [APP_RELEASES_SLUG]: "mobile-apps",
+};
+
+/** A numbered guide section — not a changelog, not a child page. */
+export function isGuideSection(slug: string): boolean {
+  return !CHANGELOG_SLUGS.has(slug) && !(slug in PARENT_SECTION);
+}
 
 /** A What's New entry for teasers (overview panel, sidebar). */
 export type UpdateSummary = { date: string | null; title: string; anchor: string };
