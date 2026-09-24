@@ -342,7 +342,8 @@ export type Database = {
           assigned_to: string | null;
           created_by: string | null;
           ai_status: "idle" | "running" | "ready" | "failed";
-          ai_session_id: string | null;
+          ai_messages: Json;
+          ai_steps: number;
           ai_suggestion: string | null;
           ai_error: string | null;
           ai_requested_at: string | null;
@@ -380,7 +381,8 @@ export type Database = {
           assigned_to?: string | null;
           created_by?: string | null;
           ai_status?: "idle" | "running" | "ready" | "failed";
-          ai_session_id?: string | null;
+          ai_messages?: Json;
+          ai_steps?: number;
           ai_suggestion?: string | null;
           ai_error?: string | null;
           ai_requested_at?: string | null;
@@ -418,7 +420,8 @@ export type Database = {
           assigned_to?: string | null;
           created_by?: string | null;
           ai_status?: "idle" | "running" | "ready" | "failed";
-          ai_session_id?: string | null;
+          ai_messages?: Json;
+          ai_steps?: number;
           ai_suggestion?: string | null;
           ai_error?: string | null;
           ai_requested_at?: string | null;

@@ -13,7 +13,7 @@ planning tool at `/command-centre`.
 - Supabase (Postgres) — content, forms, support tickets
 - Postmark — transactional and support email
 - Google Analytics Data API (GA4) — admin analytics
-- Anthropic Managed Agents — "Ask Claude" ticket analysis
+- Support assistant — any OpenAI-compatible LLM, read-only app DB + repo tools
 - c15t — cookie consent
 
 ## Prerequisites
@@ -231,10 +231,11 @@ and read responses at `/admin/forms/submissions`. Forms are consumed publicly vi
 Ticket inbox with a detail view at `/admin/support/[id]` and a drag-and-drop board
 at `/admin/support/board`. Threaded replies go out through Postmark and customer
 replies land back via the inbound webhook; unread messages are flagged in the
-sidebar. Each ticket has an **Ask Claude** button that starts a read-only
-Anthropic Managed Agent session against the app repo and writes a diagnosis back
-onto the ticket — see [`anthropic/README.md`](anthropic/README.md). The section
-greys itself out until all five Anthropic/repo variables are set.
+sidebar. Each ticket has a **Support assistant**: a technical-support agent on
+any OpenAI-compatible model that reads the ticket, queries the app database and
+the app repo (both read-only), and writes a diagnosis plus a draft customer reply
+onto the ticket (`lib/support/ai-analysis.ts`). The section greys itself out
+until the model and repo variables are set.
 Tables: `support_tickets`, `support_ticket_messages`, `support_notify_emails`.
 
 *Assignment* — tickets can be assigned to any admin from
@@ -405,22 +406,35 @@ replaced).
 | `GA_CLIENT_EMAIL` | Service account email (grant it Viewer on the GA4 property) |
 | `GA_PRIVATE_KEY`  | Service account private key — keep the `\n` escapes         |
 
-### Ask Claude (optional — the feature hides itself if unset)
+### Support assistant (optional — the feature hides itself if unset)
 
-| Variable                     | Notes                                                    |
-| ---------------------------- | -------------------------------------------------------- |
-| `ANTHROPIC_API_KEY`          | Anthropic API key                                        |
-| `ANTHROPIC_SUPPORT_AGENT_ID` | `agent_…`, created once via the Anthropic CLI            |
-| `ANTHROPIC_SUPPORT_ENV_ID`   | `env_…`, created once via the Anthropic CLI              |
-| `SUPPORT_REPO_URL`           | `https://github.com/<owner>/genera` — the **app** repo   |
-| `SUPPORT_REPO_TOKEN`         | GitHub fine-grained PAT, that repo only, `Contents: Read` |
-| `SUPPORT_REPO_BRANCH`        | Optional, defaults to `main`                             |
+| Variable               | Notes                                                              |
+| ---------------------- | ------------------------------------------------------------------ |
+| `SUPPORT_LLM_API_KEY`  | API key for the model provider                                     |
+| `SUPPORT_LLM_MODEL`    | Model id, e.g. `gpt-5-mini`, `claude-sonnet-5`, `gemini-2.5-flash` |
+| `SUPPORT_LLM_BASE_URL` | Any OpenAI-compatible endpoint; defaults to OpenAI (see below)     |
+| `SUPPORT_REPO_URL`     | `https://github.com/<owner>/genera` — the **app** repo             |
+| `SUPPORT_REPO_TOKEN`   | GitHub fine-grained PAT, that repo only, `Contents: Read`          |
+| `SUPPORT_REPO_BRANCH`  | Optional, defaults to `main`                                       |
+| `SUPPORT_DB_URL`       | Optional. App DB pooler URL for the `support_reader` role          |
+
+Base URLs: OpenAI `https://api.openai.com/v1`, Anthropic
+`https://api.anthropic.com/v1`, Gemini
+`https://generativelanguage.googleapis.com/v1beta/openai`, OpenRouter
+`https://openrouter.ai/api/v1`. Pick a model that supports tool calling.
 
 `SUPPORT_REPO_TOKEN` is minted at GitHub → Settings → Developer settings →
 Personal access tokens → Fine-grained tokens: resource owner = the org owning the
 app repo, repository access = only that repo, permissions = **Contents: Read-only**
-and nothing else. Note the expiry date — the Ask Claude panel simply greys out once
-the token lapses. Full setup steps are in [`anthropic/README.md`](anthropic/README.md).
+and nothing else. Note the expiry date: the assistant's code tools fail once the
+token lapses.
+
+`SUPPORT_DB_URL` connects as a SELECT-only role created by
+[`scripts/support-reader-role.sql`](scripts/support-reader-role.sql) in the
+**app's** Supabase project. Without it the assistant works from code alone. The
+customer's email is never shown to the model; it can only use it as a bound SQL
+parameter (`:customer_email`), and query results are scrubbed of emails and
+phone numbers before the model sees them.
 
 ## Database
 
@@ -461,7 +475,6 @@ unaffected and still output to `.next`.
   `supabase/`, `support/`
 - `public/` — static assets, images, legacy HTML pages
 - `supabase/migrations/` — schema
-- `anthropic/` — Ask Claude agent + environment YAML and setup docs
 - `support-widget/` — embeddable support widget
 - `scripts/` — badge generation, help centre seeding
 - `legacy/` — the previous static HTML site, kept for reference

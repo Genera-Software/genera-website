@@ -35,8 +35,8 @@ import {
 import AiAnalysisSection from "../_components/AiAnalysisSection";
 import { ticketRef } from "@/lib/support/thread";
 import {
+  getTicketAnalysis,
   isAiAnalysisConfigured,
-  reconcileTicketAnalysis,
 } from "@/lib/support/ai-analysis";
 export const dynamic = "force-dynamic";
 
@@ -137,9 +137,7 @@ export default async function SupportTicketDetailPage({
       .is("read_at", null);
   }
 
-  // A pending Ask Claude run finishes on Anthropic's side, so collect the result
-  // whenever someone opens the ticket. No-op unless a run is in flight.
-  const analysis = await reconcileTicketAnalysis(ticket);
+  const analysis = getTicketAnalysis(ticket);
 
   const errors: ConsoleError[] = Array.isArray(ticket.console_errors)
     ? (ticket.console_errors as ConsoleError[])
@@ -225,11 +223,12 @@ export default async function SupportTicketDetailPage({
             </section>
           )}
 
-          {/* Claude repo analysis */}
+          {/* Support assistant */}
           <AiAnalysisSection
             ticketId={ticket.id}
             analysis={analysis}
             configured={isAiAnalysisConfigured()}
+            canReply={Boolean(ticket.account_email)}
           />
 
           {/* Email conversation */}
@@ -295,6 +294,7 @@ export default async function SupportTicketDetailPage({
                 }}
               >
                 <textarea
+                  id="ticket-reply-body"
                   name="body"
                   rows={5}
                   required

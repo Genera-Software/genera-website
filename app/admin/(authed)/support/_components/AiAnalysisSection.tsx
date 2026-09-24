@@ -1,6 +1,7 @@
 import { AdminFormStatusButton } from "../../_components/AdminBusyButton";
-import { askClaude } from "../actions";
-import AiAnalysisPoller from "./AiAnalysisPoller";
+import { startSupportAssistant } from "../actions";
+import AiAnalysisDriver from "./AiAnalysisDriver";
+import UseDraftReplyButton from "./UseDraftReplyButton";
 import type { TicketAnalysis } from "@/lib/support/ai-analysis";
 
 function formatDate(iso: string | null) {
@@ -11,11 +12,20 @@ function formatDate(iso: string | null) {
   });
 }
 
+/** The "Draft reply to the customer" section of the report, if it wrote one. */
+function extractDraftReply(report: string): string | null {
+  const match = report.match(
+    /\*\*Draft reply to the customer\*\*[^\n]*\n([\s\S]*?)(?=\n\s*\*\*Confidence\*\*|$)/i,
+  );
+  const draft = match?.[1]?.trim();
+  return draft || null;
+}
+
 function Header({ children }: { children: React.ReactNode }) {
   return (
     <div className="mb-3 flex flex-wrap items-baseline justify-between gap-3">
       <h2 className="text-sm font-semibold uppercase tracking-wider text-ink-soft">
-        Claude code analysis
+        Support assistant
       </h2>
       {children}
     </div>
@@ -26,18 +36,22 @@ export default function AiAnalysisSection({
   ticketId,
   analysis,
   configured,
+  canReply,
 }: {
   ticketId: string;
   analysis: TicketAnalysis;
   configured: boolean;
+  canReply: boolean;
 }) {
   const running = analysis.status === "running";
+  const draft =
+    canReply && analysis.suggestion ? extractDraftReply(analysis.suggestion) : null;
 
   const askForm = (label: string) => (
     <form
       action={async () => {
         "use server";
-        await askClaude(ticketId);
+        await startSupportAssistant(ticketId);
       }}
     >
       <AdminFormStatusButton
@@ -64,55 +78,47 @@ export default function AiAnalysisSection({
       {!configured ? (
         <p className="text-sm text-ink-soft">
           Not configured on this deployment. Set{" "}
-          <code className="font-mono text-xs">ANTHROPIC_API_KEY</code>,{" "}
-          <code className="font-mono text-xs">ANTHROPIC_SUPPORT_AGENT_ID</code>,{" "}
-          <code className="font-mono text-xs">ANTHROPIC_SUPPORT_ENV_ID</code>,{" "}
+          <code className="font-mono text-xs">SUPPORT_LLM_API_KEY</code>,{" "}
+          <code className="font-mono text-xs">SUPPORT_LLM_MODEL</code>,{" "}
           <code className="font-mono text-xs">SUPPORT_REPO_URL</code> and{" "}
-          <code className="font-mono text-xs">SUPPORT_REPO_TOKEN</code> — see{" "}
-          <code className="font-mono text-xs">anthropic/README.md</code>.
+          <code className="font-mono text-xs">SUPPORT_REPO_TOKEN</code> (plus{" "}
+          <code className="font-mono text-xs">SUPPORT_DB_URL</code> for
+          database access) — see the README.
         </p>
       ) : running ? (
-        <>
-          <AiAnalysisPoller />
-          <div className="flex items-center gap-3 rounded-lg border border-cream-dark bg-cream/40 px-4 py-3">
-            <span
-              className="inline-block h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-teal-mid/50 border-t-forest"
-              aria-hidden
-            />
-            <p className="text-sm text-ink">
-              Reading the repo — this usually takes a few minutes. The result
-              appears here on its own; you can leave the page.
-            </p>
-          </div>
-        </>
+        <AiAnalysisDriver ticketId={ticketId} />
       ) : analysis.status === "ready" && analysis.suggestion ? (
         <>
           <p className="mb-3 text-xs text-ink-soft">
-            Internal engineering aid only — verify before acting, and never send
-            this to a customer verbatim.
+            Read-only look at the app&rsquo;s data and code. Verify before
+            acting, and edit the draft reply before sending.
           </p>
           <div className="max-h-[36rem] overflow-y-auto rounded-lg border border-cream-dark bg-cream/40 p-4">
-            <pre className="whitespace-pre-wrap break-words font-mono text-xs leading-relaxed text-ink">
+            <pre className="whitespace-pre-wrap break-words font-sans text-sm leading-relaxed text-ink">
               {analysis.suggestion}
             </pre>
           </div>
-          <div className="mt-3 flex justify-end">{askForm("Run again")}</div>
+          <div className="mt-3 flex items-center justify-end gap-4">
+            {draft && <UseDraftReplyButton draft={draft} />}
+            {askForm("Run again")}
+          </div>
         </>
       ) : analysis.status === "failed" ? (
         <>
           <p className="mb-3 text-sm text-red-700">
-            {analysis.error ?? "The analysis failed."}
+            {analysis.error ?? "The assistant failed."}
           </p>
           <div className="flex justify-end">{askForm("Try again")}</div>
         </>
       ) : (
         <>
           <p className="mb-3 text-sm text-ink-soft">
-            Clone the app repo into a sandbox and have Claude trace this ticket
-            through the source. Customer identity is stripped before the ticket
-            is sent.
+            A technical support agent checks this customer&rsquo;s data and the
+            app code (read-only), then suggests a fix and drafts a reply. Takes
+            about a minute; keep this page open while it runs. The customer&rsquo;s
+            identity is withheld from the model.
           </p>
-          <div className="flex justify-end">{askForm("Ask Claude")}</div>
+          <div className="flex justify-end">{askForm("Ask the assistant")}</div>
         </>
       )}
     </section>
