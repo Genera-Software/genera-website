@@ -1808,8 +1808,44 @@ export const SECTIONS: DocSection[] = [
       "What changed in each version of Genera Driver, the app for iPhone and Android. The newest version is at the top. iPhone and Android share version numbers from 1.1.0 onwards; the chip on each entry shows the build for each phone. Testers get new versions through TestFlight and Google Play testing.",
     subsections: [
       {
+        title: "24 September 2026 — Version 1.3.0",
+        route: "iPhone build 15 · Android version code 15",
+        whatItDoes:
+          "Other drivers' routes, ticking stops during your run with undo, a location reminder, and a clearer Messages page with search.",
+        items: [
+          {
+            label: "Other drivers' routes",
+            desc: "Tap Other drivers' routes under your stops to see every other run that day: who has it, its stops, and each pet's details. View only.",
+          },
+          {
+            label: "Tick stops during your run",
+            desc: "Pickups and drop-offs are confirmed once your run has started. Tap a stop before then and the app asks you to start your run first.",
+          },
+          {
+            label: "Undo a tick",
+            desc: "Tapped the wrong stop? Tap its tick again, or Undo on the stop, to mark it as not picked up or dropped off. Genera keeps a record that it was undone.",
+          },
+          {
+            label: "Location reminder",
+            desc: "If you start a run without location allowed, the app says so and takes you to Settings, so the office can see where you are.",
+          },
+          {
+            label: "Messages",
+            desc: "The page now reads Office, Today's customer chats and Message a customer. You can message the customers on your route today; for anyone else, message the office.",
+          },
+          {
+            label: "Search Messages",
+            desc: "Find a chat or a customer by name, pet, address or a word from the last message.",
+          },
+          {
+            label: "Owners search (iPhone)",
+            desc: "A Done button puts the keyboard away, so the tabs are always in reach.",
+          },
+        ],
+      },
+      {
         title: "23 September 2026 — Version 1.2.0",
-        route: "iPhone build 14 · Android version code 14",
+        route: "iPhone build 14 · on Android, released as part of 1.3.0",
         whatItDoes:
           "Routes that stay current on the phone, a choice of navigation app on every route, and addresses you can copy.",
         items: [
