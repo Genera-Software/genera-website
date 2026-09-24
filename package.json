@@ -13,7 +13,6 @@
     "check:suggestions": "tsx scripts/check-doc-suggestions.mts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.115.0",
     "@c15t/nextjs": "^2.0.4",
     "@google-analytics/data": "^5.2.2",
     "@supabase/ssr": "^0.10.3",
@@ -24,6 +23,7 @@
     "@tiptap/react": "^3.22.5",
     "@tiptap/starter-kit": "^3.22.5",
     "next": "^15.5.16",
+    "postgres": "^3.4.9",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-hook-form": "^7.75.0",

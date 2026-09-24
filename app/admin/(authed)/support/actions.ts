@@ -7,7 +7,11 @@ import { getAdminSupabase } from "@/lib/supabase/admin";
 import { isAllowedAdminEmail, normaliseEmail } from "@/lib/admin/allowlist";
 import { requireAdminUser } from "@/lib/admin/auth";
 import { notifySupportTicket } from "@/lib/support/notify";
-import { startTicketAnalysis } from "@/lib/support/ai-analysis";
+import {
+  advanceTicketAnalysis,
+  startTicketAnalysis,
+  type AnalysisProgress,
+} from "@/lib/support/ai-analysis";
 import { sendTicketReply } from "@/lib/support/thread";
 import { MANUAL_PAGE_URL } from "@/lib/support/manual";
 
@@ -262,13 +266,22 @@ export async function updateInternalNotes(id: string, formData: FormData) {
 }
 
 /**
- * Ask Claude to diagnose this ticket against the app repo. Starts a Managed
- * Agents session and returns — the result is collected on a later page view.
- * Deliberately admin-triggered per ticket: each run costs real money.
+ * Start the support assistant on this ticket. It only resets the run — the
+ * ticket page then calls `advanceSupportAssistant` until it finishes. Guarded
+ * explicitly because each step spends model tokens and reads production data.
  */
-export async function askClaude(id: string) {
+export async function startSupportAssistant(id: string) {
+  await requireAdminUser();
   await startTicketAnalysis(id);
   revalidatePath(`/admin/support/${id}`);
+}
+
+/** One step of a running assistant: a model turn, or the tools it asked for. */
+export async function advanceSupportAssistant(
+  id: string,
+): Promise<AnalysisProgress> {
+  await requireAdminUser();
+  return advanceTicketAnalysis(id);
 }
 
 export async function deleteTicket(id: string) {
