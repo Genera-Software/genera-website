@@ -68,7 +68,11 @@ export async function chat(
     body: JSON.stringify({
       model,
       messages,
-      max_tokens: 4000,
+      // OpenAI's reasoning models reject `max_tokens`; most other providers
+      // only understand it. Reasoning also spends from this budget.
+      ...(new URL(baseUrl).hostname === "api.openai.com"
+        ? { max_completion_tokens: 16000 }
+        : { max_tokens: 4000 }),
       // Tools stay declared even when forcing an answer: some providers reject
       // a transcript containing tool calls if the request declares no tools.
       ...(tools.length
