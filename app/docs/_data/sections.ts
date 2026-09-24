@@ -1084,30 +1084,21 @@ export const SECTIONS: DocSection[] = [
         title: "Routes: today's run",
         route: "Routes tab",
         whatItDoes:
-          "The home screen. A card for the round shows how many dogs are still to collect, with progress, and below it Your stops lists every stop in run order under its route's name and colour, the same way the office sees the route.",
-        items: [
-          {
-            label: "Pickups / Dropoffs",
-            desc: "Switches between the morning and evening legs. Each leg keeps its own progress.",
-          },
-          {
-            label: "Date",
-            desc: "Tap the date to look at another day's run; Return to today brings you back.",
-          },
-          {
-            label: "Each stop",
-            desc: "The number in the run, the dog, the owner and address, what the dog is booked in for (e.g. Daycare, or Groom · 11:00), the collection or home time, and care flags such as Shoes off or Crate. A cake marks a birthday, and the note badge counts the notes on file.",
-          },
-          {
-            label: "Route map",
-            desc: "The map button beside Start run shows the day's stops as numbered pins with your daycare, with lines joining them in order (Hide lines turns them off).",
-          },
-        ],
+          "The home screen. A card for the round shows how many dogs are still to collect, with progress, and below it Your stops lists every stop in run order under its route's name and colour, the same way the office sees the route. The routes stay up to date on their own while the app is open.",
         howToUse: [
           "Switch to Pickups or Dropoffs for the leg you're driving.",
-          "Tap Start run & share location when you set off. Your daycare then sees your live position on the Map and Tracking views while the app is open.",
+          "Tap Start run & share location when you set off. Your daycare then sees your live position on the Map and Tracking views while the app is open. If location isn't allowed, the app says so and takes you to Settings.",
+          "Once your run has started, tap the circle on a stop's right to confirm it straight from the list, or tap the stop to open its details. Before the run starts the circles are dimmed, and tapping one asks you to start your run first.",
+          "Tapped the wrong stop? Tap its tick again to undo it.",
           "Tap End run when you're finished to stop sharing. Stops you've confirmed stay confirmed.",
-          "Tap a stop to open its details, or tap the circle on its right to confirm it straight from the list.",
+        ],
+        items: [
+          { label: "Pickups / Dropoffs", desc: "Switches between the morning and evening legs. Each leg keeps its own progress." },
+          { label: "Date", desc: "Tap the date to look at another day's run; Return to today brings you back. An app left open overnight moves on to the new day by itself." },
+          { label: "Each stop", desc: "The number in the run, the dog, the owner and address, what the dog is booked in for (e.g. Daycare, or Groom · 11:00), the collection or home time, and care flags such as Shoes off or Crate. A cake marks a birthday, and the note badge counts the notes on file." },
+          { label: "Route map", desc: "The map button beside Start run shows the day's stops as numbered pins with your daycare, with lines joining them in order (Hide lines turns them off)." },
+          { label: "Other drivers' routes", desc: "Below your stops, opens every other run that day: who has it, its stops, and each dog's details. View only: only the driver on the route can confirm its stops." },
+          { label: "If routes can't load", desc: "A Couldn't load your routes card with Retry shows, rather than an empty day." },
         ],
         images: [
           {
@@ -1135,28 +1126,17 @@ export const SECTIONS: DocSection[] = [
         route: "Routes tab › tap a stop",
         whatItDoes:
           "Everything the driver needs at the door: where to go, the office's collection and drop-off instructions (with the leg they're on marked This stop), today's note from the owner, the dog's details, food, an emergency contact and driver notes. Confirming a stop updates the live booking and records who confirmed it and when.",
-        items: [
-          {
-            label: "Where to go",
-            desc: "The full address, with directions in the driver's chosen navigation app.",
-          },
-          {
-            label: "About the dog",
-            desc: "Gender, dogs in the household, lead, lunch and flight risk, then a Food card (what, brand and quantity) and the emergency contact.",
-          },
-          {
-            label: "Driver notes",
-            desc: "Notes left for whoever does this stop next, with who wrote them. Drivers can add their own.",
-          },
-          {
-            label: "Gallery",
-            desc: "Add photos, or take one with the camera, straight into the dog's gallery.",
-          },
-        ],
         howToUse: [
           "Tap a stop to open it. Read Where to go and the instruction marked This stop before you knock.",
-          "At the bottom, tap Confirm pickup (or Confirm drop-off), or tap the stop's circle in the list.",
-          "Confirm when asked. The stop is crossed through and shows who picked the dog up and at what time, and the office sees it straight away.",
+          "Start your run first. Stops are confirmed during a run, and tapping Confirm before then asks you to start it.",
+          "At the bottom, tap Confirm pickup (or Confirm drop-off), or tap the stop's circle in the list. Confirm when asked. The stop is crossed through and shows who picked the dog up and at what time, and the office sees it straight away.",
+          "Confirmed the wrong stop? Tap Undo pickup (or Undo drop-off) on the stop, or its tick in the list, to mark it as not done. Who confirmed it and when are cleared, and Genera keeps a record that it was undone.",
+        ],
+        items: [
+          { label: "Where to go", desc: "The full address, with directions in the driver's chosen navigation app." },
+          { label: "About the dog", desc: "Gender, dogs in the household, lead, lunch and flight risk, then a Food card (what, brand and quantity) and the emergency contact." },
+          { label: "Driver notes", desc: "Notes left for whoever does this stop next, with who wrote them. Drivers can add their own." },
+          { label: "Gallery", desc: "Add photos, or take one with the camera, straight into the dog's gallery." },
         ],
         images: [
           {
@@ -1245,25 +1225,19 @@ export const SECTIONS: DocSection[] = [
         title: "Messages",
         route: "Messages tab",
         whatItDoes:
-          "The driver's line to the office at the top, titled with your daycare's name, then conversations with customers on today's routes. Customer threads are day-scoped: a driver can only message owners with a dog booked in that day.",
-        items: [
-          {
-            label: "Your team",
-            desc: "The office thread, open every day. Drivers can start it themselves.",
-          },
-          {
-            label: "Start a conversation",
-            desc: "Customers on today's routes, tagged On today. This list changes day to day.",
-          },
-          {
-            label: "Report or block",
-            desc: "A driver can report a message or conversation, or block a customer, from the conversation.",
-          },
-        ],
+          "Chats with the office and with the customers on the driver's own route today. The office chat is at the top, titled with your daycare's name. Customer chats are day-scoped: a driver can message owners with a dog on their route that day, and the office handles everyone else.",
         howToUse: [
-          "Open Messages and tap the office thread, or a customer under Start a conversation.",
+          "Open Messages and tap the office chat, or a chat under Today's customer chats.",
+          "To start a new chat, tap a customer under Message a customer (on Android, tap the Message a customer button).",
+          "Type in the search box to find a chat or customer by name, pet, address or a word from the last message.",
           "Type a message and tap the arrow to send.",
-          "If customer messaging isn't turned on for your daycare, drivers still have the office thread and see a note saying so.",
+          "If customer messaging isn't turned on for your daycare, drivers still have the office chat and see a note saying so.",
+        ],
+        items: [
+          { label: "Office", desc: "The chat with your daycare's office, open every day. Anyone in the office can reply, and drivers can start it themselves." },
+          { label: "Today's customer chats", desc: "Chats with customers that have already started today. They clear at the end of the day." },
+          { label: "Message a customer", desc: "Customers on your route today you haven't messaged yet. The list changes day to day, and moves with a route if the office reassigns it." },
+          { label: "Report or block", desc: "A driver can report a message or conversation, or block a customer, from the conversation." },
         ],
         images: [
           {
