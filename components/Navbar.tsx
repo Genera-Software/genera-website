@@ -16,18 +16,6 @@ const NAV_LINKS = [
   { href: "/contact", label: "Contact" },
 ] as const;
 
-/**
- * The "For" menu: one landing page per business type. Audiences only, so the
- * label stays true; the licensing guides and the report are a content type,
- * not an audience, and are reached from Blog instead.
- */
-const FOR_LINKS = [
-  { href: "/dog-daycare-software", label: "Dog Daycares" },
-  { href: "/dog-walker-software", label: "Dog Walkers" },
-  { href: "/dog-grooming-software", label: "Dog Groomers" },
-  { href: "/dog-boarding-software", label: "Boarding Kennels" },
-] as const;
-
 const PAW_LOGO = "/images/genera-svg.svg";
 
 /** How far the nav can slide upward before being fully tucked away (px). */
@@ -39,12 +27,9 @@ export default function Navbar() {
   const [stuck, setStuck] = useState(false);
   const [offset, setOffset] = useState(0); // 0 = visible, -HIDE_DISTANCE = hidden
   const [open, setOpen] = useState(false);
-  const [forOpen, setForOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const forRef = useRef<HTMLDivElement>(null);
   const hamRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
-  const forActive = FOR_LINKS.some((f) => pathname === f.href || pathname.startsWith(f.href + "/"));
   // On the Features page the sticky section nav owns the top, so once the user
   // scrolls past the top we keep this bar tucked away and never reveal it on
   // scroll-up (it only shows while pinned at the very top).
@@ -103,29 +88,6 @@ export default function Navbar() {
     };
   }, [open]);
 
-  // The "For" menu opens on hover and on click; a click elsewhere or Escape
-  // closes it, and so does moving to another page.
-  useEffect(() => {
-    if (!forOpen) return;
-    const onClick = (e: MouseEvent) => {
-      if (forRef.current?.contains(e.target as Node)) return;
-      setForOpen(false);
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setForOpen(false);
-    };
-    document.addEventListener("click", onClick);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("click", onClick);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [forOpen]);
-
-  useEffect(() => {
-    setForOpen(false);
-  }, [pathname]);
-
   return (
     <>
       <nav
@@ -163,64 +125,14 @@ export default function Navbar() {
         </Link>
 
         <div className="mx-auto hidden items-center gap-0 lg:flex">
-          {NAV_LINKS.map((l, i) => (
-            <span key={l.href} className="contents">
-              {i === 0 && (
-                <div ref={forRef} className="group relative">
-                  <button
-                    type="button"
-                    aria-haspopup="menu"
-                    aria-expanded={forOpen}
-                    onClick={() => setForOpen((v) => !v)}
-                    className={`flex items-center gap-1 rounded-full px-2 py-1.5 text-fine font-medium transition-colors hover:bg-white/10 hover:text-white whitespace-nowrap ${
-                      forActive ? "text-white" : "text-white/80"
-                    }`}
-                  >
-                    Built for
-                    <svg
-                      viewBox="0 0 24 24"
-                      width={12}
-                      height={12}
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2.5}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden
-                      className="transition-transform group-hover:rotate-180"
-                    >
-                      <path d="m6 9 6 6 6-6" />
-                    </svg>
-                  </button>
-                  <div
-                    role="menu"
-                    className={`absolute left-1/2 top-full z-50 w-56 -translate-x-1/2 pt-3 group-hover:block group-focus-within:block ${
-                      forOpen ? "block" : "hidden"
-                    }`}
-                  >
-                    <div className="overflow-hidden rounded-2xl border border-white/10 bg-forest-dark p-1.5 shadow-[0_14px_36px_rgba(0,0,0,0.35)]">
-                      {FOR_LINKS.map((f) => (
-                        <Link
-                          key={f.href}
-                          href={f.href}
-                          role="menuitem"
-                          onClick={() => setForOpen(false)}
-                          className="block rounded-xl px-3.5 py-2 text-fine font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-gold"
-                        >
-                          {f.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-              <Link
-                href={l.href}
-                className="rounded-full px-2 py-1.5 text-fine font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white whitespace-nowrap"
-              >
-                {l.label}
-              </Link>
-            </span>
+          {NAV_LINKS.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="rounded-full px-2 py-1.5 text-fine font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white whitespace-nowrap"
+            >
+              {l.label}
+            </Link>
           ))}
         </div>
 
@@ -276,33 +188,15 @@ export default function Navbar() {
         >
           ×
         </button>
-        {NAV_LINKS.map((l, i) => (
-          <span key={l.href} className="contents">
-            <Link
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="border-b border-white/10 py-3 font-massilia text-mini-h font-bold text-white/85 hover:text-gold"
-            >
-              {l.label}
-            </Link>
-            {i === 0 && (
-              <div className="border-b border-white/10 py-3">
-                <span className="font-caveat text-body-lg text-gold-soft">For</span>
-                <div className="mt-1 flex flex-col">
-                  {FOR_LINKS.map((f) => (
-                    <Link
-                      key={f.href}
-                      href={f.href}
-                      onClick={() => setOpen(false)}
-                      className="py-1.5 pl-4 font-massilia text-body-lg font-bold text-white/85 hover:text-gold"
-                    >
-                      {f.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </span>
+        {NAV_LINKS.map((l) => (
+          <Link
+            key={l.href}
+            href={l.href}
+            onClick={() => setOpen(false)}
+            className="border-b border-white/10 py-3 font-massilia text-mini-h font-bold text-white/85 hover:text-gold"
+          >
+            {l.label}
+          </Link>
         ))}
         <div className="mt-6 flex flex-col gap-3">
           <StartTrialLink className="btn btn-gold btn-lg" />
