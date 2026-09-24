@@ -13,6 +13,7 @@ import {
   SITE_URL,
 } from "@/lib/seo";
 import { getPublicSupabase } from "@/lib/supabase/server";
+import { VERTICALS } from "@/lib/verticals";
 
 export const revalidate = 60;
 
@@ -193,6 +194,28 @@ export default async function BlogPostPage({
           className="rev mx-auto max-w-[720px] font-niveau text-body-lg leading-[1.75] text-ink-soft [&_a]:font-semibold [&_a]:text-forest [&_a]:underline [&_a]:decoration-gold [&_a]:underline-offset-2 hover:[&_a]:text-forest-mid [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-gold [&_blockquote]:pl-5 [&_blockquote]:italic [&_h2]:mt-10 [&_h2]:mb-3 [&_h2]:font-massilia [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:leading-[var(--leading-title)] [&_h2]:text-forest [&_h3]:mt-8 [&_h3]:mb-2 [&_h3]:font-massilia [&_h3]:text-xl [&_h3]:font-bold [&_h3]:leading-[var(--leading-title)] [&_h3]:text-forest [&_img]:my-6 [&_img]:rounded-2xl [&_li]:my-1 [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-5 [&_strong]:font-bold [&_strong]:text-forest [&_ul]:my-4 [&_ul]:list-disc [&_ul]:pl-6"
           dangerouslySetInnerHTML={{ __html: post.body_html }}
         />
+      </section>
+
+      {/* The landing page for the reader's business, so every post passes a
+          link to the pages that hold the quotable answer and the schema. */}
+      <section className="bg-cream px-6 pb-10 md:px-8 md:pb-12">
+        <div className="rev mx-auto max-w-[720px] rounded-2xl border border-cream-dark bg-white p-6 md:p-8">
+          <p className="font-caveat text-body-lg text-forest md:text-mini-h">
+            See Genera for your business
+          </p>
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {VERTICALS.map((v) => (
+              <li key={v.slug}>
+                <Link
+                  href={`/${v.slug}`}
+                  className="inline-block rounded-full border-2 border-teal-mid bg-cream px-4 py-1.5 text-meta font-semibold text-forest transition-colors hover:border-forest hover:bg-white"
+                >
+                  {v.audience.charAt(0).toUpperCase() + v.audience.slice(1)}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       {/* Author / E-E-A-T */}

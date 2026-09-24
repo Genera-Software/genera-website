@@ -4,10 +4,15 @@ import ConsentPreferencesLink from "@/components/ConsentPreferencesLink";
 
 const PAW_LOGO = "/images/genera-svg.svg";
 
+// The footer stays as short as it was. The four landing pages and the guides are
+// reached from the nav's "For" menu, and the guides and report from /blog, so
+// repeating them here would only make this column long for no gain: a sitewide
+// boilerplate link is the weakest kind there is.
 const PRODUCT_LINKS = [
   { href: "/features", label: "Features" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/faqs", label: "FAQs" },
-  { href: "/blog", label: "Blog" },
+  { href: "/blog", label: "Blog & Guides" },
 ];
 
 const COMPANY_LINKS = [
@@ -85,10 +90,10 @@ export default function Footer() {
       </div>
 
       <div className="mx-auto flex max-w-[1160px] flex-wrap items-center justify-between gap-4 py-5">
-        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] text-white/35">
-          <p>© 2026 Genera Software Ltd.</p>
+        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-fine text-white/35">
+          <p className="text-fine">© 2026 Genera Software Ltd.</p>
           <span aria-hidden="true" className="text-white/20">•</span>
-          <p className="flex items-center gap-1.5">
+          <p className="flex items-center gap-1.5 text-fine">
             <span>Made with</span>
             <svg viewBox="0 0 24 24" aria-label="love" role="img" className="h-2.5 w-2.5 shrink-0 fill-[#e25555]">
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />

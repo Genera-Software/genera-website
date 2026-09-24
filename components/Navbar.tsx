@@ -8,11 +8,10 @@ import StartTrialLink from "@/components/StartTrialLink";
 import { LOGIN_URL } from "@/lib/urls";
 
 const NAV_LINKS = [
-  { href: "/", label: "Home" },
   { href: "/features", label: "Features" },
   { href: "/pricing", label: "Pricing" },
   { href: "/our-story", label: "Our Story" },
-  { href: "/blog", label: "Blog" },
+  { href: "/blog", label: "Blog & Guides" },
   { href: "/faqs", label: "FAQs" },
   { href: "/contact", label: "Contact" },
 ] as const;
