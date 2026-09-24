@@ -423,6 +423,15 @@ Base URLs: OpenAI `https://api.openai.com/v1`, Anthropic
 `https://generativelanguage.googleapis.com/v1beta/openai`, OpenRouter
 `https://openrouter.ai/api/v1`. Pick a model that supports tool calling.
 
+Keep both keys as narrow as the feature needs:
+
+- **OpenAI key.** Restricted to *Model capabilities → Chat completions* only,
+  with every other permission set to None.
+- **GitHub token.** Fine-grained, owned by the org, limited to the `genera`
+  repo with *Contents: Read-only*.
+
+Each key expires after a year, so put a reminder in the calendar to rotate it.
+
 `SUPPORT_REPO_TOKEN` is minted at GitHub → Settings → Developer settings →
 Personal access tokens → Fine-grained tokens: resource owner = the org owning the
 app repo, repository access = only that repo, permissions = **Contents: Read-only**
