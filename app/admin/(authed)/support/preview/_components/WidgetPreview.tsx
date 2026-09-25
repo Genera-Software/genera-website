@@ -71,7 +71,7 @@ export default function WidgetPreview() {
             type="button"
             onClick={() => runProbe(probe)}
             disabled={probing || probe.trim().length < 8}
-            className="rounded-lg bg-forest px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50"
+            className="rounded-full bg-forest px-5 py-2.5 font-massilia text-sm font-bold text-white transition-colors hover:bg-forest-mid disabled:opacity-50"
           >
             {probing ? "…" : "Match"}
           </button>

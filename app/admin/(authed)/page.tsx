@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PageHeader from "./_components/PageHeader";
 import { getAdminSupabase } from "@/lib/supabase/admin";
 import {
   fetchHeadlineMetrics,
@@ -155,12 +156,11 @@ export default async function AdminDashboard() {
 
   return (
     <div>
-      <header className="mb-8">
-        <p className="text-sm font-medium text-ink-soft">Welcome back</p>
-        <h1 className="mt-1 font-massilia text-3xl font-bold tracking-tight text-ink">
-          Genera CMS
-        </h1>
-      </header>
+      <PageHeader
+        eyebrow="Welcome back"
+        title="Dashboard"
+        description="What's happening across the site and support this week."
+      />
 
       {/* Top tiles */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

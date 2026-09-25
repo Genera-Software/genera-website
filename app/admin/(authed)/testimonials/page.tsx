@@ -34,7 +34,7 @@ export default async function TestimonialsPage() {
         action={
           <Link
             href="/admin/testimonials/new"
-            className="rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-ink transition-all hover:opacity-90 hover:shadow-md hover:shadow-gold/30"
+            className="rounded-full bg-gold px-5 py-2 font-massilia text-sm font-bold text-ink shadow-[0_4px_14px_rgba(255,168,0,0.3)] hover:shadow-[0_6px_20px_rgba(255,168,0,0.45)] transition-shadow"
           >
             + Add testimonial
           </Link>

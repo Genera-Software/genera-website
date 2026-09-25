@@ -25,57 +25,57 @@ const VARIANT_STYLES: Record<
 > = {
   gold: {
     button:
-      "rounded-lg bg-gold px-5 py-2.5 text-sm font-semibold text-ink shadow-sm transition-all hover:opacity-90 hover:shadow-md hover:shadow-gold/30 disabled:cursor-not-allowed disabled:opacity-65",
+      "rounded-full bg-gold px-5 py-2.5 font-massilia text-sm font-bold text-ink shadow-[0_4px_14px_rgba(255,168,0,0.3)] hover:shadow-[0_6px_20px_rgba(255,168,0,0.45)] transition-shadow disabled:cursor-not-allowed disabled:opacity-65",
     spinner: "h-4 w-4 border-2 border-ink/20 border-t-ink",
   },
   goldLg: {
     button:
-      "rounded-lg bg-gold px-4 py-3 text-base font-semibold text-ink shadow-sm transition-all hover:opacity-90 hover:shadow-md hover:shadow-gold/30 disabled:cursor-not-allowed disabled:opacity-65",
+      "rounded-full bg-gold px-5 py-3 font-massilia text-base font-bold text-ink shadow-[0_4px_14px_rgba(255,168,0,0.3)] hover:shadow-[0_6px_20px_rgba(255,168,0,0.45)] transition-shadow disabled:cursor-not-allowed disabled:opacity-65",
     spinner: "h-4 w-4 border-2 border-ink/20 border-t-ink",
   },
   forest: {
     button:
-      "rounded-lg bg-forest px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-forest-dark disabled:cursor-not-allowed disabled:opacity-65",
+      "rounded-full bg-forest px-5 py-2 font-massilia text-sm font-bold text-white shadow-[0_4px_14px_rgba(0,62,69,0.2)] transition-colors hover:bg-forest-mid disabled:cursor-not-allowed disabled:opacity-65",
     spinner: "h-4 w-4 border-2 border-white/25 border-t-white",
   },
   forestSm: {
     button:
-      "rounded-lg bg-forest px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-forest-dark disabled:cursor-not-allowed disabled:opacity-65",
+      "rounded-full bg-forest px-4 py-1.5 font-massilia text-sm font-bold text-white transition-colors hover:bg-forest-mid disabled:cursor-not-allowed disabled:opacity-65",
     spinner: "h-3.5 w-3.5 border-2 border-white/25 border-t-white",
   },
   outline: {
     button:
-      "rounded-lg border border-teal-mid bg-white px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-forest disabled:cursor-not-allowed disabled:opacity-60",
+      "rounded-full border border-teal-mid bg-white px-5 py-2 text-sm font-semibold text-forest transition-colors hover:border-forest disabled:cursor-not-allowed disabled:opacity-60",
     spinner: "h-4 w-4 border-2 border-teal-mid/50 border-t-forest",
   },
   outlineDanger: {
     button:
-      "rounded-md border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60",
+      "rounded-full border border-red-200 px-3.5 py-1.5 text-xs font-semibold text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60",
     spinner: "h-3.5 w-3.5 border-2 border-red-200 border-t-red-600",
   },
   outlineSm: {
     button:
-      "rounded-md border border-teal-mid px-2.5 py-1.5 text-xs font-semibold text-ink-soft transition-colors hover:border-forest hover:text-ink disabled:cursor-not-allowed disabled:opacity-60",
+      "rounded-full border border-teal-mid bg-white px-3 py-1.5 text-xs font-semibold text-ink-soft transition-colors hover:border-forest hover:text-forest disabled:cursor-not-allowed disabled:opacity-60",
     spinner: "h-3.5 w-3.5 border-2 border-teal-mid/50 border-t-forest",
   },
   outlineDangerSm: {
     button:
-      "rounded-md border border-red-200 px-2.5 py-1 text-xs font-semibold text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60",
+      "rounded-full border border-red-200 px-3 py-1 text-xs font-semibold text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60",
     spinner: "h-3 w-3 border-2 border-red-200 border-t-red-600",
   },
   outlineMarkAll: {
     button:
-      "rounded-lg border border-teal-mid bg-white px-3 py-2 text-xs font-semibold text-ink transition-colors hover:border-forest disabled:cursor-not-allowed disabled:opacity-60",
+      "rounded-full border border-teal-mid bg-white px-3.5 py-2 text-xs font-semibold text-forest transition-colors hover:border-forest disabled:cursor-not-allowed disabled:opacity-60",
     spinner: "h-3.5 w-3.5 border-2 border-teal-mid/50 border-t-forest",
   },
   ghostWide: {
     button:
-      "flex w-full items-center justify-start gap-3 rounded-lg border border-forest-mid/50 px-3 py-2.5 text-sm font-medium text-cream transition-colors hover:bg-forest hover:text-white disabled:cursor-not-allowed disabled:opacity-60",
+      "flex w-full items-center justify-start gap-3 rounded-full px-4 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-60",
     spinner: "h-4 w-4 border-2 border-cream/25 border-t-cream",
   },
   icon: {
     button:
-      "inline-flex h-7 w-7 items-center justify-center rounded p-1 text-ink-soft/70 transition-colors hover:bg-cream-dark hover:text-ink disabled:cursor-not-allowed disabled:opacity-50",
+      "inline-flex h-7 w-7 items-center justify-center rounded-full p-1 text-ink-soft/70 transition-colors hover:bg-cream-dark hover:text-ink disabled:cursor-not-allowed disabled:opacity-50",
     spinner: "h-3.5 w-3.5 border-2 border-ink-soft/35 border-t-forest",
   },
   ticketStatus: {

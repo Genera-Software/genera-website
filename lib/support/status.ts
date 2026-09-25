@@ -6,6 +6,15 @@ export const STATUSES: readonly SupportTicketStatus[] = [
   "completed",
 ] as const;
 
+/**
+ * Completed tickets leave the working views and live in the archive — unless
+ * the customer has written back and nobody has read it yet, in which case the
+ * ticket stays in front of us until someone does.
+ */
+export function isArchived(status: SupportTicketStatus, hasUnreadReply: boolean) {
+  return status === "completed" && !hasUnreadReply;
+}
+
 export const STATUS_LABEL: Record<SupportTicketStatus, string> = {
   new: "New",
   in_progress: "In progress",

@@ -266,7 +266,7 @@ export default function FormPreview({
               <button
                 type="button"
                 onClick={next}
-                className="inline-flex items-center gap-2 rounded-xl bg-gold px-5 py-2 text-sm font-semibold text-ink transition hover:opacity-90"
+                className="inline-flex items-center gap-2 rounded-full bg-gold px-5 py-2 font-massilia text-sm font-bold text-ink shadow-[0_4px_14px_rgba(255,168,0,0.3)] hover:shadow-[0_6px_20px_rgba(255,168,0,0.45)] transition-shadow"
               >
                 {step === total - 1 ? "Submit" : "OK"}
                 <svg

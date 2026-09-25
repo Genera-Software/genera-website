@@ -6,16 +6,17 @@ import {
   claimTicket,
   deleteTicket,
   replyToTicket,
-  setTicketAssignee,
+  setTicketAssignees,
+  toggleTicketAssignee,
   setTicketPriority,
   setTicketStatus,
   updateInternalNotes,
 } from "../actions";
-import { listAdminUsers } from "@/lib/admin/allowlist";
+import { listAdminUsers, normaliseEmail } from "@/lib/admin/allowlist";
 import { requireAdminUser } from "@/lib/admin/auth";
 import { assigneeName } from "@/lib/support/assignee";
 import { SUPPORT_FROM_EMAIL } from "@/lib/support/thread";
-import AssigneeAvatar from "../_components/AssigneeAvatar";
+import AssigneeAvatar, { AssigneeStack } from "../_components/AssigneeAvatar";
 import {
   PRIORITIES,
   PRIORITY_BADGE,
@@ -116,11 +117,12 @@ export default async function SupportTicketDetailPage({
     requireAdminUser(),
     listAdminUsers(),
   ]);
-  const assignedTo = ticket.assigned_to;
+  const assignees = ticket.assignees;
+  const me = normaliseEmail(currentUser.email);
   // Someone could still hold the ticket after being removed if the row was
   // edited outside the app — surface it rather than silently dropping them.
-  const assigneeIsStale = Boolean(
-    assignedTo && !admins.some((a) => a.email === assignedTo),
+  const staleAssignees = assignees.filter(
+    (e) => !admins.some((a) => a.email === e),
   );
 
   // Opening the ticket counts as reading it — clears this ticket from the
@@ -397,21 +399,21 @@ export default async function SupportTicketDetailPage({
             )}
           </section>
 
-          {/* Assignee */}
+          {/* Assignees — any number of people can be on a ticket. */}
           <section className="rounded-2xl border border-teal-mid bg-white p-6">
             <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-ink-soft">
               Assigned to
             </h2>
 
             <div className="mb-3">
-              <AssigneeAvatar
-                email={assignedTo}
+              <AssigneeStack
+                emails={assignees}
                 showName
-                stale={assigneeIsStale}
+                staleEmails={staleAssignees}
               />
             </div>
 
-            {assignedTo !== currentUser.email && (
+            {!assignees.includes(me) && (
               <form
                 className="mb-3"
                 action={async () => {
@@ -431,59 +433,79 @@ export default async function SupportTicketDetailPage({
 
             <div className="flex flex-col gap-2">
               {admins.map((admin) => {
-                const active = assignedTo === admin.email;
+                const on = assignees.includes(admin.email);
                 return (
                   <form
                     key={admin.id}
                     action={async () => {
                       "use server";
-                      await setTicketAssignee(ticket.id, admin.email);
+                      await toggleTicketAssignee(ticket.id, admin.email, !on);
                     }}
                   >
                     <AdminFormStatusButton
                       type="submit"
                       variant="ticketOption"
                       className={
-                        active
+                        on
                           ? "border-forest bg-forest/10 text-forest"
                           : "border-teal-mid bg-white text-ink hover:border-forest/40 hover:bg-cream"
                       }
-                      disabled={active}
-                      pendingLabel="Assigning…"
+                      title={on ? "Click to remove" : "Click to add"}
+                      pendingLabel={on ? "Removing…" : "Adding…"}
                     >
                       <AssigneeAvatar email={admin.email} />
                       <span className="truncate">
                         {assigneeName(admin.email)}
-                        {admin.email === currentUser.email && " (you)"}
+                        {admin.email === me && " (you)"}
                       </span>
-                      {active && <span className="ml-auto">✓</span>}
+                      {on && <span className="ml-auto">✓</span>}
                     </AdminFormStatusButton>
                   </form>
                 );
               })}
 
-              <form
-                action={async () => {
-                  "use server";
-                  await setTicketAssignee(ticket.id, null);
-                }}
-              >
-                <AdminFormStatusButton
-                  type="submit"
-                  variant="ticketOption"
-                  className={
-                    assignedTo === null
-                      ? "border-slate-300 bg-slate-100 text-slate-700"
-                      : "border-teal-mid bg-white text-ink-soft hover:border-slate-300 hover:bg-slate-50"
-                  }
-                  disabled={assignedTo === null}
-                  pendingLabel="Clearing…"
+              {staleAssignees.map((email) => (
+                <form
+                  key={email}
+                  action={async () => {
+                    "use server";
+                    await toggleTicketAssignee(ticket.id, email, false);
+                  }}
                 >
-                  <AssigneeAvatar email={null} />
-                  Unassigned
-                  {assignedTo === null && <span className="ml-auto">✓</span>}
-                </AdminFormStatusButton>
-              </form>
+                  <AdminFormStatusButton
+                    type="submit"
+                    variant="ticketOption"
+                    className="border-teal-mid bg-white text-ink-soft hover:border-red-300 hover:bg-red-50"
+                    title="No longer an admin — click to remove"
+                    pendingLabel="Removing…"
+                  >
+                    <AssigneeAvatar email={email} stale />
+                    <span className="truncate line-through">
+                      {assigneeName(email)}
+                    </span>
+                    <span className="ml-auto">✓</span>
+                  </AdminFormStatusButton>
+                </form>
+              ))}
+
+              {assignees.length > 0 && (
+                <form
+                  action={async () => {
+                    "use server";
+                    await setTicketAssignees(ticket.id, []);
+                  }}
+                >
+                  <AdminFormStatusButton
+                    type="submit"
+                    variant="ticketOption"
+                    className="border-teal-mid bg-white text-ink-soft hover:border-slate-300 hover:bg-slate-50"
+                    pendingLabel="Clearing…"
+                  >
+                    <AssigneeAvatar email={null} />
+                    Unassign everyone
+                  </AdminFormStatusButton>
+                </form>
+              )}
             </div>
           </section>
 

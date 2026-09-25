@@ -51,10 +51,16 @@ export default async function AuthedAdminLayout({
   const user = await requireAdminUser();
   const badges = await loadBadges();
   return (
-    <div className="min-h-screen bg-cream text-ink">
+    <div className="admin-shell min-h-screen bg-cream text-ink">
       <Sidebar badges={badges} userEmail={user.email} />
-      <div className="lg:pl-64">
-        <main className="px-4 pb-12 pt-20 lg:px-8 lg:pt-8">
+      <div className="relative lg:pl-64">
+        {/* A light teal wash behind the page header, like the site's light
+            sections — fades out before the content gets going. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-teal-soft/70 to-transparent"
+        />
+        <main className="relative px-4 pb-12 pt-20 lg:px-10 lg:pt-10">
           {/* Pages opt out of the reading-width cap with data-full-width. */}
           <div className="mx-auto max-w-6xl has-[[data-full-width]]:max-w-none">
             {/* Unread customer replies, surfaced on every admin page — the
