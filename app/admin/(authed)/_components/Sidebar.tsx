@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -190,7 +191,7 @@ export default function Sidebar({
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Open menu"
-        className="fixed left-4 top-4 z-30 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-teal-mid bg-white shadow-sm lg:hidden"
+        className="fixed left-4 top-4 z-30 inline-flex h-11 w-11 items-center justify-center rounded-full bg-forest text-white shadow-[0_6px_22px_rgba(0,40,48,0.25)] lg:hidden"
       >
         <svg
           width="20"
@@ -210,29 +211,47 @@ export default function Sidebar({
       {/* Backdrop */}
       {open && (
         <div
-          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          className="fixed inset-0 z-40 bg-forest-dark/50 backdrop-blur-sm lg:hidden"
           onClick={() => setOpen(false)}
           aria-hidden
         />
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-forest-dark text-white transition-transform duration-200 ease-out lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 transform flex-col overflow-hidden bg-gradient-to-b from-forest to-forest-dark text-white transition-transform duration-200 ease-out lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex h-16 items-center justify-between border-b border-forest-mid/50 px-5">
-          <Link
-            href="/admin"
-            className="font-massilia text-lg font-bold text-white"
-          >
-            Genera <span className="text-gold">CMS</span>
+        {/* The site hero's soft gold shape, kept faint. */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-gold/[0.07]"
+        />
+
+        {/* Brand lockup, as in the site's navbar. */}
+        <div className="relative flex h-20 shrink-0 items-center justify-between px-5">
+          <Link href="/admin" className="flex items-center gap-2.5">
+            <Image
+              src="/images/genera-svg.svg"
+              alt=""
+              width={34}
+              height={34}
+              className="h-[34px] w-[34px] object-contain"
+            />
+            <span className="flex flex-col leading-none">
+              <span className="font-massilia text-base font-extrabold tracking-[0.125rem] text-white">
+                GENERA
+              </span>
+              <span className="mt-1 text-[11px] tracking-[0.5px] text-white/55">
+                Content studio
+              </span>
+            </span>
           </Link>
           <button
             type="button"
             onClick={() => setOpen(false)}
             aria-label="Close menu"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md text-ink-soft/70 hover:bg-forest hover:text-white lg:hidden"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full text-white/60 hover:bg-white/10 hover:text-white lg:hidden"
           >
             <svg
               width="16"
@@ -249,13 +268,13 @@ export default function Sidebar({
           </button>
         </div>
 
-        <nav className="flex flex-col gap-1 p-4">
+        <nav className="relative flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 pb-4">
           {NAV.map((entry, i) => {
             if (entry.kind === "heading") {
               return (
                 <p
                   key={`h-${i}`}
-                  className="mt-4 px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wider text-cream/50"
+                  className="mt-4 px-4 pb-1 pt-1 font-caveat text-base font-bold text-gold-soft/70"
                 >
                   {entry.label}
                 </p>
@@ -271,10 +290,10 @@ export default function Sidebar({
                 key={entry.href}
                 href={entry.href}
                 onClick={() => setOpen(false)}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                className={`flex items-center gap-3 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                   active
-                    ? "bg-gold/15 text-gold-soft"
-                    : "text-cream hover:bg-forest hover:text-white"
+                    ? "bg-white font-semibold text-forest shadow-[0_4px_14px_rgba(0,0,0,0.18)]"
+                    : "text-white/75 hover:bg-white/10 hover:text-white"
                 }`}
               >
                 <svg
@@ -283,6 +302,7 @@ export default function Sidebar({
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
+                  className={active ? "text-forest" : "text-white/60"}
                   strokeWidth="1.8"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -300,12 +320,12 @@ export default function Sidebar({
           })}
         </nav>
 
-        <div className="absolute bottom-4 left-4 right-4">
+        <div className="relative shrink-0 border-t border-white/10 px-3 pb-4 pt-3">
           {userEmail && (
             <Link
               href="/admin/account"
               title={`${userEmail} — manage your account`}
-              className="mb-2 block truncate px-1 text-[11px] text-cream/60 hover:text-cream"
+              className="mb-2 block truncate px-4 text-[11px] text-white/50 hover:text-white"
             >
               Signed in as <span className="underline">{userEmail}</span>
             </Link>

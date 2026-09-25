@@ -400,3 +400,31 @@
     font-size: 1.275rem;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Admin (CMS) surface — scoped to .admin-shell on the authed
+   admin layout, so none of this reaches the public site.
+
+   It carries the site's card language (white, softly lifted,
+   teal-tinted shadow) into the CMS without touching each of the
+   ~70 panels that are written as `rounded-2xl border bg-white`.
+   ───────────────────────────────────────────────────────────── */
+.admin-shell {
+  /* Slightly lighter card edges than the public site's borders —
+     the shadow does the separating, the border just defines it. */
+  --color-teal-mid: #D3E8EB;
+}
+
+/* In the components layer so a panel's own shadow-* utility still wins. */
+@layer components {
+  .admin-shell :is(.rounded-2xl, .rounded-xl).bg-white.border {
+    box-shadow:
+      0 1px 2px rgba(0, 62, 69, 0.04),
+      0 6px 20px rgba(0, 62, 69, 0.05);
+  }
+}
+
+.admin-shell ::selection {
+  background: var(--color-gold-soft);
+  color: var(--color-ink);
+}
