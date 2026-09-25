@@ -188,12 +188,26 @@ export async function removeAdminUser(email: string): Promise<void> {
   // Hand their open tickets back to the pool rather than leaving them assigned
   // to someone who can no longer sign in. Completed tickets keep the name as a
   // record of who handled them.
-  const { error: unassignError } = await supabase
+  const { data: held, error: heldError } = await supabase
     .from("support_tickets")
-    .update({ assigned_to: null })
-    .eq("assigned_to", target)
+    .select("id, assignees")
+    .contains("assignees", [target])
     .neq("status", "completed");
-  if (unassignError) throw new Error(unassignError.message);
+  if (heldError) throw new Error(heldError.message);
+  for (const t of held ?? []) {
+    const { error: unassignError } = await supabase
+      .from("support_tickets")
+      .update({ assignees: t.assignees.filter((e) => e !== target) })
+      .eq("id", t.id);
+    if (unassignError) throw new Error(unassignError.message);
+  }
+
+  // And stop new tickets being auto-assigned to them.
+  const { error: categoryError } = await supabase
+    .from("support_category_assignees")
+    .delete()
+    .eq("email", target);
+  if (categoryError) throw new Error(categoryError.message);
 
   const authUser = await findAuthUserByEmail(target);
   if (authUser) {

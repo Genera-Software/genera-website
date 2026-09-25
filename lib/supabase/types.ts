@@ -340,6 +340,7 @@ export type Database = {
           source: string;
           internal_notes: string;
           assigned_to: string | null;
+          assignees: string[];
           created_by: string | null;
           ai_status: "idle" | "running" | "ready" | "failed";
           ai_messages: Json;
@@ -379,6 +380,7 @@ export type Database = {
           source?: string;
           internal_notes?: string;
           assigned_to?: string | null;
+          assignees?: string[];
           created_by?: string | null;
           ai_status?: "idle" | "running" | "ready" | "failed";
           ai_messages?: Json;
@@ -418,6 +420,7 @@ export type Database = {
           source?: string;
           internal_notes?: string;
           assigned_to?: string | null;
+          assignees?: string[];
           created_by?: string | null;
           ai_status?: "idle" | "running" | "ready" | "failed";
           ai_messages?: Json;
@@ -429,6 +432,24 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           resolved_at?: string | null;
+        };
+        Relationships: [];
+      };
+      support_category_assignees: {
+        Row: {
+          category: string;
+          email: string;
+          created_at: string;
+        };
+        Insert: {
+          category: string;
+          email: string;
+          created_at?: string;
+        };
+        Update: {
+          category?: string;
+          email?: string;
+          created_at?: string;
         };
         Relationships: [];
       };

@@ -2,6 +2,7 @@ import "server-only";
 import { getAdminSupabase } from "@/lib/supabase/admin";
 import { escapeHtml, sendPostmarkEmail } from "@/lib/forms/delivery";
 import { ticketRef } from "./ref";
+import { assigneeName } from "./assignee";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.generasoftware.com";
@@ -59,6 +60,8 @@ const multiline = (s: string) => escapeHtml(s).replace(/\r?\n/g, "<br>");
  * full-width, and the card is fluid up to 560px.
  */
 function ticketEmailHtml(opts: {
+  /** Small caps line above the subject, e.g. "New support ticket". */
+  eyebrow?: string;
   ref: string;
   url: string;
   subject: string;
@@ -102,7 +105,7 @@ function ticketEmailHtml(opts: {
     <tr><td style="padding:16px 12px;">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;">
         <tr><td style="padding:24px 20px;font-family:${FONT};color:#111827;">
-          <p style="margin:0 0 8px;font-size:12px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6B7280;">New support ticket · #${opts.ref}</p>
+          <p style="margin:0 0 8px;font-size:12px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#6B7280;">${escapeHtml(opts.eyebrow ?? "New support ticket")} · #${opts.ref}</p>
           <h1 style="margin:0 0 6px;font-size:20px;line-height:1.3;font-weight:700;color:#003E45;${WRAP}">${escapeHtml(opts.subject)}</h1>
           <p style="margin:0 0 20px;font-size:14px;line-height:1.5;color:#4B5563;${WRAP}">${escapeHtml(byline)}</p>
 
@@ -144,7 +147,18 @@ export async function notifySupportTicket(opts: {
   source?: string | null;
   console_errors?: Array<{ message: string }> | null;
 }) {
-  const recipients = await getSupportNotifyEmails();
+  // Whoever the category auto-assigned (the database fills this on insert)
+  // hears about it as theirs; everyone else on the notify list gets the usual
+  // heads-up. One email per person either way.
+  const { data: ticket } = await getAdminSupabase()
+    .from("support_tickets")
+    .select("assignees")
+    .eq("id", opts.ticket_id)
+    .maybeSingle();
+  const assignees = new Set(ticket?.assignees ?? []);
+  const recipients = [
+    ...new Set([...(await getSupportNotifyEmails()), ...assignees]),
+  ];
   if (recipients.length === 0) return;
 
   const ref = ticketRef(opts.ticket_id);
@@ -166,21 +180,8 @@ export async function notifySupportTicket(opts: {
 
   const errors = (opts.console_errors ?? []).slice(0, 5).map((e) => e.message);
 
-  const subject = `New support ticket — ${category}: ${opts.subject}`;
-
-  const htmlBody = ticketEmailHtml({
-    ref,
-    url,
-    subject: opts.subject,
-    category: opts.category,
-    description: opts.description,
-    from: opts.account_name || opts.account_email || null,
-    details,
-    errors,
-  });
-
-  const textBody = [
-    `New support ticket #${ref}`,
+  const textBody = (heading: string) => [
+    `${heading} #${ref}`,
     `Open ticket: ${url}`,
     "",
     `Category: ${category}`,
@@ -192,13 +193,33 @@ export async function notifySupportTicket(opts: {
     ...(errors.length ? ["", "Recent errors:", ...errors.map((m) => `• ${m}`)] : []),
   ].join("\n");
 
+  const emailFor = (assigned: boolean) => {
+    const heading = assigned ? "New ticket, assigned to you" : "New support ticket";
+    return {
+      subject: `${assigned ? "Assigned to you" : "New support ticket"} — ${category}: ${opts.subject}`,
+      htmlBody: ticketEmailHtml({
+        eyebrow: heading,
+        ref,
+        url,
+        subject: opts.subject,
+        category: opts.category,
+        description: opts.description,
+        from: opts.account_name || opts.account_email || null,
+        details,
+        errors,
+      }),
+      textBody: textBody(heading),
+    };
+  };
+
+  const plain = emailFor(false);
+  const mine = emailFor(true);
+
   await Promise.all(
     recipients.map(async (to) => {
       const result = await sendPostmarkEmail({
         to,
-        subject,
-        htmlBody,
-        textBody,
+        ...(assignees.has(to) ? mine : plain),
         replyTo: opts.account_email ?? null,
       });
       if (!result.ok) {
@@ -206,4 +227,68 @@ export async function notifySupportTicket(opts: {
       }
     }),
   );
+}
+
+/**
+ * Tell an admin a ticket has been handed to them, with a link straight to it.
+ * Best effort: a failed send is logged, never thrown, so it can't undo the
+ * assignment that triggered it.
+ */
+export async function notifyTicketAssigned(opts: {
+  ticketId: string;
+  assignee: string;
+  assignedBy: string;
+}) {
+  const supabase = getAdminSupabase();
+  const { data: t } = await supabase
+    .from("support_tickets")
+    .select("id, subject, description, category, priority, account_email, account_name")
+    .eq("id", opts.ticketId)
+    .maybeSingle();
+  if (!t) return;
+
+  const ref = ticketRef(t.id);
+  const url = ticketAdminUrl(t.id);
+  const by = assigneeName(opts.assignedBy);
+  const priority = t.priority.charAt(0).toUpperCase() + t.priority.slice(1);
+
+  const details: [string, string][] = [
+    ["Assigned by", by],
+    ["Priority", priority],
+  ];
+  if (t.account_name) details.push(["Name", t.account_name]);
+  if (t.account_email) details.push(["Email", t.account_email]);
+
+  const htmlBody = ticketEmailHtml({
+    eyebrow: "Assigned to you",
+    ref,
+    url,
+    subject: t.subject,
+    category: t.category,
+    description: t.description,
+    from: t.account_name || t.account_email || null,
+    details,
+    errors: [],
+  });
+
+  const textBody = [
+    `${by} assigned support ticket #${ref} to you.`,
+    `Open ticket: ${url}`,
+    "",
+    `Subject: ${t.subject}`,
+    `Category: ${categoryLabel(t.category)}`,
+    `Priority: ${priority}`,
+    "",
+    t.description,
+  ].join("\n");
+
+  const result = await sendPostmarkEmail({
+    to: opts.assignee,
+    subject: `Assigned to you — #${ref}: ${t.subject}`,
+    htmlBody,
+    textBody,
+  });
+  if (!result.ok) {
+    console.error("[support/notify] assignment email failed", opts.assignee, result.error);
+  }
 }

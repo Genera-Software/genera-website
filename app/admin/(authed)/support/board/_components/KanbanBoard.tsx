@@ -11,7 +11,7 @@ import {
 } from "@/lib/support/priority";
 import { STATUS_DOT, STATUS_LABEL } from "@/lib/support/status";
 import { assigneeName } from "@/lib/support/assignee";
-import AssigneeAvatar from "../../_components/AssigneeAvatar";
+import AssigneeAvatar, { AssigneeStack } from "../../_components/AssigneeAvatar";
 import type {
   SupportTicketCategory,
   SupportTicketPriority,
@@ -25,7 +25,7 @@ type BoardTicket = {
   category: SupportTicketCategory;
   subject: string;
   account_email: string | null;
-  assigned_to: string | null;
+  assignees: string[];
   created_at: string;
 };
 
@@ -49,6 +49,7 @@ function formatDate(iso: string) {
 
 export default function KanbanBoard({
   tickets,
+  archivedCount = 0,
   unreadIds,
   admins,
   onMove,
@@ -56,11 +57,13 @@ export default function KanbanBoard({
   onAssign,
 }: {
   tickets: BoardTicket[];
+  /** Completed tickets hidden from the board; linked from the Completed column. */
+  archivedCount?: number;
   unreadIds: string[];
   admins: string[];
   onMove: (id: string, status: string) => Promise<void>;
   onPriority: (id: string, priority: string) => Promise<void>;
-  onAssign: (id: string, email: string | null) => Promise<void>;
+  onAssign: (id: string, emails: string[]) => Promise<void>;
 }) {
   // Local copy so drags apply instantly; the server action revalidates and the
   // fresh props re-sync it afterwards.
@@ -93,14 +96,32 @@ export default function KanbanBoard({
     });
   }
 
-  function changeAssignee(id: string, email: string | null) {
+  function toggleAssignee(id: string, email: string) {
+    const ticket = items.find((t) => t.id === id);
+    if (!ticket) return;
+    const next = ticket.assignees.includes(email)
+      ? ticket.assignees.filter((e) => e !== email)
+      : [...ticket.assignees, email];
     setItems((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, assigned_to: email } : t)),
+      prev.map((t) => (t.id === id ? { ...t, assignees: next } : t)),
     );
     startTransition(() => {
-      onAssign(id, email).catch(() => setItems(tickets));
+      onAssign(id, next).catch(() => setItems(tickets));
     });
   }
+
+  // One assignee picker open at a time; a click anywhere else closes it.
+  const [pickerFor, setPickerFor] = useState<string | null>(null);
+  useEffect(() => {
+    if (!pickerFor) return;
+    const close = (e: MouseEvent) => {
+      if (!(e.target as Element).closest("[data-assignee-picker]")) {
+        setPickerFor(null);
+      }
+    };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, [pickerFor]);
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -218,26 +239,47 @@ export default function KanbanBoard({
                         {CATEGORY_LABEL[t.category]}
                       </span>
 
-                      {/* Assignee: avatar plus an invisible select over it, so
-                          the card stays compact but stays clickable. */}
-                      <span className="relative ml-auto inline-flex items-center">
-                        <AssigneeAvatar email={t.assigned_to} />
-                        <select
-                          value={t.assigned_to ?? ""}
-                          onChange={(e) =>
-                            changeAssignee(t.id, e.target.value || null)
+                      {/* Assignees: the avatar stack opens a small checklist,
+                          so the card stays compact. */}
+                      <span
+                        data-assignee-picker
+                        className="relative ml-auto inline-flex items-center"
+                      >
+                        <button
+                          type="button"
+                          aria-label="Assignees"
+                          aria-expanded={pickerFor === t.id}
+                          onClick={() =>
+                            setPickerFor((cur) => (cur === t.id ? null : t.id))
                           }
-                          aria-label="Assignee"
-                          title={t.assigned_to ?? "Unassigned"}
-                          className="absolute inset-0 cursor-pointer opacity-0"
+                          className="rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-forest"
                         >
-                          <option value="">Unassigned</option>
-                          {admins.map((email) => (
-                            <option key={email} value={email}>
-                              {assigneeName(email)}
-                            </option>
-                          ))}
-                        </select>
+                          <AssigneeStack emails={t.assignees} />
+                        </button>
+                        {pickerFor === t.id && (
+                          <div className="absolute right-0 top-full z-20 mt-1.5 w-52 rounded-xl border border-teal-mid bg-white p-1.5 shadow-lg">
+                            {admins.map((email) => {
+                              const on = t.assignees.includes(email);
+                              return (
+                                <button
+                                  key={email}
+                                  type="button"
+                                  aria-pressed={on}
+                                  onClick={() => toggleAssignee(t.id, email)}
+                                  className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-xs font-semibold text-ink hover:bg-cream"
+                                >
+                                  <AssigneeAvatar email={email} />
+                                  <span className="truncate">
+                                    {assigneeName(email)}
+                                  </span>
+                                  {on && (
+                                    <span className="ml-auto text-forest">✓</span>
+                                  )}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
                       </span>
                     </div>
                   </div>
@@ -246,10 +288,23 @@ export default function KanbanBoard({
 
               {colTickets.length === 0 && (
                 <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-cream-dark p-6 text-xs text-ink-soft">
-                  {highlighted ? "Drop here" : "No tickets"}
+                  {highlighted
+                    ? col === "completed"
+                      ? "Drop to complete and archive"
+                      : "Drop here"
+                    : "No tickets"}
                 </div>
               )}
             </div>
+
+            {col === "completed" && archivedCount > 0 && (
+              <Link
+                href="/admin/support?view=archive"
+                className="mt-3 px-1 text-xs font-semibold text-ink-soft hover:text-forest"
+              >
+                {archivedCount} archived →
+              </Link>
+            )}
           </div>
         );
       })}

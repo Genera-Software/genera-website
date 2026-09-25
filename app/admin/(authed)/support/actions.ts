@@ -6,7 +6,10 @@ import { z } from "zod";
 import { getAdminSupabase } from "@/lib/supabase/admin";
 import { isAllowedAdminEmail, normaliseEmail } from "@/lib/admin/allowlist";
 import { requireAdminUser } from "@/lib/admin/auth";
-import { notifySupportTicket } from "@/lib/support/notify";
+import {
+  notifySupportTicket,
+  notifyTicketAssigned,
+} from "@/lib/support/notify";
 import {
   advanceTicketAnalysis,
   startTicketAnalysis,
@@ -225,33 +228,117 @@ export async function setTicketPriority(id: string, priority: string) {
 }
 
 /**
- * Assign a ticket to an admin, or pass null to unassign. The email is checked
- * against the allowlist so a stale form can't park work on someone who no
- * longer has access.
+ * Set who is working a ticket — any number of admins, or none. Anyone being
+ * added is checked against the allowlist so a stale form can't park work on
+ * someone who no longer has access; people already on it are left alone even
+ * if they've since been removed, so the change doesn't fail over them.
  */
-export async function setTicketAssignee(id: string, email: string | null) {
-  const target = email ? normaliseEmail(email) : null;
-
-  if (target && !(await isAllowedAdminEmail(target))) {
-    throw new Error(`${target} is not an admin.`);
-  }
+export async function setTicketAssignees(id: string, emails: string[]) {
+  const actor = await requireAdminUser();
+  const target = [...new Set(emails.map(normaliseEmail).filter(Boolean))];
 
   const supabase = getAdminSupabase();
+  const { data: before } = await supabase
+    .from("support_tickets")
+    .select("assignees")
+    .eq("id", id)
+    .maybeSingle();
+  if (!before) throw new Error("Ticket not found.");
+
+  const added = target.filter((e) => !before.assignees.includes(e));
+  for (const email of added) {
+    if (!(await isAllowedAdminEmail(email))) {
+      throw new Error(`${email} is not an admin.`);
+    }
+  }
+
   const { error } = await supabase
     .from("support_tickets")
-    .update({ assigned_to: target })
+    .update({ assignees: target })
     .eq("id", id);
   if (error) throw new Error(error.message);
+
+  // Email each newly added person a link to the ticket — but not someone
+  // adding themselves.
+  const me = normaliseEmail(actor.email);
+  await Promise.all(
+    added
+      .filter((email) => email !== me)
+      .map((email) =>
+        notifyTicketAssigned({
+          ticketId: id,
+          assignee: email,
+          assignedBy: actor.email,
+        }).catch((e) =>
+          console.error("[support] assignment email failed", email, e),
+        ),
+      ),
+  );
 
   revalidatePath("/admin/support");
   revalidatePath("/admin/support/board");
   revalidatePath(`/admin/support/${id}`);
 }
 
+/** Add or remove one person, leaving everyone else on the ticket as they are. */
+export async function toggleTicketAssignee(
+  id: string,
+  email: string,
+  on: boolean,
+) {
+  const target = normaliseEmail(email);
+  const supabase = getAdminSupabase();
+  const { data: ticket } = await supabase
+    .from("support_tickets")
+    .select("assignees")
+    .eq("id", id)
+    .maybeSingle();
+  if (!ticket) throw new Error("Ticket not found.");
+
+  const rest = ticket.assignees.filter((e) => e !== target);
+  await setTicketAssignees(id, on ? [...rest, target] : rest);
+}
+
 /** "Assign to me" — resolves the actor from the session rather than the form. */
 export async function claimTicket(id: string) {
   const actor = await requireAdminUser();
-  await setTicketAssignee(id, actor.email);
+  await toggleTicketAssignee(id, actor.email, true);
+}
+
+/**
+ * Add or remove an admin from a category's auto-assign list. Only affects
+ * tickets created from now on — the database fills `assignees` on insert.
+ */
+export async function setCategoryAssignee(
+  category: string,
+  email: string,
+  on: boolean,
+) {
+  await requireAdminUser();
+  const parsedCategory = z.enum(CATEGORIES).parse(category);
+  const target = normaliseEmail(email);
+
+  const supabase = getAdminSupabase();
+  if (on) {
+    if (!(await isAllowedAdminEmail(target))) {
+      throw new Error(`${target} is not an admin.`);
+    }
+    const { error } = await supabase
+      .from("support_category_assignees")
+      .upsert(
+        { category: parsedCategory, email: target },
+        { onConflict: "category,email", ignoreDuplicates: true },
+      );
+    if (error) throw new Error(error.message);
+  } else {
+    const { error } = await supabase
+      .from("support_category_assignees")
+      .delete()
+      .eq("category", parsedCategory)
+      .eq("email", target);
+    if (error) throw new Error(error.message);
+  }
+  revalidatePath("/admin/support");
 }
 
 export async function updateInternalNotes(id: string, formData: FormData) {
