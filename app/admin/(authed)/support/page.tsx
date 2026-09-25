@@ -35,6 +35,7 @@ import AssigneeAvatar, { AssigneeStack } from "./_components/AssigneeAvatar";
 import { listAdminUsers, normaliseEmail } from "@/lib/admin/allowlist";
 import { requireAdminUser } from "@/lib/admin/auth";
 import { assigneeName } from "@/lib/support/assignee";
+import { searchTicketIds } from "@/lib/support/search";
 
 export const dynamic = "force-dynamic";
 
@@ -67,6 +68,25 @@ const CATEGORY_FILTERS: Array<{ value: SupportTicketCategory; label: string }> =
 ];
 
 const PRIORITY_FILTERS: SupportTicketPriority[] = ["urgent", "high", "medium", "low"];
+
+type SortKey = "assignee" | "priority" | "status" | "age";
+type SortDir = "asc" | "desc";
+const SORT_KEYS: SortKey[] = ["assignee", "priority", "status", "age"];
+
+/** Which way a column sorts on its first click. Age starts oldest-first, since
+    that is usually what you're hunting for. */
+const FIRST_DIR: Record<SortKey, SortDir> = {
+  assignee: "asc",
+  priority: "asc",
+  status: "asc",
+  age: "desc",
+};
+
+const STATUS_RANK: Record<SupportTicketStatus, number> = {
+  new: 0,
+  in_progress: 1,
+  completed: 2,
+};
 
 const CATEGORY_LABEL: Record<SupportTicketCategory, string> = {
   technical: "Technical",
@@ -211,9 +231,18 @@ export default async function SupportTicketsPage({
     category?: string;
     priority?: string;
     assignee?: string;
+    q?: string;
+    sort?: string;
+    dir?: string;
   }>;
 }) {
   const sp = await searchParams;
+  const q = (sp.q ?? "").trim().slice(0, 200);
+  const searching = q !== "";
+  const sortKey = SORT_KEYS.includes(sp.sort as SortKey)
+    ? (sp.sort as SortKey)
+    : null;
+  const sortDir: SortDir = sp.dir === "asc" || sp.dir === "desc" ? sp.dir : "asc";
 
   // Older links used ?status=completed and ?assignee=me|unassigned — map them
   // onto the views that replaced them.
@@ -318,19 +347,61 @@ export default async function SupportTicketsPage({
   };
 
   // ---- Rows for the current view -----------------------------------------
-  let rows = view === "archive" ? archived : active;
-  if (view === "mine") rows = rows.filter((t) => t.assignees.includes(me));
-  if (view === "unassigned") rows = rows.filter((t) => t.assignees.length === 0);
+  // A search looks through every ticket, archive included — it's how you find
+  // the old one you need to revisit — so it sets the view tabs aside.
+  let rows = searching ? tickets : view === "archive" ? archived : active;
+  if (searching) {
+    const hits = await searchTicketIds(q, tickets);
+    rows = rows.filter((t) => hits.has(t.id));
+  } else {
+    if (view === "mine") rows = rows.filter((t) => t.assignees.includes(me));
+    if (view === "unassigned") rows = rows.filter((t) => t.assignees.length === 0);
+  }
   if (status === "replied") rows = rows.filter((t) => unreadTickets.has(t.id));
   else if (status !== "all") rows = rows.filter((t) => t.status === status);
   if (priority !== "all") rows = rows.filter((t) => t.priority === priority);
   if (category !== "all") rows = rows.filter((t) => t.category === category);
   if (assignee !== "all") rows = rows.filter((t) => t.assignees.includes(assignee));
 
+  const isArchive = view === "archive" && !searching;
+
+  // A clicked column header wins; ties fall back to newest first.
+  const firstAssignee = (t: (typeof rows)[number]) =>
+    t.assignees.length ? assigneeName(t.assignees[0]).toLowerCase() : null;
+  const byColumn = (a: (typeof rows)[number], b: (typeof rows)[number]) => {
+    const sign = sortDir === "asc" ? 1 : -1;
+    switch (sortKey) {
+      case "assignee": {
+        const x = firstAssignee(a);
+        const y = firstAssignee(b);
+        // Unassigned stays at the bottom whichever way the column is sorted.
+        if (x === null || y === null) return (x === null ? 1 : 0) - (y === null ? 1 : 0);
+        return sign * x.localeCompare(y);
+      }
+      case "priority":
+        return sign * (PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority]);
+      case "status":
+        return isArchive
+          ? sign *
+              (a.resolved_at ?? a.created_at).localeCompare(
+                b.resolved_at ?? b.created_at,
+              )
+          : sign * (STATUS_RANK[a.status] - STATUS_RANK[b.status]);
+      case "age":
+        // asc = youngest first, desc = oldest first.
+        return sign * b.created_at.localeCompare(a.created_at);
+      default:
+        return 0;
+    }
+  };
+
   // Working views: anything the customer is waiting on first, then by
   // priority, then newest. The archive reads most-recently-resolved first.
-  rows =
-    view === "archive"
+  rows = sortKey
+    ? [...rows].sort(
+        (a, b) => byColumn(a, b) || b.created_at.localeCompare(a.created_at),
+      )
+    : isArchive
       ? [...rows].sort((a, b) =>
           (b.resolved_at ?? b.created_at).localeCompare(
             a.resolved_at ?? a.created_at,
@@ -363,6 +434,9 @@ export default async function SupportTicketsPage({
     category?: string;
     priority?: string;
     assignee?: string;
+    q?: string;
+    sort?: SortKey | null;
+    dir?: SortDir;
   }) {
     const params = new URLSearchParams();
     const v = next.view ?? view;
@@ -370,16 +444,63 @@ export default async function SupportTicketsPage({
     const c = next.category ?? category;
     const p = next.priority ?? priority;
     const a = next.assignee ?? assignee;
+    // Picking a view tab leaves the search; everything else keeps it.
+    const query = next.q ?? (next.view ? "" : q);
+    const k = next.sort === undefined ? sortKey : next.sort;
+    const d = next.dir ?? sortDir;
     if (v !== "inbox") params.set("view", v);
     if (s !== "all" && v !== "archive") params.set("status", s);
     if (c !== "all") params.set("category", c);
     if (p !== "all") params.set("priority", p);
     if (a !== "all") params.set("assignee", a);
+    if (query) params.set("q", query);
+    if (k) {
+      params.set("sort", k);
+      params.set("dir", d);
+    }
     const qs = params.toString();
     return qs ? `/admin/support?${qs}` : "/admin/support";
   }
 
-  const isArchive = view === "archive";
+  /** Header link that cycles: first direction → the other → back to default. */
+  function sortHref(key: SortKey) {
+    if (sortKey !== key) return hrefFor({ sort: key, dir: FIRST_DIR[key] });
+    if (sortDir === FIRST_DIR[key])
+      return hrefFor({ sort: key, dir: sortDir === "asc" ? "desc" : "asc" });
+    return hrefFor({ sort: null });
+  }
+
+  function SortHeader({
+    column,
+    label,
+    align = "left",
+  }: {
+    column: SortKey;
+    label: string;
+    align?: "left" | "right";
+  }) {
+    const on = sortKey === column;
+    return (
+      <Link
+        href={sortHref(column)}
+        scroll={false}
+        aria-sort={on ? (sortDir === "asc" ? "ascending" : "descending") : undefined}
+        title={
+          on && sortDir !== FIRST_DIR[column]
+            ? "Back to the default order"
+            : `Sort by ${label.toLowerCase()}`
+        }
+        className={`inline-flex items-center gap-1 uppercase hover:text-ink ${
+          align === "right" ? "flex-row-reverse" : ""
+        } ${on ? "text-ink" : ""}`}
+      >
+        {label}
+        <span aria-hidden className={`text-[9px] ${on ? "" : "opacity-30"}`}>
+          {on ? (sortDir === "asc" ? "▲" : "▼") : "▲▼"}
+        </span>
+      </Link>
+    );
+  }
 
   return (
     <div data-full-width>
@@ -456,7 +577,7 @@ export default async function SupportTicketsPage({
         {/* View tabs */}
         <div className="flex flex-wrap items-center gap-x-1 gap-y-2 border-b border-cream-dark px-3 pt-2">
           {VIEWS.map((v) => {
-            const on = view === v.value;
+            const on = view === v.value && !searching;
             return (
               <Link
                 key={v.value}
@@ -479,7 +600,48 @@ export default async function SupportTicketsPage({
             );
           })}
 
-          <div className="ml-auto flex items-center gap-2 pb-2 pr-2">
+          <div className="ml-auto flex items-center gap-3 pb-2 pr-2">
+            <form action="/admin/support" className="relative">
+              {view !== "inbox" && <input type="hidden" name="view" value={view} />}
+              {status !== "all" && <input type="hidden" name="status" value={status} />}
+              {category !== "all" && (
+                <input type="hidden" name="category" value={category} />
+              )}
+              {priority !== "all" && (
+                <input type="hidden" name="priority" value={priority} />
+              )}
+              {assignee !== "all" && (
+                <input type="hidden" name="assignee" value={assignee} />
+              )}
+              {sortKey && (
+                <>
+                  <input type="hidden" name="sort" value={sortKey} />
+                  <input type="hidden" name="dir" value={sortDir} />
+                </>
+              )}
+              <svg
+                aria-hidden
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-soft"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <line x1="16.5" y1="16.5" x2="21" y2="21" />
+              </svg>
+              <input
+                type="search"
+                name="q"
+                defaultValue={q}
+                placeholder="Search tickets, customers, messages…"
+                aria-label="Search all tickets"
+                className="w-64 rounded-full border border-teal-mid bg-white py-1.5 pl-8 pr-3 text-sm text-ink placeholder:text-ink-soft/70 focus:border-forest focus:outline-none"
+              />
+            </form>
             {filtersActive > 0 && (
               <Link
                 href={hrefFor({
@@ -495,6 +657,26 @@ export default async function SupportTicketsPage({
             )}
           </div>
         </div>
+
+        {searching && (
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-cream-dark bg-cream/40 px-5 py-2.5 text-sm">
+            <span className="text-ink">
+              <span className="font-semibold tabular-nums">{matching}</span>{" "}
+              ticket{matching === 1 ? "" : "s"} matching{" "}
+              <span className="font-semibold">&ldquo;{q}&rdquo;</span>
+            </span>
+            <span className="text-xs text-ink-soft">
+              across all tickets, archive included · searches subject,
+              description, customer, assignee and the email thread
+            </span>
+            <Link
+              href={hrefFor({ q: "" })}
+              className="ml-auto text-xs font-semibold text-forest hover:underline"
+            >
+              Clear search
+            </Link>
+          </div>
+        )}
 
         {/* Filters stay folded away until wanted; open whenever one is set so
             the active pill is visible. */}
@@ -633,13 +815,24 @@ export default async function SupportTicketsPage({
             <thead className="text-[11px] uppercase tracking-wider text-ink-soft">
               <tr>
                 <th className="px-5 py-2.5 font-semibold">Ticket</th>
-                <th className="px-5 py-2.5 font-semibold">Assignee</th>
-                <th className="px-5 py-2.5 font-semibold">Priority</th>
                 <th className="px-5 py-2.5 font-semibold">
-                  {isArchive ? "Resolved" : "Status"}
+                  <SortHeader column="assignee" label="Assignee" />
+                </th>
+                <th className="px-5 py-2.5 font-semibold">
+                  <SortHeader column="priority" label="Priority" />
+                </th>
+                <th className="px-5 py-2.5 font-semibold">
+                  <SortHeader
+                    column="status"
+                    label={isArchive ? "Resolved" : "Status"}
+                  />
                 </th>
                 <th className="px-5 py-2.5 text-right font-semibold">
-                  {isArchive ? "Took" : "Age"}
+                  {isArchive ? (
+                    "Took"
+                  ) : (
+                    <SortHeader column="age" label="Age" align="right" />
+                  )}
                 </th>
               </tr>
             </thead>
@@ -683,7 +876,20 @@ export default async function SupportTicketsPage({
                         </span>
                         {" · "}
                         {CATEGORY_LABEL[t.category]}
-                        {who && <> · {who}</>}
+                        {t.account_email ? (
+                          <>
+                            {" · "}
+                            <Link
+                              href={hrefFor({ q: t.account_email })}
+                              title="All tickets from this customer"
+                              className="hover:text-forest hover:underline"
+                            >
+                              {t.account_email}
+                            </Link>
+                          </>
+                        ) : (
+                          who && <> · {who}</>
+                        )}
                       </div>
                     </td>
                     <td className="w-44 whitespace-nowrap px-5 py-3 align-middle">
@@ -737,7 +943,9 @@ export default async function SupportTicketsPage({
                     colSpan={5}
                     className="px-5 py-12 text-center text-sm text-ink-soft"
                   >
-                    {filtersActive > 0
+                    {searching
+                      ? `No tickets match \u201c${q}\u201d${filtersActive > 0 ? " with these filters" : ""}.`
+                      : filtersActive > 0
                       ? "No tickets match these filters."
                       : isArchive
                         ? "Nothing archived yet."
